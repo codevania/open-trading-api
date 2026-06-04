@@ -121,6 +121,7 @@ cython_debug/
 # ===== IDE =====
 .vscode/
 .idea/
+.obsidian/
 *.swp
 *.swo
 *.sublime-project
@@ -176,3 +177,23 @@ backtester/examples/output/*.py
 settings.local.json
 
 .serena/
+
+# ===== Codex / OMX local runtime =====
+.omx/
+
+# ===== Portfolio report local/generated data =====
+_report/watchlist.yaml
+_report/portfolio.yaml
+_report/holdings*.csv
+_report/raw/**
+!_report/raw/
+!_report/raw/.gitkeep
+
+# ===== Local KIS MCP runner helpers =====
+MCP/Kis Trading MCP/.env.kis
+MCP/Kis Trading MCP/build-kis-trade-mcp.bat
+MCP/Kis Trading MCP/find-docker.bat
+MCP/Kis Trading MCP/logs-kis-trade-mcp.bat
+MCP/Kis Trading MCP/run-kis-trade-mcp.bat
+MCP/Kis Trading MCP/status-kis-trade-mcp.bat
+MCP/Kis Trading MCP/stop-kis-trade-mcp.bat
