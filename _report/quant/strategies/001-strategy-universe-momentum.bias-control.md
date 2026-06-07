@@ -13,6 +13,7 @@
 - Point-in-Time 계획: `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`
 - Raw sample audit: `_report/quant/research/2026-06-07-krx-raw-sample-audit.md`
 - Manual snapshot 절차: `_report/quant/research/2026-06-08-krx-manual-snapshot-procedure.md`
+- 비용 가정: `_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md`
 
 ## 1. Universe Bias
 
@@ -83,12 +84,12 @@
 - [x] 개인 투자자가 전액 투입할 필요가 없다는 전제를 기록했다.
 - [ ] 총자산 Return 관점에서 Strategy Signal의 비중 한도를 적었다.
 - [ ] 정기 현금흐름이 있는 개인 투자자와 목돈 운용자의 차이를 기록했다.
-- [ ] Transaction Cost, 세금, Slippage 가정을 명시했다.
+- [x] Transaction Cost, 세금, Slippage 가정을 명시했다.
 - [x] 주문 API 호출 또는 자동매매 연결이 없는지 확인했다.
 
 판정: hold
 
-메모: 이 Strategy는 아직 `Signal Candidate` 추적용이다. 실제 Portfolio 비중과 현금 비중은 별도 Risk 문서에서 정해야 한다.
+메모: 이 Strategy는 아직 `Signal Candidate` 추적용이다. Transaction Cost, Tax, Slippage 기본 가정은 고정했지만 실제 Portfolio 비중과 현금 비중은 별도 Risk 문서에서 정해야 한다.
 
 ## 7. Strategy Diversification and Domain Hypothesis
 
@@ -111,7 +112,7 @@
 - Universe v0의 Inclusion Rule, Exclusion Rule, Liquidity Filter, Listing Age, Signal Timing은 고정했다.
 - DI watchlist와 Quant Universe를 분리했다.
 - Survivorship Bias와 Lookahead Bias 방지 기준은 문서화했다.
-- 그러나 reproducible official Point-in-Time source snapshot, Transaction Cost, Slippage, Out-of-Sample 구간, Stress Period 검증은 아직 미완료다.
+- 그러나 reproducible official Point-in-Time source snapshot, Out-of-Sample 구간, Stress Period 검증은 아직 미완료다.
 
 사용 가능 범위:
 

@@ -99,8 +99,8 @@
 - 최대 보유 종목 수: v0 미적용, v1에서 `상위 N개` 검토
 - 전체 자산 내 목표 비중: `not_set`. Strategy Signal과 실제 자금 투입은 분리한다.
 - 현금 비중: 개인 투자자는 기관처럼 항상 전액 투자할 필요가 없으므로 별도 Risk 문서에서 결정한다.
-- Transaction Cost: Backtest 실행 시 명시
-- Slippage: Backtest 실행 시 명시
+- Transaction Cost: `_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md`
+- Slippage: `_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md`
 - 주문 연동: 이 단계에서는 제외
 - 개인 자산 내 실제 배분은 이 Strategy 문서가 아니라 별도 Portfolio/Risk 문서에서 결정한다.
 

@@ -31,6 +31,7 @@ _report/quant/
     2026-06-07-point-in-time-universe-plan.md # Point-in-Time Universe 확보 계획
     2026-06-07-krx-raw-sample-audit.md    # KRX raw sample 확보 가능성 audit
     2026-06-08-krx-manual-snapshot-procedure.md # KRX manual snapshot 절차
+    2026-06-08-transaction-cost-slippage-assumptions.md # 비용/Slippage/Tax 가정
   routines/
     quant-research-routine.md            # Strategy 검증 절차
     market-regime-scan-routine.md        # 시장 환경 필터 절차
@@ -137,7 +138,7 @@ _report/quant/
 1. `learning-roadmap.md` 1주차를 진행하고 `templates/study-log.md`로 첫 학습 로그를 남긴다.
 2. `templates/market-regime-scan.md`로 첫 Market Regime Scan을 작성한다.
 3. KRX 웹 UI에서 사람이 수동 CSV를 내려받고 `_report/quant/templates/krx-manual-snapshot-manifest.yaml` 형식으로 `manual_snapshot` manifest를 작성한다.
-4. Transaction Cost, Slippage, 세금 가정을 Strategy v0 Backtest용으로 고정한다.
+4. Transaction Cost, Slippage, 세금 가정은 `_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md`에 고정했다.
 5. Out-of-Sample 또는 walk-forward 구간을 정한다.
 6. Manual Watchlist smoke test가 필요하면 결과 첫머리에 "퀀트 검증 아님"을 표시한다.
 7. Backtest 결과를 `templates/backtest-report.md` 형식으로 기록한다.

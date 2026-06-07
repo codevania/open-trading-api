@@ -117,10 +117,29 @@ risk:
     percent: 10.0
   transaction_cost:
     required_for_backtest: true
-    current_status: "not_set"
+    current_status: "baseline_assumption_set_external_fee_override_required"
+    assumption_file: "_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md"
+    commission_bps_per_side:
+      baseline: 1.5
+      stress: 5.0
   slippage:
     required_for_backtest: true
-    current_status: "not_set"
+    current_status: "baseline_assumption_set"
+    bps_per_side:
+      baseline: 5.0
+      stress: 20.0
+  tax:
+    required_for_backtest: true
+    current_status: "2026_krx_sell_side_assumption_set"
+    transaction_tax_bps_sell_side:
+      KOSPI: 20.0
+      KOSDAQ: 20.0
+    notes:
+      - "Apply on sell side only."
+      - "Use total transaction tax burden for Strategy cost modeling."
+  round_trip_cost_bps:
+    baseline: 33.0
+    stress: 70.0
 
 bias_control:
   checklist_file: "_report/quant/strategies/001-strategy-universe-momentum.bias-control.md"
@@ -128,7 +147,6 @@ bias_control:
   hold_reasons:
     - "Point-in-Time Investable Universe plan is documented, but reproducible official source snapshots are not yet available"
     - "KRX direct JSON/CSV endpoints returned LOGOUT or HTTP 400 in non-browser automated session"
-    - "Transaction Cost and Slippage assumptions are not yet set"
     - "Out-of-Sample or walk-forward dates are not yet set"
 
 validation_policy:
@@ -154,3 +172,7 @@ validation_policy:
   out_of_sample:
     required: true
     current_status: "not_set"
+  cost_model:
+    required: true
+    current_status: "baseline_assumption_set"
+    assumption_file: "_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md"
