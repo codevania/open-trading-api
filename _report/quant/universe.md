@@ -3,7 +3,7 @@
 ## 메타데이터
 
 - 기준일: 2026-06-06
-- 상태: 정책 정의 완료, 실제 Point-in-Time Universe 미구축
+- 상태: Universe v0 정책 정의 완료, 실제 Point-in-Time Universe 미구축
 - 용도: 퀀트 Strategy가 사용할 Investable Universe 정의 원칙
 
 ## 핵심 원칙
@@ -32,15 +32,52 @@
 - 종목명이 불명확한 항목을 임의 티커로 대체하지 않는다.
 - 한 Strategy가 잘 맞는 종목만 골라 다시 Universe를 정의하지 않는다.
 
-## 001-strategy-universe-momentum 적용 메모
+## 001-strategy-universe-momentum Universe v0
 
-- v0는 "관심종목 모멘텀"이 아니라 "Strategy 규칙 기반 Universe에서의 상대/절대 모멘텀 기준선"으로 둔다.
-- 실제 Backtest 전까지 기본 Universe는 미정이다.
-- 첫 후보 Universe는 `KRX 보통주 + 최소 상장기간 + 최소 거래대금` 같은 Rule-Based Universe로 설계한다.
-- point-in-time 데이터가 없으면 최종 판정은 `hold` 이하로 둔다.
+이 Strategy의 Universe v0는 "관심종목 모멘텀"이 아니라 "사전에 고정된 Rule-Based Universe에서의 Momentum 기준선"이다.
+
+### Definition
+
+- Universe Version: `v0`
+- Market: `KRX`
+- Venue: `KOSPI`, `KOSDAQ`
+- Security Type: `common_stock`
+- Manual Watchlist: 사용 안 함. 필요한 경우 `Data Pipeline Smoke Test`로만 표시한다.
+- Interpretation Status: Point-in-Time Investable Universe 미구축으로 Backtest 성과 판정은 `hold` 이하.
+
+### Inclusion Rule
+
+- Rebalance date 기준 KRX `KOSPI` 또는 `KOSDAQ` 상장 보통주다.
+- Rebalance date 기준 정상 거래 가능 상태다.
+- Listing Age가 최소 `252 trading days` 이상이다.
+- 최근 `20 trading days` 평균 거래대금이 최소 `1,000,000,000 KRW` 이상이다.
+- 일봉 OHLCV가 최소 `600 trading days` 이상 확보되어 있다.
+- 종가, 거래량, 거래대금 계산에 결측 또는 비정상 값이 없다.
+
+### Exclusion Rule
+
+- ETF, ETN, ELW, preferred share, SPAC, REIT, closed-end fund, infrastructure fund.
+- 관리종목, 투자주의/경고/위험, 거래정지, 상장폐지 예정 등 거래 가능성이나 체결 품질이 훼손된 종목.
+- Main/Game/DI watchlist에서 수동 선택되었다는 이유만으로 포함된 종목.
+- 종목 코드가 확인되지 않은 항목.
+- 원천 데이터 응답이 비정상인 항목.
+- Lookback, Liquidity Filter, Listing Age 계산에 필요한 과거 데이터가 부족한 항목.
+
+### Point-in-Time Rule
+
+- Universe 포함 여부, Listing Age, 거래 가능 상태, Liquidity Filter는 모두 해당 Rebalance date 기준으로 계산해야 한다.
+- 현재 생존 종목 목록이나 현재 테마 대표주를 과거에 소급 적용하지 않는다.
+- 과거 상장폐지, 거래정지, 편입/편출 이력을 확보하지 못하면 결과 문서의 Bias Control 최종 판정은 `hold`로 둔다.
+- 현재 기준 종목 목록으로 실행한 결과는 성과 증거가 아니라 `Data Pipeline Smoke Test`다.
+
+### Signal Timing Rule
+
+- Signal은 장마감 후 확정된 end-of-day 데이터로 계산한다.
+- Entry/Exit 후보는 다음 거래 세션부터 실행 가능하다고 가정한다.
+- 뉴스, 공시, 수급 데이터를 붙일 경우 Signal 계산 시점 전에 공개되어 실제로 사용 가능했던 데이터만 사용한다.
 
 ## 다음 확인
 
 1. KRX 보통주 전체 또는 지수별 point-in-time 구성 데이터를 확보할 수 있는지 확인한다.
-2. Liquidity Filter의 기준값을 Backtest 전에 문서화한다.
+2. 상장폐지, 거래정지, 관리종목, 투자주의/경고/위험 이력을 어떤 원천에서 가져올지 정한다.
 3. Manual Watchlist smoke test가 필요하면 결과 문서에 "퀀트 검증 아님"을 명시한다.

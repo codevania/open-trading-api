@@ -16,16 +16,57 @@ strategy:
 
   universe:
     mode: rule_based
+    version: "v0"
     policy_file: "_report/quant/universe.md"
+    status: "policy_locked_point_in_time_data_pending"
+    interpretation_status: "hold_until_point_in_time_investable_universe_is_available"
     manual_symbols_allowed: false
     manual_symbols_usage: "smoke_test_only"
-    draft_rules:
-      market: "KRX"
-      security_type: "common_stock"
-      min_listing_days: 252
-      min_avg_trading_value_20d_krw: null
+    market: "KRX"
+    venues:
+      - "KOSPI"
+      - "KOSDAQ"
+    security_type: "common_stock"
+    inclusion_rules:
+      - id: market_membership
+        description: "KRX KOSPI or KOSDAQ listed common stock as of the rebalance date"
+      - id: trading_status
+        description: "Tradable normal status as of the rebalance date"
+      - id: listing_age
+        min_trading_days: 252
+      - id: liquidity
+        metric: "avg_trading_value_20d_krw"
+        min_value: 1000000000
+        lookback_trading_days: 20
+      - id: history
+        min_ohlcv_trading_days: 600
+      - id: data_quality
+        require_non_missing_close_volume_trading_value: true
+    exclusion_rules:
+      - "ETF"
+      - "ETN"
+      - "ELW"
+      - "preferred_share"
+      - "SPAC"
+      - "REIT"
+      - "closed_end_fund"
+      - "infrastructure_fund"
+      - "managed_or_investment_warning_stock"
+      - "trading_halt"
+      - "scheduled_delisting"
+      - "unknown_symbol_code"
+      - "abnormal_source_response"
+    point_in_time:
+      required: true
+      current_status: "not_available"
+      if_unavailable: "treat_results_as_hold_or_data_pipeline_smoke_test"
+    signal_timing:
+      data_cutoff: "market_close_t"
+      earliest_trade: "next_trading_session_t_plus_1"
     excluded_sources:
       - "_report/di/watchlist.yaml Main/Game/DI groups"
+      - "_report/di/watchlist.yaml sector/watchlist groups"
+      - "manual watchlist selected after observing current winners"
 
   params:
     lookback:
@@ -71,3 +112,41 @@ risk:
   stop_loss:
     enabled: true
     percent: 10.0
+  transaction_cost:
+    required_for_backtest: true
+    current_status: "not_set"
+  slippage:
+    required_for_backtest: true
+    current_status: "not_set"
+
+bias_control:
+  checklist_file: "_report/quant/strategies/001-strategy-universe-momentum.bias-control.md"
+  current_judgment: "hold"
+  hold_reasons:
+    - "Point-in-Time Investable Universe is not yet available"
+    - "Transaction Cost and Slippage assumptions are not yet set"
+    - "Out-of-Sample or walk-forward dates are not yet set"
+
+validation_policy:
+  parameter_candidates:
+    lookback:
+      - 20
+      - 60
+      - 120
+      - 252
+    threshold:
+      - 0.0
+    stop_loss_pct:
+      - 10.0
+  parameter_selection: "sensitivity_analysis_only_not_optimization"
+  required_metrics:
+    - total_return
+    - CAGR
+    - MDD
+    - Sharpe
+    - win_rate
+    - trade_count
+    - turnover
+  out_of_sample:
+    required: true
+    current_status: "not_set"

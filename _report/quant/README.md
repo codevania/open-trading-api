@@ -39,7 +39,8 @@ _report/quant/
     study-log.md                         # 주간 학습 로그 템플릿
   strategies/
     001-strategy-universe-momentum.md    # 첫 후보 Strategy Spec
-    001-strategy-universe-momentum.kis.yaml # Backtester/Strategy Builder용 초안
+    001-strategy-universe-momentum.kis.yaml # Backtester/Strategy Builder용 Strategy config
+    001-strategy-universe-momentum.bias-control.md # Strategy별 Bias Control 판정
 ```
 
 연결 루틴: `_report/quant/routines/quant-research-routine.md`
@@ -54,11 +55,13 @@ _report/quant/
 
 - Main/Game/관심종목 그룹은 Quant Universe에서 제외한다.
 - Strategy별 Universe는 종목명이 아니라 Inclusion/Exclusion Rules으로 정의한다.
-- 첫 후보 Universe는 `KRX 보통주 + 최소 상장기간 + 최소 거래대금`처럼 사전 규칙으로 설계한다.
+- 첫 후보 Universe는 `KRX common_stock + Listing Age + Liquidity Filter`로 고정했다.
 - 보유 수량, 계좌번호, 앱키, 토큰은 `_report/`에 기록하지 않는다.
 - Backtest 전에는 종목 코드, 시장, 데이터 기간, 결측 여부를 확인한다.
 
 완료 기준: Strategy가 사용할 Universe와 데이터 출처가 문서에 명시되어 있다.
+
+현재 상태: 완료. 단, 실제 Point-in-Time Investable Universe 데이터는 미확보이므로 Backtest 해석은 `hold` 이하로 둔다.
 
 ### 1단계: 첫 Strategy Spec
 
@@ -129,9 +132,9 @@ _report/quant/
 
 1. `learning-roadmap.md` 1주차를 진행하고 `templates/study-log.md`로 첫 학습 로그를 남긴다.
 2. `templates/market-regime-scan.md`로 첫 Market Regime Scan을 작성한다.
-3. `001-strategy-universe-momentum`의 Universe를 `KRX 보통주 + Liquidity Filter` 같은 Rule-Based Universe로 확정한다.
-4. Backtest 전에 `templates/bias-control-checklist.md`를 복사해 Bias Control 판정을 먼저 작성한다.
-5. 역사적 투자 가능 유니버스와 point-in-time 데이터 확보 계획을 작성한다.
+3. 역사적 투자 가능 Universe와 Point-in-Time 데이터 확보 계획을 작성한다.
+4. Transaction Cost, Slippage, 세금 가정을 Strategy v0 Backtest용으로 고정한다.
+5. Out-of-Sample 또는 walk-forward 구간을 정한다.
 6. Manual Watchlist smoke test가 필요하면 결과 첫머리에 "퀀트 검증 아님"을 표시한다.
 7. Backtest 결과를 `templates/backtest-report.md` 형식으로 기록한다.
 8. 개인 투자용 Position 크기, 현금 비중, 전체 자산 내 Strategy 비중 문서를 만든다.

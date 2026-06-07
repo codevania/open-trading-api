@@ -19,9 +19,12 @@ Quant 문서에서는 핵심 개념을 영어로 쓴다. 한국어는 설명을 
 | Strategy | 사전에 정의한 투자 규칙과 검증 대상 |
 | Universe | Strategy가 투자할 수 있는 후보 집합 |
 | Investable Universe | 실제 과거 시점에 투자 가능했던 Universe |
+| Point-in-Time Investable Universe | 특정 과거 시점에 실제로 투자 가능했던 종목만 포함한 Universe |
 | Point-in-Time | 해당 과거 시점에 알 수 있었던 정보만 사용하는 기준 |
 | Inclusion Rule | Universe에 포함하는 조건 |
 | Exclusion Rule | Universe에서 제외하는 조건 |
+| Liquidity Filter | 거래대금, 거래량, 스프레드 등 체결 가능성을 기준으로 Universe를 제한하는 규칙 |
+| Listing Age | 상장 후 경과한 거래일 수 |
 | Signal | 매수/매도 후보를 만드는 정량 조건 |
 | Position | 실제 자금이 들어간 상태와 크기 |
 | Portfolio | 여러 Position 또는 Strategy의 조합 |

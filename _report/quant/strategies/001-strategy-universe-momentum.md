@@ -4,13 +4,13 @@
 
 - Strategy ID: `001-strategy-universe-momentum`
 - Strategy Name: Strategy Universe Momentum Baseline v0
-- 상태: draft
+- 상태: draft, Universe v0 policy locked
 - 작성일: 2026-06-06
 - 작성자: Codex
 - 관련 YAML: `001-strategy-universe-momentum.kis.yaml`
 - 연결 도구: Backtester `momentum` preset
 - 참고 분석: `_report/quant/research/2026-06-06-ai-quant-video-analysis.md`
-- Bias Control: `_report/quant/templates/bias-control-checklist.md`
+- Bias Control: `_report/quant/strategies/001-strategy-universe-momentum.bias-control.md`
 - Strategy Portfolio 역할: 단독 운용 Strategy가 아니라 Signal 검증용 기준선
 
 ## 1. Economic/Financial Hypothesis
@@ -35,17 +35,28 @@
 ## 3. Universe
 
 - 기본 소스: `_report/quant/universe.md`
-- 시장: 미정. 첫 후보는 KRX 보통주 기반 Rule-Based Universe로 검토한다.
-- Inclusion Rule 초안:
-  - 보통주
-  - 최소 상장기간 충족
-  - 최소 거래대금 또는 거래량 충족
-  - 데이터 lookback 충족
-- 제외 조건:
-  - Main/Game/관심종목 그룹에서 수동 선택된 항목
-  - 종목 코드가 확인되지 않은 항목
-  - 일봉 데이터가 lookback보다 짧은 항목
-  - 원천 데이터 응답이 비정상인 항목
+- Universe Version: `v0`
+- Universe 상태: policy locked, Point-in-Time 구성 데이터 미확보로 Backtest 해석은 `hold`
+- Market: `KRX`
+- Venue: `KOSPI`, `KOSDAQ`
+- Security Type: `common_stock`
+- Inclusion Rule:
+  - Rebalance date 기준 KRX `KOSPI` 또는 `KOSDAQ`에 상장된 보통주다.
+  - Rebalance date 기준 정상 거래 가능 상태다.
+  - Listing Age가 최소 `252 trading days` 이상이다.
+  - 최근 `20 trading days` 평균 거래대금이 최소 `1,000,000,000 KRW` 이상이다.
+  - Strategy 계산에 필요한 일봉 OHLCV가 최소 `600 trading days` 이상 확보되어 있다.
+  - 종가, 거래량, 거래대금 계산에 결측 또는 비정상 값이 없다.
+- Exclusion Rule:
+  - ETF, ETN, ELW, preferred share, SPAC, REIT, closed-end fund, infrastructure fund.
+  - 관리종목, 투자주의/경고/위험, 거래정지, 상장폐지 예정 등 거래 가능성이나 체결 품질이 훼손된 종목.
+  - Main/Game/DI watchlist에서 수동 선택되었다는 이유만으로 포함된 종목.
+  - 종목 코드가 확인되지 않은 항목.
+  - 일봉 데이터가 `max_lookback` 또는 `min_history_trading_days`보다 짧은 항목.
+  - 원천 데이터 응답이 비정상인 항목.
+- Signal Timing:
+  - Signal은 장마감 후 end-of-day 데이터로 계산한다.
+  - 실제 진입 가능 시점은 다음 거래 세션으로 둔다.
 - 종목 확인 필요 항목은 임의 티커로 대체하지 않는다.
 - 현재 watchlist는 재량 관찰용이므로 Quant Universe가 아니다.
 - watchlist만 사용한 실행은 Backtest가 아니라 Data Pipeline Smoke Test로만 해석한다.
@@ -54,17 +65,20 @@
 ## 4. 데이터 요구사항
 
 - 필수 데이터: 일봉 종가, 거래량
+- 필수 데이터 추가: 일봉 거래대금, 상장일 또는 Listing Age, 거래 가능 상태, Security Type
 - 선택 데이터: 투자자 수급, 뉴스/공시 제목
-- 최소 기간: 60거래일 lookback 기준 최소 600거래일 권장
+- 최소 기간: `max_lookback 252 trading days` 기준 최소 `600 trading days`
 - 데이터 출처: KIS MCP 일봉 조회 또는 Backtester 데이터 수집 결과
 - 원천 저장: `_report/raw/YYYY/YYYY-MM-DD/SYMBOL/`
 - 공개 데이터만으로 검증 가능한 기준선 Strategy로 둔다.
 - 투자자 수급이나 뉴스/공시를 붙일 경우 실제 진입 시점 전에 이용 가능했던 데이터만 사용한다.
 - KRX의 상대적 비효율성은 기회일 수 있지만, Strategy Universe와 데이터가 부족하면 성과 주장이 아니라 연구 가설로만 남긴다.
+- Point-in-Time Investable Universe가 없으면 최종 성과 판정은 `hold` 이하로 둔다.
 
 ## 5. 진입 규칙
 
 - 60거래일 ROC가 `0%`를 초과하면 매수 후보로 분류한다.
+- ROC 계산은 장마감 후 확정된 종가 기준으로 수행하고, 다음 거래 세션부터 실행 가능하다고 가정한다.
 - v0에서는 종목별 단일 Signal만 판단한다.
 - 여러 종목 중 순위 선정과 equal weight 포트폴리오 구성은 v1에서 다룬다.
 - Signal이 중복 발생하면 기존 보유 Signal을 유지하고 신규 진입으로 중복 기록하지 않는다.
@@ -75,22 +89,24 @@
 - 손절 기준은 `-10%`로 시작하되, Backtest 결과에 따라 조정한다.
 - 뉴스/공시로 가설이 깨진 경우 정량 Signal과 별도로 무효화 조건을 기록한다.
 - 손절 기준을 결과가 좋게 보이는 값으로 사후 선택하지 않는다.
+- 청산 Signal도 장마감 후 확정 데이터로 계산하고, 다음 거래 세션부터 실행 가능하다고 가정한다.
 
 ## 7. Position 및 Risk
 
-- Position 크기: Backtest 전까지 미정
+- Position 크기: `not_set`, Backtest와 별도 Risk 문서 전까지 실제 배분 금지
 - 최대 보유 종목 수: v0 미적용, v1에서 `상위 N개` 검토
-- 전체 자산 내 목표 비중: 미정. Strategy Signal과 실제 자금 투입은 분리한다.
+- 전체 자산 내 목표 비중: `not_set`. Strategy Signal과 실제 자금 투입은 분리한다.
 - 현금 비중: 개인 투자자는 기관처럼 항상 전액 투자할 필요가 없으므로 별도 Risk 문서에서 결정한다.
 - Transaction Cost: Backtest 실행 시 명시
 - Slippage: Backtest 실행 시 명시
 - 주문 연동: 이 단계에서는 제외
+- 개인 자산 내 실제 배분은 이 Strategy 문서가 아니라 별도 Portfolio/Risk 문서에서 결정한다.
 
 ## 8. Backtest 설정
 
 - 엔진: Backtester
 - Strategy 파일: `001-strategy-universe-momentum.kis.yaml`
-- Benchmark: 종목별 buy-and-hold 또는 시장별 대표 지수
+- Benchmark: KRX 전체 Universe 결과는 `KOSPI`, `KOSDAQ`, 또는 Universe 특성에 맞는 시장 대표 지수와 분리 비교한다.
 - 파라미터:
   - `lookback`: 20, 60, 120, 252
   - `threshold`: 0.0
@@ -104,6 +120,7 @@
 
 - Bias Control 체크리스트 판정이 `fail`이면 Strategy 해석을 중단한다.
 - 체크리스트 판정이 `hold`이면 일일 리포트에는 "퀀트 Signal Candidate"로만 기록한다.
+- 현재 Bias Control 판정은 Point-in-Time Investable Universe 미확보로 `hold`다.
 - 최소 거래 횟수가 너무 적어 해석 불가능하면 보류한다.
 - MDD가 Benchmark보다 과도하게 크면 폐기 또는 Risk 규칙을 재설계한다.
 - Return이 좋아도 특정 한 거래나 한 구간에만 의존하면 보류한다.
@@ -134,8 +151,8 @@
 
 ## 11. 다음 실험
 
-1. KRX 보통주 기반 Rule-Based Universe 초안을 먼저 확정한다.
+1. Point-in-Time Investable Universe 확보 계획을 별도 노트로 작성한다.
 2. lookback 20/60/120/252를 비교하되, 최적값 선택이 아니라 민감도와 실패 조건으로 기록한다.
-3. point-in-time Investable Universe 확보 계획을 별도 노트로 작성한다.
-4. 결과가 의미 있으면 v1에서 상대강도 상위 N개 포트폴리오 규칙을 추가한다.
-5. 두 번째 후보 Strategy는 모멘텀과 다른 Domain Hypothesis를 가진 Strategy로 만든다.
+3. 결과가 의미 있으면 v1에서 상대강도 상위 N개 Portfolio 규칙을 추가한다.
+4. 두 번째 후보 Strategy는 Momentum과 다른 Domain Hypothesis를 가진 Strategy로 만든다.
+5. Manual Watchlist 실행이 필요하면 결과 첫머리에 `Data Pipeline Smoke Test`라고 표시한다.
