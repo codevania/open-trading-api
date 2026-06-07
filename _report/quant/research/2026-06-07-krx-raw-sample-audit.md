@@ -7,6 +7,7 @@
 - 대상 계획: `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`
 - 대상 Strategy: `001-strategy-universe-momentum`
 - 현재 판정: hold
+- Manual snapshot 절차: `_report/quant/research/2026-06-08-krx-manual-snapshot-procedure.md`
 
 ## 1. 목적
 
@@ -100,8 +101,14 @@ _report/raw/2026/2026-06-07/krx/universe/
 
 ## 6. 다음 액션
 
-1. KRX 웹 UI에서 수동 CSV 다운로드가 가능한지 확인한다.
-2. 수동 다운로드가 가능하면 같은 파일을 `_report/raw/2026/2026-06-07/krx/universe/`에 저장하고 `manifest`를 갱신한다.
+1. KRX 웹 UI에서 사람이 수동 CSV를 내려받는다.
+2. 수동 다운로드가 가능하면 같은 파일을 `_report/raw/YYYY/YYYY-MM-DD/krx/universe/`에 저장하고 `manifest`를 작성한다.
 3. 수동 다운로드만 가능하면 `source_mode: manual_snapshot`으로 표시하고 자동 Backtest는 계속 `hold`로 둔다.
 4. 공식 API 또는 안정적인 브라우저 자동화 경로가 확인되면 `source_mode: reproducible_official_snapshot`으로 승격한다.
 5. 그 다음에만 `eligible_universe_v0` parser를 만든다.
+
+추가 메모:
+
+- KRX 공식 화면에는 다운로드 팝업 요소가 노출된다.
+- 다만 Codex 인앱 Browser 런타임이 현재 환경에서 시작 단계에 종료되어 실제 다운로드 이벤트는 자동 검증하지 못했다.
+- 따라서 현재 상태는 `manual_snapshot_procedure_ready`이며, `download_verified_by_codex: false`로 둔다.

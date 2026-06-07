@@ -12,6 +12,7 @@
 - AI 사용 범위: 문서화, Strategy Spec 정리, YAML 작성, 검증 체크리스트 작성 보조
 - Point-in-Time 계획: `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`
 - Raw sample audit: `_report/quant/research/2026-06-07-krx-raw-sample-audit.md`
+- Manual snapshot 절차: `_report/quant/research/2026-06-08-krx-manual-snapshot-procedure.md`
 
 ## 1. Universe Bias
 
@@ -24,7 +25,7 @@
 
 판정: hold
 
-메모: Universe v0 정책과 Point-in-Time 확보 계획은 고정했다. KRX raw sample audit에서 비브라우저 직접 endpoint는 blocked였고, wrapper 보조 sample만 확보했다. 따라서 공식 source snapshot, 거래정지 이력, 관리종목/투자주의 이력은 아직 확보하지 않은 것으로 판정한다. 성과 Backtest를 해도 투자 근거가 아니라 연구용 `hold` 판정이다.
+메모: Universe v0 정책, Point-in-Time 확보 계획, KRX manual snapshot 절차는 고정했다. KRX raw sample audit에서 비브라우저 직접 endpoint는 blocked였고, wrapper 보조 sample만 확보했다. Codex 인앱 Browser 런타임도 현재 환경에서는 다운로드 이벤트 검증까지 진행하지 못했다. 따라서 공식 source snapshot, 거래정지 이력, 관리종목/투자주의 이력은 아직 확보하지 않은 것으로 판정한다. 성과 Backtest를 해도 투자 근거가 아니라 연구용 `hold` 판정이다.
 
 ## 2. Lookahead Bias
 

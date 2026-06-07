@@ -58,9 +58,10 @@ strategy:
       - "abnormal_source_response"
     point_in_time:
       required: true
-      current_status: "official_direct_endpoint_blocked_wrapper_sample_available"
+      current_status: "official_direct_endpoint_blocked_manual_snapshot_procedure_ready"
       plan_file: "_report/quant/research/2026-06-07-point-in-time-universe-plan.md"
       raw_sample_audit_file: "_report/quant/research/2026-06-07-krx-raw-sample-audit.md"
+      manual_snapshot_procedure_file: "_report/quant/research/2026-06-08-krx-manual-snapshot-procedure.md"
       if_unavailable: "treat_results_as_hold_or_data_pipeline_smoke_test"
     signal_timing:
       data_cutoff: "market_close_t"
