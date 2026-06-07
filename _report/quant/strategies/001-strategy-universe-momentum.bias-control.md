@@ -14,6 +14,8 @@
 - Raw sample audit: `_report/quant/research/2026-06-07-krx-raw-sample-audit.md`
 - Manual snapshot 절차: `_report/quant/research/2026-06-08-krx-manual-snapshot-procedure.md`
 - 비용 가정: `_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md`
+- Out-of-Sample 계획: `_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan.md`
+- Smoke Test 계획: `_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md`
 
 ## 1. Universe Bias
 
@@ -44,13 +46,13 @@
 - [x] 파라미터 후보를 사전에 문서화했다.
 - [x] 가장 좋은 파라미터만 고른 결과를 Strategy 성과로 주장하지 않는다고 명시했다.
 - [x] `lookback`, `threshold`, `stop_loss_pct` 비교는 민감도 분석으로 기록한다고 명시했다.
-- [ ] Out-of-Sample 또는 walk-forward 검증 구간을 정했다.
+- [x] Out-of-Sample 또는 walk-forward 검증 구간을 정했다.
 - [ ] 반복 Backtest 횟수와 폐기한 아이디어를 기록했다.
 - [x] in-sample 성과와 Out-of-Sample 성과를 같은 의미로 해석하지 않는다고 명시했다.
 
 판정: hold
 
-메모: `lookback` 후보는 20, 60, 120, 252로 고정했다. 아직 Backtest 기간과 Out-of-Sample 구간이 정해지지 않았으므로 성과 해석은 보류한다.
+메모: `lookback` 후보는 20, 60, 120, 252로 고정했다. In-Sample은 2020-2022, Out-of-Sample은 2023-2025, Forward Paper는 2026년 이후로 고정했다. 단, Point-in-Time Universe가 아직 없으므로 성과 해석은 계속 보류한다.
 
 ## 4. Data Quality
 
@@ -112,7 +114,7 @@
 - Universe v0의 Inclusion Rule, Exclusion Rule, Liquidity Filter, Listing Age, Signal Timing은 고정했다.
 - DI watchlist와 Quant Universe를 분리했다.
 - Survivorship Bias와 Lookahead Bias 방지 기준은 문서화했다.
-- 그러나 reproducible official Point-in-Time source snapshot, Out-of-Sample 구간, Stress Period 검증은 아직 미완료다.
+- 그러나 reproducible official Point-in-Time source snapshot과 Stress Period 검증은 아직 미완료다.
 
 사용 가능 범위:
 

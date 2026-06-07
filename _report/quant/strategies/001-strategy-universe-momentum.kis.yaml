@@ -171,8 +171,43 @@ validation_policy:
     - turnover
   out_of_sample:
     required: true
-    current_status: "not_set"
+    current_status: "window_set_point_in_time_data_pending"
+    plan_file: "_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan.md"
+    windows:
+      warmup:
+        start: "2018-01-01"
+        end: "2019-12-31"
+      in_sample:
+        start: "2020-01-01"
+        end: "2022-12-31"
+      out_of_sample:
+        start: "2023-01-01"
+        end: "2025-12-31"
+      forward_paper:
+        start: "2026-01-01"
+        end: null
+    walk_forward:
+      - id: "wf_01"
+        observation_start: "2020-01-01"
+        observation_end: "2022-12-31"
+        test_start: "2023-01-01"
+        test_end: "2023-12-31"
+      - id: "wf_02"
+        observation_start: "2021-01-01"
+        observation_end: "2023-12-31"
+        test_start: "2024-01-01"
+        test_end: "2024-12-31"
+      - id: "wf_03"
+        observation_start: "2022-01-01"
+        observation_end: "2024-12-31"
+        test_start: "2025-01-01"
+        test_end: "2025-12-31"
   cost_model:
     required: true
     current_status: "baseline_assumption_set"
     assumption_file: "_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md"
+  smoke_test:
+    allowed_when_point_in_time_unavailable: true
+    current_status: "plan_set_preflight_kis_daily_005930_success_raw_not_persisted"
+    plan_file: "_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md"
+    universe_definition_mode: "manual_smoke_test"

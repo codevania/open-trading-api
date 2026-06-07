@@ -13,6 +13,8 @@ Strategy 아이디어를 바로 주문으로 연결하지 않고, 문서화된 S
 - 결과 템플릿: `_report/quant/templates/backtest-report.md`
 - Bias Control 체크리스트: `_report/quant/templates/bias-control-checklist.md`
 - Market Regime Scan 템플릿: `_report/quant/templates/market-regime-scan.md`
+- Out-of-Sample 계획: `_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan.md`
+- Smoke Test 계획: `_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md`
 - 원천 데이터 저장소: `_report/raw/YYYY/YYYY-MM-DD/`
 
 ## 절차
@@ -61,6 +63,7 @@ Strategy 아이디어를 바로 주문으로 연결하지 않고, 문서화된 S
 6. Docker, Lean, 의존성, 데이터 부족으로 실행하지 못하면 이유를 결과 문서에 남긴다.
 7. 파라미터 반복 비교는 최적값 찾기가 아니라 민감도와 실패 조건으로 기록한다.
 8. in-sample과 out-of-sample을 분리하지 못하면 최종 판정은 `hold` 이하로 둔다.
+9. `Point-in-Time Investable Universe`가 없으면 `_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md`에 따라 `manual_smoke_test`만 허용한다.
 
 ### 5. 결과 기록
 

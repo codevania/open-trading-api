@@ -12,6 +12,8 @@
 - 참고 분석: `_report/quant/research/2026-06-06-ai-quant-video-analysis.md`
 - Bias Control: `_report/quant/strategies/001-strategy-universe-momentum.bias-control.md`
 - Point-in-Time 계획: `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`
+- Out-of-Sample 계획: `_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan.md`
+- Smoke Test 계획: `_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md`
 - Strategy Portfolio 역할: 단독 운용 Strategy가 아니라 Signal 검증용 기준선
 
 ## 1. Economic/Financial Hypothesis
@@ -116,6 +118,10 @@
 - 파라미터 비교는 최적값 찾기가 아니라 민감도 분석으로 기록한다.
 - KRX와 NASDAQ 결과는 통화, 거래일, 세션, Benchmark 차이를 분리해 해석한다.
 - in-sample과 out-of-sample 구간을 분리할 수 없으면 결과 판정은 `hold`로 둔다.
+- `in_sample`: 2020-01-01 to 2022-12-31
+- `out_of_sample`: 2023-01-01 to 2025-12-31
+- `forward_paper`: 2026-01-01 onward
+- 실제 KRX trading calendar에 맞춰 각 calendar date는 직전/직후 거래일로 보정한다.
 - 반복 Backtest에서 폐기한 파라미터와 아이디어도 결과 문서에 남긴다.
 
 ## 9. 통과 기준
@@ -154,7 +160,7 @@
 ## 11. 다음 실험
 
 1. KRX 공식 데이터에서 Point-in-Time Universe raw sample 1일치를 확보할 수 있는지 확인한다.
-2. lookback 20/60/120/252를 비교하되, 최적값 선택이 아니라 민감도와 실패 조건으로 기록한다.
-3. 결과가 의미 있으면 v1에서 상대강도 상위 N개 Portfolio 규칙을 추가한다.
-4. 두 번째 후보 Strategy는 Momentum과 다른 Domain Hypothesis를 가진 Strategy로 만든다.
-5. Manual Watchlist 실행이 필요하면 결과 첫머리에 `Data Pipeline Smoke Test`라고 표시한다.
+2. Point-in-Time raw가 없으면 `Data Pipeline Smoke Test`만 실행한다.
+3. lookback 20/60/120/252를 비교하되, 최적값 선택이 아니라 민감도와 실패 조건으로 기록한다.
+4. 결과가 의미 있으면 v1에서 상대강도 상위 N개 Portfolio 규칙을 추가한다.
+5. 두 번째 후보 Strategy는 Momentum과 다른 Domain Hypothesis를 가진 Strategy로 만든다.

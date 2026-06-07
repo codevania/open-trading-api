@@ -32,6 +32,8 @@ _report/quant/
     2026-06-07-krx-raw-sample-audit.md    # KRX raw sample 확보 가능성 audit
     2026-06-08-krx-manual-snapshot-procedure.md # KRX manual snapshot 절차
     2026-06-08-transaction-cost-slippage-assumptions.md # 비용/Slippage/Tax 가정
+    2026-06-08-out-of-sample-walk-forward-plan.md # OOS/walk-forward 검증 구간
+    2026-06-08-data-pipeline-smoke-test-plan.md # smoke test 기준
   routines/
     quant-research-routine.md            # Strategy 검증 절차
     market-regime-scan-routine.md        # 시장 환경 필터 절차
@@ -49,6 +51,8 @@ _report/quant/
 ```
 
 연결 루틴: `_report/quant/routines/quant-research-routine.md`
+
+Smoke test validator: `scripts/quant_smoke_validate.py`
 
 시장 환경 루틴: `_report/quant/routines/market-regime-scan-routine.md`
 
@@ -139,9 +143,9 @@ _report/quant/
 2. `templates/market-regime-scan.md`로 첫 Market Regime Scan을 작성한다.
 3. KRX 웹 UI에서 사람이 수동 CSV를 내려받고 `_report/quant/templates/krx-manual-snapshot-manifest.yaml` 형식으로 `manual_snapshot` manifest를 작성한다.
 4. Transaction Cost, Slippage, 세금 가정은 `_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md`에 고정했다.
-5. Out-of-Sample 또는 walk-forward 구간을 정한다.
-6. Manual Watchlist smoke test가 필요하면 결과 첫머리에 "퀀트 검증 아님"을 표시한다.
-7. Backtest 결과를 `templates/backtest-report.md` 형식으로 기록한다.
+5. Out-of-Sample 또는 walk-forward 구간은 `_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan.md`에 고정했다.
+6. Manual symbol 기반 실행은 `_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md`에 따라 smoke test로만 실행한다.
+7. Smoke test raw validator는 `scripts/quant_smoke_validate.py`로 만들었다. 다음 실제 작업은 KIS MCP raw 저장 routine을 만들고 결과를 `templates/backtest-report.md` 형식으로 기록하는 것이다.
 8. 개인 투자용 Position 크기, 현금 비중, 전체 자산 내 Strategy 비중 문서를 만든다.
 9. 두 번째 후보 Strategy는 momentum과 다른 가설을 가진 `volatility_breakout`, `mean_reversion`, `event_filter`, `regime_filter` 중 하나로 제한한다.
 10. 일일 리포트 템플릿에 "퀀트 Signal" 섹션을 추가할지 검토한다.
