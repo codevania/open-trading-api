@@ -36,6 +36,7 @@ _report/quant/
     2026-06-08-data-pipeline-smoke-test-plan.md # smoke test 기준
     2026-06-08-data-pipeline-smoke-test-result.md # 기존 DI raw 기반 validator 결과
   routines/
+    kis-raw-save-routine.md              # KIS MCP raw 저장 절차
     quant-research-routine.md            # Strategy 검증 절차
     market-regime-scan-routine.md        # 시장 환경 필터 절차
   templates/
@@ -53,7 +54,11 @@ _report/quant/
 
 연결 루틴: `_report/quant/routines/quant-research-routine.md`
 
+KIS raw 저장 루틴: `_report/quant/routines/kis-raw-save-routine.md`
+
 Smoke test validator: `scripts/quant_smoke_validate.py`
+
+KIS raw 저장 helper: `scripts/quant_kis_raw_save.py`
 
 시장 환경 루틴: `_report/quant/routines/market-regime-scan-routine.md`
 
@@ -147,7 +152,8 @@ Smoke test validator: `scripts/quant_smoke_validate.py`
 5. Out-of-Sample 또는 walk-forward 구간은 `_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan.md`에 고정했다.
 6. Manual symbol 기반 실행은 `_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md`에 따라 smoke test로만 실행한다.
 7. Smoke test raw validator 결과는 `_report/quant/research/2026-06-08-data-pipeline-smoke-test-result.md`에 기록했다. 기존 DI raw 요약은 5개 row라 모두 `data-insufficient`였고, 성과 해석은 금지한다.
-8. 다음 실제 작업은 KIS MCP raw 저장 routine을 만들고 `_report/raw/YYYY/YYYY-MM-DD/quant/smoke-test/`에 최소 21개 daily rows를 저장하는 것이다.
-9. 개인 투자용 Position 크기, 현금 비중, 전체 자산 내 Strategy 비중 문서를 만든다.
-10. 두 번째 후보 Strategy는 momentum과 다른 가설을 가진 `volatility_breakout`, `mean_reversion`, `event_filter`, `regime_filter` 중 하나로 제한한다.
-11. 일일 리포트 템플릿에 "퀀트 Signal" 섹션을 추가할지 검토한다.
+8. KIS MCP raw 저장 routine과 helper는 `_report/quant/routines/kis-raw-save-routine.md`, `scripts/quant_kis_raw_save.py`로 만들었다.
+9. 다음 실제 작업은 MCP 응답을 helper로 저장해 `_report/raw/YYYY/YYYY-MM-DD/quant/smoke-test/`에 최소 21개 daily rows를 확보하는 것이다.
+10. 개인 투자용 Position 크기, 현금 비중, 전체 자산 내 Strategy 비중 문서를 만든다.
+11. 두 번째 후보 Strategy는 momentum과 다른 가설을 가진 `volatility_breakout`, `mean_reversion`, `event_filter`, `regime_filter` 중 하나로 제한한다.
+12. 일일 리포트 템플릿에 "퀀트 Signal" 섹션을 추가할지 검토한다.
