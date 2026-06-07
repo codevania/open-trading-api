@@ -28,6 +28,7 @@ _report/quant/
   research/
     2026-06-06-ai-quant-video-analysis.md # AI 퀀트 영상 분석과 Strategy 반영
     YYYY-MM-DD-market-regime-scan.md      # 시장 환경 스캔 결과
+    2026-06-07-point-in-time-universe-plan.md # Point-in-Time Universe 확보 계획
   routines/
     quant-research-routine.md            # Strategy 검증 절차
     market-regime-scan-routine.md        # 시장 환경 필터 절차
@@ -61,7 +62,7 @@ _report/quant/
 
 완료 기준: Strategy가 사용할 Universe와 데이터 출처가 문서에 명시되어 있다.
 
-현재 상태: 완료. 단, 실제 Point-in-Time Investable Universe 데이터는 미확보이므로 Backtest 해석은 `hold` 이하로 둔다.
+현재 상태: 완료. Point-in-Time 확보 계획은 작성했지만 실제 데이터는 미확보이므로 Backtest 해석은 `hold` 이하로 둔다.
 
 ### 1단계: 첫 Strategy Spec
 
@@ -132,7 +133,7 @@ _report/quant/
 
 1. `learning-roadmap.md` 1주차를 진행하고 `templates/study-log.md`로 첫 학습 로그를 남긴다.
 2. `templates/market-regime-scan.md`로 첫 Market Regime Scan을 작성한다.
-3. 역사적 투자 가능 Universe와 Point-in-Time 데이터 확보 계획을 작성한다.
+3. KRX 공식 데이터에서 Point-in-Time Universe raw sample 1일치를 확보할 수 있는지 확인한다.
 4. Transaction Cost, Slippage, 세금 가정을 Strategy v0 Backtest용으로 고정한다.
 5. Out-of-Sample 또는 walk-forward 구간을 정한다.
 6. Manual Watchlist smoke test가 필요하면 결과 첫머리에 "퀀트 검증 아님"을 표시한다.

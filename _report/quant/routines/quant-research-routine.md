@@ -29,9 +29,10 @@ Strategy 아이디어를 바로 주문으로 연결하지 않고, 문서화된 S
 
 1. `_report/quant/universe.md`를 먼저 읽는다.
 2. 대상 Strategy 문서에 Inclusion/Exclusion Rules이 있는지 확인한다.
-3. Main/Game/관심종목 그룹을 기본 Universe로 쓰고 있으면 Backtest를 중단한다.
-4. Manual Watchlist를 사용해야 하는 경우에는 "Data Pipeline Smoke Test"로만 표시한다.
-5. 종목 코드, 시장, 해외 종목의 `exchange_code`는 실제 데이터 조회 전 검증하되, Strategy Universe를 종목명으로 정의하지 않는다.
+3. Point-in-Time 확보 계획이 필요한 Strategy면 `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`를 확인한다.
+4. Main/Game/관심종목 그룹을 기본 Universe로 쓰고 있으면 Backtest를 중단한다.
+5. Manual Watchlist를 사용해야 하는 경우에는 "Data Pipeline Smoke Test"로만 표시한다.
+6. 종목 코드, 시장, 해외 종목의 `exchange_code`는 실제 데이터 조회 전 검증하되, Strategy Universe를 종목명으로 정의하지 않는다.
 
 ### 2. Strategy Spec 확인
 

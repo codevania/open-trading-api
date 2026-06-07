@@ -59,6 +59,7 @@ strategy:
     point_in_time:
       required: true
       current_status: "not_available"
+      plan_file: "_report/quant/research/2026-06-07-point-in-time-universe-plan.md"
       if_unavailable: "treat_results_as_hold_or_data_pipeline_smoke_test"
     signal_timing:
       data_cutoff: "market_close_t"
@@ -123,7 +124,7 @@ bias_control:
   checklist_file: "_report/quant/strategies/001-strategy-universe-momentum.bias-control.md"
   current_judgment: "hold"
   hold_reasons:
-    - "Point-in-Time Investable Universe is not yet available"
+    - "Point-in-Time Investable Universe plan is documented but source snapshots are not yet available"
     - "Transaction Cost and Slippage assumptions are not yet set"
     - "Out-of-Sample or walk-forward dates are not yet set"
 

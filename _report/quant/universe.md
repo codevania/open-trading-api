@@ -3,8 +3,9 @@
 ## 메타데이터
 
 - 기준일: 2026-06-06
-- 상태: Universe v0 정책 정의 완료, 실제 Point-in-Time Universe 미구축
+- 상태: Universe v0 정책 정의 완료, Point-in-Time 확보 계획 작성, 실제 데이터 미구축
 - 용도: 퀀트 Strategy가 사용할 Investable Universe 정의 원칙
+- Point-in-Time 계획: `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`
 
 ## 핵심 원칙
 
@@ -69,6 +70,7 @@
 - 현재 생존 종목 목록이나 현재 테마 대표주를 과거에 소급 적용하지 않는다.
 - 과거 상장폐지, 거래정지, 편입/편출 이력을 확보하지 못하면 결과 문서의 Bias Control 최종 판정은 `hold`로 둔다.
 - 현재 기준 종목 목록으로 실행한 결과는 성과 증거가 아니라 `Data Pipeline Smoke Test`다.
+- 확보 계획과 `pass/hold/fail` 기준은 `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`를 따른다.
 
 ### Signal Timing Rule
 
@@ -78,6 +80,6 @@
 
 ## 다음 확인
 
-1. KRX 보통주 전체 또는 지수별 point-in-time 구성 데이터를 확보할 수 있는지 확인한다.
-2. 상장폐지, 거래정지, 관리종목, 투자주의/경고/위험 이력을 어떤 원천에서 가져올지 정한다.
+1. KRX 공식 데이터에서 `listed issues`, `designated issues`, `market alert issues`, `delisting` raw sample 1일치를 확보할 수 있는지 확인한다.
+2. 상장폐지, 거래정지, 관리종목, 투자주의/경고/위험 이력을 표준 schema로 합칠 수 있는지 검증한다.
 3. Manual Watchlist smoke test가 필요하면 결과 문서에 "퀀트 검증 아님"을 명시한다.

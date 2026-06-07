@@ -11,6 +11,7 @@
 - 연결 도구: Backtester `momentum` preset
 - 참고 분석: `_report/quant/research/2026-06-06-ai-quant-video-analysis.md`
 - Bias Control: `_report/quant/strategies/001-strategy-universe-momentum.bias-control.md`
+- Point-in-Time 계획: `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`
 - Strategy Portfolio 역할: 단독 운용 Strategy가 아니라 Signal 검증용 기준선
 
 ## 1. Economic/Financial Hypothesis
@@ -61,6 +62,7 @@
 - 현재 watchlist는 재량 관찰용이므로 Quant Universe가 아니다.
 - watchlist만 사용한 실행은 Backtest가 아니라 Data Pipeline Smoke Test로만 해석한다.
 - point-in-time Investable Universe가 확보되기 전까지 과거 지수 구성종목이나 현재 테마 대표주를 소급 적용하지 않는다.
+- Point-in-Time 확보 계획과 `pass/hold/fail` 기준은 `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`를 따른다.
 
 ## 4. 데이터 요구사항
 
@@ -151,7 +153,7 @@
 
 ## 11. 다음 실험
 
-1. Point-in-Time Investable Universe 확보 계획을 별도 노트로 작성한다.
+1. KRX 공식 데이터에서 Point-in-Time Universe raw sample 1일치를 확보할 수 있는지 확인한다.
 2. lookback 20/60/120/252를 비교하되, 최적값 선택이 아니라 민감도와 실패 조건으로 기록한다.
 3. 결과가 의미 있으면 v1에서 상대강도 상위 N개 Portfolio 규칙을 추가한다.
 4. 두 번째 후보 Strategy는 Momentum과 다른 Domain Hypothesis를 가진 Strategy로 만든다.
