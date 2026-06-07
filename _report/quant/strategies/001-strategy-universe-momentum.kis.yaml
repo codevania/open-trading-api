@@ -112,6 +112,15 @@ strategy:
         value: 0
 
 risk:
+  position_sizing:
+    current_status: "paper_signal_only_capital_allocation_zero"
+    policy_file: "_report/quant/research/2026-06-08-position-sizing-capital-allocation-policy.md"
+    strategy_capital_cap_pct:
+      current: 0.0
+      pilot_review_max: 1.0
+    single_position_cap_pct:
+      current: 0.0
+      pilot_review_max: 0.25
   stop_loss:
     enabled: true
     percent: 10.0
