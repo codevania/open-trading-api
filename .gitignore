@@ -185,6 +185,9 @@ settings.local.json
 _report/watchlist.yaml
 _report/portfolio.yaml
 _report/holdings*.csv
+_report/di/watchlist.yaml
+_report/di/portfolio.yaml
+_report/di/holdings*.csv
 _report/raw/**
 !_report/raw/
 !_report/raw/.gitkeep

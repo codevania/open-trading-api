@@ -15,13 +15,13 @@
 아래 프롬프트를 Codex Automations 생성 화면에 넣는다.
 
 ```text
-이 저장소에서 _report/routines/daily-report-routine.md의 절차를 따라 오늘 기준 데일리 투자 리포트를 작성해줘.
+이 저장소에서 _report/di/routines/daily-report-routine.md의 절차를 따라 오늘 기준 데일리 투자 리포트를 작성해줘.
 
-대상 종목은 _report/watchlist.yaml이 있으면 그 파일을 우선 사용하고, 없으면 _report/watchlist.example.yaml을 사용해줘.
+대상 종목은 _report/di/watchlist.yaml이 있으면 그 파일을 우선 사용하고, 없으면 _report/di/watchlist.example.yaml을 사용해줘.
 
 KIS MCP로 조회 가능한 국내 주식은 현재가, 기간별 시세, 투자자 수급을 확인하고, 해외 주식은 가능한 현재가와 기간별 시세를 확인해줘. API 호출 전에는 해당 MCP 도구의 find_api_detail로 파라미터를 확인해줘.
 
-결과는 _report/daily/YYYY/YYYY-MM-DD.md에 한국어로 작성하고, 종목별 판단 요약은 _report/decisions/decision-log.md에도 누적해줘.
+결과는 _report/di/daily/YYYY/YYYY-MM-DD.md에 한국어로 작성하고, 종목별 판단 요약은 _report/di/decisions/decision-log.md에도 누적해줘.
 
 종목명이 불명확하거나 API 데이터가 비정상적이면 추측해서 확정하지 말고 리포트의 데이터 한계 메모에 남겨줘.
 
@@ -33,5 +33,5 @@ KIS MCP로 조회 가능한 국내 주식은 현재가, 기간별 시세, 투자
 자동화로 등록하기 전에 일반 Codex 스레드에서 아래처럼 한 번 실행해 검증한다.
 
 ```text
-_report/routines/daily-report-routine.md에 따라 오늘 데일리 리포트를 한 번 수동 생성해줘.
+_report/di/routines/daily-report-routine.md에 따라 오늘 데일리 리포트를 한 번 수동 생성해줘.
 ```

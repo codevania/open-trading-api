@@ -6,8 +6,8 @@
 
 ## 리포트 작성 규칙
 
-- 사용자가 "오늘 리포트", "데일리 리포트", "일일 리포트", "장마감 리포트", "루틴 돌려줘"처럼 요청하면 `_report/routines/daily-report-routine.md`를 따라 일일 투자 리포트를 생성한다.
-- 일일 리포트는 `_report/daily/YYYY/YYYY-MM-DD.md`에 작성한다.
+- 사용자가 "오늘 리포트", "데일리 리포트", "일일 리포트", "장마감 리포트", "루틴 돌려줘"처럼 요청하면 `_report/di/routines/daily-report-routine.md`를 따라 일일 투자 리포트를 생성한다.
+- 일일 리포트는 `_report/di/daily/YYYY/YYYY-MM-DD.md`에 작성한다.
 - 원천 MCP/API 응답은 `_report/raw/YYYY/YYYY-MM-DD/` 아래에 저장하고, 사람이 쓴 결론과 분리한다.
 - 날짜는 기본적으로 한국시간(Asia/Seoul)을 사용한다. 해외시장 세션을 기준으로 작성할 때만 별도로 명시한다.
 - `_report/`에는 계좌번호, 앱키, 토큰, `.env` 내용, 실제 보유수량 같은 민감 정보를 저장하지 않는다.

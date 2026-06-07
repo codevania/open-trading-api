@@ -1,0 +1,73 @@
+version: "1.0"
+
+metadata:
+  name: "Strategy Universe Momentum Baseline v0"
+  description: "Within a pre-defined investable universe, mark buy candidates when N-day ROC is above threshold and sell candidates when ROC drops below zero."
+  author: "Codex"
+  tags:
+    - momentum
+    - strategy-universe
+    - baseline
+    - signal-only
+
+strategy:
+  id: momentum
+  category: momentum
+
+  universe:
+    mode: rule_based
+    policy_file: "_report/quant/universe.md"
+    manual_symbols_allowed: false
+    manual_symbols_usage: "smoke_test_only"
+    draft_rules:
+      market: "KRX"
+      security_type: "common_stock"
+      min_listing_days: 252
+      min_avg_trading_value_20d_krw: null
+    excluded_sources:
+      - "_report/di/watchlist.yaml Main/Game/DI groups"
+
+  params:
+    lookback:
+      default: 60
+      min: 20
+      max: 252
+      type: int
+      description: "Return lookback period"
+    threshold:
+      default: 0.0
+      min: -10
+      max: 10
+      type: float
+      description: "Entry threshold in percent"
+    stop_loss_pct:
+      default: 10.0
+      min: 2
+      max: 20
+      type: float
+      description: "Stop loss percent"
+
+  indicators:
+    - id: roc
+      alias: momentum
+      params:
+        period: $lookback
+
+  entry:
+    logic: AND
+    conditions:
+      - indicator: momentum
+        operator: greater_than
+        value: $threshold
+
+  exit:
+    logic: AND
+    conditions:
+      - indicator: momentum
+        operator: less_than
+        value: 0
+
+risk:
+  stop_loss:
+    enabled: true
+    percent: 10.0

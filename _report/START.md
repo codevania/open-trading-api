@@ -1,36 +1,46 @@
-# 포트폴리오 리포트 시작페이지
+# 투자 리포트 시작페이지
 
-이 파일은 `_report/`의 시작페이지입니다. 매일 리포트를 작성하거나 이전 판단을 되짚을 때 여기서 출발합니다.
+이 파일은 `_report/`의 시작페이지다. 일반/재량 투자는 `DI`, 퀀트 검증은 `Quant`, 원천 응답은 `raw`에서 출발한다.
 
 ## 바로가기
 
 | 목적 | 파일 |
 | --- | --- |
-| 최신 일일 리포트 | [daily/2026/2026-06-04.md](daily/2026/2026-06-04.md) |
-| 결정 로그 | [decisions/decision-log.md](decisions/decision-log.md) |
-| 일일 리포트 생성 루틴 | [routines/daily-report-routine.md](routines/daily-report-routine.md) |
-| Codex 자동화 등록 프롬프트 | [routines/codex-automation-prompt.md](routines/codex-automation-prompt.md) |
-| 일일 리포트 템플릿 | [templates/daily-report.md](templates/daily-report.md) |
+| DI 최신 일일 리포트 | [di/daily/2026/2026-06-05.md](di/daily/2026/2026-06-05.md) |
+| DI 결정 로그 | [di/decisions/decision-log.md](di/decisions/decision-log.md) |
+| DI 일일 리포트 생성 루틴 | [di/routines/daily-report-routine.md](di/routines/daily-report-routine.md) |
+| DI 자동화 등록 프롬프트 | [di/routines/codex-automation-prompt.md](di/routines/codex-automation-prompt.md) |
+| DI 일일 리포트 템플릿 | [di/templates/daily-report.md](di/templates/daily-report.md) |
+| DI 공개 관찰종목 예시 | [di/watchlist.example.yaml](di/watchlist.example.yaml) |
+| Quant 준비 로드맵 | [quant/README.md](quant/README.md) |
+| Quant 리서치 루틴 | [quant/routines/quant-research-routine.md](quant/routines/quant-research-routine.md) |
+| Market Regime Scan 루틴 | [quant/routines/market-regime-scan-routine.md](quant/routines/market-regime-scan-routine.md) |
+| 공용 원천 데이터 | [raw/](raw/) |
 | 리포트 운영 설명 | [README.md](README.md) |
-| 공개 가능한 관찰종목 예시 | [watchlist.example.yaml](watchlist.example.yaml) |
 
-## 현재 관찰종목
+## 영역 구분
 
-| 종목코드 | 종목명 | 시장 | 상태 | 메모 |
-| --- | --- | --- | --- | --- |
-| 005930 | 삼성전자 | KRX | 관찰중 | 국내 반도체 대표 관찰 종목 |
-| 000660 | SK하이닉스 | KRX | 관찰중 | HBM/메모리 사이클 핵심 관찰 종목 |
-| NAS:NVDA | NVIDIA | NASDAQ | 관찰중 | 글로벌 AI 가속기 기준 종목 |
-| 확인필요 | 현대 로보틱스 | KRX | 종목 확인 | 정확한 상장 종목코드 확인 필요 |
+| 영역 | 의미 | 주요 산출물 |
+| --- | --- | --- |
+| DI | Discretionary Investing, 일반/재량 투자 | watchlist, daily report, decision log, thesis |
+| Quant | Strategy 검증 | Universe, Strategy Spec, Backtest, Bias Control |
+| Raw | 공용 원천 데이터 | KIS/API JSON, 조회 요약 |
 
-## 매일 작성 흐름
+## DI 작성 흐름
 
-1. [일일 리포트 생성 루틴](routines/daily-report-routine.md)을 기준으로 작업한다.
-2. `_report/watchlist.yaml`에서 오늘 추적할 종목을 확인한다.
+1. [DI 일일 리포트 생성 루틴](di/routines/daily-report-routine.md)을 기준으로 작업한다.
+2. `_report/di/watchlist.yaml`에서 오늘 추적할 종목을 확인한다.
 3. KIS MCP로 현재가, 일봉, 수급, 뉴스/공시 데이터를 조회한다.
 4. 필요하면 원천 JSON을 `_report/raw/YYYY/YYYY-MM-DD/SYMBOL/`에 저장한다.
-5. `_report/templates/daily-report.md`를 복사해 `_report/daily/YYYY/YYYY-MM-DD.md`를 작성한다.
-6. 매수/매도/관망/확인 필요 판단은 `_report/decisions/decision-log.md`에 누적한다.
+5. `_report/di/templates/daily-report.md`를 복사해 `_report/di/daily/YYYY/YYYY-MM-DD.md`를 작성한다.
+6. 매수/매도/관망/확인 필요 판단은 `_report/di/decisions/decision-log.md`에 누적한다.
+
+## Quant 작성 흐름
+
+1. [Quant 리서치 루틴](quant/routines/quant-research-routine.md)을 기준으로 작업한다.
+2. DI watchlist를 Quant Universe로 사용하지 않는다.
+3. Strategy, Universe, Backtest, Bias Control은 `_report/quant/` 아래에 남긴다.
+4. 검증 전 Signal은 매매 Signal이 아니라 `Signal Candidate`로만 기록한다.
 
 ## 작성 원칙
 
@@ -42,7 +52,8 @@
 
 ## 다음 개선 후보
 
-- `watchlist.yaml`을 읽어 매일 리포트 초안을 생성하는 스크립트 추가
+- `_report/di/watchlist.yaml`을 읽어 매일 리포트 초안을 생성하는 스크립트 추가
 - 원천 JSON 자동 저장 규칙 확정
-- 월간 요약 템플릿 추가
-- 종목별 장기 투자 thesis 문서 추가
+- DI 월간 요약 템플릿 추가
+- DI 종목별 장기 투자 thesis 문서 추가
+- Quant 첫 Universe 초안 확정
