@@ -11,6 +11,7 @@
 - Strategy Portfolio 내 역할: 단독 운용 Strategy가 아니라 Momentum 기준선 및 Signal 검증용
 - AI 사용 범위: 문서화, Strategy Spec 정리, YAML 작성, 검증 체크리스트 작성 보조
 - Point-in-Time 계획: `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`
+- Raw sample audit: `_report/quant/research/2026-06-07-krx-raw-sample-audit.md`
 
 ## 1. Universe Bias
 
@@ -23,7 +24,7 @@
 
 판정: hold
 
-메모: Universe v0 정책과 Point-in-Time 확보 계획은 고정했다. 다만 실제 source snapshot, 상장폐지 이력, 거래정지 이력, 관리종목/투자주의 이력은 아직 확보하지 않았다. 따라서 성과 Backtest를 해도 투자 근거가 아니라 연구용 `hold` 판정이다.
+메모: Universe v0 정책과 Point-in-Time 확보 계획은 고정했다. KRX raw sample audit에서 비브라우저 직접 endpoint는 blocked였고, wrapper 보조 sample만 확보했다. 따라서 공식 source snapshot, 거래정지 이력, 관리종목/투자주의 이력은 아직 확보하지 않은 것으로 판정한다. 성과 Backtest를 해도 투자 근거가 아니라 연구용 `hold` 판정이다.
 
 ## 2. Lookahead Bias
 
@@ -109,7 +110,7 @@
 - Universe v0의 Inclusion Rule, Exclusion Rule, Liquidity Filter, Listing Age, Signal Timing은 고정했다.
 - DI watchlist와 Quant Universe를 분리했다.
 - Survivorship Bias와 Lookahead Bias 방지 기준은 문서화했다.
-- 그러나 Point-in-Time source snapshot, Transaction Cost, Slippage, Out-of-Sample 구간, Stress Period 검증은 아직 미완료다.
+- 그러나 reproducible official Point-in-Time source snapshot, Transaction Cost, Slippage, Out-of-Sample 구간, Stress Period 검증은 아직 미완료다.
 
 사용 가능 범위:
 

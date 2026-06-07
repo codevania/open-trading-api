@@ -8,6 +8,7 @@
 - Universe Version: `v0`
 - 현재 판정: hold
 - 목적: `Survivorship Bias`를 줄이기 위해 과거 각 시점에 실제 투자 가능했던 `Investable Universe`를 재구성하는 계획을 고정한다.
+- Raw sample audit: `_report/quant/research/2026-06-07-krx-raw-sample-audit.md`
 
 ## 1. Problem Statement
 
@@ -184,6 +185,15 @@ Stop condition이 발생하면 Backtest를 계속하지 않고 Bias Control을 `
 
 ## 9. Next Action
 
-다음 실제 작업은 KRX 공식 데이터에서 `listed issues`, `designated issues`, `market alert issues`, `delisting` raw sample 1일치를 확보할 수 있는지 확인하는 것이다.
+KRX 공식 데이터 raw sample 자동 확보 가능성은 `_report/quant/research/2026-06-07-krx-raw-sample-audit.md`에서 1차 확인했다.
+
+결론:
+
+- 공식 KRX 웹 페이지와 일부 `bld`는 확인했다.
+- 비브라우저 자동 POST endpoint는 `LOGOUT` 또는 HTTP `400`으로 blocked 상태다.
+- `finance-datareader` wrapper로 현재 KRX 상장 목록과 상장폐지 목록 보조 sample은 확보했다.
+- 단, 이 보조 sample은 `pass` 근거가 아니며 현재 판정은 계속 `hold`다.
+
+다음 실제 작업은 KRX 웹 UI에서 수동 CSV 다운로드가 가능한지 확인하고, 가능하면 `manual_snapshot`으로 manifest를 갱신하는 것이다.
 
 이 확인이 끝나기 전에는 `001-strategy-universe-momentum`을 성과 Strategy로 보지 않고, `Signal Candidate` 연구 대상으로만 둔다.

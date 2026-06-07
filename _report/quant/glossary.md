@@ -31,6 +31,8 @@ Quant 문서에서는 핵심 개념을 영어로 쓴다. 한국어는 설명을 
 | Market Alert Issue | 투자주의, 투자경고, 투자위험 등 시장경보 종목 |
 | Source Snapshot | 특정 시점에 수집한 원천 데이터 사본 |
 | Source Hash | 원천 데이터 변경 여부를 감지하기 위한 해시값 |
+| Manual Snapshot | 자동 API가 아니라 사람이 웹 UI에서 내려받아 저장한 Source Snapshot |
+| Reproducible Official Snapshot | 공식 원천에서 절차와 파라미터를 재현해 다시 받을 수 있는 Source Snapshot |
 | Signal | 매수/매도 후보를 만드는 정량 조건 |
 | Position | 실제 자금이 들어간 상태와 크기 |
 | Portfolio | 여러 Position 또는 Strategy의 조합 |
