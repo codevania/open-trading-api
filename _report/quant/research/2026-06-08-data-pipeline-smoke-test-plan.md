@@ -78,6 +78,27 @@ params:
 - 다음 smoke test implementation은 반드시 `_report/raw/YYYY/YYYY-MM-DD/`에 원천 응답을 저장해야 한다.
 - 수동 symbol 하나이므로 성과 해석은 금지한다.
 
+## 2.1 Existing Raw Validator Result
+
+2026-06-08에 기존 DI raw 요약 파일로 validator를 실행했다.
+
+결과 문서:
+
+- `_report/quant/research/2026-06-08-data-pipeline-smoke-test-result.md`
+
+판정:
+
+- `000660`, `005930`, `454910` raw JSON은 parser가 읽었다.
+- 각 파일은 5개 row만 있어 `lookback=20`의 `ROC`를 계산하지 않았다.
+- 결과는 모두 `data-insufficient`다.
+- 이 결과는 pipeline의 parser와 insufficient-data 방어 경로만 검증한다.
+
+제한:
+
+- 기존 raw는 `_report/raw/2026/2026-06-05/` 아래 DI 리포트용 요약 파일이다.
+- Quant 전용 raw 저장 위치인 `_report/raw/YYYY/YYYY-MM-DD/quant/smoke-test/`를 아직 만들지 않았다.
+- 이 결과는 full smoke test 통과가 아니며 Backtest 증거가 아니다.
+
 ## 3. Minimal Smoke Test Scope
 
 수동 symbol set은 pipeline 검증용으로만 사용한다.
@@ -123,6 +144,12 @@ Smoke test는 다음을 만족하면 통과다.
 ## 6. Next Implementation
 
 다음 구현은 작은 script 또는 routine으로 한다.
+
+현재 남은 blocker:
+
+- KIS MCP 응답을 raw JSON으로 저장하는 routine이 필요하다.
+- 각 symbol별로 최소 21개 daily rows가 필요하다.
+- 저장 위치는 `_report/raw/YYYY/YYYY-MM-DD/quant/smoke-test/`로 고정한다.
 
 필수 산출물:
 

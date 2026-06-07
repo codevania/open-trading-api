@@ -166,15 +166,18 @@ def _find_raw_files(raw_dir: Path) -> list[Path]:
     return sorted(raw_dir.glob("**/inquire_daily_itemchartprice.json"))
 
 
-def _render_markdown(results: list[SmokeResult], lookback: int, threshold: float) -> str:
+def _render_markdown(results: list[SmokeResult], lookback: int, threshold: float, raw_dir: Path) -> str:
     lines = [
         "# Data Pipeline Smoke Test Result",
         "",
+        f"- Source raw directory: `{raw_dir.as_posix()}`",
+        "- Validator: `scripts/quant_smoke_validate.py`",
         "- Universe definition mode: `manual_smoke_test`",
         "- Interpretation: `Data Pipeline Smoke Test - Not Quant Validation`",
         "- Bias Control judgment: `hold`",
         f"- Lookback: `{lookback}`",
         f"- Threshold: `{threshold}`",
+        "- Cost model reference: `_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md`",
         "",
         "| Symbol | Status | Rows | Latest Date | Latest Close | ROC % | Avg Trading Value 20D KRW | Message |",
         "| --- | --- | ---: | --- | ---: | ---: | ---: | --- |",
@@ -196,6 +199,8 @@ def _render_markdown(results: list[SmokeResult], lookback: int, threshold: float
             "- Manual symbol files are not a Quant Universe.",
             "- This output must not be used as Strategy performance evidence.",
             "- Point-in-Time Investable Universe remains required before Backtest interpretation.",
+            f"- Files with fewer than {lookback + 1} daily rows only prove the parser and `data-insufficient` path.",
+            "- Full smoke test acceptance remains blocked until raw files with enough daily rows are saved under `_report/raw/YYYY/YYYY-MM-DD/quant/smoke-test/`.",
         ]
     )
     return "\n".join(lines) + "\n"
@@ -218,7 +223,7 @@ def main() -> int:
         raise SystemExit(f"no raw daily files found under: {raw_dir}")
 
     results = [validate_file(path, args.lookback, args.threshold) for path in raw_files]
-    report = _render_markdown(results, args.lookback, args.threshold)
+    report = _render_markdown(results, args.lookback, args.threshold, raw_dir)
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(report, encoding="utf-8")

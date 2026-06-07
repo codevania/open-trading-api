@@ -147,7 +147,7 @@ bias_control:
   hold_reasons:
     - "Point-in-Time Investable Universe plan is documented, but reproducible official source snapshots are not yet available"
     - "KRX direct JSON/CSV endpoints returned LOGOUT or HTTP 400 in non-browser automated session"
-    - "Out-of-Sample or walk-forward dates are not yet set"
+    - "Out-of-Sample and walk-forward dates are documented, but source data is still point-in-time pending"
 
 validation_policy:
   parameter_candidates:
@@ -208,6 +208,7 @@ validation_policy:
     assumption_file: "_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md"
   smoke_test:
     allowed_when_point_in_time_unavailable: true
-    current_status: "plan_set_preflight_kis_daily_005930_success_raw_not_persisted"
+    current_status: "existing_di_raw_validator_result_data_insufficient"
     plan_file: "_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md"
+    result_file: "_report/quant/research/2026-06-08-data-pipeline-smoke-test-result.md"
     universe_definition_mode: "manual_smoke_test"
