@@ -51,6 +51,9 @@ _report/quant/
     001-strategy-universe-momentum.md    # 첫 후보 Strategy Spec
     001-strategy-universe-momentum.kis.yaml # Backtester/Strategy Builder용 Strategy config
     001-strategy-universe-momentum.bias-control.md # Strategy별 Bias Control 판정
+    002-strategy-universe-short-term-reversal.md # 두 번째 후보 Strategy Spec
+    002-strategy-universe-short-term-reversal.kis.yaml # mean_reversion 후보 config
+    002-strategy-universe-short-term-reversal.bias-control.md # 002 Bias Control 판정
 ```
 
 연결 루틴: `_report/quant/routines/quant-research-routine.md`
@@ -156,5 +159,5 @@ KIS raw 저장 helper: `scripts/quant_kis_raw_save.py`
 8. KIS MCP raw 저장 routine과 helper는 `_report/quant/routines/kis-raw-save-routine.md`, `scripts/quant_kis_raw_save.py`로 만들었다.
 9. 다음 실제 작업은 MCP 응답을 helper로 저장해 `_report/raw/YYYY/YYYY-MM-DD/quant/smoke-test/`에 최소 21개 daily rows를 확보하는 것이다.
 10. 개인 투자용 Position 크기, 현금 비중, 전체 자산 내 Strategy 비중은 `_report/quant/research/2026-06-08-position-sizing-capital-allocation-policy.md`에 고정했다.
-11. 두 번째 후보 Strategy는 momentum과 다른 가설을 가진 `volatility_breakout`, `mean_reversion`, `event_filter`, `regime_filter` 중 하나로 제한한다.
+11. 두 번째 후보 Strategy는 momentum과 다른 가설을 가진 `short_term_reversal` mean_reversion으로 고정했다.
 12. 일일 리포트 템플릿에 "퀀트 Signal" 섹션을 추가할지 검토한다.

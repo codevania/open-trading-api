@@ -1,0 +1,131 @@
+version: "1.0"
+
+metadata:
+  name: "Strategy Universe Short-Term Reversal Candidate v0"
+  description: "Within a pre-defined investable universe, mark short-term mean-reversion candidates when close is below a short SMA by a fixed threshold."
+  author: "Codex"
+  tags:
+    - mean_reversion
+    - short_term_reversal
+    - strategy-universe
+    - candidate
+    - signal-only
+
+strategy:
+  id: short_term_reversal
+  category: mean_reversion
+
+  universe:
+    mode: rule_based
+    version: "v0"
+    policy_file: "_report/quant/universe.md"
+    status: "policy_locked_point_in_time_data_pending"
+    interpretation_status: "hold_until_point_in_time_investable_universe_is_available"
+    manual_symbols_allowed: false
+    manual_symbols_usage: "smoke_test_only"
+    market: "KRX"
+    venues:
+      - "KOSPI"
+      - "KOSDAQ"
+    security_type: "common_stock"
+    excluded_sources:
+      - "_report/di/watchlist.yaml Main/Game/DI groups"
+      - "manual watchlist selected after observing current losers or rebound candidates"
+
+  params:
+    period:
+      default: 5
+      min: 3
+      max: 20
+      type: int
+      description: "SMA period"
+    threshold_pct:
+      default: 3.0
+      min: 1.0
+      max: 10.0
+      type: float
+      description: "Divergence threshold percent"
+    stop_loss_pct:
+      default: 5.0
+      min: 2
+      max: 15
+      type: float
+      description: "Stop loss percent"
+
+  indicators:
+    - id: sma
+      alias: ma
+      params:
+        period: 5
+      output: value
+  candlesticks: []
+
+  entry:
+    logic: AND
+    conditions:
+      - indicator: close
+        operator: less_than
+        compare_to: ma
+        output: close
+        compare_output: value
+        compare_scalar: 0.97
+        compare_operation: mul
+
+  exit:
+    logic: OR
+    conditions:
+      - indicator: close
+        operator: greater_than
+        compare_to: ma
+        output: close
+        compare_output: value
+        compare_scalar: 1.03
+        compare_operation: mul
+
+risk:
+  position_sizing:
+    current_status: "paper_signal_only_capital_allocation_zero"
+    policy_file: "_report/quant/research/2026-06-08-position-sizing-capital-allocation-policy.md"
+    strategy_capital_cap_pct:
+      current: 0.0
+      pilot_review_max: 1.0
+    single_position_cap_pct:
+      current: 0.0
+      pilot_review_max: 0.25
+  stop_loss:
+    enabled: true
+    percent: 5.0
+  transaction_cost:
+    required_for_backtest: true
+    current_status: "baseline_assumption_set_external_fee_override_required"
+    assumption_file: "_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md"
+  slippage:
+    required_for_backtest: true
+    current_status: "baseline_assumption_set"
+  tax:
+    required_for_backtest: true
+    current_status: "2026_krx_sell_side_assumption_set"
+
+bias_control:
+  checklist_file: "_report/quant/strategies/002-strategy-universe-short-term-reversal.bias-control.md"
+  current_judgment: "hold"
+  hold_reasons:
+    - "Point-in-Time Investable Universe is not available"
+    - "Full smoke-test raw has not been captured"
+    - "Out-of-Sample and stress-period review are not complete"
+
+validation_policy:
+  strategy_role: "second_candidate_diversification_against_momentum"
+  parameter_selection: "sensitivity_analysis_only_not_optimization"
+  out_of_sample:
+    required: true
+    current_status: "window_set_point_in_time_data_pending"
+    plan_file: "_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan.md"
+  cost_model:
+    required: true
+    current_status: "baseline_assumption_set"
+    assumption_file: "_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md"
+  smoke_test:
+    allowed_when_point_in_time_unavailable: true
+    current_status: "candidate_waiting_for_full_smoke_test_raw"
+    universe_definition_mode: "manual_smoke_test"
