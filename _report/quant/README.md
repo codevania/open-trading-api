@@ -40,6 +40,7 @@ _report/quant/
     2026-06-08-di-quant-signal-section-proposal.md # DI 리포트 Quant Signal 섹션 제안
   routines/
     kis-raw-save-routine.md              # KIS MCP raw 저장 절차
+    paper-signal-tracking-routine.md     # 검증 전 paper Signal 관찰 절차
     quant-research-routine.md            # Strategy 검증 절차
     market-regime-scan-routine.md        # 시장 환경 필터 절차
   templates/
@@ -48,6 +49,7 @@ _report/quant/
     bias-control-checklist.md            # Bias Control 체크리스트
     krx-manual-snapshot-manifest.yaml    # KRX 수동 snapshot manifest 템플릿
     market-regime-scan.md                # 시장 환경 필터 템플릿
+    paper-signal-log.md                  # paper Signal 추적 템플릿
     study-log.md                         # 주간 학습 로그 템플릿
   strategies/
     001-strategy-universe-momentum.md    # 첫 후보 Strategy Spec
@@ -61,6 +63,8 @@ _report/quant/
 연결 루틴: `_report/quant/routines/quant-research-routine.md`
 
 KIS raw 저장 루틴: `_report/quant/routines/kis-raw-save-routine.md`
+
+Paper Signal tracking 루틴: `_report/quant/routines/paper-signal-tracking-routine.md`
 
 Smoke test validator: `scripts/quant_smoke_validate.py`
 
@@ -162,4 +166,5 @@ KIS raw 저장 helper: `scripts/quant_kis_raw_save.py`
 9. KIS MCP 수동 raw capture 기반으로 `_report/raw/2026/2026-06-09/quant/smoke-test/`에 21개 daily rows를 저장했고, `_report/quant/research/2026-06-09-data-pipeline-smoke-test-result.md`에서 ROC path를 통과했다.
 10. 개인 투자용 Position 크기, 현금 비중, 전체 자산 내 Strategy 비중은 `_report/quant/research/2026-06-08-position-sizing-capital-allocation-policy.md`에 고정했다.
 11. 두 번째 후보 Strategy는 momentum과 다른 가설을 가진 `short_term_reversal` mean_reversion으로 고정했다.
-12. 일일 리포트 템플릿의 "Quant Signal Candidates" 섹션은 `_report/quant/research/2026-06-08-di-quant-signal-section-proposal.md`에 제안만 남기고, DI 템플릿 직접 수정은 현재 사용자 변경 때문에 보류한다.
+12. 첫 paper Signal log는 `_report/quant/research/2026-06-09-paper-signal-log.md`에 기록했다.
+13. 일일 리포트 템플릿의 "Quant Signal Candidates" 섹션은 `_report/quant/research/2026-06-08-di-quant-signal-section-proposal.md`에 제안만 남기고, DI 템플릿 직접 수정은 현재 사용자 변경 때문에 보류한다.
