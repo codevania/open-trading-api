@@ -167,6 +167,7 @@ def _find_raw_files(raw_dir: Path) -> list[Path]:
 
 
 def _render_markdown(results: list[SmokeResult], lookback: int, threshold: float, raw_dir: Path) -> str:
+    has_insufficient_rows = any(result.rows < lookback + 1 for result in results)
     lines = [
         "# Data Pipeline Smoke Test Result",
         "",
@@ -198,11 +199,24 @@ def _render_markdown(results: list[SmokeResult], lookback: int, threshold: float
             "",
             "- Manual symbol files are not a Quant Universe.",
             "- This output must not be used as Strategy performance evidence.",
+            "- `BUY candidate` and `SELL candidate` are paper Signal Candidate states, not trade instructions.",
             "- Point-in-Time Investable Universe remains required before Backtest interpretation.",
-            f"- Files with fewer than {lookback + 1} daily rows only prove the parser and `data-insufficient` path.",
-            "- Full smoke test acceptance remains blocked until raw files with enough daily rows are saved under `_report/raw/YYYY/YYYY-MM-DD/quant/smoke-test/`.",
         ]
     )
+    if has_insufficient_rows:
+        lines.append(
+            f"- Files with fewer than {lookback + 1} daily rows only prove the parser and `data-insufficient` path."
+        )
+        lines.append(
+            "- Full smoke test acceptance remains blocked until raw files with enough daily rows are saved under `_report/raw/YYYY/YYYY-MM-DD/quant/smoke-test/`."
+        )
+    else:
+        lines.append(
+            f"- All listed files had at least {lookback + 1} daily rows, so the parser and ROC calculation path passed."
+        )
+        lines.append(
+            "- Full Backtest interpretation remains blocked until Point-in-Time Universe, OOS, and Bias Control pass."
+        )
     return "\n".join(lines) + "\n"
 
 

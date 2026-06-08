@@ -35,6 +35,7 @@ _report/quant/
     2026-06-08-out-of-sample-walk-forward-plan.md # OOS/walk-forward 검증 구간
     2026-06-08-data-pipeline-smoke-test-plan.md # smoke test 기준
     2026-06-08-data-pipeline-smoke-test-result.md # 기존 DI raw 기반 validator 결과
+    2026-06-09-data-pipeline-smoke-test-result.md # KIS MCP 수동 raw capture 기반 ROC path 결과
     2026-06-08-position-sizing-capital-allocation-policy.md # Position/Capital 정책
     2026-06-08-di-quant-signal-section-proposal.md # DI 리포트 Quant Signal 섹션 제안
   routines/
@@ -158,7 +159,7 @@ KIS raw 저장 helper: `scripts/quant_kis_raw_save.py`
 6. Manual symbol 기반 실행은 `_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md`에 따라 smoke test로만 실행한다.
 7. Smoke test raw validator 결과는 `_report/quant/research/2026-06-08-data-pipeline-smoke-test-result.md`에 기록했다. 기존 DI raw 요약은 5개 row라 모두 `data-insufficient`였고, 성과 해석은 금지한다.
 8. KIS MCP raw 저장 routine과 helper는 `_report/quant/routines/kis-raw-save-routine.md`, `scripts/quant_kis_raw_save.py`로 만들었다.
-9. 다음 실제 작업은 MCP 응답을 helper로 저장해 `_report/raw/YYYY/YYYY-MM-DD/quant/smoke-test/`에 최소 21개 daily rows를 확보하는 것이다.
+9. KIS MCP 수동 raw capture 기반으로 `_report/raw/2026/2026-06-09/quant/smoke-test/`에 21개 daily rows를 저장했고, `_report/quant/research/2026-06-09-data-pipeline-smoke-test-result.md`에서 ROC path를 통과했다.
 10. 개인 투자용 Position 크기, 현금 비중, 전체 자산 내 Strategy 비중은 `_report/quant/research/2026-06-08-position-sizing-capital-allocation-policy.md`에 고정했다.
 11. 두 번째 후보 Strategy는 momentum과 다른 가설을 가진 `short_term_reversal` mean_reversion으로 고정했다.
 12. 일일 리포트 템플릿의 "Quant Signal Candidates" 섹션은 `_report/quant/research/2026-06-08-di-quant-signal-section-proposal.md`에 제안만 남기고, DI 템플릿 직접 수정은 현재 사용자 변경 때문에 보류한다.

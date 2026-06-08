@@ -147,9 +147,10 @@ Smoke test는 다음을 만족하면 통과다.
 
 현재 남은 blocker:
 
-- KIS MCP 응답을 `scripts/quant_kis_raw_save.py`로 raw JSON 저장해야 한다.
-- 각 symbol별로 최소 21개 daily rows가 필요하다.
-- 저장 위치는 `_report/raw/YYYY/YYYY-MM-DD/quant/smoke-test/`로 고정한다.
+- 2026-06-09에 KIS MCP 수동 raw capture로 각 symbol별 21개 daily rows를 확보했다.
+- 저장 위치는 `_report/raw/2026/2026-06-09/quant/smoke-test/`다.
+- 결과 문서는 `_report/quant/research/2026-06-09-data-pipeline-smoke-test-result.md`다.
+- 남은 blocker는 Point-in-Time Universe, full Backtest, OOS/Bias Control이다.
 
 필수 산출물:
 

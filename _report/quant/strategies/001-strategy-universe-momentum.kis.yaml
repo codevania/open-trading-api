@@ -217,7 +217,7 @@ validation_policy:
     assumption_file: "_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md"
   smoke_test:
     allowed_when_point_in_time_unavailable: true
-    current_status: "existing_di_raw_validator_result_data_insufficient"
+    current_status: "manual_kis_mcp_raw_capture_roc_path_passed"
     plan_file: "_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md"
-    result_file: "_report/quant/research/2026-06-08-data-pipeline-smoke-test-result.md"
+    result_file: "_report/quant/research/2026-06-09-data-pipeline-smoke-test-result.md"
     universe_definition_mode: "manual_smoke_test"
