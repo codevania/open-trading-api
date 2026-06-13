@@ -155,9 +155,9 @@ KIS raw 저장 helper: `scripts/quant_kis_raw_save.py`
 
 ## 다음 작업 큐
 
-1. `learning-roadmap.md` 1주차를 진행하고 `templates/study-log.md`로 첫 학습 로그를 남긴다.
-2. `templates/market-regime-scan.md`로 첫 Market Regime Scan을 작성한다.
-3. KRX 웹 UI에서 사람이 수동 CSV를 내려받고 `_report/quant/templates/krx-manual-snapshot-manifest.yaml` 형식으로 `manual_snapshot` manifest를 작성한다.
+1. `learning-roadmap.md` 1주차 학습 로그는 `_report/quant/research/2026-06-13-study-log-week-01.md`에 남겼다.
+2. 첫 Market Regime Scan은 `_report/quant/research/2026-06-13-market-regime-scan.md`에 남겼다. 현재 판정은 `event-driven`, `high-volatility`, `low confidence`다.
+3. KRX manual snapshot prep은 `_report/quant/research/2026-06-13-krx-manual-snapshot-prep.md`와 pending manifest에 남겼다. 실제 KRX CSV 다운로드, hash, schema 검증은 아직 필요하다.
 4. Transaction Cost, Slippage, 세금 가정은 `_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md`에 고정했다.
 5. Out-of-Sample 또는 walk-forward 구간은 `_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan.md`에 고정했다.
 6. Manual symbol 기반 실행은 `_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md`에 따라 smoke test로만 실행한다.
@@ -167,4 +167,5 @@ KIS raw 저장 helper: `scripts/quant_kis_raw_save.py`
 10. 개인 투자용 Position 크기, 현금 비중, 전체 자산 내 Strategy 비중은 `_report/quant/research/2026-06-08-position-sizing-capital-allocation-policy.md`에 고정했다.
 11. 두 번째 후보 Strategy는 momentum과 다른 가설을 가진 `short_term_reversal` mean_reversion으로 고정했다.
 12. 첫 paper Signal log는 `_report/quant/research/2026-06-09-paper-signal-log.md`에 기록했다.
-13. 일일 리포트 템플릿의 "Quant Signal Candidates" 섹션은 `_report/quant/research/2026-06-08-di-quant-signal-section-proposal.md`에 제안만 남기고, DI 템플릿 직접 수정은 현재 사용자 변경 때문에 보류한다.
+13. 첫 paper Signal 1D follow-up은 `_report/quant/research/2026-06-13-paper-signal-follow-up.md`에 남겼다. 저장된 post-signal KIS raw가 없어 결과는 `data-unavailable`이며 성과로 해석하지 않는다.
+14. 일일 리포트 템플릿의 "Quant Signal Candidates" 섹션은 `_report/quant/research/2026-06-08-di-quant-signal-section-proposal.md`에 제안만 남기고, DI 템플릿 직접 수정은 현재 사용자 변경 때문에 보류한다.

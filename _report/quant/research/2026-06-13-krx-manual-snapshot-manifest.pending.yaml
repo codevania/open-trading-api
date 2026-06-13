@@ -1,0 +1,68 @@
+version: "1.0"
+
+snapshot:
+  as_of_date: "2026-06-13"
+  market: "KRX"
+  source_mode: "manual_snapshot"
+  downloaded_by: "manual"
+  download_verified_by_codex: false
+  status: "pending_manual_download"
+  notes:
+    - "This pending manifest is a prep artifact; raw files are not present yet."
+    - "Manual snapshot is official-source evidence, not automated reproducibility evidence."
+    - "Do not upgrade Bias Control to pass from this manifest alone."
+
+datasets:
+  - id: "managed_issues_current"
+    required: true
+    source_name: "KRX Data Marketplace - managed issues current"
+    source_url: "https://data.krx.co.kr/contents/MDC/STAT/issue/MDCSTAT214.jsp"
+    downloaded_at_kst: "TO_BE_FILLED"
+    raw_path: "_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv"
+    file_format: "csv"
+    sha256: "TO_BE_FILLED"
+    columns:
+      - "TO_BE_VERIFIED_AFTER_DOWNLOAD"
+    schema_verified_by_codex: false
+    status: "pending_manual_download"
+
+  - id: "managed_issue_designation_history"
+    required: true
+    source_name: "KRX Data Marketplace - managed issue designation history"
+    source_url: "https://data.krx.co.kr/contents/MDC/STAT/issue/MDCSTAT215.jsp"
+    downloaded_at_kst: "TO_BE_FILLED"
+    raw_path: "_report/raw/2026/2026-06-13/krx/universe/managed_issue_designation_history.raw.csv"
+    file_format: "csv"
+    sha256: "TO_BE_FILLED"
+    columns:
+      - "TO_BE_VERIFIED_AFTER_DOWNLOAD"
+    schema_verified_by_codex: false
+    status: "pending_manual_download"
+
+  - id: "delisting_events"
+    required: false
+    source_name: "Global KRX - Delisting"
+    source_url: "https://global.krx.co.kr/contents/GLB/03/0306/0306050000/GLB0306050000.jsp"
+    downloaded_at_kst: "TO_BE_FILLED"
+    raw_path: "_report/raw/2026/2026-06-13/krx/universe/delisting_events.raw.csv"
+    file_format: "csv"
+    sha256: "TO_BE_FILLED"
+    columns:
+      - "TO_BE_VERIFIED_AFTER_DOWNLOAD"
+    schema_verified_by_codex: false
+    status: "pending_manual_download"
+
+bias_judgment:
+  current_status: "hold"
+  reason:
+    - "manual_snapshot does not prove automated reproducibility"
+    - "point_in_time history is not yet available across rebalance dates"
+    - "OHLCV calendar and status flag conflicts are not yet audited"
+    - "raw files are not present yet"
+
+next_step_after_manifest:
+  - "Download required KRX raw files manually."
+  - "Compute SHA-256 hashes."
+  - "Verify raw file schema."
+  - "Create parser only after required datasets are present."
+  - "Keep Strategy interpretation as hold until reproducible Point-in-Time snapshots exist."
