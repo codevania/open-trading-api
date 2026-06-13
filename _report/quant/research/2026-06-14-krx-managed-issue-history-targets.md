@@ -27,15 +27,19 @@ Fallback if KRX rejects or times out:
 
 If that still fails, split by year and preserve each raw file separately.
 
-## Control Targets
+## Control Evidence
 
-These are normal large-cap comparison targets. Their history queries help confirm whether the screen returns empty rows cleanly for non-managed control names.
+Do not query these on `관리종목 지정 내역(개별종목)` if the KRX stock finder does not return them. The screen appears to be centered on names with managed-issue designation records, so large-cap normal controls may not be selectable there.
 
-| Code | Company | Save as |
+Use the current managed issues CSV as `Negative Control Evidence` instead: confirm these codes are absent from `managed_issues_current.raw.csv`.
+
+| Code | Company | Evidence method |
 | --- | --- | --- |
-| `005930` | Samsung Electronics | `managed_issue_history_005930_samsung_electronics.raw.csv` |
-| `000660` | SK hynix | `managed_issue_history_000660_sk_hynix.raw.csv` |
-| `035420` | NAVER | `managed_issue_history_035420_naver.raw.csv` |
+| `005930` | Samsung Electronics | Confirm absence from `managed_issues_current.raw.csv` |
+| `000660` | SK hynix | Confirm absence from `managed_issues_current.raw.csv` |
+| `035420` | NAVER | Confirm absence from `managed_issues_current.raw.csv` |
+
+Verified result from the current CSV: `005930 Samsung Electronics`, `000660 SK hynix`, and `035420 NAVER` are all `ABSENT`.
 
 ## Managed Issue Sample Targets
 
@@ -64,7 +68,7 @@ Save all history CSVs under:
 
 `_report/raw/2026/2026-06-13/krx/universe/`
 
-After download, rerun:
+After downloading the managed-issue sample histories, rerun:
 
 ```powershell
 uv run python scripts\quant_krx_manifest_materialize.py `
@@ -76,4 +80,3 @@ uv run python scripts\quant_krx_manifest_verify.py `
   --manifest _report\raw\2026\2026-06-13\krx\universe\manifest.yaml `
   --allow-pending
 ```
-
