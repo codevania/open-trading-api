@@ -158,7 +158,7 @@ KIS raw 저장 helper: `scripts/quant_kis_raw_save.py`
 
 1. `learning-roadmap.md` 1주차 학습 로그는 `_report/quant/research/2026-06-13-study-log-week-01.md`에 남겼다.
 2. 첫 Market Regime Scan은 `_report/quant/research/2026-06-13-market-regime-scan.md`에 남겼다. 현재 판정은 `event-driven`, `high-volatility`, `low confidence`다.
-3. KRX manual snapshot prep은 `_report/quant/research/2026-06-13-krx-manual-snapshot-prep.md`와 pending manifest에 남겼다. `scripts/quant_krx_manifest_verify.py`로 manifest/hash/schema 검증 경로를 만들었고, 실제 KRX CSV 다운로드는 아직 필요하다.
+3. KRX manual snapshot prep은 `_report/quant/research/2026-06-13-krx-manual-snapshot-prep.md`와 pending manifest에 남겼다. `scripts/quant_krx_manifest_verify.py`로 manifest/hash/schema 검증 경로를 만들었고, Chrome retry 결과는 `_report/quant/research/2026-06-13-krx-chrome-download-retry.md`에 남겼다. 실제 KRX CSV 다운로드는 아직 필요하다.
 4. Transaction Cost, Slippage, 세금 가정은 `_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md`에 고정했다.
 5. Out-of-Sample 또는 walk-forward 구간은 `_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan.md`에 고정했다.
 6. Manual symbol 기반 실행은 `_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md`에 따라 smoke test로만 실행한다.

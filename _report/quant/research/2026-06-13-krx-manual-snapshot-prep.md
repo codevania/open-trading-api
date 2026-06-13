@@ -10,6 +10,7 @@
 - Bias Control judgment: `hold`
 - Procedure reference: `_report/quant/research/2026-06-08-krx-manual-snapshot-procedure.md`
 - Pending manifest: `_report/quant/research/2026-06-13-krx-manual-snapshot-manifest.pending.yaml`
+- Chrome retry: `_report/quant/research/2026-06-13-krx-chrome-download-retry.md`
 
 ## Purpose
 
@@ -75,3 +76,15 @@ uv run python scripts/quant_krx_manifest_verify.py `
 - Column schema is not verified.
 - Parser work is not started.
 - Backtest interpretation is not upgraded.
+
+## 2026-06-13 Chrome Retry Result
+
+Codex retried the raw download path through the Chrome extension.
+
+- Direct STAT page rendered `관리종목 현황`, but page scripts were incomplete in direct URL mode.
+- Console evidence included `ReferenceError: mdc is not defined` and `ReferenceError: jQuery is not defined`.
+- KRX main shell menu discovery found `MDC02020701` for `관리종목 현황` and `MDC02020702` for `관리종목 지정 내역(개별종목)`.
+- Direct loader URL for `MDC02020701` redirected to the KRX login page.
+- No raw CSV file was captured.
+
+Result: `pending_manual_download` remains unchanged. Parser work is still blocked.
