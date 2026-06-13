@@ -167,5 +167,5 @@ KIS raw 저장 helper: `scripts/quant_kis_raw_save.py`
 10. 개인 투자용 Position 크기, 현금 비중, 전체 자산 내 Strategy 비중은 `_report/quant/research/2026-06-08-position-sizing-capital-allocation-policy.md`에 고정했다.
 11. 두 번째 후보 Strategy는 momentum과 다른 가설을 가진 `short_term_reversal` mean_reversion으로 고정했다.
 12. 첫 paper Signal log는 `_report/quant/research/2026-06-09-paper-signal-log.md`에 기록했다.
-13. 첫 paper Signal 1D follow-up은 `_report/quant/research/2026-06-13-paper-signal-follow-up.md`에 남겼다. 저장된 post-signal KIS raw가 없어 결과는 `data-unavailable`이며 성과로 해석하지 않는다.
+13. 첫 paper Signal follow-up은 `_report/quant/research/2026-06-13-paper-signal-follow-up.md`에 남겼다. repo-local daily raw 기준 `000660`, `005930`은 1D/5D paper observation을 기록했고, `035420`과 20D observation은 아직 `pending`이다.
 14. 일일 리포트 템플릿의 "Quant Signal Candidates" 섹션은 `_report/quant/research/2026-06-08-di-quant-signal-section-proposal.md`에 제안만 남기고, DI 템플릿 직접 수정은 현재 사용자 변경 때문에 보류한다.
