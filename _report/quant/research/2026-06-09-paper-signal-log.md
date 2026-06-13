@@ -14,9 +14,9 @@
 
 | Strategy | Symbol | Signal Date | Candidate State | Evidence | Data Source | Follow-Up Window | Invalidator | Action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `001-strategy-universe-momentum` | `000660` | 20260605 | BUY candidate | 20D ROC `29.2942%`, latest close `2070000`, avg trading value `12079720307940` KRW | `_report/raw/2026/2026-06-09/quant/smoke-test/000660.daily.raw.json` | next 1D, 5D, 20D paper observation | data anomaly, ROC reversal, Point-in-Time failure | paper tracking only |
-| `001-strategy-universe-momentum` | `005930` | 20260605 | BUY candidate | 20D ROC `23.6842%`, latest close `329000`, avg trading value `10431533672673` KRW | `_report/raw/2026/2026-06-09/quant/smoke-test/005930.daily.raw.json` | next 1D, 5D, 20D paper observation | data anomaly, ROC reversal, Point-in-Time failure | paper tracking only |
-| `001-strategy-universe-momentum` | `035420` | 20260605 | BUY candidate | 20D ROC `22.8365%`, latest close `255500`, avg trading value `657256761422` KRW | `_report/raw/2026/2026-06-09/quant/smoke-test/035420.daily.raw.json` | next 1D, 5D, 20D paper observation | data anomaly, ROC reversal, Point-in-Time failure | paper tracking only |
+| `001-strategy-universe-momentum` | `000660 SK hynix` | 20260605 | BUY candidate | 20D ROC `29.2942%`, latest close `2070000`, avg trading value `12079720307940` KRW | `_report/raw/2026/2026-06-09/quant/smoke-test/000660.daily.raw.json` | next 1D, 5D, 20D paper observation | data anomaly, ROC reversal, Point-in-Time failure | paper tracking only |
+| `001-strategy-universe-momentum` | `005930 Samsung Electronics` | 20260605 | BUY candidate | 20D ROC `23.6842%`, latest close `329000`, avg trading value `10431533672673` KRW | `_report/raw/2026/2026-06-09/quant/smoke-test/005930.daily.raw.json` | next 1D, 5D, 20D paper observation | data anomaly, ROC reversal, Point-in-Time failure | paper tracking only |
+| `001-strategy-universe-momentum` | `035420 NAVER` | 20260605 | BUY candidate | 20D ROC `22.8365%`, latest close `255500`, avg trading value `657256761422` KRW | `_report/raw/2026/2026-06-09/quant/smoke-test/035420.daily.raw.json` | next 1D, 5D, 20D paper observation | data anomaly, ROC reversal, Point-in-Time failure | paper tracking only |
 
 ## Data Quality
 

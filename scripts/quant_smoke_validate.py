@@ -13,6 +13,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 
 REQUIRED_FIELDS = ("stck_bsop_date", "stck_clpr", "stck_oprc", "stck_hgpr", "stck_lwpr", "acml_vol")
 
@@ -166,6 +168,21 @@ def _find_raw_files(raw_dir: Path) -> list[Path]:
     return sorted(raw_dir.glob("**/inquire_daily_itemchartprice.json"))
 
 
+def _load_symbol_labels(raw_dir: Path) -> dict[str, str]:
+    manifest_path = raw_dir / "manifest.yaml"
+    if not manifest_path.exists():
+        return {}
+
+    manifest = yaml.safe_load(manifest_path.read_text(encoding="utf-8")) or {}
+    labels: dict[str, str] = {}
+    for row in manifest.get("symbols", []) or []:
+        code = str(row.get("code", "")).strip()
+        name = str(row.get("name", "")).strip()
+        if code and name:
+            labels[code] = f"{code} {name}"
+    return labels
+
+
 def _render_markdown(results: list[SmokeResult], lookback: int, threshold: float, raw_dir: Path) -> str:
     has_insufficient_rows = any(result.rows < lookback + 1 for result in results)
     lines = [
@@ -237,6 +254,10 @@ def main() -> int:
         raise SystemExit(f"no raw daily files found under: {raw_dir}")
 
     results = [validate_file(path, args.lookback, args.threshold) for path in raw_files]
+    labels = _load_symbol_labels(raw_dir)
+    for result in results:
+        result.symbol = labels.get(result.symbol, result.symbol)
+
     report = _render_markdown(results, args.lookback, args.threshold, raw_dir)
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

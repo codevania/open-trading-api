@@ -15,6 +15,7 @@
 - AI는 코딩, 정리, 검증 자동화 보조로 사용하고 직접 종목 예측 근거로 쓰지 않는다.
 - 단일 Strategy Backtest가 좋아도 포트폴리오 Alpha로 주장하지 않는다. Strategy 간 실패 조건이 다른지 확인한다.
 - 현재 관심종목을 과거에 소급 적용한 결과는 퀀트 성과가 아니라 Data Pipeline Smoke Test로만 해석한다.
+- 사람이 읽는 Quant 표와 문장에서는 종목 코드를 단독으로 쓰지 않고 `035420 NAVER`처럼 `code + company name`을 함께 쓴다. raw file name은 예외로 코드 기반 파일명을 유지한다.
 - 모든 Strategy는 경제/금융 Domain Hypothesis, Position 제약, 전체 자산 내 역할을 함께 기록한다.
 
 ## 산출물 구조
@@ -167,5 +168,5 @@ KIS raw 저장 helper: `scripts/quant_kis_raw_save.py`
 10. 개인 투자용 Position 크기, 현금 비중, 전체 자산 내 Strategy 비중은 `_report/quant/research/2026-06-08-position-sizing-capital-allocation-policy.md`에 고정했다.
 11. 두 번째 후보 Strategy는 momentum과 다른 가설을 가진 `short_term_reversal` mean_reversion으로 고정했다.
 12. 첫 paper Signal log는 `_report/quant/research/2026-06-09-paper-signal-log.md`에 기록했다.
-13. 첫 paper Signal follow-up은 `_report/quant/research/2026-06-13-paper-signal-follow-up.md`에 남겼다. repo-local daily raw 기준 `000660`, `005930`은 1D/5D paper observation을 기록했고, `035420`과 20D observation은 아직 `pending`이다.
+13. 첫 paper Signal follow-up은 `_report/quant/research/2026-06-13-paper-signal-follow-up.md`에 남겼다. dedicated follow-up raw 기준 `000660 SK hynix`, `005930 Samsung Electronics`, `035420 NAVER`의 1D/5D paper observation을 기록했고, 20D observation은 아직 `pending`이다.
 14. 일일 리포트 템플릿의 "Quant Signal Candidates" 섹션은 `_report/quant/research/2026-06-08-di-quant-signal-section-proposal.md`에 제안만 남기고, DI 템플릿 직접 수정은 현재 사용자 변경 때문에 보류한다.
