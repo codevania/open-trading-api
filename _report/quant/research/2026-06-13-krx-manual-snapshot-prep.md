@@ -44,6 +44,7 @@ This is a prep artifact. It does not upgrade Point-in-Time Universe readiness, B
 - A single current snapshot does not create a full `Point-in-Time` Universe.
 - Strategy interpretation remains `hold`.
 - Manifest verification uses `scripts/quant_krx_manifest_verify.py`.
+- Manifest materialization uses `scripts/quant_krx_manifest_materialize.py`.
 
 Verifier command:
 
@@ -51,6 +52,14 @@ Verifier command:
 uv run python scripts/quant_krx_manifest_verify.py `
   --manifest _report/raw/2026/2026-06-13/krx/universe/manifest.yaml `
   --output _report/quant/research/YYYY-MM-DD-krx-manual-snapshot-verify-result.md
+```
+
+Materialize final raw manifest after downloads:
+
+```powershell
+uv run python scripts/quant_krx_manifest_materialize.py `
+  --manifest _report/quant/research/2026-06-13-krx-manual-snapshot-manifest.pending.yaml `
+  --output _report/raw/2026/2026-06-13/krx/universe/manifest.yaml
 ```
 
 Pending prep manifest check:
