@@ -42,11 +42,29 @@ This is a prep artifact. It does not upgrade Point-in-Time Universe readiness, B
 - `sha256` stays `TO_BE_FILLED` until raw files exist.
 - A single current snapshot does not create a full `Point-in-Time` Universe.
 - Strategy interpretation remains `hold`.
+- Manifest verification uses `scripts/quant_krx_manifest_verify.py`.
+
+Verifier command:
+
+```powershell
+uv run python scripts/quant_krx_manifest_verify.py `
+  --manifest _report/raw/2026/2026-06-13/krx/universe/manifest.yaml `
+  --output _report/quant/research/YYYY-MM-DD-krx-manual-snapshot-verify-result.md
+```
+
+Pending prep manifest check:
+
+```powershell
+uv run python scripts/quant_krx_manifest_verify.py `
+  --manifest _report/quant/research/2026-06-13-krx-manual-snapshot-manifest.pending.yaml `
+  --allow-pending
+```
 
 ## Done Criteria For This Prep Step
 
 - Prep checklist exists.
 - Pending manifest exists.
+- Verifier exists and can produce a `pending` result while raw files are absent.
 - Raw target paths are fixed.
 - The next human/manual action is unambiguous.
 
