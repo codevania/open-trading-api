@@ -23,6 +23,7 @@ class QuantKrxCurrentUniverseBuildTest(unittest.TestCase):
                     """
                     종목코드,종목명,시장구분,주식종류
                     005930,삼성전자,KOSPI,보통주
+                    0004V0,엔비알모션,KOSDAQ,보통주
                     005935,삼성전자우,KOSPI,우선주
                     121850,코이즈,KOSDAQ,보통주
                     464440,한국제13호스팩,KOSDAQ,보통주
@@ -68,7 +69,7 @@ class QuantKrxCurrentUniverseBuildTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             report = output.read_text(encoding="utf-8")
-            self.assertIn("- Included rows: `1`", report)
+            self.assertIn("- Included rows: `2`", report)
             self.assertIn("- Excluded rows: `5`", report)
             self.assertIn("| `managed_issue_current` | 1 |", report)
             self.assertIn("| `instrument_type_excluded` | 1 |", report)
@@ -78,6 +79,7 @@ class QuantKrxCurrentUniverseBuildTest(unittest.TestCase):
             with csv_output.open("r", encoding="utf-8-sig", newline="") as handle:
                 rows = {row["code"]: row for row in csv.DictReader(handle)}
             self.assertEqual(rows["005930"]["status"], "include")
+            self.assertEqual(rows["0004V0"]["status"], "include")
             self.assertEqual(rows["121850"]["reason"], "managed_issue_current")
             self.assertEqual(rows["005935"]["reason"], "instrument_type_excluded")
             self.assertEqual(rows["464440"]["reason"], "instrument_name_excluded")

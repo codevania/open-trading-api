@@ -65,13 +65,14 @@ def _first_present(row: dict[str, Any], candidates: tuple[str, ...]) -> str:
 
 
 def _normalize_code(value: Any) -> str:
-    code = str(value or "").strip()
-    if code.endswith(".0"):
+    code = str(value or "").strip().strip('"').upper()
+    if code.startswith("KR") and len(code) >= 9:
+        return code[3:9]
+    if code.endswith(".0") and code[:-2].isdigit():
         code = code[:-2]
-    digits = "".join(ch for ch in code if ch.isdigit())
-    if len(digits) >= 6:
-        return digits[-6:]
-    return digits.zfill(6) if digits else ""
+    if code.isdigit() and len(code) < 6:
+        return code.zfill(6)
+    return code
 
 
 def _require_any_column(rows: list[dict[str, Any]], candidates: tuple[str, ...], label: str) -> None:

@@ -22,6 +22,7 @@ class QuantKrxManagedIssuesExtractTest(unittest.TestCase):
                     """
                     종목코드,종목명,현재가,지정일자
                     121850,코이즈,"1,715",2026/06/05
+                    KR70004V0003,엔비알모션,"9,900",2026/06/01
                     464440,한국제13호스팩,"2,115",2026/05/06
                     348950,제이알글로벌리츠,"1,182",2026/05/18
                     """
@@ -49,8 +50,9 @@ class QuantKrxManagedIssuesExtractTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             report = output.read_text(encoding="utf-8")
-            self.assertIn("- Row count: `3`", report)
+            self.assertIn("- Row count: `4`", report)
             self.assertIn("| `121850` | 코이즈 | `2026/06/05` | `common-stock-or-unclassified` |", report)
+            self.assertIn("| `0004V0` | 엔비알모션 | `2026/06/01` | `common-stock-or-unclassified` |", report)
             self.assertIn("| `464440` | 한국제13호스팩 | `2026/05/06` | `SPAC` |", report)
             self.assertIn("| `348950` | 제이알글로벌리츠 | `2026/05/18` | `REIT` |", report)
 

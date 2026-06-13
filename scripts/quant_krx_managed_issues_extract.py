@@ -40,10 +40,14 @@ def _read_csv_dicts(path: Path) -> tuple[list[dict[str, Any]], str]:
 
 
 def _normalize_code(value: Any) -> str:
-    code = str(value or "").strip()
-    if code.endswith(".0"):
+    code = str(value or "").strip().strip('"').upper()
+    if code.startswith("KR") and len(code) >= 9:
+        return code[3:9]
+    if code.endswith(".0") and code[:-2].isdigit():
         code = code[:-2]
-    return code.zfill(6)
+    if code.isdigit() and len(code) < 6:
+        return code.zfill(6)
+    return code
 
 
 def _instrument_note(name: str) -> str:
