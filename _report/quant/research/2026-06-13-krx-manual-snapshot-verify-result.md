@@ -1,6 +1,6 @@
 # KRX Manual Snapshot Verify Result
 
-- Manifest: `_report/quant/research/2026-06-13-krx-manual-snapshot-manifest.pending.yaml`
+- Manifest: `_report/raw/2026/2026-06-13/krx/universe/manifest.yaml`
 - As-of date: `2026-06-13`
 - Source mode: `manual_snapshot`
 - Overall status: `pending`
@@ -9,7 +9,7 @@
 
 | Dataset | Required | Raw Exists | Hash | Schema | Status | Message |
 | --- | ---: | ---: | --- | --- | --- | --- |
-| `managed_issues_current` | true | false | pending | pending | pending | required raw file is missing |
+| `managed_issues_current` | true | true | ok | ok | pass | ok |
 | `managed_issue_designation_history` | true | false | pending | pending | pending | required raw file is missing |
 | `delisting_events` | false | false | pending | pending | optional-missing | optional raw file is missing |
 
