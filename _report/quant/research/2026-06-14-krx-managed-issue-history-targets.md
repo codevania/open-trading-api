@@ -15,17 +15,22 @@
 
 ## Query Period
 
-Use the longest available range:
+Observed UI constraint:
 
-- Start date: `2000-01-01`
-- End date: `2026-06-13`
+- KRX rejects query ranges longer than 2 years.
+- A broad 2-year window such as `20240612` to `20260612` may still return no rows on `관리종목 지정 내역(개별종목)`.
+- Do not save a blank individual-history CSV as evidence.
 
-Fallback if KRX rejects or times out:
+Use event-anchored windows from the current managed issues CSV:
 
-- Start date: `2010-01-01`
-- End date: `2026-06-13`
+1. Select the target through the KRX stock finder popup, not by typing only.
+2. Uncheck `시세정보` for the first query.
+3. Check `지정일만` for the first query.
+4. Query the exact `지정일자`: start date equals end date.
+5. If no rows appear, retry a short window around the designation date.
+6. If still no rows appear, record `individual history unavailable from KRX UI` and move on.
 
-If that still fails, split by year and preserve each raw file separately.
+Do not use this page as a full historical Universe source. It is only a sample event-evidence screen.
 
 ## Control Evidence
 
@@ -45,13 +50,13 @@ Verified result from the current CSV: `005930 Samsung Electronics`, `000660 SK h
 
 Chosen from the current managed issues CSV by recent designation date, excluding REIT/SPAC names for the default common-stock sample.
 
-| Code | Company | Designation date | Save as |
-| --- | --- | --- | --- |
-| `121850` | 코이즈 | `2026/06/05` | `managed_issue_history_121850_koiz.raw.csv` |
-| `017040` | 광명전기 | `2026/05/04` | `managed_issue_history_017040_kwangmyung_electric.raw.csv` |
-| `106080` | 케이이엠텍 | `2026/04/20` | `managed_issue_history_106080_kemtec.raw.csv` |
-| `024830` | 세원물산 | `2026/04/16` | `managed_issue_history_024830_sewon.raw.csv` |
-| `032960` | 동일기연 | `2026/04/16` | `managed_issue_history_032960_dongil_technology.raw.csv` |
+| Code | Company | Designation date | First query | Retry window | Save as |
+| --- | --- | --- | --- | --- | --- |
+| `121850` | 코이즈 | `2026/06/05` | `20260605` to `20260605` | `20260529` to `20260612` | `managed_issue_history_121850_koiz.raw.csv` |
+| `017040` | 광명전기 | `2026/05/04` | `20260504` to `20260504` | `20260427` to `20260511` | `managed_issue_history_017040_kwangmyung_electric.raw.csv` |
+| `106080` | 케이이엠텍 | `2026/04/20` | `20260420` to `20260420` | `20260413` to `20260427` | `managed_issue_history_106080_kemtec.raw.csv` |
+| `024830` | 세원물산 | `2026/04/16` | `20260416` to `20260416` | `20260409` to `20260423` | `managed_issue_history_024830_sewon.raw.csv` |
+| `032960` | 동일기연 | `2026/04/16` | `20260416` to `20260416` | `20260409` to `20260423` | `managed_issue_history_032960_dongil_technology.raw.csv` |
 
 ## Optional Instrument-Type Edge Cases
 
