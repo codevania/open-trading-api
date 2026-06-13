@@ -87,7 +87,7 @@ KIS raw 저장 helper: `scripts/quant_kis_raw_save.py`
 
 완료 기준: Strategy가 사용할 Universe와 데이터 출처가 문서에 명시되어 있다.
 
-현재 상태: 완료. Point-in-Time 확보 계획, KRX raw sample audit, manual snapshot 절차는 작성했지만, 재현 가능한 공식 source snapshot은 미확보이므로 Backtest 해석은 `hold` 이하로 둔다.
+현재 상태: 완료. Point-in-Time 확보 계획, KRX raw sample audit, manual snapshot 절차를 작성했고, 현재 KRX 관리종목 snapshot은 exclusion evidence로 파생했다. 단, 재현 가능한 공식 Point-in-Time source snapshot은 미확보이므로 Backtest 해석은 `hold` 이하로 둔다.
 
 ### 1단계: 첫 Strategy Spec
 

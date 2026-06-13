@@ -64,6 +64,9 @@
 - 원천 데이터 응답이 비정상인 항목.
 - Lookback, Liquidity Filter, Listing Age 계산에 필요한 과거 데이터가 부족한 항목.
 
+현재 KRX 관리종목 snapshot exclusion evidence:
+`_report/quant/research/2026-06-14-krx-managed-issues-current-exclusions.md`
+
 ### Point-in-Time Rule
 
 - Universe 포함 여부, Listing Age, 거래 가능 상태, Liquidity Filter는 모두 해당 Rebalance date 기준으로 계산해야 한다.
