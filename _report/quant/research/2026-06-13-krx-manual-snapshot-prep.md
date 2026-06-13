@@ -22,6 +22,7 @@ This is a prep artifact. It does not upgrade Point-in-Time Universe readiness, B
 
 | Dataset ID | Required | Source URL | Target Raw Path | Status |
 | --- | --- | --- | --- | --- |
+| `listed_issues_current` | yes | `KRX Data Marketplace > 통계 > 기본 통계 > 주식 > 종목정보 > 전종목 기본정보` | `_report/raw/2026/2026-06-13/krx/universe/listed_issues_current.raw.csv` | `pending_manual_download` |
 | `managed_issues_current` | yes | `https://data.krx.co.kr/contents/MDC/STAT/issue/MDCSTAT214.jsp` | `_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv` | `pending_manual_download` |
 | `managed_issue_designation_history` | yes | `https://data.krx.co.kr/contents/MDC/STAT/issue/MDCSTAT215.jsp` | `_report/raw/2026/2026-06-13/krx/universe/managed_issue_designation_history.raw.csv` | `pending_manual_download` |
 | `delisting_events` | preferred | `https://global.krx.co.kr/contents/GLB/03/0306/0306050000/GLB0306050000.jsp` | `_report/raw/2026/2026-06-13/krx/universe/delisting_events.raw.csv` | `pending_manual_download` |
@@ -35,6 +36,7 @@ This is a prep artifact. It does not upgrade Point-in-Time Universe readiness, B
 5. Compute SHA-256 with `Get-FileHash -Algorithm SHA256`.
 6. Fill the pending manifest and save the final manifest next to the raw files as `_report/raw/2026/2026-06-13/krx/universe/manifest.yaml`.
 7. Ask Codex to verify schema and hash after the files exist.
+8. After `listed_issues_current` and `managed_issues_current` exist, build current snapshot Universe v0 with `scripts/quant_krx_current_universe_build.py`.
 
 ## Validation Rules
 

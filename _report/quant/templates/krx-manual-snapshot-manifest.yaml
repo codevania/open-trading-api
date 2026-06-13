@@ -11,6 +11,19 @@ snapshot:
     - "Do not upgrade Bias Control to pass from this manifest alone."
 
 datasets:
+  - id: "listed_issues_current"
+    required: true
+    source_name: "KRX Data Marketplace - stock listed issues basic information"
+    source_url: "https://data.krx.co.kr/contents/MDC/MAIN/main/index.cmd"
+    source_menu_path: "통계 > 기본 통계 > 주식 > 종목정보 > 전종목 기본정보"
+    downloaded_at_kst: "YYYY-MM-DDTHH:MM:SS+09:00"
+    raw_path: "_report/raw/YYYY/YYYY-MM-DD/krx/universe/listed_issues_current.raw.csv"
+    file_format: "csv"
+    sha256: "TO_BE_FILLED"
+    columns:
+      - "TO_BE_VERIFIED_AFTER_DOWNLOAD"
+    schema_verified_by_codex: false
+
   - id: "managed_issues_current"
     required: true
     source_name: "KRX Data Marketplace - managed issues current"

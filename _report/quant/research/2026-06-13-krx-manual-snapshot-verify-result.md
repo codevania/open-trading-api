@@ -9,6 +9,7 @@
 
 | Dataset | Required | Raw Exists | Hash | Schema | Status | Message |
 | --- | ---: | ---: | --- | --- | --- | --- |
+| `listed_issues_current` | true | false | pending | pending | pending | required raw file is missing |
 | `managed_issues_current` | true | true | ok | ok | pass | ok |
 | `managed_issue_designation_history` | true | false | pending | pending | pending | required raw file is missing |
 | `delisting_events` | false | false | pending | pending | optional-missing | optional raw file is missing |
