@@ -17,33 +17,39 @@ git status --short
 uv run python -m unittest discover tests
 ```
 
-If the dirty files are still present, stage/commit/push them before starting `Liquidity Filter`.
+If the Liquidity Filter dirty files are still present, stage/commit/push them before starting OHLCV batch collection work.
 
 Suggested commit intent:
 
-`Apply Listing Age guard to current KRX universe`
+`Apply Liquidity Filter smoke to current KRX universe`
 
 Use Lore commit protocol.
 
 ## Current Best Next Task
 
-Add `Liquidity Filter` to the current Universe pipeline.
+Connect generated current Universe rows to OHLCV batch collection.
 
-Target rule from existing Quant policy:
+Already implemented in the latest local work:
 
-- `avg_trading_value_20d_krw >= 1,000,000,000`
+- `scripts/quant_liquidity_filter.py`
+- `tests/test_quant_liquidity_filter.py`
+- `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.md`
+- `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.rows.csv`
+- Target rule: `avg_trading_value_20d_krw >= 1,000,000,000`
+- Saved raw coverage currently evaluates `000660 SK hynix`, `005930 Samsung Electronics`, and `035420 NAVER`; all pass.
+- `2387` base-included rows are `liquidity_raw_missing`, which means raw coverage is missing, not that those stocks are illiquid.
 
 Likely needed work:
 
-1. Decide input source for OHLCV/trading value rows.
-2. Reuse or extend `scripts/quant_smoke_validate.py` / KIS raw routines where possible.
-3. Add a dedicated liquidity-enrichment or liquidity-filter script.
-4. Generate a new derived artifact from current Universe rows.
+1. Preflight KIS daily OHLCV API with `find_api_detail`.
+2. Build a batch collection path from `_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv` included rows.
+3. Save raw KIS responses under `_report/raw/**`; do not commit raw files.
+4. Re-run `scripts/quant_liquidity_filter.py` on the expanded raw directory.
 5. Keep result as paper/smoke only until `Point-in-Time` is solved.
 
 ## Current Blockers
 
-- Git commit/push for latest local changes may still be pending.
+- Git commit/push for latest Liquidity Filter local changes may still be pending.
 - KIS OHLCV batch collection is not yet connected to generated Universe rows.
 - Historical KRX status data is not available by Rebalance date.
 - Backtest remains `hold`.
@@ -55,4 +61,3 @@ Likely needed work:
 - When mentioning stocks, include code and company name, for example `005930 Samsung Electronics`.
 - Keep DI/Main/Game watchlists separate from Quant.
 - Preserve raw evidence under `_report/raw/**`; do not commit raw files.
-

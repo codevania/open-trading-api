@@ -5,8 +5,8 @@
 - Date: 2026-06-14
 - Scope: Quant trading research and implementation workflow
 - Current phase: `current_snapshot_universe_v0`
-- Overall implementation progress: `25-30%`
-- Current Snapshot Universe progress: `70-80%`
+- Overall implementation progress: `30-35%`
+- Current Snapshot Universe progress: `80-85%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
 
@@ -23,10 +23,10 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 0. Project separation | done | 100% | Quant, DI, raw evidence, routines separated under `_report/` | Keep DI watchlists out of Quant Universe |
 | 1. Quant learning baseline | in-progress | 35% | `_report/quant/learning-roadmap.md`, week 01 study log | Continue weekly study logs tied to outputs |
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
-| 3. Current Snapshot Universe v0 | in-progress | 70-80% | KRX listed issues + managed issues parsed into current Universe | Add `Liquidity Filter` |
+| 3. Current Snapshot Universe v0 | in-progress | 80-85% | KRX listed issues + managed issues parsed into current Universe; saved-raw Liquidity Filter smoke artifact generated | Connect full Universe rows to OHLCV batch collection |
 | 4. Point-in-Time Universe | blocked | 15-20% | Plan exists; current snapshot artifacts exist | Historical status snapshots or reliable replay source |
-| 5. Market data pipeline | in-progress | 30-40% | KIS raw save and smoke validators exist | Batch OHLCV collection for Universe subset |
-| 6. Liquidity Filter | next | 10% | Policy exists; not applied to Universe rows yet | Add avg trading value / volume inputs |
+| 5. Market data pipeline | in-progress | 35-40% | KIS raw save, smoke validators, and saved-raw Liquidity Filter input path exist | Batch OHLCV collection for full current Universe subset |
+| 6. Liquidity Filter | in-progress | 35-40% | `scripts/quant_liquidity_filter.py`; current Universe + saved raw smoke artifact | Fill OHLCV coverage beyond manual raw captures |
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
 | 8. OOS / Walk-Forward | planned | 10% | OOS plan exists | Run only after Backtest pipeline works |
 | 9. Bias Control pass | hold | 20% | Bias checklists exist; blockers documented | Point-in-Time and OOS evidence |
@@ -59,6 +59,8 @@ Current KRX snapshot artifacts:
 - `_report/quant/research/2026-06-14-krx-current-universe-v0-builder.md`
 - `_report/quant/research/2026-06-14-krx-current-universe-v0.md`
 - `_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv`
+- `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.md`
+- `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.rows.csv`
 
 Scripts and tests:
 
@@ -66,11 +68,13 @@ Scripts and tests:
 - `scripts/quant_krx_manifest_verify.py`
 - `scripts/quant_krx_managed_issues_extract.py`
 - `scripts/quant_krx_current_universe_build.py`
+- `scripts/quant_liquidity_filter.py`
 - `scripts/quant_smoke_validate.py`
 - `scripts/quant_calendar_audit.py`
 - `tests/test_quant_krx_manifest_tools.py`
 - `tests/test_quant_krx_managed_issues_extract.py`
 - `tests/test_quant_krx_current_universe_build.py`
+- `tests/test_quant_liquidity_filter.py`
 - `tests/test_quant_calendar_audit.py`
 
 ## Current Snapshot Universe v0
@@ -91,10 +95,12 @@ Applied filters:
 - Exclude SPAC, REIT, ETF, ETN, ELW, preferred-share-like instruments.
 - Exclude current managed issues.
 - Apply `365 calendar days` Listing Age guard.
+- Saved-raw Liquidity Filter smoke: `avg_trading_value_20d_krw >= 1,000,000,000`.
 
 Known limitation:
 
 - The Strategy target rule is `252 trading days` Listing Age, but this artifact uses `365 calendar days` because a full trading calendar and historical Point-in-Time snapshots are not built yet.
+- The Liquidity Filter smoke artifact only evaluates rows with saved raw OHLCV under `_report/raw/2026/2026-06-13/quant/paper-follow-up/`; missing raw is a data-coverage blocker, not an illiquidity finding.
 
 ## Open Blockers
 
@@ -102,8 +108,8 @@ Hard blockers before Backtest interpretation:
 
 - `Point-in-Time Universe` is not built.
 - Historical managed issue / trading suspension / market alert / delisting status is not reproducible by Rebalance date.
-- `Liquidity Filter` is not applied to generated Universe rows.
-- OHLCV batch collection is not connected to the generated Universe.
+- Full-Universe `Liquidity Filter` coverage is incomplete because OHLCV batch collection is not connected to all generated Universe rows.
+- Current Liquidity Filter output is a saved-raw smoke artifact, not full current Universe coverage.
 - Backtest, OOS, Walk-Forward, and Bias Control have not passed.
 
 Soft blockers:
@@ -114,40 +120,40 @@ Soft blockers:
 
 ## Next Implementation Steps
 
-### Step A. Commit Current Local Changes
+### Step A. Connect Universe to OHLCV Batch Collection
 
-Status: pending because git staging was blocked by usage-limit approval failure.
+Goal:
 
-Files currently expected to be dirty:
+- Stop relying on manually selected raw files for Liquidity Filter coverage.
+- Use generated current Universe rows as the batch input list for KIS daily OHLCV collection.
 
-- `_report/quant/README.md`
-- `_report/quant/universe.md`
-- `_report/quant/research/2026-06-14-krx-current-universe-v0-builder.md`
-- `_report/quant/research/2026-06-14-krx-current-universe-v0.md`
-- `_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv`
-- `scripts/quant_krx_current_universe_build.py`
-- `tests/test_quant_krx_current_universe_build.py`
+Guardrail:
 
-Commit intent:
+- KIS data calls must still be preflighted with `find_api_detail`.
+- Raw responses stay under `_report/raw/**` and are not committed.
 
-`Apply Listing Age guard to current KRX universe`
+### Step B. Expand Liquidity Filter Coverage
 
-### Step B. Add Liquidity Filter
+Current implemented path:
 
-Input needed:
-
-- Daily OHLCV / trading value for candidate Universe rows.
-- At minimum, enough data to calculate recent `20 trading days` average trading value.
+- `scripts/quant_liquidity_filter.py` reads current Universe rows and saved KIS daily raw files.
+- `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.md` records a paper/smoke run.
+- Saved raw coverage currently evaluates `000660 SK hynix`, `005930 Samsung Electronics`, and `035420 NAVER`; all three pass the threshold.
 
 Target rule:
 
 - `avg_trading_value_20d_krw >= 1,000,000,000`
 
-Output:
+Remaining input needed:
 
-- Add `avg_trading_value_20d_krw`.
-- Add `liquidity_filter_status`.
-- Exclude rows failing the threshold.
+- Daily OHLCV / trading value for all generated candidate Universe rows, or for a documented current Universe subset.
+- At minimum, enough data to calculate recent `20 trading days` average trading value.
+
+Output already added:
+
+- `avg_trading_value_20d_krw`
+- `liquidity_filter_status`
+- final `status` and `reason` after the saved-raw Liquidity Filter pass
 
 ### Step C. Connect Universe to Paper Signal
 
@@ -204,4 +210,3 @@ Current state:
 - Current Snapshot Universe: usable for paper/smoke validation.
 - Backtest readiness: `hold`.
 - Live trading readiness: `blocked`.
-

@@ -70,6 +70,11 @@
 현재 KRX current snapshot Universe v0:
 `_report/quant/research/2026-06-14-krx-current-universe-v0.md`
 
+현재 KRX current snapshot Liquidity Filter smoke:
+`_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.md`
+
+메모: Liquidity Filter target rule은 `avg_trading_value_20d_krw >= 1,000,000,000`이다. 현재 smoke artifact는 저장된 KIS 일봉 raw가 있는 `000660 SK hynix`, `005930 Samsung Electronics`, `035420 NAVER`만 평가했으며, 세 종목은 모두 threshold를 통과했다. 나머지 base-included rows는 `liquidity_raw_missing`으로 표시했으며, 이는 유동성 부족 판정이 아니라 full Universe OHLCV batch collection 미완료를 뜻한다.
+
 메모: Universe v0의 목표 기준은 `252 trading days` Listing Age지만, current snapshot artifact에서는 거래일 달력 미구축 상태이므로 `365 calendar days` guard를 사용한다.
 
 ### Point-in-Time Rule
