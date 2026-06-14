@@ -74,6 +74,7 @@ KIS raw 저장 helper: `scripts/quant_kis_raw_save.py`
 시장 환경 루틴: `_report/quant/routines/market-regime-scan-routine.md`
 
 학습 루틴: `_report/quant/learning-roadmap.md`
+구현 로드맵: `_report/quant/implementation-roadmap.md`
 
 ## 단계별 계획
 
@@ -87,7 +88,7 @@ KIS raw 저장 helper: `scripts/quant_kis_raw_save.py`
 
 완료 기준: Strategy가 사용할 Universe와 데이터 출처가 문서에 명시되어 있다.
 
-현재 상태: 완료. Point-in-Time 확보 계획, KRX raw sample audit, manual snapshot 절차를 작성했고, 현재 KRX 관리종목 snapshot은 exclusion evidence로 파생했다. `scripts/quant_krx_current_universe_build.py`로 `listed_issues_current` raw 확보 후 current snapshot Universe v0를 만들 수 있다. 단, 재현 가능한 공식 Point-in-Time source snapshot은 미확보이므로 Backtest 해석은 `hold` 이하로 둔다.
+현재 상태: 완료. Point-in-Time 확보 계획, KRX raw sample audit, manual snapshot 절차를 작성했고, 현재 KRX 관리종목 snapshot은 exclusion evidence로 파생했다. `scripts/quant_krx_current_universe_build.py`로 `listed_issues_current` raw를 결합해 current snapshot Universe v0를 만들었고, Listing Age는 `365 calendar days` guard로 반영했다. 단, 재현 가능한 공식 Point-in-Time source snapshot은 미확보이므로 Backtest 해석은 `hold` 이하로 둔다.
 
 ### 1단계: 첫 Strategy Spec
 

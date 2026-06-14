@@ -13,6 +13,7 @@ Build a current KRX Universe v0 from official manual CSV snapshots:
 2. Keep KOSPI/KOSDAQ common-stock-like rows.
 3. Exclude SPAC, REIT, preferred share, ETF, ETN, ELW style instruments by type/name.
 4. Exclude every code in `managed_issues_current.raw.csv`.
+5. Exclude rows with less than `365` calendar days since listing date.
 
 This does not solve `Point-in-Time Universe`. It is only a current snapshot for paper/smoke work.
 
@@ -47,6 +48,6 @@ uv run python scripts\quant_krx_current_universe_build.py `
 
 - Do not treat this as Backtest-ready.
 - Do not treat current listed issues as historical membership.
-- Listing Age, Liquidity Filter, trading suspension, market-alert, and delisting history remain unresolved.
+- Listing Age is represented by a current-snapshot calendar-day guard, not exact historical trading-day age.
+- Liquidity Filter, trading suspension, market-alert, and delisting history remain unresolved.
 - Keep Strategy interpretation at `hold`.
-

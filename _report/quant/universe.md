@@ -67,6 +67,11 @@
 현재 KRX 관리종목 snapshot exclusion evidence:
 `_report/quant/research/2026-06-14-krx-managed-issues-current-exclusions.md`
 
+현재 KRX current snapshot Universe v0:
+`_report/quant/research/2026-06-14-krx-current-universe-v0.md`
+
+메모: Universe v0의 목표 기준은 `252 trading days` Listing Age지만, current snapshot artifact에서는 거래일 달력 미구축 상태이므로 `365 calendar days` guard를 사용한다.
+
 ### Point-in-Time Rule
 
 - Universe 포함 여부, Listing Age, 거래 가능 상태, Liquidity Filter는 모두 해당 Rebalance date 기준으로 계산해야 한다.
