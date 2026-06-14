@@ -5,7 +5,7 @@
 - Date: 2026-06-14
 - Scope: Quant trading research and implementation workflow
 - Current phase: `current_snapshot_universe_v0`
-- Overall implementation progress: `30-35%`
+- Overall implementation progress: `35-40%`
 - Current Snapshot Universe progress: `80-85%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
@@ -25,7 +25,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 80-85% | KRX listed issues + managed issues parsed into current Universe; saved-raw Liquidity Filter smoke artifact generated | Connect full Universe rows to OHLCV batch collection |
 | 4. Point-in-Time Universe | blocked | 15-20% | Plan exists; current snapshot artifacts exist | Historical status snapshots or reliable replay source |
-| 5. Market data pipeline | in-progress | 35-40% | KIS raw save, smoke validators, and saved-raw Liquidity Filter input path exist | Batch OHLCV collection for full current Universe subset |
+| 5. Market data pipeline | in-progress | 40-45% | KIS raw save, smoke validators, saved-raw Liquidity Filter input path, and Universe-based OHLCV request queue dry-run exist | Execute first MCP subset capture from request queue |
 | 6. Liquidity Filter | in-progress | 35-40% | `scripts/quant_liquidity_filter.py`; current Universe + saved raw smoke artifact | Fill OHLCV coverage beyond manual raw captures |
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
 | 8. OOS / Walk-Forward | planned | 10% | OOS plan exists | Run only after Backtest pipeline works |
@@ -61,6 +61,8 @@ Current KRX snapshot artifacts:
 - `_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv`
 - `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.md`
 - `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.rows.csv`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.md`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.requests.jsonl`
 
 Scripts and tests:
 
@@ -68,12 +70,14 @@ Scripts and tests:
 - `scripts/quant_krx_manifest_verify.py`
 - `scripts/quant_krx_managed_issues_extract.py`
 - `scripts/quant_krx_current_universe_build.py`
+- `scripts/quant_kis_ohlcv_batch_plan.py`
 - `scripts/quant_liquidity_filter.py`
 - `scripts/quant_smoke_validate.py`
 - `scripts/quant_calendar_audit.py`
 - `tests/test_quant_krx_manifest_tools.py`
 - `tests/test_quant_krx_managed_issues_extract.py`
 - `tests/test_quant_krx_current_universe_build.py`
+- `tests/test_quant_kis_ohlcv_batch_plan.py`
 - `tests/test_quant_liquidity_filter.py`
 - `tests/test_quant_calendar_audit.py`
 
@@ -108,7 +112,7 @@ Hard blockers before Backtest interpretation:
 
 - `Point-in-Time Universe` is not built.
 - Historical managed issue / trading suspension / market alert / delisting status is not reproducible by Rebalance date.
-- Full-Universe `Liquidity Filter` coverage is incomplete because OHLCV batch collection is not connected to all generated Universe rows.
+- Full-Universe `Liquidity Filter` coverage is incomplete because OHLCV request queue is not yet executed against KIS for generated Universe rows.
 - Current Liquidity Filter output is a saved-raw smoke artifact, not full current Universe coverage.
 - Backtest, OOS, Walk-Forward, and Bias Control have not passed.
 
@@ -127,10 +131,21 @@ Goal:
 - Stop relying on manually selected raw files for Liquidity Filter coverage.
 - Use generated current Universe rows as the batch input list for KIS daily OHLCV collection.
 
+Current implemented path:
+
+- `scripts/quant_kis_ohlcv_batch_plan.py` reads generated Universe rows and emits a resumable request queue.
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.md` records a first dry-run with `10` requests.
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.requests.jsonl` is the machine-readable request queue.
+
 Guardrail:
 
 - KIS data calls must still be preflighted with `find_api_detail`.
 - Raw responses stay under `_report/raw/**` and are not committed.
+- The current Codex App surface did not expose the KIS MCP tool, so the dry-run used local KIS config as API detail evidence and did not call KIS.
+
+Next gate:
+
+- In a surface with KIS MCP access, run `domestic_stock.find_api_detail` for `inquire_daily_itemchartprice`, execute the first request queue subset, save raw responses under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`, then re-run `scripts/quant_liquidity_filter.py`.
 
 ### Step B. Expand Liquidity Filter Coverage
 

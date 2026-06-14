@@ -38,6 +38,7 @@ _report/quant/
     2026-06-08-data-pipeline-smoke-test-result.md # 기존 DI raw 기반 validator 결과
     2026-06-09-data-pipeline-smoke-test-result.md # KIS MCP 수동 raw capture 기반 ROC path 결과
     2026-06-14-krx-current-universe-v0-liquidity-smoke.md # current Universe + saved raw Liquidity Filter smoke
+    2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.md # Universe rows 기반 KIS OHLCV request queue dry-run
     2026-06-08-position-sizing-capital-allocation-policy.md # Position/Capital 정책
     2026-06-08-di-quant-signal-section-proposal.md # DI 리포트 Quant Signal 섹션 제안
   routines/
@@ -74,6 +75,8 @@ KIS raw 저장 helper: `scripts/quant_kis_raw_save.py`
 
 Liquidity Filter helper: `scripts/quant_liquidity_filter.py`
 
+KIS OHLCV batch plan helper: `scripts/quant_kis_ohlcv_batch_plan.py`
+
 시장 환경 루틴: `_report/quant/routines/market-regime-scan-routine.md`
 
 학습 루틴: `_report/quant/learning-roadmap.md`
@@ -91,7 +94,7 @@ Liquidity Filter helper: `scripts/quant_liquidity_filter.py`
 
 완료 기준: Strategy가 사용할 Universe와 데이터 출처가 문서에 명시되어 있다.
 
-현재 상태: 완료. Point-in-Time 확보 계획, KRX raw sample audit, manual snapshot 절차를 작성했고, 현재 KRX 관리종목 snapshot은 exclusion evidence로 파생했다. `scripts/quant_krx_current_universe_build.py`로 `listed_issues_current` raw를 결합해 current snapshot Universe v0를 만들었고, Listing Age는 `365 calendar days` guard로 반영했다. `scripts/quant_liquidity_filter.py`로 저장된 KIS 일봉 raw가 있는 종목에 한해 `avg_trading_value_20d_krw >= 1,000,000,000` smoke artifact를 만들었다. 단, full Universe OHLCV batch collection과 재현 가능한 공식 Point-in-Time source snapshot은 미확보이므로 Backtest 해석은 `hold` 이하로 둔다.
+현재 상태: 완료. Point-in-Time 확보 계획, KRX raw sample audit, manual snapshot 절차를 작성했고, 현재 KRX 관리종목 snapshot은 exclusion evidence로 파생했다. `scripts/quant_krx_current_universe_build.py`로 `listed_issues_current` raw를 결합해 current snapshot Universe v0를 만들었고, Listing Age는 `365 calendar days` guard로 반영했다. `scripts/quant_liquidity_filter.py`로 저장된 KIS 일봉 raw가 있는 종목에 한해 `avg_trading_value_20d_krw >= 1,000,000,000` smoke artifact를 만들었다. `scripts/quant_kis_ohlcv_batch_plan.py`로 generated Universe `include` rows를 KIS OHLCV request queue로 바꾸는 dry-run path를 만들었다. 단, 실제 full Universe OHLCV raw collection과 재현 가능한 공식 Point-in-Time source snapshot은 미확보이므로 Backtest 해석은 `hold` 이하로 둔다.
 
 ### 1단계: 첫 Strategy Spec
 
@@ -175,3 +178,4 @@ Liquidity Filter helper: `scripts/quant_liquidity_filter.py`
 13. 첫 paper Signal follow-up은 `_report/quant/research/2026-06-13-paper-signal-follow-up.md`에 남겼다. dedicated follow-up raw 기준 `000660 SK hynix`, `005930 Samsung Electronics`, `035420 NAVER`의 1D/5D paper observation을 기록했고, 20D observation은 아직 `pending`이다.
 14. 일일 리포트 템플릿의 "Quant Signal Candidates" 섹션은 `_report/quant/research/2026-06-08-di-quant-signal-section-proposal.md`에 제안만 남기고, DI 템플릿 직접 수정은 현재 사용자 변경 때문에 보류한다.
 15. Current Universe v0 Liquidity Filter smoke는 `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.md`에 남겼다. 저장 raw가 있는 `000660 SK hynix`, `005930 Samsung Electronics`, `035420 NAVER`는 모두 threshold를 통과했고, 나머지 base-included rows는 `liquidity_raw_missing` 데이터 커버리지 blocker로 남겼다.
+16. Current Universe v0 OHLCV batch plan dry-run은 `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.md`에 남겼다. 첫 10개 included rows를 `domestic_stock.inquire_daily_itemchartprice` request queue로 만들었고, 실제 KIS 호출은 현재 Codex App surface에 MCP tool이 없어 수행하지 않았다.
