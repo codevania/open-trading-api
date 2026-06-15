@@ -20,11 +20,16 @@ Tracked derived outputs:
 - `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.rows.csv`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.requests.jsonl`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10.md`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10.requests.jsonl`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-dry-run.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result.md`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-dry-run-next10.md`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result-next10.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-validator-result.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.rows.csv`
+- `_report/quant/research/2026-06-16-quant-pipeline-gap-prep-list.md`
 - `_report/quant/research/2026-06-14-krx-managed-issues-current-exclusions.md`
 
 ## Build Script
@@ -78,6 +83,29 @@ uv run python scripts\quant_kis_ohlcv_capture.py `
   --output _report\quant\research\2026-06-15-krx-current-universe-v0-ohlcv-capture-result.md
 ```
 
+Second read-only KIS capture subset:
+
+```powershell
+uv run python scripts\quant_kis_ohlcv_batch_plan.py `
+  --universe-csv _report\quant\research\2026-06-14-krx-current-universe-v0.rows.csv `
+  --raw-dir _report\raw\2026\2026-06-15\quant\universe-ohlcv `
+  --as-of-date 2026-06-15 `
+  --start-date 20260301 `
+  --end-date 20260615 `
+  --limit 10 `
+  --skip-existing `
+  --output _report\quant\research\2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10.md `
+  --jsonl-output _report\quant\research\2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10.requests.jsonl
+
+uv run python scripts\quant_kis_ohlcv_capture.py `
+  --queue _report\quant\research\2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10.requests.jsonl `
+  --raw-dir _report\raw\2026\2026-06-15\quant\universe-ohlcv `
+  --limit 10 `
+  --skip-existing `
+  --stop-on-error `
+  --output _report\quant\research\2026-06-15-krx-current-universe-v0-ohlcv-capture-result-next10.md
+```
+
 Saved-raw Liquidity Filter smoke:
 
 ```powershell
@@ -126,11 +154,11 @@ Known exclusion reason counts:
 
 Expanded Liquidity smoke counts:
 
-- Rows with raw OHLCV evaluated: `13`
-- Included after saved-raw Liquidity Filter: `7`
-- Failed below threshold: `6`
-- `liquidity_raw_missing`: `2377`
-- Passing evaluated rows: `000080 하이트진로`, `000100 유한양행`, `000120 CJ대한통운`, `000150 두산`, `000660 SK하이닉스`, `005930 삼성전자`, `035420 NAVER`
+- Rows with raw OHLCV evaluated: `23`
+- Included after saved-raw Liquidity Filter: `14`
+- Failed below threshold: `9`
+- `liquidity_raw_missing`: `2367`
+- Passing evaluated rows include `000080 하이트진로`, `000100 유한양행`, `000120 CJ대한통운`, `000150 두산`, `000210 DL`, `000220 유유제약`, `000240 한국앤컴퍼니`, `000250 삼천당제약`, `000270 기아`, `000370 한화손해보험`, `000390 SP삼화`, `000660 SK하이닉스`, `005930 삼성전자`, `035420 NAVER`
 
 OHLCV batch plan dry-run counts:
 
@@ -143,7 +171,14 @@ First OHLCV capture counts:
 - Dry-run validated rows: `10`
 - Live capture status counts: `saved` 9, `skipped_existing` 1
 - Raw directory: `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`
-- Validator result: 10 raw files parsed, each with 71 daily rows and latest date `20260615`
+- Validator result after second capture: 20 raw files parsed, each with 71 daily rows and latest date `20260615`
+
+Second OHLCV capture counts:
+
+- Existing raw skipped by batch plan: `10`
+- Selected requests: `10`
+- Live capture status counts: `saved` 10
+- First request rows: `000210 DL`, `000220 유유제약`, `000230 일동홀딩스`
 
 ## Code Handling Rule
 

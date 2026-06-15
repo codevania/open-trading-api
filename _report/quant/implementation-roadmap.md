@@ -25,8 +25,8 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; first Universe OHLCV capture subset applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first captured subset |
 | 4. Point-in-Time Universe | blocked | 15-20% | Plan exists; current snapshot artifacts exist | Historical status snapshots or reliable replay source |
-| 5. Market data pipeline | in-progress | 45-50% | KIS raw save, smoke validators, Universe-based OHLCV request queue, and first 10 read-only KIS captures exist | Continue resumable Universe OHLCV capture batches |
-| 6. Liquidity Filter | in-progress | 40-45% | `scripts/quant_liquidity_filter.py`; 13 saved raw files evaluated against current Universe | Fill OHLCV coverage beyond the first 13 evaluated rows |
+| 5. Market data pipeline | in-progress | 45-50% | KIS raw save, smoke validators, Universe-based OHLCV request queue, and first 20 read-only KIS captures exist | Continue resumable Universe OHLCV capture batches |
+| 6. Liquidity Filter | in-progress | 40-45% | `scripts/quant_liquidity_filter.py`; 23 saved raw files evaluated against current Universe | Fill OHLCV coverage beyond the first 23 evaluated rows |
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
 | 8. OOS / Walk-Forward | planned | 10% | OOS plan exists | Run only after Backtest pipeline works |
 | 9. Bias Control pass | hold | 20% | Bias checklists exist; blockers documented | Point-in-Time and OOS evidence |
@@ -63,11 +63,16 @@ Current KRX snapshot artifacts:
 - `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.rows.csv`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.requests.jsonl`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10.md`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10.requests.jsonl`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-dry-run.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result.md`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-dry-run-next10.md`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result-next10.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-validator-result.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.rows.csv`
+- `_report/quant/research/2026-06-16-quant-pipeline-gap-prep-list.md`
 
 Scripts and tests:
 
@@ -119,7 +124,7 @@ Hard blockers before Backtest interpretation:
 
 - `Point-in-Time Universe` is not built.
 - Historical managed issue / trading suspension / market alert / delisting status is not reproducible by Rebalance date.
-- Full-Universe `Liquidity Filter` coverage is incomplete because only the first generated Universe OHLCV subset has been captured.
+- Full-Universe `Liquidity Filter` coverage is incomplete because only the first 20 generated Universe OHLCV rows have been captured.
 - Current Liquidity Filter output is an expanded saved-raw smoke artifact, not full current Universe coverage.
 - Backtest, OOS, Walk-Forward, and Bias Control have not passed.
 
@@ -142,7 +147,8 @@ Current implemented path:
 
 - `scripts/quant_kis_ohlcv_batch_plan.py` reads generated Universe rows and emits a resumable request queue.
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.md` records a first dry-run with `10` requests.
-- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.requests.jsonl` is the machine-readable request queue.
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10.md` records the next `10` requests after skipping existing raw.
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan*.requests.jsonl` files are machine-readable request queues.
 
 Guardrail:
 
@@ -160,7 +166,7 @@ Current implemented path:
 
 - `scripts/quant_liquidity_filter.py` reads current Universe rows and saved KIS daily raw files.
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.md` records the expanded paper/smoke run.
-- Saved raw coverage currently evaluates 13 rows. Passing rows are `000080 하이트진로`, `000100 유한양행`, `000120 CJ대한통운`, `000150 두산`, `000660 SK하이닉스`, `005930 삼성전자`, and `035420 NAVER`; 6 low-liquidity rows fail the threshold.
+- Saved raw coverage currently evaluates 23 rows. Passing rows include `000080 하이트진로`, `000100 유한양행`, `000120 CJ대한통운`, `000150 두산`, `000210 DL`, `000220 유유제약`, `000240 한국앤컴퍼니`, `000250 삼천당제약`, `000270 기아`, `000370 한화손해보험`, `000390 SP삼화`, `000660 SK하이닉스`, `005930 삼성전자`, and `035420 NAVER`; 9 low-liquidity rows fail the threshold.
 
 Target rule:
 

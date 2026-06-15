@@ -41,6 +41,7 @@ _report/quant/
     2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.md # Universe rows 기반 KIS OHLCV request queue dry-run
     2026-06-15-krx-current-universe-v0-ohlcv-capture-result.md # first 10 Universe queue rows read-only KIS capture
     2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.md # first 10 captured rows + prior paper raw Liquidity Filter smoke
+    2026-06-16-quant-pipeline-gap-prep-list.md # 부족한 점과 사용자 준비 항목
     2026-06-08-position-sizing-capital-allocation-policy.md # Position/Capital 정책
     2026-06-08-di-quant-signal-section-proposal.md # DI 리포트 Quant Signal 섹션 제안
   routines/
@@ -183,4 +184,5 @@ KIS OHLCV queue capture helper: `scripts/quant_kis_ohlcv_capture.py`
 14. 일일 리포트 템플릿의 "Quant Signal Candidates" 섹션은 `_report/quant/research/2026-06-08-di-quant-signal-section-proposal.md`에 제안만 남기고, DI 템플릿 직접 수정은 현재 사용자 변경 때문에 보류한다.
 15. Current Universe v0 Liquidity Filter smoke는 `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.md`에 남겼다. 저장 raw가 있는 `000660 SK하이닉스`, `005930 삼성전자`, `035420 NAVER`는 모두 threshold를 통과했고, 나머지 base-included rows는 `liquidity_raw_missing` 데이터 커버리지 blocker로 남겼다.
 16. Current Universe v0 OHLCV batch plan dry-run은 `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.md`에 남겼다. 첫 10개 included rows를 `domestic_stock.inquire_daily_itemchartprice` request queue로 만들었다.
-17. Current Universe v0 first capture는 `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result.md`에 남겼다. 현재 Codex App surface에 KIS MCP tool이 없어 `find_api_detail` 직접 호출은 못 했고, `MCP/Kis Trading MCP/configs/domestic_stock.json`와 `examples_llm` sample을 local API detail fallback으로 사용해 read-only quotation endpoint만 호출했다. raw는 `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`에 저장했고 commit하지 않는다. 확장 Liquidity Filter smoke는 `_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.md`에 남겼으며, raw 평가 13개 중 pass 7개, fail 6개, `liquidity_raw_missing` 2377개다.
+17. Current Universe v0 first and second capture는 `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result.md`와 `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result-next10.md`에 남겼다. 현재 Codex App surface에 KIS MCP tool이 없어 `find_api_detail` 직접 호출은 못 했고, `MCP/Kis Trading MCP/configs/domestic_stock.json`와 `examples_llm` sample을 local API detail fallback으로 사용해 read-only quotation endpoint만 호출했다. raw는 `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`에 저장했고 commit하지 않는다. 확장 Liquidity Filter smoke는 `_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.md`에 남겼으며, raw 평가 23개 중 pass 14개, fail 9개, `liquidity_raw_missing` 2367개다.
+18. 현재 부족한 점과 사용자 준비 항목은 `_report/quant/research/2026-06-16-quant-pipeline-gap-prep-list.md`에 남겼다.

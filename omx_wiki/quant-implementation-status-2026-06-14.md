@@ -8,7 +8,7 @@
 - Live trading readiness: `blocked`
 - Current phase: `current_snapshot_universe_v0`
 
-The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, and a first 10-row read-only KIS capture subset. It is still not Backtest-ready because `Point-in-Time Universe`, full-Universe OHLCV raw collection, OOS, and Bias Control are incomplete.
+The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, and the first 20 read-only KIS captured Universe rows. It is still not Backtest-ready because `Point-in-Time Universe`, full-Universe OHLCV raw collection, OOS, and Bias Control are incomplete.
 
 ## Completed
 
@@ -24,7 +24,7 @@ The project is beyond planning and now has a usable current-snapshot Universe ar
 - Current KRX Universe v0 was generated from listed issues + managed issue exclusions.
 - Saved-raw Liquidity Filter smoke was generated from current Universe rows + KIS daily raw files.
 - Universe `include` rows were converted into a KIS OHLCV request queue dry-run.
-- The first 10 request queue rows were captured through the read-only KIS quotation endpoint using local KIS sample auth fallback because the current Codex App surface did not expose the KIS MCP tool.
+- The first 20 request queue rows were captured through the read-only KIS quotation endpoint using local KIS sample auth fallback because the current Codex App surface did not expose the KIS MCP tool.
 - Tests for manifest verification, managed issue extraction, current Universe build, OHLCV batch planning, Liquidity Filter, and calendar audit pass.
 
 ## Current Universe v0
@@ -37,11 +37,16 @@ Artifacts:
 - `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.rows.csv`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.requests.jsonl`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10.md`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10.requests.jsonl`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-dry-run.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result.md`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-dry-run-next10.md`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result-next10.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-validator-result.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.rows.csv`
+- `_report/quant/research/2026-06-16-quant-pipeline-gap-prep-list.md`
 - `scripts/quant_krx_current_universe_build.py`
 - `scripts/quant_kis_ohlcv_batch_plan.py`
 - `scripts/quant_kis_ohlcv_capture.py`
@@ -60,13 +65,15 @@ Current result:
 - `005930 Samsung Electronics`: included
 - `121850 코이즈`: excluded by `managed_issue_current`
 - `0004V0 엔비알모션`: excluded by `listing_age_calendar_insufficient`
-- Expanded Liquidity smoke evaluated rows with saved raw OHLCV: `13`
-- Expanded Liquidity smoke pass: `000080 하이트진로`, `000100 유한양행`, `000120 CJ대한통운`, `000150 두산`, `000660 SK하이닉스`, `005930 삼성전자`, `035420 NAVER`
-- Expanded Liquidity smoke fail: `6`
-- Expanded Liquidity smoke `liquidity_raw_missing`: `2377` base-included rows without saved raw OHLCV
+- Expanded Liquidity smoke evaluated rows with saved raw OHLCV: `23`
+- Expanded Liquidity smoke pass count: `14`
+- Expanded Liquidity smoke fail count: `9`
+- Expanded Liquidity smoke `liquidity_raw_missing`: `2367` base-included rows without saved raw OHLCV
 - OHLCV batch plan dry-run selected requests: `10`
 - OHLCV batch plan first rows: `000020 동화약품`, `000040 KR모터스`, `000050 경방`
+- OHLCV next10 batch plan first rows: `000210 DL`, `000220 유유제약`, `000230 일동홀딩스`
 - First OHLCV capture result: `9` saved, `1` skipped-existing, raw stored under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`
+- Second OHLCV capture result: `10` saved, raw stored under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`
 - KIS MCP `find_api_detail` status: unavailable in current Codex App surface; local `MCP/Kis Trading MCP/configs/domestic_stock.json` and `examples_llm` sample were used as API detail fallback for read-only direct capture.
 
 Filters currently applied:
@@ -91,7 +98,9 @@ The first-capture implementation files are expected to be tracked after the curr
 - `scripts/quant_kis_ohlcv_capture.py`
 - `tests/test_quant_kis_ohlcv_capture.py`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-*.md`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10*`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded*`
+- `_report/quant/research/2026-06-16-quant-pipeline-gap-prep-list.md`
 
 ## Verification Already Run
 
@@ -125,12 +134,17 @@ The first-capture implementation files are expected to be tracked after the curr
   - queue validation dry-run selected 10 rows
   - live direct capture recorded `saved` 9 and `skipped_existing` 1
   - validator parsed 10 raw files, each with 71 daily rows and latest date `20260615`
+- Second OHLCV capture sanity checks:
+  - next10 queue validation dry-run selected 10 rows
+  - live direct capture recorded `saved` 10
+  - validator parsed 20 raw files, each with 71 daily rows and latest date `20260615`
 - Expanded Liquidity Filter smoke sanity checks:
   - total rows `2875`
   - base included rows before Liquidity Filter `2390`
-  - rows with raw OHLCV evaluated `13`
-  - included rows after saved-raw Liquidity Filter `7`
-  - `liquidity_raw_missing` `2377`
+  - rows with raw OHLCV evaluated `23`
+  - included rows after saved-raw Liquidity Filter `14`
+  - failed rows after saved-raw Liquidity Filter `9`
+  - `liquidity_raw_missing` `2367`
 
 ## Next Gates
 

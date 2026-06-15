@@ -15,18 +15,18 @@
 
 - Total rows: `2875`
 - Base included rows before Liquidity Filter: `2390`
-- Included rows after Liquidity Filter: `7`
-- Excluded rows after Liquidity Filter: `2868`
-- Rows with raw OHLCV evaluated: `13`
+- Included rows after Liquidity Filter: `14`
+- Excluded rows after Liquidity Filter: `2861`
+- Rows with raw OHLCV evaluated: `23`
 
 ## Liquidity Filter Status Counts
 
 | Status | Count |
 | --- | ---: |
-| `data_missing` | 2377 |
-| `fail` | 6 |
+| `data_missing` | 2367 |
+| `fail` | 9 |
 | `not_evaluated_preexisting_exclude` | 485 |
-| `pass` | 7 |
+| `pass` | 14 |
 
 ## Exclusion Reason Counts
 
@@ -34,8 +34,8 @@
 | --- | ---: |
 | `instrument_name_excluded` | 97 |
 | `instrument_type_excluded` | 101 |
-| `liquidity_raw_missing` | 2377 |
-| `liquidity_value_below_threshold` | 6 |
+| `liquidity_raw_missing` | 2367 |
+| `liquidity_value_below_threshold` | 9 |
 | `listing_age_calendar_insufficient` | 102 |
 | `managed_issue_current` | 101 |
 | `market_not_allowed` | 107 |
@@ -51,13 +51,20 @@
 | `000070` | 삼양홀딩스 | exclude | 790201820 | fail | 20260615 |
 | `000140` | 하이트진로홀딩스 | exclude | 228453086 | fail | 20260615 |
 | `000180` | 성창기업지주 | exclude | 95916534 | fail | 20260615 |
+| `000230` | 일동홀딩스 | exclude | 191386718 | fail | 20260615 |
+| `000300` | DH오토넥스 | exclude | 0 | fail | 20260615 |
+| `000320` | 노루홀딩스 | exclude | 227570928 | fail | 20260615 |
 | `000080` | 하이트진로 | include | 3189955734 | pass | 20260615 |
 | `000100` | 유한양행 | include | 27434149333 | pass | 20260615 |
 | `000120` | CJ대한통운 | include | 6503111895 | pass | 20260615 |
 | `000150` | 두산 | include | 220005532594 | pass | 20260615 |
-| `000660` | SK하이닉스 | include | 12079686842833 | pass | 20260612 |
-| `005930` | 삼성전자 | include | 10406371176321 | pass | 20260612 |
-| `035420` | NAVER | include | 963846182491 | pass | 20260612 |
+| `000210` | DL | include | 5921823646 | pass | 20260615 |
+| `000220` | 유유제약 | include | 3165085379 | pass | 20260615 |
+| `000240` | 한국앤컴퍼니 | include | 6074605698 | pass | 20260615 |
+| `000250` | 삼천당제약 | include | 68200375025 | pass | 20260615 |
+| `000270` | 기아 | include | 270150484096 | pass | 20260615 |
+| `000370` | 한화손해보험 | include | 9478891538 | pass | 20260615 |
+| `000390` | SP삼화 | include | 1498245029 | pass | 20260615 |
 
 ## Limitations
 
