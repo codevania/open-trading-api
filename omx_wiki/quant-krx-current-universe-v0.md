@@ -20,6 +20,11 @@ Tracked derived outputs:
 - `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.rows.csv`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.requests.jsonl`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-dry-run.md`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result.md`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-validator-result.md`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.md`
+- `_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.rows.csv`
 - `_report/quant/research/2026-06-14-krx-managed-issues-current-exclusions.md`
 
 ## Build Script
@@ -50,6 +55,29 @@ uv run python scripts\quant_kis_ohlcv_batch_plan.py `
   --jsonl-output _report\quant\research\2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.requests.jsonl
 ```
 
+Universe-based OHLCV queue capture dry-run:
+
+```powershell
+uv run python scripts\quant_kis_ohlcv_capture.py `
+  --queue _report\quant\research\2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.requests.jsonl `
+  --raw-dir _report\raw\2026\2026-06-15\quant\universe-ohlcv `
+  --dry-run `
+  --limit 10 `
+  --output _report\quant\research\2026-06-15-krx-current-universe-v0-ohlcv-capture-dry-run.md
+```
+
+First read-only KIS capture subset:
+
+```powershell
+uv run python scripts\quant_kis_ohlcv_capture.py `
+  --queue _report\quant\research\2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.requests.jsonl `
+  --raw-dir _report\raw\2026\2026-06-15\quant\universe-ohlcv `
+  --limit 10 `
+  --skip-existing `
+  --stop-on-error `
+  --output _report\quant\research\2026-06-15-krx-current-universe-v0-ohlcv-capture-result.md
+```
+
 Saved-raw Liquidity Filter smoke:
 
 ```powershell
@@ -59,6 +87,18 @@ uv run python scripts\quant_liquidity_filter.py `
   --as-of-date 2026-06-13 `
   --output _report\quant\research\2026-06-14-krx-current-universe-v0-liquidity-smoke.md `
   --csv-output _report\quant\research\2026-06-14-krx-current-universe-v0-liquidity-smoke.rows.csv
+```
+
+Expanded saved-raw Liquidity Filter smoke:
+
+```powershell
+uv run python scripts\quant_liquidity_filter.py `
+  --universe-csv _report\quant\research\2026-06-14-krx-current-universe-v0.rows.csv `
+  --raw-dir _report\raw\2026\2026-06-13\quant\paper-follow-up `
+  --raw-dir _report\raw\2026\2026-06-15\quant\universe-ohlcv `
+  --as-of-date 2026-06-15 `
+  --output _report\quant\research\2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.md `
+  --csv-output _report\quant\research\2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.rows.csv
 ```
 
 ## Current Filters
@@ -84,18 +124,26 @@ Known exclusion reason counts:
 - `instrument_name_excluded`: `97`
 - `preferred_share_name`: `15`
 
-Liquidity smoke counts:
+Expanded Liquidity smoke counts:
 
-- Rows with raw OHLCV evaluated: `3`
-- Included after saved-raw Liquidity Filter: `3`
-- `liquidity_raw_missing`: `2387`
-- Passing evaluated rows: `000660 SK hynix`, `005930 Samsung Electronics`, `035420 NAVER`
+- Rows with raw OHLCV evaluated: `13`
+- Included after saved-raw Liquidity Filter: `7`
+- Failed below threshold: `6`
+- `liquidity_raw_missing`: `2377`
+- Passing evaluated rows: `000080 하이트진로`, `000100 유한양행`, `000120 CJ대한통운`, `000150 두산`, `000660 SK하이닉스`, `005930 삼성전자`, `035420 NAVER`
 
 OHLCV batch plan dry-run counts:
 
 - Base included rows: `2390`
 - Selected requests: `10`
 - First request rows: `000020 동화약품`, `000040 KR모터스`, `000050 경방`
+
+First OHLCV capture counts:
+
+- Dry-run validated rows: `10`
+- Live capture status counts: `saved` 9, `skipped_existing` 1
+- Raw directory: `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`
+- Validator result: 10 raw files parsed, each with 71 daily rows and latest date `20260615`
 
 ## Code Handling Rule
 
@@ -112,4 +160,4 @@ Examples:
 - It is not a historical `Point-in-Time Universe`.
 - Full-Universe `Liquidity Filter`, trading suspension, market alert, delisting history, and exact trading-day Listing Age are not solved here.
 - `liquidity_raw_missing` means saved raw coverage is missing; it is not an illiquidity conclusion.
-- The OHLCV batch plan does not call KIS. Live execution still requires `domestic_stock.find_api_detail` in a KIS MCP-capable surface.
+- The OHLCV batch plan does not call KIS. Direct capture used local API detail fallback because the current Codex App surface did not expose `domestic_stock.find_api_detail`; use the MCP preflight when available.
