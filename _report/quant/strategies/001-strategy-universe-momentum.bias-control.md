@@ -10,12 +10,12 @@
 - 판정: hold
 - Strategy Portfolio 내 역할: 단독 운용 Strategy가 아니라 Momentum 기준선 및 Signal 검증용
 - AI 사용 범위: 문서화, Strategy Spec 정리, YAML 작성, 검증 체크리스트 작성 보조
-- Point-in-Time 계획: `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`
-- Raw sample audit: `_report/quant/research/2026-06-07-krx-raw-sample-audit.md`
-- Manual snapshot 절차: `_report/quant/research/2026-06-08-krx-manual-snapshot-procedure.md`
-- 비용 가정: `_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md`
-- Out-of-Sample 계획: `_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan.md`
-- Smoke Test 계획: `_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md`
+- Point-in-Time 계획: [[_report/quant/research/2026-06-07-point-in-time-universe-plan|_report/quant/research/2026-06-07-point-in-time-universe-plan.md]]
+- Raw sample audit: [[_report/quant/research/2026-06-07-krx-raw-sample-audit|_report/quant/research/2026-06-07-krx-raw-sample-audit.md]]
+- Manual snapshot 절차: [[_report/quant/research/2026-06-08-krx-manual-snapshot-procedure|_report/quant/research/2026-06-08-krx-manual-snapshot-procedure.md]]
+- 비용 가정: [[_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions|_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md]]
+- Out-of-Sample 계획: [[_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan|_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan.md]]
+- Smoke Test 계획: [[_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan|_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md]]
 
 ## 1. Universe Bias
 

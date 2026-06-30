@@ -2,26 +2,26 @@
 
 ## 목적
 
-Strategy 아이디어를 바로 주문으로 연결하지 않고, 문서화된 Strategy Spec과 Backtest 결과를 거쳐 DI 일일 리포트 Signal로 추적하기 위한 절차다. `_report/di/watchlist.yaml`의 Main, Game, 관심종목 그룹은 재량 리서치용이며 Quant Universe로 사용하지 않는다. 퀀트는 종목을 고르는 작업이 아니라 Strategy와 Investable Universe 규칙을 검증하는 작업이다.
+Strategy 아이디어를 바로 주문으로 연결하지 않고, 문서화된 Strategy Spec과 Backtest 결과를 거쳐 DI 일일 리포트 Signal로 추적하기 위한 절차다. [[_report/di/watchlist.yaml|_report/di/watchlist.yaml]]의 Main, Game, 관심종목 그룹은 재량 리서치용이며 Quant Universe로 사용하지 않는다. 퀀트는 종목을 고르는 작업이 아니라 Strategy와 Investable Universe 규칙을 검증하는 작업이다.
 
 ## 입력
 
-- Universe 원칙: `_report/quant/universe.md`
+- Universe 원칙: [[_report/quant/universe|_report/quant/universe.md]]
 - Strategy별 Universe 규칙: `_report/quant/strategies/*.md`
 - Strategy Spec: `_report/quant/strategies/*.md`
 - Strategy YAML: `_report/quant/strategies/*.kis.yaml`
-- 결과 템플릿: `_report/quant/templates/backtest-report.md`
-- Bias Control 체크리스트: `_report/quant/templates/bias-control-checklist.md`
-- Market Regime Scan 템플릿: `_report/quant/templates/market-regime-scan.md`
-- Out-of-Sample 계획: `_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan.md`
-- Smoke Test 계획: `_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md`
+- 결과 템플릿: [[_report/quant/templates/backtest-report|_report/quant/templates/backtest-report.md]]
+- Bias Control 체크리스트: [[_report/quant/templates/bias-control-checklist|_report/quant/templates/bias-control-checklist.md]]
+- Market Regime Scan 템플릿: [[_report/quant/templates/market-regime-scan|_report/quant/templates/market-regime-scan.md]]
+- Out-of-Sample 계획: [[_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan|_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan.md]]
+- Smoke Test 계획: [[_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan|_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md]]
 - 원천 데이터 저장소: `_report/raw/YYYY/YYYY-MM-DD/`
 
 ## 절차
 
 ### 0. Market Regime Scan 확인
 
-1. Strategy Signal을 DI 일일 리포트에 연결하기 전 `_report/quant/routines/market-regime-scan-routine.md`로 시장 환경을 확인한다.
+1. Strategy Signal을 DI 일일 리포트에 연결하기 전 [[_report/quant/routines/market-regime-scan-routine|_report/quant/routines/market-regime-scan-routine.md]]로 시장 환경을 확인한다.
 2. Market Regime은 Entry/Exit Signal을 만들지 않고, Strategy 실행 환경과 Risk Filter만 설명한다.
 3. `risk-off` 또는 `high-volatility` 판정이면 BUY 후보를 매매 Signal로 승격하지 않고 `Signal Candidate`로만 둔다.
 4. Perplexity Finance, 뉴스 요약, 예측시장은 Idea Source 또는 Event Filter로만 쓰고 수치 판단은 교차 검증한다.
@@ -29,9 +29,9 @@ Strategy 아이디어를 바로 주문으로 연결하지 않고, 문서화된 S
 
 ### 1. Universe 확인
 
-1. `_report/quant/universe.md`를 먼저 읽는다.
+1. [[_report/quant/universe|_report/quant/universe.md]]를 먼저 읽는다.
 2. 대상 Strategy 문서에 Inclusion/Exclusion Rules이 있는지 확인한다.
-3. Point-in-Time 확보 계획이 필요한 Strategy면 `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`를 확인한다.
+3. Point-in-Time 확보 계획이 필요한 Strategy면 [[_report/quant/research/2026-06-07-point-in-time-universe-plan|_report/quant/research/2026-06-07-point-in-time-universe-plan.md]]를 확인한다.
 4. Main/Game/관심종목 그룹을 기본 Universe로 쓰고 있으면 Backtest를 중단한다.
 5. Manual Watchlist를 사용해야 하는 경우에는 "Data Pipeline Smoke Test"로만 표시한다.
 6. 종목 코드, 시장, 해외 종목의 `exchange_code`는 실제 데이터 조회 전 검증하되, Strategy Universe를 종목명으로 정의하지 않는다.
@@ -55,7 +55,7 @@ Strategy 아이디어를 바로 주문으로 연결하지 않고, 문서화된 S
 
 ### 4. Backtest 실행
 
-1. `_report/quant/templates/bias-control-checklist.md`를 기준으로 Bias Control 항목을 먼저 검토한다.
+1. [[_report/quant/templates/bias-control-checklist|_report/quant/templates/bias-control-checklist.md]]를 기준으로 Bias Control 항목을 먼저 검토한다.
 2. 현재 watchlist만 사용한 실행은 생존/선택 편향이 있으므로 성과 증거가 아니라 smoke test로 표시한다.
 3. Backtester preset 또는 `.kis.yaml` import 흐름을 사용한다.
 4. 시장별로 Benchmark를 분리한다.
@@ -63,11 +63,11 @@ Strategy 아이디어를 바로 주문으로 연결하지 않고, 문서화된 S
 6. Docker, Lean, 의존성, 데이터 부족으로 실행하지 못하면 이유를 결과 문서에 남긴다.
 7. 파라미터 반복 비교는 최적값 찾기가 아니라 민감도와 실패 조건으로 기록한다.
 8. in-sample과 out-of-sample을 분리하지 못하면 최종 판정은 `hold` 이하로 둔다.
-9. `Point-in-Time Investable Universe`가 없으면 `_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md`에 따라 `manual_smoke_test`만 허용한다.
+9. `Point-in-Time Investable Universe`가 없으면 [[_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan|_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md]]에 따라 `manual_smoke_test`만 허용한다.
 
 ### 5. 결과 기록
 
-1. `_report/quant/templates/backtest-report.md`를 기준으로 결과 문서를 작성한다.
+1. [[_report/quant/templates/backtest-report|_report/quant/templates/backtest-report.md]]를 기준으로 결과 문서를 작성한다.
 2. Bias Control 체크리스트의 최종 판정을 결과 문서에 연결한다.
 3. 차트가 있으면 자산 곡선과 drawdown을 우선 첨부한다.
 4. 결과가 좋아도 데이터 품질, 특정 구간 의존성, 거래 횟수 부족을 같이 검토한다.
@@ -79,7 +79,7 @@ Strategy 아이디어를 바로 주문으로 연결하지 않고, 문서화된 S
 
 1. 검증 전에는 "매매 Signal"이 아니라 "퀀트 Signal Candidate"로만 쓴다.
 2. Signal 발생 시 근거 데이터와 무효화 조건을 함께 적는다.
-3. 실제 판단 변경이 있을 때만 `_report/di/decisions/decision-log.md`에 누적한다.
+3. 실제 판단 변경이 있을 때만 [[_report/di/decisions/decision-log|_report/di/decisions/decision-log.md]]에 누적한다.
 
 ## 중지 조건
 

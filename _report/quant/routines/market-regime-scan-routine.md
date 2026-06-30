@@ -8,11 +8,11 @@
 
 ## 입력
 
-- 템플릿: `_report/quant/templates/market-regime-scan.md`
-- Quant 원칙: `_report/quant/README.md`
-- Universe 원칙: `_report/quant/universe.md`
+- 템플릿: [[_report/quant/templates/market-regime-scan|_report/quant/templates/market-regime-scan.md]]
+- Quant 원칙: [[_report/quant/README|_report/quant/README.md]]
+- Universe 원칙: [[_report/quant/universe|_report/quant/universe.md]]
 - 대상 Strategy: `_report/quant/strategies/*.md`
-- DI 일일 리포트 템플릿: `_report/di/templates/daily-report.md`
+- DI 일일 리포트 템플릿: [[_report/di/templates/daily-report|_report/di/templates/daily-report.md]]
 - 원천 데이터 저장소: `_report/raw/YYYY/YYYY-MM-DD/market-regime/`
 
 ## 사용 가능한 데이터 소스
@@ -100,7 +100,7 @@
 ## 작성 절차
 
 1. 기준일, 기준 세션, 대상 시장을 확정한다.
-2. `_report/quant/templates/market-regime-scan.md`를 복사해 `_report/quant/research/YYYY-MM-DD-market-regime-scan.md` 형식으로 작성한다.
+2. [[_report/quant/templates/market-regime-scan|_report/quant/templates/market-regime-scan.md]]를 복사해 `_report/quant/research/YYYY-MM-DD-market-regime-scan.md` 형식으로 작성한다.
 3. 수집 가능한 공개 데이터와 Broker/API 데이터를 먼저 확인한다.
 4. KIS MCP를 쓸 때는 해당 API의 `find_api_detail`을 먼저 호출한다.
 5. Perplexity Finance는 로그인 화면 확인이 가능할 때만 보조 요약으로 사용한다.

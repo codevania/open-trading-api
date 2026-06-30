@@ -4,7 +4,7 @@
 
 - 작성일: 2026-06-08
 - 작성자: Codex
-- 대상 문서: `_report/di/templates/daily-report.md`
+- 대상 문서: [[_report/di/templates/daily-report|_report/di/templates/daily-report.md]]
 - 현재 판정: proposal
 - 목적: DI 일일 리포트에서 Quant Signal을 관찰하되, 재량 투자 판단과 Strategy 검증을 섞지 않는다.
 
@@ -79,7 +79,7 @@ DI 템플릿에 실제 반영하는 시점은 다음 중 하나가 충족될 때
 2. Quant smoke-test raw가 최소 21개 daily rows로 저장된다.
 3. 일일 리포트에서 paper Signal tracking을 실제로 시작한다.
 
-현재는 `_report/di/templates/daily-report.md`에 별도 사용자 변경이 있으므로, 이 제안 문서는 Quant 쪽에만 보관한다.
+현재는 [[_report/di/templates/daily-report|_report/di/templates/daily-report.md]]에 별도 사용자 변경이 있으므로, 이 제안 문서는 Quant 쪽에만 보관한다.
 
 ## 5. Current Recommendation
 

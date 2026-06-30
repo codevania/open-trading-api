@@ -1,7 +1,7 @@
 # KRX Managed Issues Current Exclusions
 
 - As-of date: `2026-06-13`
-- Source raw: `_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv`
+- Source raw: [[_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv|_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv]]
 - Detected encoding: `utf-8-sig`
 - Row count: `101`
 - Interpretation: `current snapshot Universe exclusion evidence`, `not Point-in-Time Universe`

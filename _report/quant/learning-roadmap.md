@@ -26,7 +26,7 @@
 
 | 주차 | 주제 | 익힐 것 | 산출물 |
 | --- | --- | --- | --- |
-| 1 | 퀀트 사고방식 | 종목 선택과 Strategy 검증의 차이, Alpha, Benchmark, Risk | `_report/quant/templates/study-log.md`로 첫 학습 로그 |
+| 1 | 퀀트 사고방식 | 종목 선택과 Strategy 검증의 차이, Alpha, Benchmark, Risk | [[_report/quant/templates/study-log|_report/quant/templates/study-log.md]]로 첫 학습 로그 |
 | 2 | 시장 데이터 기초 | OHLCV, 수정주가, 거래대금, 거래정지, 상장/상폐 | 데이터 품질 체크 메모 |
 | 3 | Python 기초 | 변수, 리스트/딕셔너리, 함수, 파일 읽기 | 작은 CSV를 읽고 행 수/컬럼 출력 |
 | 4 | pandas/NumPy 기초 | DataFrame, 날짜 인덱스, 결측 처리, pct_change, rolling | 종가 Return과 이동평균 계산 노트 |
@@ -45,7 +45,7 @@
 2. 학습 시작 전에 "이번 주에 설명할 수 있어야 하는 문장"을 한 줄로 쓴다.
 3. 공식 문서나 기존 repo 문서를 30분 읽는다.
 4. 작은 실습을 30분 한다.
-5. `_report/quant/templates/study-log.md`를 복사해 학습 로그를 남긴다.
+5. [[_report/quant/templates/study-log|_report/quant/templates/study-log.md]]를 복사해 학습 로그를 남긴다.
 6. 모르는 용어는 "모르는 것" 섹션에 남기고, 추정으로 채우지 않는다.
 7. 매주 산출물이 Strategy Spec, Universe 원칙, Backtest 템플릿 중 어디에 연결되는지 적는다.
 
@@ -84,7 +84,7 @@
 ## 현재 repo에서 바로 할 첫 과제
 
 1. 이 문서를 읽고 모르는 용어 10개를 `study-log`에 적는다.
-2. `_report/quant/universe.md`의 "허용 가능한 Quant Universe 정의 방식"을 다시 읽는다.
+2. [[_report/quant/universe|_report/quant/universe.md]]의 "허용 가능한 Quant Universe 정의 방식"을 다시 읽는다.
 3. `001-strategy-universe-momentum`의 Economic/Financial Hypothesis을 자신의 말로 3문장으로 바꿔 쓴다.
 4. `KRX 보통주 + 최소 상장기간 + 최소 거래대금` Universe 초안을 작성한다.
 5. 아직 Backtest를 돌리지 않는다. 먼저 Universe와 Bias Control 조건을 확정한다.
