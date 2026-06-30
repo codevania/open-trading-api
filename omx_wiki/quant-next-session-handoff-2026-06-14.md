@@ -251,7 +251,7 @@ Already implemented in the latest local work:
 Likely needed work:
 
 1. Preflight KIS daily OHLCV API with `domestic_stock.find_api_detail` in a surface where the MCP tool is available.
-2. Generate the next small request queue with `scripts/quant_kis_ohlcv_batch_plan.py --skip-existing --limit 10` against `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`; after the thirtyfifth capture this should skip `350` existing raw files.
+2. Generate the next small request queue with `[[scripts/quant_kis_ohlcv_batch_plan.py|scripts/quant_kis_ohlcv_batch_plan.py]] --skip-existing --limit 10` against `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`; after the thirtyfifth capture this should skip `350` existing raw files.
 3. Execute the next queue with [[scripts/quant_kis_ohlcv_capture.py|scripts/quant_kis_ohlcv_capture.py]].
 4. Save raw KIS responses under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`; do not commit raw files.
 5. Re-run [[scripts/quant_smoke_validate.py|scripts/quant_smoke_validate.py]] and [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] on the expanded raw directory.

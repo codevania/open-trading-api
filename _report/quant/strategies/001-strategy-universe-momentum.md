@@ -9,11 +9,11 @@
 - 작성자: Codex
 - 관련 YAML: `001-strategy-universe-momentum.kis.yaml`
 - 연결 도구: Backtester `momentum` preset
-- 참고 분석: `_report/quant/research/2026-06-06-ai-quant-video-analysis.md`
-- Bias Control: `_report/quant/strategies/001-strategy-universe-momentum.bias-control.md`
-- Point-in-Time 계획: `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`
-- Out-of-Sample 계획: `_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan.md`
-- Smoke Test 계획: `_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md`
+- 참고 분석: [[_report/quant/research/2026-06-06-ai-quant-video-analysis|_report/quant/research/2026-06-06-ai-quant-video-analysis.md]]
+- Bias Control: [[_report/quant/strategies/001-strategy-universe-momentum.bias-control.md|_report/quant/strategies/001-strategy-universe-momentum.bias-control.md]]
+- Point-in-Time 계획: [[_report/quant/research/2026-06-07-point-in-time-universe-plan|_report/quant/research/2026-06-07-point-in-time-universe-plan.md]]
+- Out-of-Sample 계획: [[_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan|_report/quant/research/2026-06-08-out-of-sample-walk-forward-plan.md]]
+- Smoke Test 계획: [[_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan|_report/quant/research/2026-06-08-data-pipeline-smoke-test-plan.md]]
 - Strategy Portfolio 역할: 단독 운용 Strategy가 아니라 Signal 검증용 기준선
 
 ## 1. Economic/Financial Hypothesis
@@ -37,7 +37,7 @@
 
 ## 3. Universe
 
-- 기본 소스: `_report/quant/universe.md`
+- 기본 소스: [[_report/quant/universe|_report/quant/universe.md]]
 - Universe Version: `v0`
 - Universe 상태: policy locked, Point-in-Time 구성 데이터 미확보로 Backtest 해석은 `hold`
 - Market: `KRX`
@@ -64,7 +64,7 @@
 - 현재 watchlist는 재량 관찰용이므로 Quant Universe가 아니다.
 - watchlist만 사용한 실행은 Backtest가 아니라 Data Pipeline Smoke Test로만 해석한다.
 - point-in-time Investable Universe가 확보되기 전까지 과거 지수 구성종목이나 현재 테마 대표주를 소급 적용하지 않는다.
-- Point-in-Time 확보 계획과 `pass/hold/fail` 기준은 `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`를 따른다.
+- Point-in-Time 확보 계획과 `pass/hold/fail` 기준은 [[_report/quant/research/2026-06-07-point-in-time-universe-plan|_report/quant/research/2026-06-07-point-in-time-universe-plan.md]]를 따른다.
 
 ## 4. 데이터 요구사항
 
@@ -101,8 +101,8 @@
 - 최대 보유 종목 수: v0 미적용, v1에서 `상위 N개` 검토
 - 전체 자산 내 목표 비중: `not_set`. Strategy Signal과 실제 자금 투입은 분리한다.
 - 현금 비중: 개인 투자자는 기관처럼 항상 전액 투자할 필요가 없으므로 별도 Risk 문서에서 결정한다.
-- Transaction Cost: `_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md`
-- Slippage: `_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md`
+- Transaction Cost: [[_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions|_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md]]
+- Slippage: [[_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions|_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md]]
 - 주문 연동: 이 단계에서는 제외
 - 개인 자산 내 실제 배분은 이 Strategy 문서가 아니라 별도 Portfolio/Risk 문서에서 결정한다.
 
@@ -148,7 +148,7 @@
 무효화 조건: ROC 0% 하회, 데이터 오류, 가설 훼손 뉴스/공시
 ```
 
-`_report/di/decisions/decision-log.md`에는 실제 판단 변경이 있을 때만 누적한다.
+[[_report/di/decisions/decision-log|_report/di/decisions/decision-log.md]]에는 실제 판단 변경이 있을 때만 누적한다.
 
 ### Market Regime 연결
 

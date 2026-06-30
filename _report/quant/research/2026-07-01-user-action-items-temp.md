@@ -91,7 +91,9 @@ The agent can safely continue:
 - Save raw responses under `_report/raw/**`.
 - Re-run [[scripts/quant_smoke_validate.py|scripts/quant_smoke_validate.py]].
 - Re-run [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]].
-- Update [[omx_wiki/quant-next-session-handoff-2026-06-14|omx_wiki/quant-next-session-handoff-2026-06-14.md]], [[omx_wiki/quant-implementation-status-2026-06-14|omx_wiki/quant-implementation-status-2026-06-14.md]], and [[_report/quant/implementation-roadmap|_report/quant/implementation-roadmap.md]] after meaningful milestones.
+- Update [[omx_wiki/quant-next-session-handoff-2026-06-14|omx_wiki/quant-next-session-handoff-2026-06-14.md]] after meaningful milestones.
+- Update [[omx_wiki/quant-implementation-status-2026-06-14|omx_wiki/quant-implementation-status-2026-06-14.md]] after meaningful milestones.
+- Update [[_report/quant/implementation-roadmap|_report/quant/implementation-roadmap.md]] after meaningful milestones.
 - Add local schema/config scaffolding for Point-in-Time tables without fetching protected or credentialed KRX data.
 
 ## Current Readiness Gate
@@ -100,4 +102,3 @@ The agent can safely continue:
 - Live trading readiness: `blocked`
 
 The user does not need to do anything immediately for the agent to continue current-snapshot OHLCV coverage.
-

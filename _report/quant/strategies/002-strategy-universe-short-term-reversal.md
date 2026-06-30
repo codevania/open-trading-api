@@ -9,7 +9,7 @@
 - 작성자: Codex
 - 관련 YAML: `002-strategy-universe-short-term-reversal.kis.yaml`
 - 연결 도구: Backtester `short_term_reversal` preset
-- Bias Control: `_report/quant/strategies/002-strategy-universe-short-term-reversal.bias-control.md`
+- Bias Control: [[_report/quant/strategies/002-strategy-universe-short-term-reversal.bias-control.md|_report/quant/strategies/002-strategy-universe-short-term-reversal.bias-control.md]]
 - Strategy Portfolio 역할: Momentum과 다른 실패 조건을 가진 두 번째 후보 Strategy
 
 ## 1. Economic/Financial Hypothesis
@@ -40,7 +40,7 @@
 
 ## 3. Universe
 
-Universe는 `_report/quant/universe.md`의 `v0` rule-based Universe를 공유한다.
+Universe는 [[_report/quant/universe|_report/quant/universe.md]]의 `v0` rule-based Universe를 공유한다.
 
 필수 조건:
 
@@ -74,8 +74,8 @@ Backtester `short_term_reversal` preset을 기준으로 한다.
 
 - Capital allocation: `0%`
 - 허용 행동: `paper Signal tracking only`
-- Position policy: `_report/quant/research/2026-06-08-position-sizing-capital-allocation-policy.md`
-- Transaction Cost/Slippage/Tax: `_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md`
+- Position policy: [[_report/quant/research/2026-06-08-position-sizing-capital-allocation-policy|_report/quant/research/2026-06-08-position-sizing-capital-allocation-policy.md]]
+- Transaction Cost/Slippage/Tax: [[_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions|_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md]]
 
 ## 7. Validation Requirements
 

@@ -46,10 +46,10 @@ Strategy artifacts:
 
 - [[_report/quant/strategies/001-strategy-universe-momentum|_report/quant/strategies/001-strategy-universe-momentum.md]]
 - [[_report/quant/strategies/001-strategy-universe-momentum.kis.yaml|_report/quant/strategies/001-strategy-universe-momentum.kis.yaml]]
-- [[_report/quant/strategies/001-strategy-universe-momentum.bias-control|_report/quant/strategies/001-strategy-universe-momentum.bias-control.md]]
+- [[_report/quant/strategies/001-strategy-universe-momentum.bias-control.md|_report/quant/strategies/001-strategy-universe-momentum.bias-control.md]]
 - [[_report/quant/strategies/002-strategy-universe-short-term-reversal|_report/quant/strategies/002-strategy-universe-short-term-reversal.md]]
 - [[_report/quant/strategies/002-strategy-universe-short-term-reversal.kis.yaml|_report/quant/strategies/002-strategy-universe-short-term-reversal.kis.yaml]]
-- [[_report/quant/strategies/002-strategy-universe-short-term-reversal.bias-control|_report/quant/strategies/002-strategy-universe-short-term-reversal.bias-control.md]]
+- [[_report/quant/strategies/002-strategy-universe-short-term-reversal.bias-control.md|_report/quant/strategies/002-strategy-universe-short-term-reversal.bias-control.md]]
 
 Current KRX snapshot artifacts:
 

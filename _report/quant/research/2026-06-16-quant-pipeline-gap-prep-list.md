@@ -74,7 +74,7 @@ Interpretation remains `current_snapshot` / paper-smoke only.
 
 ## Next Agent Actions
 
-1. Continue OHLCV coverage with `scripts/quant_kis_ohlcv_batch_plan.py --skip-existing --limit N`.
+1. Continue OHLCV coverage with `[[scripts/quant_kis_ohlcv_batch_plan.py|scripts/quant_kis_ohlcv_batch_plan.py]] --skip-existing --limit N`.
 2. Capture the queue with [[scripts/quant_kis_ohlcv_capture.py|scripts/quant_kis_ohlcv_capture.py]].
 3. Re-run [[scripts/quant_smoke_validate.py|scripts/quant_smoke_validate.py]].
 4. Re-run [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]].
