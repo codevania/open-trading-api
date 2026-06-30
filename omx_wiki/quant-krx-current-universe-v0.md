@@ -195,6 +195,13 @@ Tracked derived outputs:
 - [[_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-validator-result-thirtyfifth10|_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-validator-result-thirtyfifth10.md]]
 - [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10.md]]
 - [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10.rows.csv|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10.rows.csv]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-batch-plan-thirtysixth10|_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-batch-plan-thirtysixth10.md]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-batch-plan-thirtysixth10.requests.jsonl|_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-batch-plan-thirtysixth10.requests.jsonl]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-dry-run-thirtysixth10|_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-dry-run-thirtysixth10.md]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-result-thirtysixth10|_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-result-thirtysixth10.md]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-validator-result-thirtysixth10|_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-validator-result-thirtysixth10.md]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.md]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.rows.csv|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.rows.csv]]
 - [[_report/quant/research/2026-07-01-user-action-items-temp|_report/quant/research/2026-07-01-user-action-items-temp.md]]
 - [[_report/quant/research/2026-06-14-krx-managed-issues-current-exclusions|_report/quant/research/2026-06-14-krx-managed-issues-current-exclusions.md]]
 
@@ -366,11 +373,11 @@ Known exclusion reason counts:
 
 Expanded Liquidity smoke counts:
 
-- Rows with raw OHLCV evaluated: `351`
-- Included after saved-raw Liquidity Filter: `174`
-- Failed below threshold: `177`
-- `liquidity_raw_missing`: `2039`
-- Latest authoritative row set: [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10.rows.csv|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10.rows.csv]]
+- Rows with raw OHLCV evaluated: `361`
+- Included after saved-raw Liquidity Filter: `180`
+- Failed below threshold: `181`
+- `liquidity_raw_missing`: `2029`
+- Latest authoritative row set: [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.rows.csv|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.rows.csv]]
 
 OHLCV batch plan dry-run counts:
 
@@ -497,6 +504,14 @@ Thirtyfirst through thirtyfifth OHLCV capture counts:
 - Live capture status counts: `saved` 10 each
 - Thirtyfifth first request rows: `009420 서울바이오시스`, `009450 경동나비엔`, `009460 한창제지`
 - Validator result after thirtyfifth capture: 350 raw files parsed, each with 71 daily rows and latest date `20260615`
+
+Thirtysixth OHLCV capture counts:
+
+- Existing raw skipped by batch plan: `350`
+- Selected requests: `10`
+- Live capture status counts: `saved` 10
+- Thirtysixth first request rows: `009770 삼정펄프`, `009780 엠에스씨`, `009810 플레이그램`
+- Validator result after thirtysixth capture: 360 raw files parsed, each with 71 daily rows and latest date `20260615`
 
 ## Code Handling Rule
 

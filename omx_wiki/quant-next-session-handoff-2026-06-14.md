@@ -17,17 +17,17 @@ git status --short
 uv run python -m unittest discover tests
 ```
 
-If thirtyfifth-capture local changes are still present, stage/commit them before expanding OHLCV coverage again.
+If thirtysixth-capture local changes are still present, stage/commit them before expanding OHLCV coverage again.
 
 Suggested commit intent:
 
-`Capture thirtyfifth KIS OHLCV universe batch`
+`Capture thirtysixth KIS OHLCV universe batch`
 
 Use Lore commit protocol.
 
 ## Current Best Next Task
 
-Continue generated Universe OHLCV coverage after the first 350 captured rows.
+Continue generated Universe OHLCV coverage after the first 360 captured rows.
 
 Already implemented in the latest local work:
 
@@ -216,10 +216,17 @@ Already implemented in the latest local work:
 - [[_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-validator-result-thirtyfifth10|_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-validator-result-thirtyfifth10.md]]
 - [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10.md]]
 - [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10.rows.csv|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10.rows.csv]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-batch-plan-thirtysixth10|_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-batch-plan-thirtysixth10.md]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-batch-plan-thirtysixth10.requests.jsonl|_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-batch-plan-thirtysixth10.requests.jsonl]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-dry-run-thirtysixth10|_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-dry-run-thirtysixth10.md]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-result-thirtysixth10|_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-result-thirtysixth10.md]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-validator-result-thirtysixth10|_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-capture-validator-result-thirtysixth10.md]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.md]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.rows.csv|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.rows.csv]]
 - [[_report/quant/research/2026-07-01-user-action-items-temp|_report/quant/research/2026-07-01-user-action-items-temp.md]]
 - Target rule: `avg_trading_value_20d_krw >= 1,000,000,000`
-- Saved raw coverage currently evaluates 351 unique rows. `174` pass and `177` fail the threshold.
-- `2039` base-included rows are `liquidity_raw_missing`, which means raw coverage is missing, not that those stocks are illiquid.
+- Saved raw coverage currently evaluates 361 unique rows. `180` pass and `181` fail the threshold.
+- `2029` base-included rows are `liquidity_raw_missing`, which means raw coverage is missing, not that those stocks are illiquid.
 - First OHLCV batch dry-run selected `10` requests from generated Universe `include` rows.
 - First OHLCV direct capture saved 10 raw files under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`.
 - Second OHLCV batch dry-run selected the next `10` requests after skipping existing raw.
@@ -245,13 +252,15 @@ Already implemented in the latest local work:
 - Thirtieth OHLCV batch dry-run selected one additional `10` request queue after skipping `290` existing raw files.
 - Thirtieth direct capture saved `10` more raw files under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`; the directory then had `300` Universe raw files. Because `000660 SK하이닉스` and `005930 삼성전자` overlap with older paper-follow-up raw rows while `035420 NAVER` remains extra, the then-current Liquidity Filter had `301` unique evaluated rows.
 - Thirtyfirst through thirtyfifth OHLCV batch dry-runs selected five additional `10` request queues after skipping `300`, `310`, `320`, `330`, and `340` existing raw files.
-- Thirtyfirst through thirtyfifth direct captures saved `50` more raw files under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`; the directory now has `350` Universe raw files. Because `000660 SK하이닉스` and `005930 삼성전자` overlap with older paper-follow-up raw rows while `035420 NAVER` remains extra, the latest Liquidity Filter has `351` unique evaluated rows.
+- Thirtyfirst through thirtyfifth direct captures saved `50` more raw files under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`; the directory then had `350` Universe raw files. Because `000660 SK하이닉스` and `005930 삼성전자` overlap with older paper-follow-up raw rows while `035420 NAVER` remains extra, the then-current Liquidity Filter had `351` unique evaluated rows.
+- Thirtysixth OHLCV batch dry-run selected one additional `10` request queue after skipping `350` existing raw files.
+- Thirtysixth direct capture saved `10` more raw files under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`; the directory now has `360` Universe raw files. Because `000660 SK하이닉스` and `005930 삼성전자` overlap with older paper-follow-up raw rows while `035420 NAVER` remains extra, the latest Liquidity Filter has `361` unique evaluated rows.
 - Current Codex App surface did not expose the KIS MCP tool, so `find_api_detail` was not callable here. Local [[MCP/Kis Trading MCP/configs/domestic_stock.json|MCP/Kis Trading MCP/configs/domestic_stock.json]] and `examples_llm` sample docs were used as the fallback API detail evidence, and only the read-only quotation endpoint was called.
 
 Likely needed work:
 
 1. Preflight KIS daily OHLCV API with `domestic_stock.find_api_detail` in a surface where the MCP tool is available.
-2. Generate the next small request queue with `[[scripts/quant_kis_ohlcv_batch_plan.py|scripts/quant_kis_ohlcv_batch_plan.py]] --skip-existing --limit 10` against `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`; after the thirtyfifth capture this should skip `350` existing raw files.
+2. Generate the next small request queue with `[[scripts/quant_kis_ohlcv_batch_plan.py|scripts/quant_kis_ohlcv_batch_plan.py]] --skip-existing --limit 10` against `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`; after the thirtysixth capture this should skip `360` existing raw files.
 3. Execute the next queue with [[scripts/quant_kis_ohlcv_capture.py|scripts/quant_kis_ohlcv_capture.py]].
 4. Save raw KIS responses under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`; do not commit raw files.
 5. Re-run [[scripts/quant_smoke_validate.py|scripts/quant_smoke_validate.py]] and [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] on the expanded raw directory.
@@ -259,7 +268,7 @@ Likely needed work:
 
 ## Current Blockers
 
-- Git commit for latest OHLCV thirtyfifth-capture local changes may still be pending.
+- Git commit for latest OHLCV thirtysixth-capture local changes may still be pending.
 - Full generated Universe OHLCV coverage is still incomplete.
 - Historical KRX status data is not available by Rebalance date.
 - Backtest remains `hold`.
