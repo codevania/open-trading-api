@@ -1,8 +1,8 @@
 # KRX Current Universe v0 OHLCV Batch Plan
 
 - As-of date: `2026-06-15`
-- Source Universe rows: `_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv`
-- API detail source: `MCP/Kis Trading MCP/configs/domestic_stock.json`
+- Source Universe rows: [[_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv|_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv]]
+- API detail source: [[MCP/Kis Trading MCP/configs/domestic_stock.json|MCP/Kis Trading MCP/configs/domestic_stock.json]]
 - MCP preflight status: `tool_unavailable_in_current_codex_app_surface`
 - Local API detail preflight: `pass`
 - Tool group: `domestic_stock`
@@ -13,7 +13,7 @@
 - Offset: `0`
 - Limit: `10`
 - Skip existing raw: `true`
-- Request queue JSONL: `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-batch-plan-eleventh10.requests.jsonl`
+- Request queue JSONL: [[_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-batch-plan-eleventh10.requests.jsonl|_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-batch-plan-eleventh10.requests.jsonl]]
 
 ## Required Params
 

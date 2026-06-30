@@ -2,7 +2,7 @@
 
 - Date: 2026-06-14
 - Snapshot as-of: 2026-06-13
-- Source raw: `_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv`
+- Source raw: [[_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv|_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv]]
 - Raw status: local manual download verified for presence, hash, and CSV schema
 - Interpretation: sample evidence for `관리종목 지정 내역(개별종목)`, not a full `Point-in-Time Universe`
 

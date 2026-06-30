@@ -55,6 +55,6 @@ Main shell:
 
 1. Use a normal Chrome session from the KRX main page if login or UI state is required.
 2. Save required raw files to `_report/raw/2026/2026-06-13/krx/universe/`.
-3. Create `_report/raw/2026/2026-06-13/krx/universe/manifest.yaml`.
-4. Run `scripts/quant_krx_manifest_verify.py` against that manifest.
+3. Create [[_report/raw/2026/2026-06-13/krx/universe/manifest.yaml|_report/raw/2026/2026-06-13/krx/universe/manifest.yaml]].
+4. Run [[scripts/quant_krx_manifest_verify.py|scripts/quant_krx_manifest_verify.py]] against that manifest.
 5. Start parser work only after required datasets pass hash and schema verification.

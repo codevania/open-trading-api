@@ -14,15 +14,15 @@
 
 ## Reading
 
-- Material: `_report/quant/learning-roadmap.md`
+- Material: [[_report/quant/learning-roadmap|_report/quant/learning-roadmap.md]]
 - Key summary: first 12 weeks should focus on Strategy, data quality, Bias Control, and Backtest interpretation before any live trading.
 - Unknown terms: `Alpha`, `Benchmark`, `MDD`, `Survivorship Bias`, `Lookahead Bias`, `Data Snooping`, `Overfitting`, `Point-in-Time`, `Slippage`, `Out-of-Sample`.
 
-- Material: `_report/quant/universe.md`
+- Material: [[_report/quant/universe|_report/quant/universe.md]]
 - Key summary: Main/Game/DI watchlists are not Quant Universe inputs; a Quant Universe must be rule-based and reproducible.
 - Unknown terms: `Investable Universe`, `Inclusion Rule`, `Exclusion Rule`, `Liquidity Filter`.
 
-- Material: `_report/quant/strategies/001-strategy-universe-momentum.md`
+- Material: [[_report/quant/strategies/001-strategy-universe-momentum|_report/quant/strategies/001-strategy-universe-momentum.md]]
 - Key summary: the first Strategy is a Momentum baseline for Signal tracking, not a confirmed Alpha Strategy.
 - Unknown terms: `ROC`, `Signal Timing`, `Stress Period`, `Position`.
 
@@ -30,9 +30,9 @@
 
 - Practice: reviewed the first paper Signal log and checked whether a 1D follow-up can be computed from saved raw data.
 - Files or data used:
-  - `_report/quant/research/2026-06-09-paper-signal-log.md`
+  - [[_report/quant/research/2026-06-09-paper-signal-log|_report/quant/research/2026-06-09-paper-signal-log.md]]
   - `_report/raw/2026/2026-06-09/quant/smoke-test/`
-  - `_report/quant/research/2026-06-13-paper-signal-follow-up.md`
+  - [[_report/quant/research/2026-06-13-paper-signal-follow-up|_report/quant/research/2026-06-13-paper-signal-follow-up.md]]
 - Commands run: repo file inspection only; no KIS MCP call was available in the current Codex tool surface.
 - Result: 1D follow-up remains `data-unavailable` because the saved raw set ends at `20260605`.
 

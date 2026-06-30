@@ -23,13 +23,13 @@
 
 ## 입력 파일
 
-- 기본 관찰종목 예시: `_report/di/watchlist.example.yaml`
-- 개인 관찰종목: `_report/di/watchlist.yaml`
-- 리포트 템플릿: `_report/di/templates/daily-report.md`
-- 결정 로그: `_report/di/decisions/decision-log.md`
-- 시장 환경 루틴: `_report/quant/routines/market-regime-scan-routine.md`
+- 기본 관찰종목 예시: [[_report/di/watchlist.example.yaml|_report/di/watchlist.example.yaml]]
+- 개인 관찰종목: [[_report/di/watchlist.yaml|_report/di/watchlist.yaml]]
+- 리포트 템플릿: [[_report/di/templates/daily-report|_report/di/templates/daily-report.md]]
+- 결정 로그: [[_report/di/decisions/decision-log|_report/di/decisions/decision-log.md]]
+- 시장 환경 루틴: [[_report/quant/routines/market-regime-scan-routine|_report/quant/routines/market-regime-scan-routine.md]]
 
-`_report/di/watchlist.yaml`이 있으면 우선 사용한다. 없으면 `_report/di/watchlist.example.yaml`을 기준으로 삼는다.
+[[_report/di/watchlist.yaml|_report/di/watchlist.yaml]]이 있으면 우선 사용한다. 없으면 [[_report/di/watchlist.example.yaml|_report/di/watchlist.example.yaml]]을 기준으로 삼는다.
 
 ## 기본 관찰종목
 
@@ -42,7 +42,7 @@
 | NAS:NVDA | NVIDIA | NASDAQ | 관찰중 |
 | 454910 | 두산로보틱스 | KRX | 관찰중 |
 
-종목이 추가되면 `_report/di/watchlist.yaml`에 먼저 반영하고, 리포트의 `관찰종목` 메타데이터에도 포함한다.
+종목이 추가되면 [[_report/di/watchlist.yaml|_report/di/watchlist.yaml]]에 먼저 반영하고, 리포트의 `관찰종목` 메타데이터에도 포함한다.
 
 ## MCP 조회 순서
 
@@ -75,11 +75,11 @@
 1. 기준일을 확정한다.
 2. 관찰종목 목록을 확인한다.
 3. 각 API의 상세 파라미터를 확인한다.
-4. 필요하면 `_report/quant/routines/market-regime-scan-routine.md`로 Market Regime을 확인하고 `시장 배경`에 한 줄 요약만 반영한다.
+4. 필요하면 [[_report/quant/routines/market-regime-scan-routine|_report/quant/routines/market-regime-scan-routine.md]]로 Market Regime을 확인하고 `시장 배경`에 한 줄 요약만 반영한다.
 5. 종목별 데이터를 조회한다.
 6. 종목별 가격·거래량·수급 중 판단에 중요한 항목을 그래프로 만든다.
 7. `_report/di/daily/YYYY/YYYY-MM-DD.md`를 작성한다.
-8. 종목별 판단을 `_report/di/decisions/decision-log.md`에 추가한다.
+8. 종목별 판단을 [[_report/di/decisions/decision-log|_report/di/decisions/decision-log.md]]에 추가한다.
 9. 누락 데이터, API 실패, 종목명 불확실성을 `데이터 품질 메모`에 적는다.
 10. 사용자가 요청하지 않는 한 주문 API는 호출하지 않는다.
 
@@ -133,7 +133,7 @@
 ## 저장 규칙
 
 - 사람이 읽는 리포트: `_report/di/daily/YYYY/YYYY-MM-DD.md`
-- 결정 누적: `_report/di/decisions/decision-log.md`
+- 결정 누적: [[_report/di/decisions/decision-log|_report/di/decisions/decision-log.md]]
 - 원천 JSON: `_report/raw/YYYY/YYYY-MM-DD/SYMBOL/`
 
 현재는 수동 루틴에서 원천 JSON을 기본 저장하지 않는다. 저장하지 않은 경우 리포트에 `조회 완료, 파일 미저장`으로 남긴다.

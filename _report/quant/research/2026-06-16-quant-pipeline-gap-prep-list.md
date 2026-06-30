@@ -20,7 +20,7 @@ Interpretation remains `current_snapshot` / paper-smoke only.
 
 1. KIS MCP preflight is still unavailable in the current Codex App surface.
    - `domestic_stock.find_api_detail` could not be called directly here.
-   - The direct capture path used local `MCP/Kis Trading MCP/configs/domestic_stock.json` and `examples_llm` sample docs as fallback evidence.
+   - The direct capture path used local [[MCP/Kis Trading MCP/configs/domestic_stock.json|MCP/Kis Trading MCP/configs/domestic_stock.json]] and `examples_llm` sample docs as fallback evidence.
 
 2. OHLCV coverage is still far from full Universe coverage.
    - Only `23` rows have saved OHLCV raw out of `2390` base-included current Universe rows.
@@ -75,7 +75,7 @@ Interpretation remains `current_snapshot` / paper-smoke only.
 ## Next Agent Actions
 
 1. Continue OHLCV coverage with `scripts/quant_kis_ohlcv_batch_plan.py --skip-existing --limit N`.
-2. Capture the queue with `scripts/quant_kis_ohlcv_capture.py`.
-3. Re-run `scripts/quant_smoke_validate.py`.
-4. Re-run `scripts/quant_liquidity_filter.py`.
+2. Capture the queue with [[scripts/quant_kis_ohlcv_capture.py|scripts/quant_kis_ohlcv_capture.py]].
+3. Re-run [[scripts/quant_smoke_validate.py|scripts/quant_smoke_validate.py]].
+4. Re-run [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]].
 5. Update wiki handoff and keep `Point-in-Time` / `Backtest` claims blocked.

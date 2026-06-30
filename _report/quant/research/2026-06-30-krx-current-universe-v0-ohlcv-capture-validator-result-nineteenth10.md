@@ -1,13 +1,13 @@
 # Data Pipeline Smoke Test Result
 
 - Source raw directory: `_report/raw/2026/2026-06-15/quant/universe-ohlcv`
-- Validator: `scripts/quant_smoke_validate.py`
+- Validator: [[scripts/quant_smoke_validate.py|scripts/quant_smoke_validate.py]]
 - Universe definition mode: `manual_smoke_test`
 - Interpretation: `Data Pipeline Smoke Test - Not Quant Validation`
 - Bias Control judgment: `hold`
 - Lookback: `20`
 - Threshold: `0.0`
-- Cost model reference: `_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md`
+- Cost model reference: [[_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions|_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md]]
 
 | Symbol | Status | Rows | Latest Date | Latest Close | ROC % | Avg Trading Value 20D KRW | Message |
 | --- | --- | ---: | --- | ---: | ---: | ---: | --- |

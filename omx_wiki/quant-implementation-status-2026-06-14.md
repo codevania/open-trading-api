@@ -14,7 +14,7 @@ The project is beyond planning and now has a usable current-snapshot Universe ar
 
 - Quant work was separated from DI / general investing work.
 - Core Quant docs exist under `_report/quant/`.
-- Beginner learning roadmap exists: `_report/quant/learning-roadmap.md`.
+- Beginner learning roadmap exists: [[_report/quant/learning-roadmap|_report/quant/learning-roadmap.md]].
 - Strategy specs exist for:
   - `001-strategy-universe-momentum`
   - `002-strategy-universe-short-term-reversal`
@@ -31,94 +31,94 @@ The project is beyond planning and now has a usable current-snapshot Universe ar
 
 Artifacts:
 
-- `_report/quant/research/2026-06-14-krx-current-universe-v0.md`
-- `_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv`
-- `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.md`
-- `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.rows.csv`
-- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.md`
-- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.requests.jsonl`
-- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10.md`
-- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10.requests.jsonl`
-- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-dry-run.md`
-- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result.md`
-- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-dry-run-next10.md`
-- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result-next10.md`
-- `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-validator-result.md`
-- `_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.md`
-- `_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.rows.csv`
-- `_report/quant/research/2026-06-16-quant-pipeline-gap-prep-list.md`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-batch-plan-third10.md`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-batch-plan-third10.requests.jsonl`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-dry-run-third10.md`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-result-third10.md`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-validator-result-third10.md`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-third10.md`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-third10.rows.csv`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-batch-plan-fourth10.md`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-batch-plan-fourth10.requests.jsonl`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-dry-run-fourth10.md`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-result-fourth10.md`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-validator-result-fourth10.md`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-fourth10.md`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-fourth10.rows.csv`
+- [[_report/quant/research/2026-06-14-krx-current-universe-v0|_report/quant/research/2026-06-14-krx-current-universe-v0.md]]
+- [[_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv|_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv]]
+- [[_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke|_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.md]]
+- [[_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.rows.csv|_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.rows.csv]]
+- [[_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan|_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.md]]
+- [[_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.requests.jsonl|_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan.requests.jsonl]]
+- [[_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10|_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10.md]]
+- [[_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10.requests.jsonl|_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10.requests.jsonl]]
+- [[_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-dry-run|_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-dry-run.md]]
+- [[_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result|_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result.md]]
+- [[_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-dry-run-next10|_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-dry-run-next10.md]]
+- [[_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result-next10|_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-result-next10.md]]
+- [[_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-validator-result|_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-validator-result.md]]
+- [[_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded|_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.md]]
+- [[_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.rows.csv|_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded.rows.csv]]
+- [[_report/quant/research/2026-06-16-quant-pipeline-gap-prep-list|_report/quant/research/2026-06-16-quant-pipeline-gap-prep-list.md]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-batch-plan-third10|_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-batch-plan-third10.md]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-batch-plan-third10.requests.jsonl|_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-batch-plan-third10.requests.jsonl]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-dry-run-third10|_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-dry-run-third10.md]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-result-third10|_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-result-third10.md]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-validator-result-third10|_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-validator-result-third10.md]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-third10|_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-third10.md]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-third10.rows.csv|_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-third10.rows.csv]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-batch-plan-fourth10|_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-batch-plan-fourth10.md]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-batch-plan-fourth10.requests.jsonl|_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-batch-plan-fourth10.requests.jsonl]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-dry-run-fourth10|_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-dry-run-fourth10.md]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-result-fourth10|_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-result-fourth10.md]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-validator-result-fourth10|_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-capture-validator-result-fourth10.md]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-fourth10|_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-fourth10.md]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-fourth10.rows.csv|_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-fourth10.rows.csv]]
 - `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-*-fifth10*`
 - `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-*-sixth10*`
 - `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-*-seventh10*`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-seventh10.md`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-seventh10.rows.csv`
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-seventh10|_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-seventh10.md]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-seventh10.rows.csv|_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-seventh10.rows.csv]]
 - `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-*-eighth10*`
 - `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-*-ninth10*`
 - `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-*-tenth10*`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-tenth10.md`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-tenth10.rows.csv`
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-tenth10|_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-tenth10.md]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-tenth10.rows.csv|_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-tenth10.rows.csv]]
 - `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-*-eleventh10*`
 - `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-*-twelfth10*`
 - `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-*-thirteenth10*`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-thirteenth10.md`
-- `_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-thirteenth10.rows.csv`
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-thirteenth10|_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-thirteenth10.md]]
+- [[_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-thirteenth10.rows.csv|_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-thirteenth10.rows.csv]]
 - `_report/quant/research/2026-06-18-krx-current-universe-v0-ohlcv-*-fourteenth10*`
 - `_report/quant/research/2026-06-18-krx-current-universe-v0-ohlcv-*-fifteenth10*`
 - `_report/quant/research/2026-06-18-krx-current-universe-v0-ohlcv-*-sixteenth10*`
-- `_report/quant/research/2026-06-18-krx-current-universe-v0-liquidity-smoke-expanded-sixteenth10.md`
-- `_report/quant/research/2026-06-18-krx-current-universe-v0-liquidity-smoke-expanded-sixteenth10.rows.csv`
+- [[_report/quant/research/2026-06-18-krx-current-universe-v0-liquidity-smoke-expanded-sixteenth10|_report/quant/research/2026-06-18-krx-current-universe-v0-liquidity-smoke-expanded-sixteenth10.md]]
+- [[_report/quant/research/2026-06-18-krx-current-universe-v0-liquidity-smoke-expanded-sixteenth10.rows.csv|_report/quant/research/2026-06-18-krx-current-universe-v0-liquidity-smoke-expanded-sixteenth10.rows.csv]]
 - `_report/quant/research/2026-06-30-krx-current-universe-v0-ohlcv-*-seventeenth10*`
 - `_report/quant/research/2026-06-30-krx-current-universe-v0-ohlcv-*-eighteenth10*`
 - `_report/quant/research/2026-06-30-krx-current-universe-v0-ohlcv-*-nineteenth10*`
-- `_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-nineteenth10.md`
-- `_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-nineteenth10.rows.csv`
+- [[_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-nineteenth10|_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-nineteenth10.md]]
+- [[_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-nineteenth10.rows.csv|_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-nineteenth10.rows.csv]]
 - `_report/quant/research/2026-06-30-krx-current-universe-v0-ohlcv-*-twentieth10*`
 - `_report/quant/research/2026-06-30-krx-current-universe-v0-ohlcv-*-twentyfirst10*`
 - `_report/quant/research/2026-06-30-krx-current-universe-v0-ohlcv-*-twentysecond10*`
 - `_report/quant/research/2026-06-30-krx-current-universe-v0-ohlcv-*-twentythird10*`
 - `_report/quant/research/2026-06-30-krx-current-universe-v0-ohlcv-*-twentyfourth10*`
-- `_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-twentyfourth10.md`
-- `_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-twentyfourth10.rows.csv`
+- [[_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-twentyfourth10|_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-twentyfourth10.md]]
+- [[_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-twentyfourth10.rows.csv|_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-twentyfourth10.rows.csv]]
 - `_report/quant/research/2026-06-30-krx-current-universe-v0-ohlcv-*-twentyfifth10*`
 - `_report/quant/research/2026-06-30-krx-current-universe-v0-ohlcv-*-twentysixth10*`
 - `_report/quant/research/2026-06-30-krx-current-universe-v0-ohlcv-*-twentyseventh10*`
 - `_report/quant/research/2026-06-30-krx-current-universe-v0-ohlcv-*-twentyeighth10*`
 - `_report/quant/research/2026-06-30-krx-current-universe-v0-ohlcv-*-twentyninth10*`
-- `_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-twentyninth10.md`
-- `_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-twentyninth10.rows.csv`
+- [[_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-twentyninth10|_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-twentyninth10.md]]
+- [[_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-twentyninth10.rows.csv|_report/quant/research/2026-06-30-krx-current-universe-v0-liquidity-smoke-expanded-twentyninth10.rows.csv]]
 - `_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-*-thirtieth10*`
-- `_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtieth10.md`
-- `_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtieth10.rows.csv`
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtieth10|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtieth10.md]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtieth10.rows.csv|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtieth10.rows.csv]]
 - `_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-*-thirtyfirst10*`
 - `_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-*-thirtysecond10*`
 - `_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-*-thirtythird10*`
 - `_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-*-thirtyfourth10*`
 - `_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-*-thirtyfifth10*`
-- `_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10.md`
-- `_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10.rows.csv`
-- `_report/quant/research/2026-07-01-user-action-items-temp.md`
-- `scripts/quant_krx_current_universe_build.py`
-- `scripts/quant_kis_ohlcv_batch_plan.py`
-- `scripts/quant_kis_ohlcv_capture.py`
-- `scripts/quant_liquidity_filter.py`
-- `tests/test_quant_krx_current_universe_build.py`
-- `tests/test_quant_kis_ohlcv_batch_plan.py`
-- `tests/test_quant_kis_ohlcv_capture.py`
-- `tests/test_quant_liquidity_filter.py`
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10.md]]
+- [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10.rows.csv|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10.rows.csv]]
+- [[_report/quant/research/2026-07-01-user-action-items-temp|_report/quant/research/2026-07-01-user-action-items-temp.md]]
+- [[scripts/quant_krx_current_universe_build.py|scripts/quant_krx_current_universe_build.py]]
+- [[scripts/quant_kis_ohlcv_batch_plan.py|scripts/quant_kis_ohlcv_batch_plan.py]]
+- [[scripts/quant_kis_ohlcv_capture.py|scripts/quant_kis_ohlcv_capture.py]]
+- [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]]
+- [[tests/test_quant_krx_current_universe_build.py|tests/test_quant_krx_current_universe_build.py]]
+- [[tests/test_quant_kis_ohlcv_batch_plan.py|tests/test_quant_kis_ohlcv_batch_plan.py]]
+- [[tests/test_quant_kis_ohlcv_capture.py|tests/test_quant_kis_ohlcv_capture.py]]
+- [[tests/test_quant_liquidity_filter.py|tests/test_quant_liquidity_filter.py]]
 
 Current result:
 
@@ -194,7 +194,7 @@ Current result:
 - Twentyseventh OHLCV capture result: `10` saved, raw stored under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`
 - Twentyeighth OHLCV capture result: `10` saved, raw stored under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`
 - Twentyninth OHLCV capture result: `10` saved, raw stored under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`
-- KIS MCP `find_api_detail` status: unavailable in current Codex App surface; local `MCP/Kis Trading MCP/configs/domestic_stock.json` and `examples_llm` sample were used as API detail fallback for read-only direct capture.
+- KIS MCP `find_api_detail` status: unavailable in current Codex App surface; local [[MCP/Kis Trading MCP/configs/domestic_stock.json|MCP/Kis Trading MCP/configs/domestic_stock.json]] and `examples_llm` sample were used as API detail fallback for read-only direct capture.
 
 Filters currently applied:
 
@@ -215,12 +215,12 @@ Check `git status --short` before resuming. Raw KIS responses under `_report/raw
 
 The Quant capture/research files expected to be tracked after the current work is committed:
 
-- `scripts/quant_kis_ohlcv_capture.py`
-- `tests/test_quant_kis_ohlcv_capture.py`
+- [[scripts/quant_kis_ohlcv_capture.py|scripts/quant_kis_ohlcv_capture.py]]
+- [[tests/test_quant_kis_ohlcv_capture.py|tests/test_quant_kis_ohlcv_capture.py]]
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-capture-*.md`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-ohlcv-batch-plan-next10*`
 - `_report/quant/research/2026-06-15-krx-current-universe-v0-liquidity-smoke-expanded*`
-- `_report/quant/research/2026-06-16-quant-pipeline-gap-prep-list.md`
+- [[_report/quant/research/2026-06-16-quant-pipeline-gap-prep-list|_report/quant/research/2026-06-16-quant-pipeline-gap-prep-list.md]]
 - `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-*-third10*`
 - `_report/quant/research/2026-06-17-krx-current-universe-v0-liquidity-smoke-expanded-third10*`
 - `_report/quant/research/2026-06-17-krx-current-universe-v0-ohlcv-*-fourth10*`
@@ -265,7 +265,7 @@ The Quant capture/research files expected to be tracked after the current work i
 - `_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-*-thirtyfourth10*`
 - `_report/quant/research/2026-07-01-krx-current-universe-v0-ohlcv-*-thirtyfifth10*`
 - `_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtyfifth10*`
-- `_report/quant/research/2026-07-01-user-action-items-temp.md`
+- [[_report/quant/research/2026-07-01-user-action-items-temp|_report/quant/research/2026-07-01-user-action-items-temp.md]]
 
 ## Verification Already Run
 
@@ -360,7 +360,7 @@ The Quant capture/research files expected to be tracked after the current work i
 1. Continue OHLCV coverage in small resumable batches from generated Universe rows.
 2. In a KIS MCP-capable surface, run `domestic_stock.find_api_detail` for `inquire_daily_itemchartprice`; if unavailable, keep documenting the local API detail fallback explicitly.
 3. Save raw responses under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/` and do not commit raw files.
-4. Re-run `scripts/quant_smoke_validate.py` and `scripts/quant_liquidity_filter.py` after each documented batch.
+4. Re-run [[scripts/quant_smoke_validate.py|scripts/quant_smoke_validate.py]] and [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] after each documented batch.
 5. Generate paper/smoke `Signal Candidate` outputs from Universe rows, not manual watchlists.
 6. Build `Point-in-Time Universe` path.
 7. Only then run Backtest/OOS/Walk-Forward and Bias Control pass.

@@ -4,10 +4,10 @@
 
 - Date: 2026-06-13
 - Author: Codex
-- Source Signal Log: `_report/quant/research/2026-06-09-paper-signal-log.md`
+- Source Signal Log: [[_report/quant/research/2026-06-09-paper-signal-log|_report/quant/research/2026-06-09-paper-signal-log.md]]
 - Source raw checked: `_report/raw/2026/2026-06-09/quant/smoke-test/`
 - Follow-up raw checked: `_report/raw/2026/2026-06-13/quant/paper-follow-up/`
-- Validator result: `_report/quant/research/2026-06-13-paper-follow-up-raw-validator-result.md`
+- Validator result: [[_report/quant/research/2026-06-13-paper-follow-up-raw-validator-result|_report/quant/research/2026-06-13-paper-follow-up-raw-validator-result.md]]
 - Follow-up window requested: `next 1D`, `next 5D`
 - Follow-up status: `observed-through-5D`
 - Interpretation: `paper tracking only`, `not trade instruction`

@@ -1,14 +1,14 @@
 # KRX Current Universe v0 Liquidity Filter Smoke
 
 - As-of date: `2026-06-13`
-- Source Universe rows: `_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv`
+- Source Universe rows: [[_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv|_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv]]
 - Source raw directories:
   - `_report/raw/2026/2026-06-13/quant/paper-follow-up`
 - Filter mode: `current_snapshot_liquidity_smoke`
 - Interpretation: `paper/smoke Universe only`, `not Point-in-Time Universe`
 - Bias Control judgment: `hold`
 - Liquidity Filter rule: `avg_trading_value_20d_krw >= 1,000,000,000`
-- Machine-readable rows: `_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.rows.csv`
+- Machine-readable rows: [[_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.rows.csv|_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.rows.csv]]
 
 ## Summary
 

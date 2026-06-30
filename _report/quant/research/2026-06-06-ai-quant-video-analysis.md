@@ -74,7 +74,7 @@
 
 ## 다음 작업
 
-1. `_report/quant/templates/bias-control-checklist.md`를 모든 Strategy 결과에 첨부한다.
+1. [[_report/quant/templates/bias-control-checklist|_report/quant/templates/bias-control-checklist.md]]를 모든 Strategy 결과에 첨부한다.
 2. `001-strategy-universe-momentum`의 첫 Backtest는 성과보다 Universe와 제한사항 검증을 우선한다.
 3. 역사적 투자 가능 유니버스와 point-in-time 데이터 확보 계획을 별도 노트로 만든다.
 4. Position 크기와 현금 비중을 다루는 개인 투자용 Risk 문서를 만든다.

@@ -21,8 +21,8 @@ This does not solve `Point-in-Time Universe`. It is only a current snapshot for 
 
 | Dataset | KRX menu path | Save as |
 | --- | --- | --- |
-| Listed issues current | `KRX Data Marketplace > 통계 > 기본 통계 > 주식 > 종목정보 > 전종목 기본정보` | `_report/raw/2026/2026-06-13/krx/universe/listed_issues_current.raw.csv` |
-| Managed issues current | `KRX Data Marketplace > 통계 > 이슈 통계 > 관리종목 > 관리종목 현황` | `_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv` |
+| Listed issues current | `KRX Data Marketplace > 통계 > 기본 통계 > 주식 > 종목정보 > 전종목 기본정보` | [[_report/raw/2026/2026-06-13/krx/universe/listed_issues_current.raw.csv|_report/raw/2026/2026-06-13/krx/universe/listed_issues_current.raw.csv]] |
+| Managed issues current | `KRX Data Marketplace > 통계 > 이슈 통계 > 관리종목 > 관리종목 현황` | [[_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv|_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv]] |
 
 `managed_issues_current.raw.csv` is already present locally and has been verified. `listed_issues_current.raw.csv` is still missing.
 
@@ -41,8 +41,8 @@ uv run python scripts\quant_krx_current_universe_build.py `
 
 ## Expected Output
 
-- Markdown summary: `_report/quant/research/2026-06-14-krx-current-universe-v0.md`
-- Machine-readable rows: `_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv`
+- Markdown summary: [[_report/quant/research/2026-06-14-krx-current-universe-v0|_report/quant/research/2026-06-14-krx-current-universe-v0.md]]
+- Machine-readable rows: [[_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv|_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv]]
 
 ## Guardrails
 

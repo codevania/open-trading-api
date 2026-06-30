@@ -1,7 +1,7 @@
 # KIS OHLCV Calendar Audit Result
 
 - Source raw directory: `_report/raw/2026/2026-06-13/quant/paper-follow-up`
-- Auditor: `scripts/quant_calendar_audit.py`
+- Auditor: [[scripts/quant_calendar_audit.py|scripts/quant_calendar_audit.py]]
 - Expected calendar source: `symbol-union`
 - Overall status: `reference-only`
 - Interpretation: `calendar coverage audit only`, `not Backtest ready`

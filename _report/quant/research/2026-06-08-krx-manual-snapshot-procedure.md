@@ -9,9 +9,9 @@
 - 현재 판정: hold
 - Source Mode: `manual_snapshot_procedure_ready`
 - 관련 문서:
-  - `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`
-  - `_report/quant/research/2026-06-07-krx-raw-sample-audit.md`
-  - `_report/quant/templates/krx-manual-snapshot-manifest.yaml`
+  - [[_report/quant/research/2026-06-07-point-in-time-universe-plan|_report/quant/research/2026-06-07-point-in-time-universe-plan.md]]
+  - [[_report/quant/research/2026-06-07-krx-raw-sample-audit|_report/quant/research/2026-06-07-krx-raw-sample-audit.md]]
+  - [[_report/quant/templates/krx-manual-snapshot-manifest.yaml|_report/quant/templates/krx-manual-snapshot-manifest.yaml]]
 
 ## 1. 목적
 
@@ -70,7 +70,7 @@ _report/raw/2026/2026-06-08/krx/universe/
 
 ## 5. Manifest 작성 기준
 
-Manifest는 `_report/quant/templates/krx-manual-snapshot-manifest.yaml` 형식을 따른다.
+Manifest는 [[_report/quant/templates/krx-manual-snapshot-manifest.yaml|_report/quant/templates/krx-manual-snapshot-manifest.yaml]] 형식을 따른다.
 
 필수 필드:
 

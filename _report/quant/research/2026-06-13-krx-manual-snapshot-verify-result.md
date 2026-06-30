@@ -1,6 +1,6 @@
 # KRX Manual Snapshot Verify Result
 
-- Manifest: `_report/raw/2026/2026-06-13/krx/universe/manifest.yaml`
+- Manifest: [[_report/raw/2026/2026-06-13/krx/universe/manifest.yaml|_report/raw/2026/2026-06-13/krx/universe/manifest.yaml]]
 - As-of date: `2026-06-13`
 - Source mode: `manual_snapshot`
 - Overall status: `pending`

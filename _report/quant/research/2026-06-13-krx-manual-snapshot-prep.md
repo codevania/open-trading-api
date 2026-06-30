@@ -8,9 +8,9 @@
 - Source mode: `manual_snapshot_prep`
 - Current status: `pending_manual_download`
 - Bias Control judgment: `hold`
-- Procedure reference: `_report/quant/research/2026-06-08-krx-manual-snapshot-procedure.md`
-- Pending manifest: `_report/quant/research/2026-06-13-krx-manual-snapshot-manifest.pending.yaml`
-- Chrome retry: `_report/quant/research/2026-06-13-krx-chrome-download-retry.md`
+- Procedure reference: [[_report/quant/research/2026-06-08-krx-manual-snapshot-procedure|_report/quant/research/2026-06-08-krx-manual-snapshot-procedure.md]]
+- Pending manifest: [[_report/quant/research/2026-06-13-krx-manual-snapshot-manifest.pending.yaml|_report/quant/research/2026-06-13-krx-manual-snapshot-manifest.pending.yaml]]
+- Chrome retry: [[_report/quant/research/2026-06-13-krx-chrome-download-retry|_report/quant/research/2026-06-13-krx-chrome-download-retry.md]]
 
 ## Purpose
 
@@ -22,8 +22,8 @@ This is a prep artifact. It does not upgrade Point-in-Time Universe readiness, B
 
 | Dataset ID | Required | Source URL | Target Raw Path | Status |
 | --- | --- | --- | --- | --- |
-| `listed_issues_current` | yes | `KRX Data Marketplace > 통계 > 기본 통계 > 주식 > 종목정보 > 전종목 기본정보` | `_report/raw/2026/2026-06-13/krx/universe/listed_issues_current.raw.csv` | `pending_manual_download` |
-| `managed_issues_current` | yes | `https://data.krx.co.kr/contents/MDC/STAT/issue/MDCSTAT214.jsp` | `_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv` | `pending_manual_download` |
+| `listed_issues_current` | yes | `KRX Data Marketplace > 통계 > 기본 통계 > 주식 > 종목정보 > 전종목 기본정보` | [[_report/raw/2026/2026-06-13/krx/universe/listed_issues_current.raw.csv|_report/raw/2026/2026-06-13/krx/universe/listed_issues_current.raw.csv]] | `pending_manual_download` |
+| `managed_issues_current` | yes | `https://data.krx.co.kr/contents/MDC/STAT/issue/MDCSTAT214.jsp` | [[_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv|_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv]] | `pending_manual_download` |
 | `managed_issue_designation_history` | yes | `https://data.krx.co.kr/contents/MDC/STAT/issue/MDCSTAT215.jsp` | `_report/raw/2026/2026-06-13/krx/universe/managed_issue_designation_history.raw.csv` | `pending_manual_download` |
 | `delisting_events` | preferred | `https://global.krx.co.kr/contents/GLB/03/0306/0306050000/GLB0306050000.jsp` | `_report/raw/2026/2026-06-13/krx/universe/delisting_events.raw.csv` | `pending_manual_download` |
 
@@ -34,9 +34,9 @@ This is a prep artifact. It does not upgrade Point-in-Time Universe readiness, B
 3. Save the original file under `_report/raw/2026/2026-06-13/krx/universe/`.
 4. Rename files to the target raw file names without editing their contents.
 5. Compute SHA-256 with `Get-FileHash -Algorithm SHA256`.
-6. Fill the pending manifest and save the final manifest next to the raw files as `_report/raw/2026/2026-06-13/krx/universe/manifest.yaml`.
+6. Fill the pending manifest and save the final manifest next to the raw files as [[_report/raw/2026/2026-06-13/krx/universe/manifest.yaml|_report/raw/2026/2026-06-13/krx/universe/manifest.yaml]].
 7. Ask Codex to verify schema and hash after the files exist.
-8. After `listed_issues_current` and `managed_issues_current` exist, build current snapshot Universe v0 with `scripts/quant_krx_current_universe_build.py`.
+8. After `listed_issues_current` and `managed_issues_current` exist, build current snapshot Universe v0 with [[scripts/quant_krx_current_universe_build.py|scripts/quant_krx_current_universe_build.py]].
 
 ## Validation Rules
 
@@ -45,8 +45,8 @@ This is a prep artifact. It does not upgrade Point-in-Time Universe readiness, B
 - `sha256` stays `TO_BE_FILLED` until raw files exist.
 - A single current snapshot does not create a full `Point-in-Time` Universe.
 - Strategy interpretation remains `hold`.
-- Manifest verification uses `scripts/quant_krx_manifest_verify.py`.
-- Manifest materialization uses `scripts/quant_krx_manifest_materialize.py`.
+- Manifest verification uses [[scripts/quant_krx_manifest_verify.py|scripts/quant_krx_manifest_verify.py]].
+- Manifest materialization uses [[scripts/quant_krx_manifest_materialize.py|scripts/quant_krx_manifest_materialize.py]].
 
 Verifier command:
 

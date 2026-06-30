@@ -84,7 +84,7 @@ params:
 
 결과 문서:
 
-- `_report/quant/research/2026-06-08-data-pipeline-smoke-test-result.md`
+- [[_report/quant/research/2026-06-08-data-pipeline-smoke-test-result|_report/quant/research/2026-06-08-data-pipeline-smoke-test-result.md]]
 
 판정:
 
@@ -149,7 +149,7 @@ Smoke test는 다음을 만족하면 통과다.
 
 - 2026-06-09에 KIS MCP 수동 raw capture로 각 symbol별 21개 daily rows를 확보했다.
 - 저장 위치는 `_report/raw/2026/2026-06-09/quant/smoke-test/`다.
-- 결과 문서는 `_report/quant/research/2026-06-09-data-pipeline-smoke-test-result.md`다.
+- 결과 문서는 [[_report/quant/research/2026-06-09-data-pipeline-smoke-test-result|_report/quant/research/2026-06-09-data-pipeline-smoke-test-result.md]]다.
 - 남은 blocker는 Point-in-Time Universe, full Backtest, OOS/Bias Control이다.
 
 필수 산출물:
@@ -164,7 +164,7 @@ _report/raw/YYYY/YYYY-MM-DD/quant/smoke-test/
 _report/quant/research/YYYY-MM-DD-data-pipeline-smoke-test-result.md
 ```
 
-결과 문서는 `_report/quant/templates/backtest-report.md`를 쓰되, `Universe 정의 방식`은 `manual_smoke_test`로 고정한다.
+결과 문서는 [[_report/quant/templates/backtest-report|_report/quant/templates/backtest-report.md]]를 쓰되, `Universe 정의 방식`은 `manual_smoke_test`로 고정한다.
 
 ## 7. Validator
 

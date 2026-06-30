@@ -5,11 +5,11 @@
 - 기준일: 2026-06-06
 - 상태: Universe v0 정책 정의 완료, Point-in-Time 확보 계획 작성, 실제 데이터 미구축
 - 용도: 퀀트 Strategy가 사용할 Investable Universe 정의 원칙
-- Point-in-Time 계획: `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`
+- Point-in-Time 계획: [[_report/quant/research/2026-06-07-point-in-time-universe-plan|_report/quant/research/2026-06-07-point-in-time-universe-plan.md]]
 
 ## 핵심 원칙
 
-- `_report/di/watchlist.yaml`의 Main, Game, sector watchlist, 관심종목 그룹은 DI 리서치와 일일 관찰용이다.
+- [[_report/di/watchlist.yaml|_report/di/watchlist.yaml]]의 Main, Game, sector watchlist, 관심종목 그룹은 DI 리서치와 일일 관찰용이다.
 - 퀀트 Strategy는 기존 관심종목을 기본 Universe로 사용하지 않는다.
 - 퀀트 Universe는 종목명에서 시작하지 않고, Strategy가 사전에 정한 Inclusion/Exclusion Rules에서 시작한다.
 - 현재 시점에 좋아 보이는 종목을 과거로 소급 적용하면 생존/선택 편향이 생긴다.
@@ -65,13 +65,13 @@
 - Lookback, Liquidity Filter, Listing Age 계산에 필요한 과거 데이터가 부족한 항목.
 
 현재 KRX 관리종목 snapshot exclusion evidence:
-`_report/quant/research/2026-06-14-krx-managed-issues-current-exclusions.md`
+[[_report/quant/research/2026-06-14-krx-managed-issues-current-exclusions|_report/quant/research/2026-06-14-krx-managed-issues-current-exclusions.md]]
 
 현재 KRX current snapshot Universe v0:
-`_report/quant/research/2026-06-14-krx-current-universe-v0.md`
+[[_report/quant/research/2026-06-14-krx-current-universe-v0|_report/quant/research/2026-06-14-krx-current-universe-v0.md]]
 
 현재 KRX current snapshot Liquidity Filter smoke:
-`_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.md`
+[[_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke|_report/quant/research/2026-06-14-krx-current-universe-v0-liquidity-smoke.md]]
 
 메모: Liquidity Filter target rule은 `avg_trading_value_20d_krw >= 1,000,000,000`이다. 현재 smoke artifact는 저장된 KIS 일봉 raw가 있는 `000660 SK hynix`, `005930 Samsung Electronics`, `035420 NAVER`만 평가했으며, 세 종목은 모두 threshold를 통과했다. 나머지 base-included rows는 `liquidity_raw_missing`으로 표시했으며, 이는 유동성 부족 판정이 아니라 full Universe OHLCV batch collection 미완료를 뜻한다.
 
@@ -83,7 +83,7 @@
 - 현재 생존 종목 목록이나 현재 테마 대표주를 과거에 소급 적용하지 않는다.
 - 과거 상장폐지, 거래정지, 편입/편출 이력을 확보하지 못하면 결과 문서의 Bias Control 최종 판정은 `hold`로 둔다.
 - 현재 기준 종목 목록으로 실행한 결과는 성과 증거가 아니라 `Data Pipeline Smoke Test`다.
-- 확보 계획과 `pass/hold/fail` 기준은 `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`를 따른다.
+- 확보 계획과 `pass/hold/fail` 기준은 [[_report/quant/research/2026-06-07-point-in-time-universe-plan|_report/quant/research/2026-06-07-point-in-time-universe-plan.md]]를 따른다.
 
 ### Signal Timing Rule
 

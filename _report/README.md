@@ -58,20 +58,20 @@ _report/
 
 ## DI 작성 흐름
 
-1. 장 마감 전후로 `_report/di/watchlist.yaml`의 관찰종목을 확인한다.
-2. `_report/di/routines/daily-report-routine.md`를 따른다.
+1. 장 마감 전후로 [[_report/di/watchlist.yaml|_report/di/watchlist.yaml]]의 관찰종목을 확인한다.
+2. [[_report/di/routines/daily-report-routine|_report/di/routines/daily-report-routine.md]]를 따른다.
 3. KIS MCP로 현재가, 일봉, 투자자 수급, 뉴스/공시 데이터를 조회한다.
 4. 원천 데이터가 필요하면 `_report/raw/YYYY/YYYY-MM-DD/SYMBOL/`에 저장한다.
 5. 사람에게 읽히는 리포트는 `_report/di/daily/YYYY/YYYY-MM-DD.md`에 작성한다.
-6. 실제 판단은 `_report/di/decisions/decision-log.md`에 한 줄로 누적한다.
+6. 실제 판단은 [[_report/di/decisions/decision-log|_report/di/decisions/decision-log.md]]에 한 줄로 누적한다.
 7. 반복되는 관찰은 `_report/di/summaries/`로 올린다.
 
-Codex 앱의 Automations에 등록할 때는 `_report/di/routines/codex-automation-prompt.md`를 사용한다.
+Codex 앱의 Automations에 등록할 때는 [[_report/di/routines/codex-automation-prompt|_report/di/routines/codex-automation-prompt.md]]를 사용한다.
 
 ## Quant 작성 흐름
 
-1. `_report/quant/universe.md`에서 Strategy Universe 원칙을 확인한다.
-2. `_report/quant/routines/quant-research-routine.md`를 따른다.
+1. [[_report/quant/universe|_report/quant/universe.md]]에서 Strategy Universe 원칙을 확인한다.
+2. [[_report/quant/routines/quant-research-routine|_report/quant/routines/quant-research-routine.md]]를 따른다.
 3. Strategy Spec, Bias Control, Backtest 결과는 `_report/quant/` 안에 남긴다.
 4. DI watchlist를 Quant Universe로 사용하지 않는다. 필요하면 Data Pipeline Smoke Test로만 기록한다.
 5. 검증 전 항목은 매매 Signal이 아니라 `Signal Candidate`로만 다룬다.

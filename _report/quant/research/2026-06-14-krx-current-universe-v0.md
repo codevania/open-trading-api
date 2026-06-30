@@ -1,14 +1,14 @@
 # KRX Current Universe v0
 
 - As-of date: `2026-06-13`
-- Listed issues raw: `_report/raw/2026/2026-06-13/krx/universe/listed_issues_current.raw.csv`
+- Listed issues raw: [[_report/raw/2026/2026-06-13/krx/universe/listed_issues_current.raw.csv|_report/raw/2026/2026-06-13/krx/universe/listed_issues_current.raw.csv]]
 - Listed issues encoding: `cp949`
-- Managed issues raw: `_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv`
+- Managed issues raw: [[_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv|_report/raw/2026/2026-06-13/krx/universe/managed_issues_current.raw.csv]]
 - Universe mode: `current_snapshot`
 - Interpretation: `paper/smoke Universe only`, `not Point-in-Time Universe`
 - Bias Control judgment: `hold`
 - Listing Age guard: `365` calendar days minimum
-- Machine-readable rows: `_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv`
+- Machine-readable rows: [[_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv|_report/quant/research/2026-06-14-krx-current-universe-v0.rows.csv]]
 
 ## Summary
 

@@ -8,8 +8,8 @@
 - Universe Version: `v0`
 - 현재 판정: hold
 - 목적: `Survivorship Bias`를 줄이기 위해 과거 각 시점에 실제 투자 가능했던 `Investable Universe`를 재구성하는 계획을 고정한다.
-- Raw sample audit: `_report/quant/research/2026-06-07-krx-raw-sample-audit.md`
-- Manual snapshot 절차: `_report/quant/research/2026-06-08-krx-manual-snapshot-procedure.md`
+- Raw sample audit: [[_report/quant/research/2026-06-07-krx-raw-sample-audit|_report/quant/research/2026-06-07-krx-raw-sample-audit.md]]
+- Manual snapshot 절차: [[_report/quant/research/2026-06-08-krx-manual-snapshot-procedure|_report/quant/research/2026-06-08-krx-manual-snapshot-procedure.md]]
 
 ## 1. Problem Statement
 
@@ -94,7 +94,7 @@ KIS MCP는 Universe 원천이라기보다 검증과 OHLCV 보강용으로 사용
 
 ### Tier 3: Manual Watchlist Smoke Test
 
-`_report/di/watchlist.yaml` 또는 사람이 고른 종목 목록은 Universe 원천으로 쓰지 않는다.
+[[_report/di/watchlist.yaml|_report/di/watchlist.yaml]] 또는 사람이 고른 종목 목록은 Universe 원천으로 쓰지 않는다.
 
 허용되는 경우:
 
@@ -186,7 +186,7 @@ Stop condition이 발생하면 Backtest를 계속하지 않고 Bias Control을 `
 
 ## 9. Next Action
 
-KRX 공식 데이터 raw sample 자동 확보 가능성은 `_report/quant/research/2026-06-07-krx-raw-sample-audit.md`에서 1차 확인했다.
+KRX 공식 데이터 raw sample 자동 확보 가능성은 [[_report/quant/research/2026-06-07-krx-raw-sample-audit|_report/quant/research/2026-06-07-krx-raw-sample-audit.md]]에서 1차 확인했다.
 
 결론:
 
@@ -195,6 +195,6 @@ KRX 공식 데이터 raw sample 자동 확보 가능성은 `_report/quant/resear
 - `finance-datareader` wrapper로 현재 KRX 상장 목록과 상장폐지 목록 보조 sample은 확보했다.
 - 단, 이 보조 sample은 `pass` 근거가 아니며 현재 판정은 계속 `hold`다.
 
-다음 실제 작업은 사람이 KRX 웹 UI에서 수동 CSV를 내려받고, `_report/quant/templates/krx-manual-snapshot-manifest.yaml` 형식으로 `manual_snapshot` manifest를 작성하는 것이다.
+다음 실제 작업은 사람이 KRX 웹 UI에서 수동 CSV를 내려받고, [[_report/quant/templates/krx-manual-snapshot-manifest.yaml|_report/quant/templates/krx-manual-snapshot-manifest.yaml]] 형식으로 `manual_snapshot` manifest를 작성하는 것이다.
 
 이 확인이 끝나기 전에는 `001-strategy-universe-momentum`을 성과 Strategy로 보지 않고, `Signal Candidate` 연구 대상으로만 둔다.

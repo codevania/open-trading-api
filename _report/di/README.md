@@ -34,12 +34,12 @@ _report/di/
 
 ## 기본 루틴
 
-1. `_report/di/watchlist.yaml`이 있으면 우선 사용한다.
-2. 없으면 `_report/di/watchlist.example.yaml`을 사용한다.
-3. `_report/di/routines/daily-report-routine.md`를 따라 일일 리포트를 작성한다.
+1. [[_report/di/watchlist.yaml|_report/di/watchlist.yaml]]이 있으면 우선 사용한다.
+2. 없으면 [[_report/di/watchlist.example.yaml|_report/di/watchlist.example.yaml]]을 사용한다.
+3. [[_report/di/routines/daily-report-routine|_report/di/routines/daily-report-routine.md]]를 따라 일일 리포트를 작성한다.
 4. 원천 응답은 공용 저장소인 `_report/raw/YYYY/YYYY-MM-DD/SYMBOL/`에 저장한다.
 5. 사람이 읽는 리포트는 `_report/di/daily/YYYY/YYYY-MM-DD.md`에 저장한다.
-6. 판단 변경은 `_report/di/decisions/decision-log.md`에 누적한다.
+6. 판단 변경은 [[_report/di/decisions/decision-log|_report/di/decisions/decision-log.md]]에 누적한다.
 
 ## 작성 원칙
 

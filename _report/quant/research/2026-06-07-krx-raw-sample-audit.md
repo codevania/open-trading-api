@@ -4,10 +4,10 @@
 
 - 작성일: 2026-06-07
 - 작성자: Codex
-- 대상 계획: `_report/quant/research/2026-06-07-point-in-time-universe-plan.md`
+- 대상 계획: [[_report/quant/research/2026-06-07-point-in-time-universe-plan|_report/quant/research/2026-06-07-point-in-time-universe-plan.md]]
 - 대상 Strategy: `001-strategy-universe-momentum`
 - 현재 판정: hold
-- Manual snapshot 절차: `_report/quant/research/2026-06-08-krx-manual-snapshot-procedure.md`
+- Manual snapshot 절차: [[_report/quant/research/2026-06-08-krx-manual-snapshot-procedure|_report/quant/research/2026-06-08-krx-manual-snapshot-procedure.md]]
 
 ## 1. 목적
 

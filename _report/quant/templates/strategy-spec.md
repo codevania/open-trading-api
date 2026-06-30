@@ -33,7 +33,7 @@
 
 ## 3. Universe
 
-- 기본 소스: `_report/quant/universe.md`
+- 기본 소스: [[_report/quant/universe|_report/quant/universe.md]]
 - Inclusion Rule:
 - Exclusion Rule:
 - Manual Watchlist 사용 여부: 사용 안 함 | smoke test 전용
@@ -110,7 +110,7 @@
 
 - Signal 표기 방식:
 - 필요한 차트:
-- `_report/di/decisions/decision-log.md` 기록 조건:
+- [[_report/di/decisions/decision-log|_report/di/decisions/decision-log.md]] 기록 조건:
 
 ## 12. 한계와 다음 확인
 

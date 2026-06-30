@@ -88,4 +88,4 @@
 1. `Data Pipeline Smoke Test`를 별도 문서 기준으로 실행한다.
 2. KIS/KRX data calendar가 이 window를 지원하는지 확인한다.
 3. `Point-in-Time Investable Universe` raw snapshot이 준비되면 이 window로 parser와 Backtest를 연결한다.
-4. Backtest report는 `_report/quant/templates/backtest-report.md` 형식을 따른다.
+4. Backtest report는 [[_report/quant/templates/backtest-report|_report/quant/templates/backtest-report.md]] 형식을 따른다.

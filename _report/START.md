@@ -29,11 +29,11 @@
 ## DI 작성 흐름
 
 1. [DI 일일 리포트 생성 루틴](di/routines/daily-report-routine.md)을 기준으로 작업한다.
-2. `_report/di/watchlist.yaml`에서 오늘 추적할 종목을 확인한다.
+2. [[_report/di/watchlist.yaml|_report/di/watchlist.yaml]]에서 오늘 추적할 종목을 확인한다.
 3. KIS MCP로 현재가, 일봉, 수급, 뉴스/공시 데이터를 조회한다.
 4. 필요하면 원천 JSON을 `_report/raw/YYYY/YYYY-MM-DD/SYMBOL/`에 저장한다.
-5. `_report/di/templates/daily-report.md`를 복사해 `_report/di/daily/YYYY/YYYY-MM-DD.md`를 작성한다.
-6. 매수/매도/관망/확인 필요 판단은 `_report/di/decisions/decision-log.md`에 누적한다.
+5. [[_report/di/templates/daily-report|_report/di/templates/daily-report.md]]를 복사해 `_report/di/daily/YYYY/YYYY-MM-DD.md`를 작성한다.
+6. 매수/매도/관망/확인 필요 판단은 [[_report/di/decisions/decision-log|_report/di/decisions/decision-log.md]]에 누적한다.
 
 ## Quant 작성 흐름
 
@@ -52,7 +52,7 @@
 
 ## 다음 개선 후보
 
-- `_report/di/watchlist.yaml`을 읽어 매일 리포트 초안을 생성하는 스크립트 추가
+- [[_report/di/watchlist.yaml|_report/di/watchlist.yaml]]을 읽어 매일 리포트 초안을 생성하는 스크립트 추가
 - 원천 JSON 자동 저장 규칙 확정
 - DI 월간 요약 템플릿 추가
 - DI 종목별 장기 투자 thesis 문서 추가
