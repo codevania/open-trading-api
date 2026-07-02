@@ -5,7 +5,7 @@
 - Date: 2026-06-14
 - Last updated: 2026-07-03
 - Scope: Quant trading research and implementation workflow
-- Current phase: `point_in_time_status_source_gap`
+- Current phase: `point_in_time_status_event_schema_scaffold`
 - Overall implementation progress: `55-60%`
 - Current Snapshot Universe progress: `85-90%`
 - Backtest readiness: `hold`
@@ -25,7 +25,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 1. Quant learning baseline | in-progress | 35% | [[_report/quant/learning-roadmap|_report/quant/learning-roadmap.md]], week 01 study log | Continue weekly study logs tied to outputs |
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
-| 4. Point-in-Time Universe | in-progress | 25-30% | KRX OpenAPI market-data path works, and status source gap is documented; current snapshot artifacts exist | Status-event schema scaffolding and raw sample validation |
+| 4. Point-in-Time Universe | in-progress | 30-35% | KRX OpenAPI market-data path works; status source gap, status-event schema, source policy, and validator are documented | Validate one official raw status sample |
 | 5. Market data pipeline | in-progress | 70-75% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 7-date historical collection smoke, continuity audit, and date-scoped market-data join exist | Extend historical window or connect Point-in-Time status replay |
 | 6. Liquidity Filter | in-progress | 40-45% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]]; 361 unique saved raw rows evaluated against current Universe | Fill OHLCV coverage beyond the first 361 evaluated rows |
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
@@ -273,6 +273,12 @@ KRX OpenAPI core artifacts:
 - [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110.rows.csv|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110.rows.csv]]
 - [[_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250110.md]]
 - [[_report/quant/research/2026-07-03-point-in-time-status-source-gap|_report/quant/research/2026-07-03-point-in-time-status-source-gap.md]]
+- [[_report/quant/research/2026-07-03-point-in-time-status-event-schema|_report/quant/research/2026-07-03-point-in-time-status-event-schema.md]]
+- [[_report/quant/data/README|_report/quant/data/README.md]]
+- [[_report/quant/data/point_in_time_status_sources.yaml|_report/quant/data/point_in_time_status_sources.yaml]]
+- [[_report/quant/data/schemas/point_in_time_status_events.schema.json|_report/quant/data/schemas/point_in_time_status_events.schema.json]]
+- [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]]
+- [[tests/test_quant_point_in_time_status_events_validate.py|tests/test_quant_point_in_time_status_events_validate.py]]
 - Local secret template: `.env.krx.example`; actual `.env.krx` is git-ignored and must not be committed.
 - Raw smoke evidence is saved under `_report/raw/2026/2026-07-03/krx/openapi/` and remains uncommitted.
 
@@ -470,7 +476,32 @@ Artifact:
 
 Next gate:
 
-- Add local status-event schema/config scaffolding, then validate one raw sample before wiring status replay into `Universe`.
+- Validate one raw status sample before wiring status replay into `Universe`.
+
+## Point-in-Time Status Event Schema
+
+Status: `schema_scaffold_ready`
+
+Implemented local contract:
+
+- [[_report/quant/data/schemas/point_in_time_status_events.schema.json|_report/quant/data/schemas/point_in_time_status_events.schema.json]]
+- [[_report/quant/data/point_in_time_status_sources.yaml|_report/quant/data/point_in_time_status_sources.yaml]]
+- [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]]
+- [[tests/test_quant_point_in_time_status_events_validate.py|tests/test_quant_point_in_time_status_events_validate.py]]
+- [[_report/quant/research/2026-07-03-point-in-time-status-event-schema|_report/quant/research/2026-07-03-point-in-time-status-event-schema.md]]
+
+Validator checks:
+
+- Required normalized columns are present.
+- `event_date` is ISO `YYYY-MM-DD`.
+- KRX short codes preserve alphanumeric symbols.
+- `market`, `status_type`, `status_value`, `source`, and `confidence` stay inside explicit allowlists.
+- `raw_path` remains repo-relative under `_report/raw/**`.
+- `source_url` follows the configured source policy when present.
+
+Next gate:
+
+- Save one official KRX Data Marketplace or KIND status raw sample under `_report/raw/**`, normalize it into this schema, and run the validator.
 
 Soft blockers:
 
@@ -608,5 +639,6 @@ Current state:
 - Research and policy foundation: strong enough to proceed.
 - Current Snapshot Universe: usable for paper/smoke validation.
 - KRX OpenAPI core raw collection and normalization: usable for parser development and historical market-data collection.
+- Point-in-Time status-event schema: ready for one official raw sample normalization test.
 - Backtest readiness: `hold`.
 - Live trading readiness: `blocked`.

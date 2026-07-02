@@ -14,6 +14,8 @@
 - Continuity auditor: [[scripts/quant_krx_openapi_continuity_audit.py|scripts/quant_krx_openapi_continuity_audit.py]]
 - Market-data join: [[scripts/quant_krx_openapi_market_data_join.py|scripts/quant_krx_openapi_market_data_join.py]]
 - Point-in-Time status source gap: [[_report/quant/research/2026-07-03-point-in-time-status-source-gap|_report/quant/research/2026-07-03-point-in-time-status-source-gap.md]]
+- Point-in-Time status-event schema: [[_report/quant/research/2026-07-03-point-in-time-status-event-schema|_report/quant/research/2026-07-03-point-in-time-status-event-schema.md]]
+- Point-in-Time status-event validator: [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]]
 
 ## Why This Matters
 
@@ -116,6 +118,7 @@ Passing one KRX OpenAPI smoke test changes the status to:
 - KRX OpenAPI historical window: `usable_for_multi_date_parser_development` for `2025-01-02` through `2025-01-10`
 - KRX OpenAPI continuity audit: `passed_for_small_window`
 - KRX OpenAPI market-data join: `usable_for_date_scoped_market_data_input`
+- Point-in-Time status-event validator: `ready_for_one_official_raw_sample`
 - Backtest readiness: still `hold`
 - Live trading readiness: still `blocked`
 
@@ -126,7 +129,7 @@ Backtest interpretation remains blocked until the pipeline can reproduce `Point-
 After `.env.krx` is filled and a KRX service URL is available:
 
 1. Preserve the `2025-01-08` row-count movement as an event-validation item.
-2. Add local schema/config scaffolding for `Point-in-Time` status events.
-3. Validate one raw status sample from KRX Data Marketplace or KIND before wiring status replay into `Universe`.
-4. Validate status replay before connecting normalized market-data rows to `Backtest` code.
+2. Save one official status raw sample from KRX Data Marketplace or KIND under `_report/raw/**`.
+3. Normalize that sample into [[_report/quant/data/schemas/point_in_time_status_events.schema.json|_report/quant/data/schemas/point_in_time_status_events.schema.json]] and validate it with [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]].
+4. Validate status replay before connecting normalized market-data rows to `Universe` or `Backtest` code.
 5. Keep `Backtest` readiness at `hold` until historical status replay is solved.

@@ -64,10 +64,10 @@ Create local status-event rows before any Backtest interpretation:
 | `confidence` | high/medium/low |
 | `notes` | Parser or interpretation caveats |
 
-## Next Implementation Step
+## Follow-Up Implementation
 
-Add schema/config scaffolding for `Point-in-Time` status events without claiming that the events have been collected.
-Then validate one small raw sample from KRX Data Marketplace or KIND before wiring status replay into `Universe`.
+Schema/config scaffolding now exists in [[_report/quant/research/2026-07-03-point-in-time-status-event-schema|_report/quant/research/2026-07-03-point-in-time-status-event-schema.md]].
+The next implementation step is to validate one small raw sample from KRX Data Marketplace or KIND before wiring status replay into `Universe`.
 
 ## Guardrails
 

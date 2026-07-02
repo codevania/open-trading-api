@@ -1,0 +1,113 @@
+{
+  "version": "1.0",
+  "dataset": "point_in_time_status_events",
+  "description": "Normalized status events used to replay KRX Universe eligibility by date. This schema is local scaffolding and does not mean status data has been collected.",
+  "required_columns": [
+    "event_date",
+    "code",
+    "market",
+    "status_type",
+    "status_value",
+    "source",
+    "source_url",
+    "raw_path",
+    "confidence",
+    "notes"
+  ],
+  "nullable_columns": [
+    "source_url",
+    "notes"
+  ],
+  "event_key_columns": [
+    "event_date",
+    "code",
+    "status_type",
+    "status_value",
+    "source",
+    "raw_path"
+  ],
+  "date_columns": [
+    "event_date"
+  ],
+  "raw_path_columns": [
+    "raw_path"
+  ],
+  "url_columns": [
+    "source_url"
+  ],
+  "code_pattern": "^[0-9A-Za-z]{5,12}$",
+  "allowed_values": {
+    "market": [
+      "KOSPI",
+      "KOSDAQ",
+      "KONEX",
+      "UNKNOWN"
+    ],
+    "status_type": [
+      "managed_issue",
+      "trading_halt",
+      "trading_resume",
+      "market_alert",
+      "delisting",
+      "listing",
+      "listing_change"
+    ],
+    "status_value": [
+      "designated",
+      "released",
+      "halted",
+      "resumed",
+      "caution",
+      "warning",
+      "risk",
+      "delisting_notice",
+      "delisted",
+      "listed",
+      "changed",
+      "unknown"
+    ],
+    "source": [
+      "krx_data_marketplace",
+      "kind",
+      "manual_snapshot"
+    ],
+    "confidence": [
+      "high",
+      "medium",
+      "low"
+    ]
+  },
+  "status_value_by_type": {
+    "managed_issue": [
+      "designated",
+      "released"
+    ],
+    "trading_halt": [
+      "halted"
+    ],
+    "trading_resume": [
+      "resumed"
+    ],
+    "market_alert": [
+      "caution",
+      "warning",
+      "risk",
+      "released"
+    ],
+    "delisting": [
+      "delisting_notice",
+      "delisted"
+    ],
+    "listing": [
+      "listed"
+    ],
+    "listing_change": [
+      "changed"
+    ]
+  },
+  "guardrails": [
+    "Preserve KRX short codes exactly.",
+    "Keep source evidence under _report/raw/**.",
+    "Do not treat schema validation as Backtest readiness."
+  ]
+}

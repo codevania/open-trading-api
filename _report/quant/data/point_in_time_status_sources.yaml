@@ -1,0 +1,45 @@
+version: "1.0"
+scope: "point_in_time_status_event_source_policy"
+mode: "local_scaffolding_only"
+raw_root: "_report/raw"
+backtest_readiness: "hold"
+
+required_before_backtest:
+  - "At least one official raw sample is saved under _report/raw/**."
+  - "The raw sample is normalized into point-in-time status-event rows."
+  - "The normalized rows pass scripts/quant_point_in_time_status_events_validate.py."
+  - "Historical coverage is sufficient for the selected Backtest scope."
+
+sources:
+  krx_data_marketplace:
+    display_name: "KRX Data Marketplace"
+    source_kind: "official_table_or_download"
+    allowed_url_prefixes:
+      - "https://data.krx.co.kr/"
+    candidate_tables:
+      - "Designated details of all issues"
+      - "Market alert issue"
+      - "Delisting"
+    notes:
+      - "Preferred official source when a downloadable historical table is available."
+  kind:
+    display_name: "KIND"
+    source_kind: "official_disclosure_or_event_page"
+    allowed_url_prefixes:
+      - "https://kind.krx.co.kr/"
+    candidate_tables:
+      - "Managed issue event"
+      - "Trading halt or resumption disclosure"
+      - "Delisting disclosure"
+    notes:
+      - "Fallback source when KRX Data Marketplace does not provide a clean table."
+  manual_snapshot:
+    display_name: "Manual official snapshot"
+    source_kind: "manual_snapshot"
+    allowed_url_prefixes:
+      - "https://data.krx.co.kr/"
+      - "https://kind.krx.co.kr/"
+    candidate_tables:
+      - "Manual download captured from an official KRX or KIND page"
+    notes:
+      - "Use only with a raw file, manifest, and visible source URL when possible."
