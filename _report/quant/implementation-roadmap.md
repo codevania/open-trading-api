@@ -6,7 +6,7 @@
 - Last updated: 2026-07-03
 - Scope: Quant trading research and implementation workflow
 - Current phase: `point_in_time_status_replay_scaffold`
-- Overall implementation progress: `58-62%`
+- Overall implementation progress: `60-64%`
 - Current Snapshot Universe progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
@@ -26,7 +26,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
 | 4. Point-in-Time Universe | in-progress | 35-40% | KRX OpenAPI market-data path works; status source gap, status-event schema, validator, and replay scaffold are documented | Validate one official raw status sample |
-| 5. Market data pipeline | in-progress | 70-75% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 7-date historical collection smoke, continuity audit, and date-scoped market-data join exist | Extend historical window or connect Point-in-Time status replay |
+| 5. Market data pipeline | in-progress | 75-80% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 17-date historical collection smoke, continuity audit, and date-scoped market-data join exist | Connect Point-in-Time status replay or extend another bounded historical window |
 | 6. Liquidity Filter | in-progress | 40-45% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]]; 361 unique saved raw rows evaluated against current Universe | Fill OHLCV coverage beyond the first 361 evaluated rows |
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
 | 8. OOS / Walk-Forward | planned | 10% | OOS plan exists | Run only after Backtest pipeline works |
@@ -272,6 +272,18 @@ KRX OpenAPI core artifacts:
 - [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110.md]]
 - [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110.rows.csv|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110.rows.csv]]
 - [[_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250110.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250113-20250124|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250113-20250124.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250113-20250124.requests.json|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250113-20250124.requests.json]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250113-20250124|_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250113-20250124.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250113-20250124.requests.json|_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250113-20250124.requests.json]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250113-20250124|_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250113-20250124.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250113-20250124|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250113-20250124.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250113-20250124.rows.csv|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250113-20250124.rows.csv]]
+- [[_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250113-20250124|_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250113-20250124.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250102-20250124|_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250102-20250124.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250124|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250124.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250124.rows.csv|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250124.rows.csv]]
+- [[_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250124|_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250124.md]]
 - [[_report/quant/research/2026-07-03-point-in-time-status-source-gap|_report/quant/research/2026-07-03-point-in-time-status-source-gap.md]]
 - [[_report/quant/research/2026-07-03-point-in-time-status-event-schema|_report/quant/research/2026-07-03-point-in-time-status-event-schema.md]]
 - [[_report/quant/data/README|_report/quant/data/README.md]]
@@ -387,17 +399,17 @@ Remaining limitation:
 
 Status: `usable_for_multi_date_parser_development`
 
-Validated over `2025-01-02` to `2025-01-10`:
+Latest validated coverage spans `2025-01-02` to `2025-01-24` across `17` weekday rows after adding `2025-01-13` to `2025-01-24`.
 
 | metric | value |
 | --- | ---: |
-| candidate dates | 7 |
-| complete dates after collection | 7 |
-| saved raw files in range | 42 |
+| candidate dates | 17 |
+| complete dates after collection | 17 |
+| saved raw files in range | 102 |
 | missing requests after collection | 0 |
-| normalized `stock_daily` rows | 19212 |
-| normalized `issue_base` rows | 19212 |
-| normalized `index_daily` rows | 637 |
+| normalized `stock_daily` rows | 46659 |
+| normalized `issue_base` rows | 46659 |
+| normalized `index_daily` rows | 1547 |
 
 Artifacts:
 
@@ -407,6 +419,12 @@ Artifacts:
 - [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json]]
 - [[_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250102-20250110.md]]
 - [[_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250102-20250110.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250113-20250124|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250113-20250124.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250113-20250124.requests.json|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250113-20250124.requests.json]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250113-20250124|_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250113-20250124.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250113-20250124.requests.json|_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250113-20250124.requests.json]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250113-20250124|_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250113-20250124.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250102-20250124|_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250102-20250124.md]]
 
 Remaining limitation:
 
@@ -418,11 +436,11 @@ Remaining limitation:
 
 Status: `passed_for_small_window`
 
-Validated over normalized `2025-01-02` to `2025-01-10` rows:
+Validated over normalized `2025-01-02` to `2025-01-24` rows:
 
 | metric | value |
 | --- | ---: |
-| audited dates | 7 |
+| audited dates | 17 |
 | row-count alerts | 0 |
 | duplicate date/code keys | 0 |
 | stock/issue code mismatches | 0 |
@@ -433,31 +451,38 @@ Artifacts:
 - [[tests/test_quant_krx_openapi_continuity_audit.py|tests/test_quant_krx_openapi_continuity_audit.py]]
 - [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110.md]]
 - [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110.rows.csv|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110.rows.csv]]
+- [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250113-20250124|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250113-20250124.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250113-20250124.rows.csv|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250113-20250124.rows.csv]]
+- [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250124|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250124.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250124.rows.csv|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250124.rows.csv]]
 
 Observed data movement:
 
 - `2025-01-08` stock/issue rows dropped from `2745` to `2744` because KOSDAQ rows moved from `1784` to `1783`; this is below the alert threshold but still needs event-source validation before Backtest use.
+- `2025-01-23` and `2025-01-24` increased to `2746` and `2749` stock/issue rows; this is also below the alert threshold but needs status/listing-event evidence before Backtest use.
 
 ## KRX OpenAPI Market Data Join Smoke
 
 Status: `usable_for_date_scoped_market_data_input`
 
-Joined normalized `stock_daily` and `issue_base` rows over `2025-01-02` to `2025-01-10`:
+Joined normalized `stock_daily` and `issue_base` rows over `2025-01-02` to `2025-01-24`:
 
 | metric | value |
 | --- | ---: |
-| joined rows | 19212 |
-| date count | 7 |
+| joined rows | 46659 |
+| date count | 17 |
 | missing issue rows for stock rows | 0 |
 | missing stock rows for issue rows | 0 |
-| KOSPI rows | 6727 |
-| KOSDAQ rows | 12485 |
+| KOSPI rows | 16337 |
+| KOSDAQ rows | 30322 |
 
 Artifacts:
 
 - [[scripts/quant_krx_openapi_market_data_join.py|scripts/quant_krx_openapi_market_data_join.py]]
 - [[tests/test_quant_krx_openapi_market_data_join.py|tests/test_quant_krx_openapi_market_data_join.py]]
 - [[_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250110.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250113-20250124|_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250113-20250124.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250124|_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250124.md]]
 
 Remaining limitation:
 
@@ -526,7 +551,7 @@ Artifact:
 
 Next gate:
 
-- After one official raw status sample is normalized and validated, run the replay scaffold against the 7-date KRX OpenAPI market-data join.
+- After one official raw status sample is normalized and validated, run the replay scaffold against the 17-date KRX OpenAPI market-data join.
 
 Soft blockers:
 
@@ -664,6 +689,7 @@ Current state:
 - Research and policy foundation: strong enough to proceed.
 - Current Snapshot Universe: usable for paper/smoke validation.
 - KRX OpenAPI core raw collection and normalization: usable for parser development and historical market-data collection.
+- KRX OpenAPI date-scoped market-data join: usable as a 17-date smoke input for status replay development.
 - Point-in-Time status-event schema: ready for one official raw sample normalization test.
 - Point-in-Time status replay scaffold: ready for validated status-event rows.
 - Backtest readiness: `hold`.

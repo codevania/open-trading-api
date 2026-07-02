@@ -56,4 +56,4 @@ Next gate:
 1. Save one official KRX Data Marketplace or KIND status raw sample.
 2. Normalize it into [[_report/quant/data/schemas/point_in_time_status_events.schema.json|_report/quant/data/schemas/point_in_time_status_events.schema.json]].
 3. Validate with [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]].
-4. Run the replay scaffold against the 7-date KRX OpenAPI market-data join.
+4. Run the replay scaffold against the 17-date KRX OpenAPI market-data join.
