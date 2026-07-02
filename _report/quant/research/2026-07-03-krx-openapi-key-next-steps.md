@@ -9,6 +9,7 @@
 - Example template: `.env.krx.example`
 - Read-only probe script: [[scripts/quant_krx_openapi_probe.py|scripts/quant_krx_openapi_probe.py]]
 - Core read-only collector: [[scripts/quant_krx_openapi_collect.py|scripts/quant_krx_openapi_collect.py]]
+- Saved-raw normalizer: [[scripts/quant_krx_openapi_normalize.py|scripts/quant_krx_openapi_normalize.py]]
 
 ## Why This Matters
 
@@ -107,6 +108,7 @@ Smoke result on `2026-07-02`:
 Passing one KRX OpenAPI smoke test changes the status to:
 
 - KRX OpenAPI access: `usable_for_raw_collection`
+- KRX OpenAPI normalizer: `usable_for_parser_development` on saved `2025-01-02` core raws
 - Backtest readiness: still `hold`
 - Live trading readiness: still `blocked`
 
@@ -116,8 +118,8 @@ Backtest interpretation remains blocked until the pipeline can reproduce `Point-
 
 After `.env.krx` is filled and a KRX service URL is available:
 
-1. Run one dry-run probe to confirm the request shape.
-2. Run one read-only smoke call for a single date.
-3. Save raw response under `_report/raw/**`.
-4. Inspect schema and write a parser only after the official raw shape is known.
-5. Add KRX raw parser tests before using the data in `Universe` or `Backtest` code.
+1. Build a small historical collection plan over known trading days.
+2. Collect raw KRX OpenAPI files under `_report/raw/**` without committing raw payloads.
+3. Normalize each collected date through [[scripts/quant_krx_openapi_normalize.py|scripts/quant_krx_openapi_normalize.py]].
+4. Validate row-count continuity and schema stability before connecting normalized rows to `Universe` or `Backtest` code.
+5. Keep `Backtest` readiness at `hold` until historical status replay is solved.

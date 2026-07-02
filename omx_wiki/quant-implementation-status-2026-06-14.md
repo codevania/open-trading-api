@@ -2,14 +2,13 @@
 
 ## Summary
 
-- Overall Quant implementation progress: `40-45%`
-- Overall Quant implementation progress: `45-50%`
+- Overall Quant implementation progress: `50-55%`
 - Current Snapshot Universe v0 progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
-- Current phase: `krx_openapi_core_raw_smoke`
+- Current phase: `krx_openapi_normalizer_smoke`
 
-The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, the first 360 read-only KIS captured Universe rows, and approved KRX OpenAPI core market-data services with a raw collector smoke-tested on `2025-01-02`. It is still not Backtest-ready because full `Point-in-Time Universe` status replay, historical collection coverage, OOS, and Bias Control are incomplete.
+The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, the first 360 read-only KIS captured Universe rows, and approved KRX OpenAPI core market-data services with raw collection plus normalization smoke-tested on `2025-01-02`. It is still not Backtest-ready because full `Point-in-Time Universe` status replay, historical collection coverage, OOS, and Bias Control are incomplete.
 
 ## Completed
 
@@ -27,8 +26,10 @@ The project is beyond planning and now has a usable current-snapshot Universe ar
 - Universe `include` rows were converted into a KIS OHLCV request queue dry-run.
 - The first 360 request queue rows were captured through the read-only KIS quotation endpoint using local KIS sample auth fallback because the current Codex App surface did not expose the KIS MCP tool.
 - KRX OpenAPI core services were approved and smoke-tested through read-only raw collection for `2025-01-02`: KOSPI/KOSDAQ stock daily, KOSPI/KOSDAQ issue base, and KOSPI/KOSDAQ index daily.
+- KRX OpenAPI core raws for `2025-01-02` were normalized into stable local CSV schemas: `stock_daily=2745`, `issue_base=2745`, `index_daily=91`.
 - [[scripts/quant_krx_openapi_collect.py|scripts/quant_krx_openapi_collect.py]] collects the approved core KRX OpenAPI services while keeping `AUTH_KEY` out of tracked files and command output.
-- Tests for manifest verification, managed issue extraction, current Universe build, OHLCV batch planning, KRX OpenAPI collection, Liquidity Filter, and calendar audit pass.
+- [[scripts/quant_krx_openapi_normalize.py|scripts/quant_krx_openapi_normalize.py]] converts saved KRX OpenAPI raw JSON into stable CSV inputs for parser development.
+- Tests for manifest verification, managed issue extraction, current Universe build, OHLCV batch planning, KRX OpenAPI collection/normalization, Liquidity Filter, and calendar audit pass.
 
 ## Current Universe v0
 
@@ -611,10 +612,11 @@ The Quant capture/research files expected to be tracked after the current work i
 1. Continue OHLCV coverage in small resumable batches from generated Universe rows.
 2. In a KIS MCP-capable surface, run `domestic_stock.find_api_detail` for `inquire_daily_itemchartprice`; if unavailable, keep documenting the local API detail fallback explicitly.
 3. Save raw responses under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/` and do not commit raw files.
-4. Re-run [[scripts/quant_smoke_validate.py|scripts/quant_smoke_validate.py]] and [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] after each documented batch.
-5. Generate paper/smoke `Signal Candidate` outputs from Universe rows, not manual watchlists.
-6. Build `Point-in-Time Universe` path.
-7. Only then run Backtest/OOS/Walk-Forward and Bias Control pass.
+4. Build a small historical KRX OpenAPI collection loop over known trading days.
+5. Re-run [[scripts/quant_smoke_validate.py|scripts/quant_smoke_validate.py]] and [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] after each documented KIS OHLCV batch.
+6. Generate paper/smoke `Signal Candidate` outputs from Universe rows, not manual watchlists.
+7. Build `Point-in-Time Universe` path.
+8. Only then run Backtest/OOS/Walk-Forward and Bias Control pass.
 
 ## Do Not Do
 

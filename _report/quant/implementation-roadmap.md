@@ -5,8 +5,8 @@
 - Date: 2026-06-14
 - Last updated: 2026-07-03
 - Scope: Quant trading research and implementation workflow
-- Current phase: `krx_openapi_core_raw_smoke`
-- Overall implementation progress: `45-50%`
+- Current phase: `krx_openapi_normalizer_smoke`
+- Overall implementation progress: `50-55%`
 - Current Snapshot Universe progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
@@ -25,8 +25,8 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 1. Quant learning baseline | in-progress | 35% | [[_report/quant/learning-roadmap|_report/quant/learning-roadmap.md]], week 01 study log | Continue weekly study logs tied to outputs |
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
-| 4. Point-in-Time Universe | in-progress | 25-30% | KRX OpenAPI stock daily/basic endpoints approved and smoke-tested; current snapshot artifacts exist | Historical managed/trading halt/delisting status replay |
-| 5. Market data pipeline | in-progress | 55-60% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, and KRX OpenAPI core raw collector exist | Build KRX OpenAPI parser/normalizer and historical collection loop |
+| 4. Point-in-Time Universe | in-progress | 25-30% | KRX OpenAPI stock daily/basic endpoints approved, raw-collected, and normalized for one historical date; current snapshot artifacts exist | Historical managed/trading halt/delisting status replay |
+| 5. Market data pipeline | in-progress | 60-65% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector, and KRX OpenAPI normalizer exist | Build historical KRX OpenAPI collection loop |
 | 6. Liquidity Filter | in-progress | 40-45% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]]; 361 unique saved raw rows evaluated against current Universe | Fill OHLCV coverage beyond the first 361 evaluated rows |
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
 | 8. OOS / Walk-Forward | planned | 10% | OOS plan exists | Run only after Backtest pipeline works |
@@ -255,6 +255,9 @@ KRX OpenAPI core artifacts:
 - [[tests/test_quant_krx_openapi_probe.py|tests/test_quant_krx_openapi_probe.py]]
 - [[scripts/quant_krx_openapi_collect.py|scripts/quant_krx_openapi_collect.py]]
 - [[tests/test_quant_krx_openapi_collect.py|tests/test_quant_krx_openapi_collect.py]]
+- [[scripts/quant_krx_openapi_normalize.py|scripts/quant_krx_openapi_normalize.py]]
+- [[tests/test_quant_krx_openapi_normalize.py|tests/test_quant_krx_openapi_normalize.py]]
+- [[_report/quant/research/2026-07-03-krx-openapi-normalize-smoke|_report/quant/research/2026-07-03-krx-openapi-normalize-smoke.md]]
 - Local secret template: `.env.krx.example`; actual `.env.krx` is git-ignored and must not be committed.
 - Raw smoke evidence is saved under `_report/raw/2026/2026-07-03/krx/openapi/` and remains uncommitted.
 
@@ -332,6 +335,29 @@ Notes:
 - This solves the first official raw-market-data gate, but it does not yet solve `Point-in-Time` status replay for managed issues, trading halts, or delistings.
 - Current Liquidity Filter output is an expanded saved-raw smoke artifact, not full current Universe coverage.
 - Backtest, OOS, Walk-Forward, and Bias Control have not passed.
+
+## KRX OpenAPI Normalize Smoke
+
+Status: `usable_for_parser_development`
+
+Validated on the saved `2025-01-02` KRX OpenAPI core raw files:
+
+| table | rows | interpretation |
+| --- | ---: | --- |
+| `stock_daily` | 2745 | KOSPI/KOSDAQ daily market rows normalized into stable local columns |
+| `issue_base` | 2745 | KOSPI/KOSDAQ issue master rows normalized with standard code, short code, listing date, market, and listed shares |
+| `index_daily` | 91 | KOSPI/KOSDAQ index rows normalized for benchmark plumbing |
+
+Artifacts:
+
+- [[scripts/quant_krx_openapi_normalize.py|scripts/quant_krx_openapi_normalize.py]]
+- [[tests/test_quant_krx_openapi_normalize.py|tests/test_quant_krx_openapi_normalize.py]]
+- [[_report/quant/research/2026-07-03-krx-openapi-normalize-smoke|_report/quant/research/2026-07-03-krx-openapi-normalize-smoke.md]]
+
+Remaining limitation:
+
+- This is a parser/market-data normalization milestone, not a `Point-in-Time Universe` or `Backtest` milestone.
+- Management designation, trading halt, market alert, and delisting replay still need historical status sources.
 
 Soft blockers:
 
@@ -468,6 +494,6 @@ Current state:
 
 - Research and policy foundation: strong enough to proceed.
 - Current Snapshot Universe: usable for paper/smoke validation.
-- KRX OpenAPI core raw collection: usable for parser development and historical market-data collection.
+- KRX OpenAPI core raw collection and normalization: usable for parser development and historical market-data collection.
 - Backtest readiness: `hold`.
 - Live trading readiness: `blocked`.
