@@ -24,6 +24,8 @@ KRX Data Marketplace:
 - URL: [KRX Data Marketplace main](https://data.krx.co.kr/contents/MDC/MAIN/main/index.cmd)
 - The main menu exposes stock `종목정보` pages including `전종목 기본정보` and `전종목 지정내역`.
 - This is the best official next candidate for manual/downloadable status snapshots, but it is not yet a clean automated OpenAPI path in this repo.
+- 2026-07-03 probe found official `bld` identifiers for core status screens, but unattended JSON calls returned `auth_required`/`LOGOUT` without a KRX Data Marketplace login session.
+- Probe artifact: [[_report/quant/research/2026-07-03-krx-data-marketplace-status-source-probe|_report/quant/research/2026-07-03-krx-data-marketplace-status-source-probe.md]]
 
 KIND:
 
@@ -67,7 +69,7 @@ Create local status-event rows before any Backtest interpretation:
 ## Follow-Up Implementation
 
 Schema/config scaffolding now exists in [[_report/quant/research/2026-07-03-point-in-time-status-event-schema|_report/quant/research/2026-07-03-point-in-time-status-event-schema.md]].
-The next implementation step is to validate one small raw sample from KRX Data Marketplace or KIND before wiring status replay into `Universe`.
+The next implementation step is to validate one small raw sample from an authenticated/manual KRX Data Marketplace download or KIND before wiring status replay into `Universe`.
 
 ## Guardrails
 
@@ -75,3 +77,4 @@ The next implementation step is to validate one small raw sample from KRX Data M
 - Do not start Backtest/OOS interpretation until status replay exists for the selected test scope.
 - Preserve alphanumeric short codes exactly.
 - Keep raw status evidence under `_report/raw/**`; commit only summaries, manifests, and parser code.
+- Treat unattended KRX Data Marketplace status JSON as blocked until an authenticated or officially approved non-login path is confirmed.

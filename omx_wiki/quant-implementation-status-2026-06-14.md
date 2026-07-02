@@ -8,7 +8,7 @@
 - Live trading readiness: `blocked`
 - Current phase: `point_in_time_status_replay_scaffold`
 
-The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, the first 360 read-only KIS captured Universe rows, approved KRX OpenAPI core market-data services with raw collection, normalization, continuity auditing, and date-scoped market-data joining smoke-tested across a 17-date historical window, plus local `Point-in-Time` status-event schema/config/replay scaffolding. The next blocker is one official KRX Data Marketplace or KIND status raw sample because KRX OpenAPI core market-data services do not provide managed issue, trading halt, market alert, or delisting event replay. It is still not Backtest-ready.
+The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, the first 360 read-only KIS captured Universe rows, approved KRX OpenAPI core market-data services with raw collection, normalization, continuity auditing, and date-scoped market-data joining smoke-tested across a 17-date historical window, plus local `Point-in-Time` status-event schema/config/replay scaffolding. KRX Data Marketplace status screens are mapped, but unattended JSON probes returned `auth_required`; the next blocker is one authenticated/manual KRX Data Marketplace or KIND status raw sample. It is still not Backtest-ready.
 
 ## Completed
 
@@ -42,7 +42,8 @@ The project is beyond planning and now has a usable current-snapshot Universe ar
 - Point-in-Time status source gap is documented in [[_report/quant/research/2026-07-03-point-in-time-status-source-gap|_report/quant/research/2026-07-03-point-in-time-status-source-gap.md]].
 - Point-in-Time status-event schema/config scaffolding is documented in [[_report/quant/research/2026-07-03-point-in-time-status-event-schema|_report/quant/research/2026-07-03-point-in-time-status-event-schema.md]].
 - Point-in-Time status replay scaffold is documented in [[_report/quant/research/2026-07-03-point-in-time-status-replay-scaffold|_report/quant/research/2026-07-03-point-in-time-status-replay-scaffold.md]].
-- Tests for manifest verification, managed issue extraction, current Universe build, OHLCV batch planning, KRX OpenAPI collection/normalization/history planning/continuity auditing/market-data joining, status-event validation/replay, Liquidity Filter, and calendar audit pass.
+- KRX Data Marketplace status-source probe found official status screen `bld` identifiers but classified all core unattended JSON calls as `auth_required`.
+- Tests for manifest verification, managed issue extraction, current Universe build, OHLCV batch planning, KRX OpenAPI collection/normalization/history planning/continuity auditing/market-data joining, KRX Data Marketplace status-source probing, status-event validation/replay, Liquidity Filter, and calendar audit pass.
 
 ## Current Universe v0
 
@@ -625,7 +626,7 @@ The Quant capture/research files expected to be tracked after the current work i
 1. Continue OHLCV coverage in small resumable batches from generated Universe rows.
 2. In a KIS MCP-capable surface, run `domestic_stock.find_api_detail` for `inquire_daily_itemchartprice`; if unavailable, keep documenting the local API detail fallback explicitly.
 3. Save raw responses under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/` and do not commit raw files.
-4. Save one official KRX Data Marketplace or KIND status raw sample under `_report/raw/**`, normalize it into the status-event schema, validate it, then run [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]] against the 17-date market-data join.
+4. Save one official authenticated/manual KRX Data Marketplace or KIND status raw sample under `_report/raw/**`, normalize it into the status-event schema, validate it, then run [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]] against the 17-date market-data join.
 5. Re-run [[scripts/quant_smoke_validate.py|scripts/quant_smoke_validate.py]] and [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] after each documented KIS OHLCV batch.
 6. Generate paper/smoke `Signal Candidate` outputs from Universe rows, not manual watchlists.
 7. Build `Point-in-Time Universe` path.
@@ -637,4 +638,5 @@ The Quant capture/research files expected to be tracked after the current work i
 - Do not treat current snapshot results as Backtest-ready.
 - Do not use DI/Main/Game watchlists as Quant Universe.
 - Do not strip alphanumeric KRX short codes to digits. Preserve codes like `0004V0`.
+- Do not treat `auth_required` KRX Data Marketplace status endpoint probes as collected status data.
 - Do not move toward live trading while Backtest readiness is `hold`.

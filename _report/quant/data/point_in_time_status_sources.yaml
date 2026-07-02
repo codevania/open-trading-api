@@ -22,6 +22,8 @@ sources:
       - "Delisting"
     notes:
       - "Preferred official source when a downloadable historical table is available."
+      - "2026-07-03 unattended JSON probes found the official status screen blds, but all core status endpoints returned auth_required/LOGOUT without a KRX Data Marketplace login session."
+      - "Use this source through an authenticated/manual official download unless an approved non-login endpoint is later confirmed."
   kind:
     display_name: "KIND"
     source_kind: "official_disclosure_or_event_page"

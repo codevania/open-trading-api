@@ -25,7 +25,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 1. Quant learning baseline | in-progress | 35% | [[_report/quant/learning-roadmap|_report/quant/learning-roadmap.md]], week 01 study log | Continue weekly study logs tied to outputs |
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
-| 4. Point-in-Time Universe | in-progress | 35-40% | KRX OpenAPI market-data path works; status source gap, status-event schema, validator, and replay scaffold are documented | Validate one official raw status sample |
+| 4. Point-in-Time Universe | in-progress | 40-45% | KRX OpenAPI market-data path works; status source gap, status-event schema, validator, replay scaffold, and KRX Data Marketplace status-source probe are documented | Get one authenticated/manual KRX status raw sample or switch to KIND fallback |
 | 5. Market data pipeline | in-progress | 75-80% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 17-date historical collection smoke, continuity audit, and date-scoped market-data join exist | Connect Point-in-Time status replay or extend another bounded historical window |
 | 6. Liquidity Filter | in-progress | 40-45% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]]; 361 unique saved raw rows evaluated against current Universe | Fill OHLCV coverage beyond the first 361 evaluated rows |
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
@@ -294,6 +294,9 @@ KRX OpenAPI core artifacts:
 - [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]]
 - [[tests/test_quant_point_in_time_status_replay.py|tests/test_quant_point_in_time_status_replay.py]]
 - [[_report/quant/research/2026-07-03-point-in-time-status-replay-scaffold|_report/quant/research/2026-07-03-point-in-time-status-replay-scaffold.md]]
+- [[scripts/quant_krx_data_marketplace_status_probe.py|scripts/quant_krx_data_marketplace_status_probe.py]]
+- [[tests/test_quant_krx_data_marketplace_status_probe.py|tests/test_quant_krx_data_marketplace_status_probe.py]]
+- [[_report/quant/research/2026-07-03-krx-data-marketplace-status-source-probe|_report/quant/research/2026-07-03-krx-data-marketplace-status-source-probe.md]]
 - Local secret template: `.env.krx.example`; actual `.env.krx` is git-ignored and must not be committed.
 - Raw smoke evidence is saved under `_report/raw/2026/2026-07-03/krx/openapi/` and remains uncommitted.
 
@@ -497,14 +500,17 @@ Official-source check:
 - KRX OpenAPI service list covers market data and issue base rows but does not expose the needed managed issue, trading halt, market alert, or delisting event replay as a visible core OpenAPI service.
 - KRX Data Marketplace stock `종목정보` pages, especially `전종목 지정내역`, are the next official candidate for status snapshots.
 - KIND is the event/disclosure fallback candidate when KRX Data Marketplace does not provide a clean historical table.
+- KRX Data Marketplace status-source probe identified official menu/screen/bld mappings for `전종목 지정내역`, `관리종목 현황`, `매매거래정지종목 현황`, `상장폐지종목 현황`, `정리매매종목 현황`, and market-alert pages.
+- The same probe classified all core status JSON calls as `auth_required` because KRX returned `LOGOUT` without an authenticated Data Marketplace session.
 
 Artifact:
 
 - [[_report/quant/research/2026-07-03-point-in-time-status-source-gap|_report/quant/research/2026-07-03-point-in-time-status-source-gap.md]]
+- [[_report/quant/research/2026-07-03-krx-data-marketplace-status-source-probe|_report/quant/research/2026-07-03-krx-data-marketplace-status-source-probe.md]]
 
 Next gate:
 
-- Validate one raw status sample before wiring status replay into `Universe`.
+- Save one authenticated/manual KRX Data Marketplace status raw sample or use KIND fallback before wiring status replay into `Universe`.
 
 ## Point-in-Time Status Event Schema
 
@@ -555,7 +561,8 @@ Next gate:
 
 Soft blockers:
 
-- KRX downloads are manual snapshots, not automated reproducible downloads.
+- KRX Data Marketplace status JSON endpoints returned `auth_required`/`LOGOUT` in unattended probes.
+- KRX downloads are manual or authenticated snapshots, not yet automated reproducible downloads.
 - KRX `관리종목 지정 내역(개별종목)` has range/UI constraints and is not a full historical Universe source.
 - Some current KRX codes are alphanumeric short codes, so code handling must preserve values such as `0004V0`.
 
@@ -690,6 +697,7 @@ Current state:
 - Current Snapshot Universe: usable for paper/smoke validation.
 - KRX OpenAPI core raw collection and normalization: usable for parser development and historical market-data collection.
 - KRX OpenAPI date-scoped market-data join: usable as a 17-date smoke input for status replay development.
+- KRX Data Marketplace status-source probe: official status screen `bld` identifiers found, but unattended JSON access is `auth_required`.
 - Point-in-Time status-event schema: ready for one official raw sample normalization test.
 - Point-in-Time status replay scaffold: ready for validated status-event rows.
 - Backtest readiness: `hold`.
