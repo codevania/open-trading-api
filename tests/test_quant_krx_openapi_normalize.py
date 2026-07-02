@@ -137,6 +137,38 @@ class QuantKrxOpenapiNormalizeTest(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("unsupported service id", result.stderr)
 
+    def test_date_range_filter_excludes_other_raw_dates(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            raw_dir = Path(tmp)
+            _write_raw(
+                raw_dir / "kospi_stock_daily_20250102.raw.json",
+                [{"BAS_DD": "20250102", "ISU_CD": "005930", "ISU_NM": "Samsung Electronics", "MKT_NM": "KOSPI"}],
+            )
+            _write_raw(
+                raw_dir / "kospi_stock_daily_20250103.raw.json",
+                [{"BAS_DD": "20250103", "ISU_CD": "000660", "ISU_NM": "SK Hynix", "MKT_NM": "KOSPI"}],
+            )
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(NORMALIZE),
+                    "--raw-dir",
+                    str(raw_dir),
+                    "--start-bas-dd",
+                    "20250102",
+                    "--end-bas-dd",
+                    "20250102",
+                ],
+                cwd=REPO_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("| `stock_daily` | 1 |", result.stdout)
+
     def test_invalid_bas_dd_filter_fails(self) -> None:
         result = subprocess.run(
             [sys.executable, str(NORMALIZE), "--raw-dir", ".", "--bas-dd", "2025-01-02"],

@@ -27,7 +27,7 @@ Use Lore commit protocol.
 
 ## Current Best Next Task
 
-Execute the small KRX OpenAPI historical collection plan, then feed the newly saved raws through the normalizer and compare row-count continuity. KIS OHLCV coverage can still continue, but KRX OpenAPI is now the better first lane for official KOSPI/KOSDAQ market data.
+Build a continuity audit and date-scoped market-data input from the 7-date KRX OpenAPI normalized rows. KIS OHLCV coverage can still continue, but KRX OpenAPI is now the better first lane for official KOSPI/KOSDAQ market data.
 
 Already implemented in the latest local work:
 
@@ -43,6 +43,9 @@ Already implemented in the latest local work:
 - [[_report/quant/research/2026-07-03-krx-openapi-normalize-smoke|_report/quant/research/2026-07-03-krx-openapi-normalize-smoke.md]]
 - [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.md]]
 - [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250102-20250110.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250102-20250110.requests.json|_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250102-20250110.requests.json]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250102-20250110.md]]
 - [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]]
 - [[tests/test_quant_liquidity_filter.py|tests/test_quant_liquidity_filter.py]]
 - [[scripts/quant_kis_ohlcv_batch_plan.py|scripts/quant_kis_ohlcv_batch_plan.py]]
@@ -270,14 +273,16 @@ Already implemented in the latest local work:
 - KRX OpenAPI core collector smoke-tested `2025-01-02` and saved raw files under `_report/raw/2026/2026-07-03/krx/openapi/`. Row counts: `kospi_stock_daily=961`, `kosdaq_stock_daily=1784`, `kospi_issue_base=961`, `kosdaq_issue_base=1784`, `kospi_index_daily=51`, `kosdaq_index_daily=40`.
 - KRX OpenAPI normalizer smoke-tested the saved `2025-01-02` raws into three tables: `stock_daily=2745`, `issue_base=2745`, `index_daily=91`.
 - KRX OpenAPI history plan smoke-tested `2025-01-02` to `2025-01-10`: `7` weekday candidate dates, `1` complete date, `6` existing raw files, and `36` missing requests.
+- KRX OpenAPI history collection executed the `36` missing read-only requests; the same range now has `7` complete dates, `42` saved raw files, and `0` missing requests.
+- KRX OpenAPI history normalization over `2025-01-02` to `2025-01-10` produced `stock_daily=19212`, `issue_base=19212`, and `index_daily=637` rows.
 - KRX OpenAPI `2026-07-02` smoke returned HTTP `200` but `0` rows for all six core services, so use known historical trading days for parser development until latest-date availability is confirmed.
 - Current Codex App surface did not expose the KIS MCP tool, so `find_api_detail` was not callable here. Local [[MCP/Kis Trading MCP/configs/domestic_stock.json|MCP/Kis Trading MCP/configs/domestic_stock.json]] and `examples_llm` sample docs were used as the fallback API detail evidence, and only the read-only quotation endpoint was called.
 
 Likely needed work:
 
-1. Execute the `36` missing read-only requests from [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json]] using [[scripts/quant_krx_openapi_collect.py|scripts/quant_krx_openapi_collect.py]].
-2. Feed each collected date through [[scripts/quant_krx_openapi_normalize.py|scripts/quant_krx_openapi_normalize.py]] and validate row-count continuity.
-3. Join normalized `issue_base` and `stock_daily` into a date-scoped market-data input for the future `Universe` path.
+1. Build a row-count continuity audit over the 7 normalized dates.
+2. Join normalized `issue_base` and `stock_daily` into a date-scoped market-data input for the future `Universe` path.
+3. Decide whether to extend KRX OpenAPI collection by another bounded window after the audit passes.
 4. Continue KIS OHLCV batch capture only as secondary cross-check or to fill fields KRX OpenAPI does not provide.
 5. Keep result as paper/smoke only until full `Point-in-Time` status replay is solved.
 

@@ -251,12 +251,16 @@ def normalize_raw_files(raw_files: list[Path]) -> dict[str, NormalizedTable]:
     }
 
 
-def _discover_raw_files(raw_dir: Path, bas_dd: str | None) -> list[Path]:
+def _discover_raw_files(raw_dir: Path, bas_dd: str | None, start_bas_dd: str | None, end_bas_dd: str | None) -> list[Path]:
     if not raw_dir.exists():
         raise ValueError(f"raw dir not found: {raw_dir}")
     candidates = sorted(raw_dir.glob("*.raw.json"))
     if bas_dd:
         candidates = [path for path in candidates if path.name.endswith(f"_{bas_dd}.raw.json")]
+    if start_bas_dd:
+        candidates = [path for path in candidates if _source_bas_dd_from_path(path) >= start_bas_dd]
+    if end_bas_dd:
+        candidates = [path for path in candidates if _source_bas_dd_from_path(path) <= end_bas_dd]
     return [path for path in candidates if not path.name.endswith(".meta.json")]
 
 
@@ -320,15 +324,23 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Normalize saved KRX OpenAPI raw JSON into CSV tables.")
     parser.add_argument("--raw-dir", required=True, type=Path)
     parser.add_argument("--bas-dd", help="Optional YYYYMMDD filter.")
+    parser.add_argument("--start-bas-dd", help="Optional inclusive YYYYMMDD start filter.")
+    parser.add_argument("--end-bas-dd", help="Optional inclusive YYYYMMDD end filter.")
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--report-output", type=Path)
     args = parser.parse_args()
 
     if args.bas_dd and not BAS_DD_RE.match(args.bas_dd):
         raise SystemExit("--bas-dd must be YYYYMMDD")
+    if args.start_bas_dd and not BAS_DD_RE.match(args.start_bas_dd):
+        raise SystemExit("--start-bas-dd must be YYYYMMDD")
+    if args.end_bas_dd and not BAS_DD_RE.match(args.end_bas_dd):
+        raise SystemExit("--end-bas-dd must be YYYYMMDD")
+    if args.start_bas_dd and args.end_bas_dd and args.start_bas_dd > args.end_bas_dd:
+        raise SystemExit("--start-bas-dd must be on or before --end-bas-dd")
 
     try:
-        raw_files = _discover_raw_files(args.raw_dir, args.bas_dd)
+        raw_files = _discover_raw_files(args.raw_dir, args.bas_dd, args.start_bas_dd, args.end_bas_dd)
         if not raw_files:
             raise ValueError(f"no KRX OpenAPI raw files found under: {args.raw_dir}")
         tables = normalize_raw_files(raw_files)

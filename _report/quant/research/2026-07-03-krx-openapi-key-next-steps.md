@@ -110,7 +110,7 @@ Passing one KRX OpenAPI smoke test changes the status to:
 
 - KRX OpenAPI access: `usable_for_raw_collection`
 - KRX OpenAPI normalizer: `usable_for_parser_development` on saved `2025-01-02` core raws
-- KRX OpenAPI historical plan: `usable_for_bounded_collection` for `2025-01-02` through `2025-01-10`
+- KRX OpenAPI historical window: `usable_for_multi_date_parser_development` for `2025-01-02` through `2025-01-10`
 - Backtest readiness: still `hold`
 - Live trading readiness: still `blocked`
 
@@ -120,8 +120,8 @@ Backtest interpretation remains blocked until the pipeline can reproduce `Point-
 
 After `.env.krx` is filled and a KRX service URL is available:
 
-1. Execute the bounded `2025-01-02` to `2025-01-10` collection plan.
-2. Collect raw KRX OpenAPI files under `_report/raw/**` without committing raw payloads.
-3. Normalize each collected date through [[scripts/quant_krx_openapi_normalize.py|scripts/quant_krx_openapi_normalize.py]].
-4. Validate row-count continuity and schema stability before connecting normalized rows to `Universe` or `Backtest` code.
+1. Build a row-count continuity audit over the normalized `2025-01-02` to `2025-01-10` window.
+2. Join normalized `issue_base` and `stock_daily` into a date-scoped market-data input.
+3. Decide whether to extend KRX OpenAPI collection by another bounded window after the audit passes.
+4. Validate schema stability before connecting normalized rows to `Universe` or `Backtest` code.
 5. Keep `Backtest` readiness at `hold` until historical status replay is solved.

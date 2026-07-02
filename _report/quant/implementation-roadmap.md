@@ -5,8 +5,8 @@
 - Date: 2026-06-14
 - Last updated: 2026-07-03
 - Scope: Quant trading research and implementation workflow
-- Current phase: `krx_openapi_history_plan_smoke`
-- Overall implementation progress: `50-55%`
+- Current phase: `krx_openapi_history_normalize_smoke`
+- Overall implementation progress: `55-60%`
 - Current Snapshot Universe progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
@@ -25,8 +25,8 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 1. Quant learning baseline | in-progress | 35% | [[_report/quant/learning-roadmap|_report/quant/learning-roadmap.md]], week 01 study log | Continue weekly study logs tied to outputs |
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
-| 4. Point-in-Time Universe | in-progress | 25-30% | KRX OpenAPI stock daily/basic endpoints approved, raw-collected, and normalized for one historical date; current snapshot artifacts exist | Historical managed/trading halt/delisting status replay |
-| 5. Market data pipeline | in-progress | 60-65% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, and historical missing-raw plan exist | Run bounded historical KRX OpenAPI collection from plan |
+| 4. Point-in-Time Universe | in-progress | 25-30% | KRX OpenAPI stock daily/basic endpoints approved, raw-collected, and normalized over a small historical window; current snapshot artifacts exist | Historical managed/trading halt/delisting status replay |
+| 5. Market data pipeline | in-progress | 65-70% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, and 7-date historical collection smoke exist | Build continuity audit and date-scoped market-data input |
 | 6. Liquidity Filter | in-progress | 40-45% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]]; 361 unique saved raw rows evaluated against current Universe | Fill OHLCV coverage beyond the first 361 evaluated rows |
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
 | 8. OOS / Walk-Forward | planned | 10% | OOS plan exists | Run only after Backtest pipeline works |
@@ -262,6 +262,9 @@ KRX OpenAPI core artifacts:
 - [[_report/quant/research/2026-07-03-krx-openapi-normalize-smoke|_report/quant/research/2026-07-03-krx-openapi-normalize-smoke.md]]
 - [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.md]]
 - [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250102-20250110.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250102-20250110.requests.json|_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250102-20250110.requests.json]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250102-20250110.md]]
 - Local secret template: `.env.krx.example`; actual `.env.krx` is git-ignored and must not be committed.
 - Raw smoke evidence is saved under `_report/raw/2026/2026-07-03/krx/openapi/` and remains uncommitted.
 
@@ -363,18 +366,21 @@ Remaining limitation:
 - This is a parser/market-data normalization milestone, not a `Point-in-Time Universe` or `Backtest` milestone.
 - Management designation, trading halt, market alert, and delisting replay still need historical status sources.
 
-## KRX OpenAPI Historical Plan Smoke
+## KRX OpenAPI Historical Collection Smoke
 
-Status: `usable_for_bounded_collection`
+Status: `usable_for_multi_date_parser_development`
 
-Validated plan over `2025-01-02` to `2025-01-10`:
+Validated over `2025-01-02` to `2025-01-10`:
 
 | metric | value |
 | --- | ---: |
 | candidate dates | 7 |
-| complete dates | 1 |
-| existing raw files | 6 |
-| missing requests | 36 |
+| complete dates after collection | 7 |
+| saved raw files in range | 42 |
+| missing requests after collection | 0 |
+| normalized `stock_daily` rows | 19212 |
+| normalized `issue_base` rows | 19212 |
+| normalized `index_daily` rows | 637 |
 
 Artifacts:
 
@@ -382,11 +388,14 @@ Artifacts:
 - [[tests/test_quant_krx_openapi_history_plan.py|tests/test_quant_krx_openapi_history_plan.py]]
 - [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.md]]
 - [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-history-collection-result-20250102-20250110.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250102-20250110.md]]
 
 Remaining limitation:
 
 - The plan filters weekends only; it is not a verified KRX trading calendar.
 - Holidays and unavailable dates must be interpreted from saved collector metadata and normalized row counts.
+- This still does not provide historical managed issue, trading halt, market alert, or delisting replay.
 
 Soft blockers:
 
