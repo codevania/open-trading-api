@@ -16,6 +16,8 @@ This step creates the local contract for status events before any KRX Data Marke
 - Data scaffolding README: [[_report/quant/data/README|_report/quant/data/README.md]]
 - Validator: [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]]
 - Tests: [[tests/test_quant_point_in_time_status_events_validate.py|tests/test_quant_point_in_time_status_events_validate.py]]
+- Replay scaffold: [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]]
+- Replay report: [[_report/quant/research/2026-07-03-point-in-time-status-replay-scaffold|_report/quant/research/2026-07-03-point-in-time-status-replay-scaffold.md]]
 
 ## Normalized Row Contract
 
@@ -52,7 +54,8 @@ Next gate:
 1. Save one KRX Data Marketplace or KIND status raw sample under `_report/raw/**`.
 2. Normalize it into the schema above.
 3. Run the validator and keep the validation report.
-4. Only then decide how to replay status events into `Universe`.
+4. Run the replay scaffold against the 7-date KRX OpenAPI market-data join.
+5. Only then decide how to wire status replay into `Universe`.
 
 ## Guardrails
 

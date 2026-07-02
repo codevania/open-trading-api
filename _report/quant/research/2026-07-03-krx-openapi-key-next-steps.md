@@ -16,6 +16,7 @@
 - Point-in-Time status source gap: [[_report/quant/research/2026-07-03-point-in-time-status-source-gap|_report/quant/research/2026-07-03-point-in-time-status-source-gap.md]]
 - Point-in-Time status-event schema: [[_report/quant/research/2026-07-03-point-in-time-status-event-schema|_report/quant/research/2026-07-03-point-in-time-status-event-schema.md]]
 - Point-in-Time status-event validator: [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]]
+- Point-in-Time status replay scaffold: [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]]
 
 ## Why This Matters
 
@@ -119,6 +120,7 @@ Passing one KRX OpenAPI smoke test changes the status to:
 - KRX OpenAPI continuity audit: `passed_for_small_window`
 - KRX OpenAPI market-data join: `usable_for_date_scoped_market_data_input`
 - Point-in-Time status-event validator: `ready_for_one_official_raw_sample`
+- Point-in-Time status replay scaffold: `ready_for_validated_event_rows`
 - Backtest readiness: still `hold`
 - Live trading readiness: still `blocked`
 
@@ -131,5 +133,6 @@ After `.env.krx` is filled and a KRX service URL is available:
 1. Preserve the `2025-01-08` row-count movement as an event-validation item.
 2. Save one official status raw sample from KRX Data Marketplace or KIND under `_report/raw/**`.
 3. Normalize that sample into [[_report/quant/data/schemas/point_in_time_status_events.schema.json|_report/quant/data/schemas/point_in_time_status_events.schema.json]] and validate it with [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]].
-4. Validate status replay before connecting normalized market-data rows to `Universe` or `Backtest` code.
-5. Keep `Backtest` readiness at `hold` until historical status replay is solved.
+4. Replay the validated events against the 7-date KRX OpenAPI market-data join with [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]].
+5. Validate status replay coverage before connecting normalized market-data rows to `Universe` or `Backtest` code.
+6. Keep `Backtest` readiness at `hold` until historical status replay is solved.

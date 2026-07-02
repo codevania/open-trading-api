@@ -27,7 +27,7 @@ Use Lore commit protocol.
 
 ## Current Best Next Task
 
-Use the 7-date KRX OpenAPI market-data join as the clean market-data input, then validate one official KRX Data Marketplace or KIND status raw sample against the new `Point-in-Time` status-event schema. KIS OHLCV coverage can still continue, but KRX OpenAPI is now the better first lane for official KOSPI/KOSDAQ market data.
+Use the 7-date KRX OpenAPI market-data join as the clean market-data input, then validate one official KRX Data Marketplace or KIND status raw sample and replay the normalized events against that market-data window. KIS OHLCV coverage can still continue, but KRX OpenAPI is now the better first lane for official KOSPI/KOSDAQ market data.
 
 Already implemented in the latest local work:
 
@@ -60,6 +60,9 @@ Already implemented in the latest local work:
 - [[_report/quant/data/schemas/point_in_time_status_events.schema.json|_report/quant/data/schemas/point_in_time_status_events.schema.json]]
 - [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]]
 - [[tests/test_quant_point_in_time_status_events_validate.py|tests/test_quant_point_in_time_status_events_validate.py]]
+- [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]]
+- [[tests/test_quant_point_in_time_status_replay.py|tests/test_quant_point_in_time_status_replay.py]]
+- [[_report/quant/research/2026-07-03-point-in-time-status-replay-scaffold|_report/quant/research/2026-07-03-point-in-time-status-replay-scaffold.md]]
 - [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]]
 - [[tests/test_quant_liquidity_filter.py|tests/test_quant_liquidity_filter.py]]
 - [[scripts/quant_kis_ohlcv_batch_plan.py|scripts/quant_kis_ohlcv_batch_plan.py]]
@@ -293,6 +296,7 @@ Already implemented in the latest local work:
 - KRX OpenAPI market-data join over that window produced `19212` joined rows with `0` stock/issue mismatches: `6727` KOSPI rows and `12485` KOSDAQ rows.
 - Point-in-Time status source gap is documented: KRX OpenAPI handles market data, while status replay still needs KRX Data Marketplace and/or KIND evidence.
 - Point-in-Time status-event schema/config scaffolding and validator are implemented; next step is one official raw status sample normalization test.
+- Point-in-Time status replay scaffold is implemented; it can apply validated event rows to date/code market-data rows, but still needs real official status events.
 - KRX OpenAPI `2026-07-02` smoke returned HTTP `200` but `0` rows for all six core services, so use known historical trading days for parser development until latest-date availability is confirmed.
 - Current Codex App surface did not expose the KIS MCP tool, so `find_api_detail` was not callable here. Local [[MCP/Kis Trading MCP/configs/domestic_stock.json|MCP/Kis Trading MCP/configs/domestic_stock.json]] and `examples_llm` sample docs were used as the fallback API detail evidence, and only the read-only quotation endpoint was called.
 
@@ -301,8 +305,9 @@ Likely needed work:
 1. Preserve `2025-01-08` row-count movement as an event-validation item, not as a Backtest conclusion.
 2. Save one official KRX Data Marketplace or KIND status raw sample under `_report/raw/**`.
 3. Normalize that sample into the status-event schema and run [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]].
-4. Continue KIS OHLCV batch capture only as secondary cross-check or to fill fields KRX OpenAPI does not provide.
-5. Keep result as paper/smoke only until full `Point-in-Time` status replay is solved.
+4. Replay validated status events with [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]] against the 7-date market-data join.
+5. Continue KIS OHLCV batch capture only as secondary cross-check or to fill fields KRX OpenAPI does not provide.
+6. Keep result as paper/smoke only until full `Point-in-Time` status replay is solved.
 
 ## Current Blockers
 
