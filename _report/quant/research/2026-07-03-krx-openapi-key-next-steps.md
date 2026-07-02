@@ -12,6 +12,7 @@
 - Saved-raw normalizer: [[scripts/quant_krx_openapi_normalize.py|scripts/quant_krx_openapi_normalize.py]]
 - Historical missing-raw planner: [[scripts/quant_krx_openapi_history_plan.py|scripts/quant_krx_openapi_history_plan.py]]
 - Continuity auditor: [[scripts/quant_krx_openapi_continuity_audit.py|scripts/quant_krx_openapi_continuity_audit.py]]
+- Market-data join: [[scripts/quant_krx_openapi_market_data_join.py|scripts/quant_krx_openapi_market_data_join.py]]
 
 ## Why This Matters
 
@@ -113,6 +114,7 @@ Passing one KRX OpenAPI smoke test changes the status to:
 - KRX OpenAPI normalizer: `usable_for_parser_development` on saved `2025-01-02` core raws
 - KRX OpenAPI historical window: `usable_for_multi_date_parser_development` for `2025-01-02` through `2025-01-10`
 - KRX OpenAPI continuity audit: `passed_for_small_window`
+- KRX OpenAPI market-data join: `usable_for_date_scoped_market_data_input`
 - Backtest readiness: still `hold`
 - Live trading readiness: still `blocked`
 
@@ -122,8 +124,8 @@ Backtest interpretation remains blocked until the pipeline can reproduce `Point-
 
 After `.env.krx` is filled and a KRX service URL is available:
 
-1. Join normalized `issue_base` and `stock_daily` into a date-scoped market-data input.
-2. Preserve the `2025-01-08` row-count movement as an event-validation item.
-3. Decide whether to extend KRX OpenAPI collection by another bounded window after the joined input passes checks.
-4. Validate schema stability before connecting normalized rows to `Universe` or `Backtest` code.
+1. Preserve the `2025-01-08` row-count movement as an event-validation item.
+2. Decide whether to extend KRX OpenAPI collection by another bounded window or prioritize `Point-in-Time` status replay.
+3. Build source handling for managed issue, trading halt, market alert, and delisting events.
+4. Validate status replay before connecting normalized market-data rows to `Universe` or `Backtest` code.
 5. Keep `Backtest` readiness at `hold` until historical status replay is solved.

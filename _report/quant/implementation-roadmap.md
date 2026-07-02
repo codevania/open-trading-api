@@ -5,7 +5,7 @@
 - Date: 2026-06-14
 - Last updated: 2026-07-03
 - Scope: Quant trading research and implementation workflow
-- Current phase: `krx_openapi_continuity_audit_smoke`
+- Current phase: `krx_openapi_market_data_join_smoke`
 - Overall implementation progress: `55-60%`
 - Current Snapshot Universe progress: `85-90%`
 - Backtest readiness: `hold`
@@ -26,7 +26,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
 | 4. Point-in-Time Universe | in-progress | 25-30% | KRX OpenAPI stock daily/basic endpoints approved, raw-collected, and normalized over a small historical window; current snapshot artifacts exist | Historical managed/trading halt/delisting status replay |
-| 5. Market data pipeline | in-progress | 65-70% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 7-date historical collection smoke, and continuity audit exist | Build date-scoped market-data input |
+| 5. Market data pipeline | in-progress | 70-75% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 7-date historical collection smoke, continuity audit, and date-scoped market-data join exist | Extend historical window or connect Point-in-Time status replay |
 | 6. Liquidity Filter | in-progress | 40-45% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]]; 361 unique saved raw rows evaluated against current Universe | Fill OHLCV coverage beyond the first 361 evaluated rows |
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
 | 8. OOS / Walk-Forward | planned | 10% | OOS plan exists | Run only after Backtest pipeline works |
@@ -261,6 +261,8 @@ KRX OpenAPI core artifacts:
 - [[tests/test_quant_krx_openapi_history_plan.py|tests/test_quant_krx_openapi_history_plan.py]]
 - [[scripts/quant_krx_openapi_continuity_audit.py|scripts/quant_krx_openapi_continuity_audit.py]]
 - [[tests/test_quant_krx_openapi_continuity_audit.py|tests/test_quant_krx_openapi_continuity_audit.py]]
+- [[scripts/quant_krx_openapi_market_data_join.py|scripts/quant_krx_openapi_market_data_join.py]]
+- [[tests/test_quant_krx_openapi_market_data_join.py|tests/test_quant_krx_openapi_market_data_join.py]]
 - [[_report/quant/research/2026-07-03-krx-openapi-normalize-smoke|_report/quant/research/2026-07-03-krx-openapi-normalize-smoke.md]]
 - [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.md]]
 - [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json]]
@@ -269,6 +271,7 @@ KRX OpenAPI core artifacts:
 - [[_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-history-normalize-result-20250102-20250110.md]]
 - [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110.md]]
 - [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110.rows.csv|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110.rows.csv]]
+- [[_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250110.md]]
 - Local secret template: `.env.krx.example`; actual `.env.krx` is git-ignored and must not be committed.
 - Raw smoke evidence is saved under `_report/raw/2026/2026-07-03/krx/openapi/` and remains uncommitted.
 
@@ -424,6 +427,31 @@ Artifacts:
 Observed data movement:
 
 - `2025-01-08` stock/issue rows dropped from `2745` to `2744` because KOSDAQ rows moved from `1784` to `1783`; this is below the alert threshold but still needs event-source validation before Backtest use.
+
+## KRX OpenAPI Market Data Join Smoke
+
+Status: `usable_for_date_scoped_market_data_input`
+
+Joined normalized `stock_daily` and `issue_base` rows over `2025-01-02` to `2025-01-10`:
+
+| metric | value |
+| --- | ---: |
+| joined rows | 19212 |
+| date count | 7 |
+| missing issue rows for stock rows | 0 |
+| missing stock rows for issue rows | 0 |
+| KOSPI rows | 6727 |
+| KOSDAQ rows | 12485 |
+
+Artifacts:
+
+- [[scripts/quant_krx_openapi_market_data_join.py|scripts/quant_krx_openapi_market_data_join.py]]
+- [[tests/test_quant_krx_openapi_market_data_join.py|tests/test_quant_krx_openapi_market_data_join.py]]
+- [[_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250110.md]]
+
+Remaining limitation:
+
+- This is a clean market-data input, not a `Point-in-Time Universe`; historical managed issue, trading halt, market alert, and delisting replay still need separate status sources.
 
 Soft blockers:
 
