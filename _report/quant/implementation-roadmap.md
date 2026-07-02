@@ -5,7 +5,7 @@
 - Date: 2026-06-14
 - Last updated: 2026-07-03
 - Scope: Quant trading research and implementation workflow
-- Current phase: `krx_openapi_market_data_join_smoke`
+- Current phase: `point_in_time_status_source_gap`
 - Overall implementation progress: `55-60%`
 - Current Snapshot Universe progress: `85-90%`
 - Backtest readiness: `hold`
@@ -25,7 +25,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 1. Quant learning baseline | in-progress | 35% | [[_report/quant/learning-roadmap|_report/quant/learning-roadmap.md]], week 01 study log | Continue weekly study logs tied to outputs |
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
-| 4. Point-in-Time Universe | in-progress | 25-30% | KRX OpenAPI stock daily/basic endpoints approved, raw-collected, and normalized over a small historical window; current snapshot artifacts exist | Historical managed/trading halt/delisting status replay |
+| 4. Point-in-Time Universe | in-progress | 25-30% | KRX OpenAPI market-data path works, and status source gap is documented; current snapshot artifacts exist | Status-event schema scaffolding and raw sample validation |
 | 5. Market data pipeline | in-progress | 70-75% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 7-date historical collection smoke, continuity audit, and date-scoped market-data join exist | Extend historical window or connect Point-in-Time status replay |
 | 6. Liquidity Filter | in-progress | 40-45% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]]; 361 unique saved raw rows evaluated against current Universe | Fill OHLCV coverage beyond the first 361 evaluated rows |
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
@@ -272,6 +272,7 @@ KRX OpenAPI core artifacts:
 - [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110.md]]
 - [[_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110.rows.csv|_report/quant/research/2026-07-03-krx-openapi-continuity-audit-20250102-20250110.rows.csv]]
 - [[_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250110.md]]
+- [[_report/quant/research/2026-07-03-point-in-time-status-source-gap|_report/quant/research/2026-07-03-point-in-time-status-source-gap.md]]
 - Local secret template: `.env.krx.example`; actual `.env.krx` is git-ignored and must not be committed.
 - Raw smoke evidence is saved under `_report/raw/2026/2026-07-03/krx/openapi/` and remains uncommitted.
 
@@ -452,6 +453,24 @@ Artifacts:
 Remaining limitation:
 
 - This is a clean market-data input, not a `Point-in-Time Universe`; historical managed issue, trading halt, market alert, and delisting replay still need separate status sources.
+
+## Point-in-Time Status Source Gap
+
+Status: `source_gap_confirmed_for_openapi_core`
+
+Official-source check:
+
+- KRX OpenAPI service list covers market data and issue base rows but does not expose the needed managed issue, trading halt, market alert, or delisting event replay as a visible core OpenAPI service.
+- KRX Data Marketplace stock `종목정보` pages, especially `전종목 지정내역`, are the next official candidate for status snapshots.
+- KIND is the event/disclosure fallback candidate when KRX Data Marketplace does not provide a clean historical table.
+
+Artifact:
+
+- [[_report/quant/research/2026-07-03-point-in-time-status-source-gap|_report/quant/research/2026-07-03-point-in-time-status-source-gap.md]]
+
+Next gate:
+
+- Add local status-event schema/config scaffolding, then validate one raw sample before wiring status replay into `Universe`.
 
 Soft blockers:
 

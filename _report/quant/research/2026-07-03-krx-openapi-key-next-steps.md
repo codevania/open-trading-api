@@ -13,6 +13,7 @@
 - Historical missing-raw planner: [[scripts/quant_krx_openapi_history_plan.py|scripts/quant_krx_openapi_history_plan.py]]
 - Continuity auditor: [[scripts/quant_krx_openapi_continuity_audit.py|scripts/quant_krx_openapi_continuity_audit.py]]
 - Market-data join: [[scripts/quant_krx_openapi_market_data_join.py|scripts/quant_krx_openapi_market_data_join.py]]
+- Point-in-Time status source gap: [[_report/quant/research/2026-07-03-point-in-time-status-source-gap|_report/quant/research/2026-07-03-point-in-time-status-source-gap.md]]
 
 ## Why This Matters
 
@@ -125,7 +126,7 @@ Backtest interpretation remains blocked until the pipeline can reproduce `Point-
 After `.env.krx` is filled and a KRX service URL is available:
 
 1. Preserve the `2025-01-08` row-count movement as an event-validation item.
-2. Decide whether to extend KRX OpenAPI collection by another bounded window or prioritize `Point-in-Time` status replay.
-3. Build source handling for managed issue, trading halt, market alert, and delisting events.
-4. Validate status replay before connecting normalized market-data rows to `Universe` or `Backtest` code.
+2. Add local schema/config scaffolding for `Point-in-Time` status events.
+3. Validate one raw status sample from KRX Data Marketplace or KIND before wiring status replay into `Universe`.
+4. Validate status replay before connecting normalized market-data rows to `Backtest` code.
 5. Keep `Backtest` readiness at `hold` until historical status replay is solved.
