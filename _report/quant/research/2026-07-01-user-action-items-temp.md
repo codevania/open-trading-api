@@ -10,18 +10,30 @@ The agent should keep progressing reversible local work and read-only KIS data c
 
 ### 1. KRX OpenAPI Access
 
-Status: `needed`
+Status: `key_obtained_pending_local_secret_file_and_service_smoke`
 
 What to do:
 
 - Create or confirm access at the KRX OpenAPI site: https://openapi.krx.co.kr/contents/OPP/MAIN/main/index.cmd
 - Apply for an API authentication key if the account does not already have one.
 - Keep the key outside the repository. Do not paste it into `_report/`, `omx_wiki/`, tracked scripts, or chat logs intended for commit.
+- Put the key only in local `.env.krx` as `KRX_AUTH_KEY=...`; `.env.krx` must stay git-ignored.
+- For each KRX OpenAPI product needed by the Quant pipeline, use the KRX service page to apply for API usage and copy the official sample/service URL into the read-only probe command.
 
 Why it matters:
 
 - KRX OpenAPI is the preferred first source for reproducible daily KRX market data.
 - KIS read-only OHLCV can continue as a smoke/current-snapshot feed, but it should not become the only historical Backtest data source.
+
+Next local smoke test:
+
+```powershell
+Copy-Item .env.krx.example .env.krx
+notepad .env.krx
+uv run python scripts/quant_krx_openapi_probe.py --url "OFFICIAL_KRX_SAMPLE_URL" --param basDd=YYYYMMDD --output _report/raw/YYYY/YYYY-MM-DD/krx/openapi/smoke.raw.json
+```
+
+Use only official KRX sample/service URLs from the approved API product page. Do not paste the key into the command line.
 
 ### 2. Point-in-Time Data Source Policy
 
