@@ -3,9 +3,10 @@
 ## Metadata
 
 - Date: 2026-06-14
+- Last updated: 2026-07-03
 - Scope: Quant trading research and implementation workflow
-- Current phase: `current_snapshot_universe_v0`
-- Overall implementation progress: `40-45%`
+- Current phase: `krx_openapi_core_raw_smoke`
+- Overall implementation progress: `45-50%`
 - Current Snapshot Universe progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
@@ -24,8 +25,8 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 1. Quant learning baseline | in-progress | 35% | [[_report/quant/learning-roadmap|_report/quant/learning-roadmap.md]], week 01 study log | Continue weekly study logs tied to outputs |
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
-| 4. Point-in-Time Universe | blocked | 15-20% | Plan exists; current snapshot artifacts exist | Historical status snapshots or reliable replay source |
-| 5. Market data pipeline | in-progress | 45-50% | KIS raw save, smoke validators, Universe-based OHLCV request queue, and first 360 read-only KIS captures exist | Continue resumable Universe OHLCV capture batches |
+| 4. Point-in-Time Universe | in-progress | 25-30% | KRX OpenAPI stock daily/basic endpoints approved and smoke-tested; current snapshot artifacts exist | Historical managed/trading halt/delisting status replay |
+| 5. Market data pipeline | in-progress | 55-60% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, and KRX OpenAPI core raw collector exist | Build KRX OpenAPI parser/normalizer and historical collection loop |
 | 6. Liquidity Filter | in-progress | 40-45% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]]; 361 unique saved raw rows evaluated against current Universe | Fill OHLCV coverage beyond the first 361 evaluated rows |
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
 | 8. OOS / Walk-Forward | planned | 10% | OOS plan exists | Run only after Backtest pipeline works |
@@ -246,6 +247,16 @@ Current KRX snapshot artifacts:
 - [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.md]]
 - [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.rows.csv|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.rows.csv]]
 - [[_report/quant/research/2026-07-01-user-action-items-temp|_report/quant/research/2026-07-01-user-action-items-temp.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-key-next-steps|_report/quant/research/2026-07-03-krx-openapi-key-next-steps.md]]
+
+KRX OpenAPI core artifacts:
+
+- [[scripts/quant_krx_openapi_probe.py|scripts/quant_krx_openapi_probe.py]]
+- [[tests/test_quant_krx_openapi_probe.py|tests/test_quant_krx_openapi_probe.py]]
+- [[scripts/quant_krx_openapi_collect.py|scripts/quant_krx_openapi_collect.py]]
+- [[tests/test_quant_krx_openapi_collect.py|tests/test_quant_krx_openapi_collect.py]]
+- Local secret template: `.env.krx.example`; actual `.env.krx` is git-ignored and must not be committed.
+- Raw smoke evidence is saved under `_report/raw/2026/2026-07-03/krx/openapi/` and remains uncommitted.
 
 Scripts and tests:
 
@@ -298,6 +309,27 @@ Hard blockers before Backtest interpretation:
 - `Point-in-Time Universe` is not built.
 - Historical managed issue / trading suspension / market alert / delisting status is not reproducible by Rebalance date.
 - Full-Universe `Liquidity Filter` coverage is incomplete because only the first 360 generated Universe OHLCV rows have been captured.
+
+## KRX OpenAPI Core Raw Smoke
+
+Status: `usable_for_raw_collection`
+
+Approved and smoke-tested core services:
+
+| service id | API | 2025-01-02 rows |
+| --- | --- | ---: |
+| `kospi_stock_daily` | 유가증권 일별매매정보 | 961 |
+| `kosdaq_stock_daily` | 코스닥 일별매매정보 | 1784 |
+| `kospi_issue_base` | 유가증권 종목기본정보 | 961 |
+| `kosdaq_issue_base` | 코스닥 종목기본정보 | 1784 |
+| `kospi_index_daily` | KOSPI 시리즈 일별시세정보 | 51 |
+| `kosdaq_index_daily` | KOSDAQ 시리즈 일별시세정보 | 40 |
+
+Notes:
+
+- All six services returned HTTP `200` with `OutBlock_1` JSON rows for `2025-01-02`.
+- The same six services returned HTTP `200` but `0` rows for `2026-07-02`; treat that date as unavailable for schema validation until KRX data availability is confirmed.
+- This solves the first official raw-market-data gate, but it does not yet solve `Point-in-Time` status replay for managed issues, trading halts, or delistings.
 - Current Liquidity Filter output is an expanded saved-raw smoke artifact, not full current Universe coverage.
 - Backtest, OOS, Walk-Forward, and Bias Control have not passed.
 
@@ -436,5 +468,6 @@ Current state:
 
 - Research and policy foundation: strong enough to proceed.
 - Current Snapshot Universe: usable for paper/smoke validation.
+- KRX OpenAPI core raw collection: usable for parser development and historical market-data collection.
 - Backtest readiness: `hold`.
 - Live trading readiness: `blocked`.

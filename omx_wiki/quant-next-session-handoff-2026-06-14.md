@@ -27,10 +27,15 @@ Use Lore commit protocol.
 
 ## Current Best Next Task
 
-Continue generated Universe OHLCV coverage after the first 360 captured rows.
+Build the KRX OpenAPI parser/normalizer from the approved core raw smoke, then use it as the official market-data path for historical KOSPI/KOSDAQ daily/basic/index rows. KIS OHLCV coverage can still continue, but KRX OpenAPI is now the better first lane for Backtest market data.
 
 Already implemented in the latest local work:
 
+- [[scripts/quant_krx_openapi_probe.py|scripts/quant_krx_openapi_probe.py]]
+- [[tests/test_quant_krx_openapi_probe.py|tests/test_quant_krx_openapi_probe.py]]
+- [[scripts/quant_krx_openapi_collect.py|scripts/quant_krx_openapi_collect.py]]
+- [[tests/test_quant_krx_openapi_collect.py|tests/test_quant_krx_openapi_collect.py]]
+- [[_report/quant/research/2026-07-03-krx-openapi-key-next-steps|_report/quant/research/2026-07-03-krx-openapi-key-next-steps.md]]
 - [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]]
 - [[tests/test_quant_liquidity_filter.py|tests/test_quant_liquidity_filter.py]]
 - [[scripts/quant_kis_ohlcv_batch_plan.py|scripts/quant_kis_ohlcv_batch_plan.py]]
@@ -255,22 +260,23 @@ Already implemented in the latest local work:
 - Thirtyfirst through thirtyfifth direct captures saved `50` more raw files under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`; the directory then had `350` Universe raw files. Because `000660 SK하이닉스` and `005930 삼성전자` overlap with older paper-follow-up raw rows while `035420 NAVER` remains extra, the then-current Liquidity Filter had `351` unique evaluated rows.
 - Thirtysixth OHLCV batch dry-run selected one additional `10` request queue after skipping `350` existing raw files.
 - Thirtysixth direct capture saved `10` more raw files under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`; the directory now has `360` Universe raw files. Because `000660 SK하이닉스` and `005930 삼성전자` overlap with older paper-follow-up raw rows while `035420 NAVER` remains extra, the latest Liquidity Filter has `361` unique evaluated rows.
+- KRX OpenAPI core collector smoke-tested `2025-01-02` and saved raw files under `_report/raw/2026/2026-07-03/krx/openapi/`. Row counts: `kospi_stock_daily=961`, `kosdaq_stock_daily=1784`, `kospi_issue_base=961`, `kosdaq_issue_base=1784`, `kospi_index_daily=51`, `kosdaq_index_daily=40`.
+- KRX OpenAPI `2026-07-02` smoke returned HTTP `200` but `0` rows for all six core services, so use known historical trading days for parser development until latest-date availability is confirmed.
 - Current Codex App surface did not expose the KIS MCP tool, so `find_api_detail` was not callable here. Local [[MCP/Kis Trading MCP/configs/domestic_stock.json|MCP/Kis Trading MCP/configs/domestic_stock.json]] and `examples_llm` sample docs were used as the fallback API detail evidence, and only the read-only quotation endpoint was called.
 
 Likely needed work:
 
-1. Preflight KIS daily OHLCV API with `domestic_stock.find_api_detail` in a surface where the MCP tool is available.
-2. Generate the next small request queue with `[[scripts/quant_kis_ohlcv_batch_plan.py|scripts/quant_kis_ohlcv_batch_plan.py]] --skip-existing --limit 10` against `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`; after the thirtysixth capture this should skip `360` existing raw files.
-3. Execute the next queue with [[scripts/quant_kis_ohlcv_capture.py|scripts/quant_kis_ohlcv_capture.py]].
-4. Save raw KIS responses under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/`; do not commit raw files.
-5. Re-run [[scripts/quant_smoke_validate.py|scripts/quant_smoke_validate.py]] and [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] on the expanded raw directory.
-6. Keep result as paper/smoke only until `Point-in-Time` is solved.
+1. Add a KRX OpenAPI raw normalizer for stock daily, issue base, and index daily JSON into typed CSV/parquet-like rows.
+2. Add parser tests from the saved `2025-01-02` raw schema without committing raw files.
+3. Build a small historical collection plan over known trading days using [[scripts/quant_krx_openapi_collect.py|scripts/quant_krx_openapi_collect.py]].
+4. Continue KIS OHLCV batch capture only as secondary cross-check or to fill fields KRX OpenAPI does not provide.
+5. Keep result as paper/smoke only until full `Point-in-Time` status replay is solved.
 
 ## Current Blockers
 
 - Git commit for latest OHLCV thirtysixth-capture local changes may still be pending.
 - Full generated Universe OHLCV coverage is still incomplete.
-- Historical KRX status data is not available by Rebalance date.
+- KRX OpenAPI stock daily/basic/index market data is available, but historical managed issue / trading halt / delisting status replay is still incomplete.
 - Backtest remains `hold`.
 
 ## User Preferences

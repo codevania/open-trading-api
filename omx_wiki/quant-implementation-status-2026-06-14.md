@@ -3,12 +3,13 @@
 ## Summary
 
 - Overall Quant implementation progress: `40-45%`
+- Overall Quant implementation progress: `45-50%`
 - Current Snapshot Universe v0 progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
-- Current phase: `current_snapshot_universe_v0`
+- Current phase: `krx_openapi_core_raw_smoke`
 
-The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, and the first 360 read-only KIS captured Universe rows. It is still not Backtest-ready because `Point-in-Time Universe`, full-Universe OHLCV raw collection, OOS, and Bias Control are incomplete.
+The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, the first 360 read-only KIS captured Universe rows, and approved KRX OpenAPI core market-data services with a raw collector smoke-tested on `2025-01-02`. It is still not Backtest-ready because full `Point-in-Time Universe` status replay, historical collection coverage, OOS, and Bias Control are incomplete.
 
 ## Completed
 
@@ -25,7 +26,9 @@ The project is beyond planning and now has a usable current-snapshot Universe ar
 - Saved-raw Liquidity Filter smoke was generated from current Universe rows + KIS daily raw files.
 - Universe `include` rows were converted into a KIS OHLCV request queue dry-run.
 - The first 360 request queue rows were captured through the read-only KIS quotation endpoint using local KIS sample auth fallback because the current Codex App surface did not expose the KIS MCP tool.
-- Tests for manifest verification, managed issue extraction, current Universe build, OHLCV batch planning, Liquidity Filter, and calendar audit pass.
+- KRX OpenAPI core services were approved and smoke-tested through read-only raw collection for `2025-01-02`: KOSPI/KOSDAQ stock daily, KOSPI/KOSDAQ issue base, and KOSPI/KOSDAQ index daily.
+- [[scripts/quant_krx_openapi_collect.py|scripts/quant_krx_openapi_collect.py]] collects the approved core KRX OpenAPI services while keeping `AUTH_KEY` out of tracked files and command output.
+- Tests for manifest verification, managed issue extraction, current Universe build, OHLCV batch planning, KRX OpenAPI collection, Liquidity Filter, and calendar audit pass.
 
 ## Current Universe v0
 
