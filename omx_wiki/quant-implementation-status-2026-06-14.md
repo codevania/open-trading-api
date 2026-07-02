@@ -6,9 +6,9 @@
 - Current Snapshot Universe v0 progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
-- Current phase: `krx_openapi_history_normalize_smoke`
+- Current phase: `krx_openapi_continuity_audit_smoke`
 
-The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, the first 360 read-only KIS captured Universe rows, and approved KRX OpenAPI core market-data services with raw collection and normalization smoke-tested across a 7-date historical window. It is still not Backtest-ready because full `Point-in-Time Universe` status replay, broader historical collection coverage, OOS, and Bias Control are incomplete.
+The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, the first 360 read-only KIS captured Universe rows, and approved KRX OpenAPI core market-data services with raw collection, normalization, and continuity auditing smoke-tested across a 7-date historical window. It is still not Backtest-ready because full `Point-in-Time Universe` status replay, broader historical collection coverage, OOS, and Bias Control are incomplete.
 
 ## Completed
 
@@ -33,7 +33,8 @@ The project is beyond planning and now has a usable current-snapshot Universe ar
 - KRX OpenAPI history plan smoke-tested `2025-01-02` to `2025-01-10`: `7` weekday candidate dates, `1` complete date, `6` existing raw files, and `36` missing requests.
 - KRX OpenAPI history collection executed those `36` read-only missing requests; `2025-01-02` to `2025-01-10` now has `42` saved raw files and `0` missing requests.
 - KRX OpenAPI history normalization over the same range produced `stock_daily=19212`, `issue_base=19212`, and `index_daily=637` rows.
-- Tests for manifest verification, managed issue extraction, current Universe build, OHLCV batch planning, KRX OpenAPI collection/normalization/history planning, Liquidity Filter, and calendar audit pass.
+- KRX OpenAPI continuity audit over the same normalized range passed with `7` audited dates, `0` row-count alerts, `0` duplicate date/code keys, and `0` stock/issue code mismatches.
+- Tests for manifest verification, managed issue extraction, current Universe build, OHLCV batch planning, KRX OpenAPI collection/normalization/history planning/continuity auditing, Liquidity Filter, and calendar audit pass.
 
 ## Current Universe v0
 
@@ -616,7 +617,7 @@ The Quant capture/research files expected to be tracked after the current work i
 1. Continue OHLCV coverage in small resumable batches from generated Universe rows.
 2. In a KIS MCP-capable surface, run `domestic_stock.find_api_detail` for `inquire_daily_itemchartprice`; if unavailable, keep documenting the local API detail fallback explicitly.
 3. Save raw responses under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/` and do not commit raw files.
-4. Build a row-count continuity audit and date-scoped market-data input from the normalized KRX OpenAPI rows.
+4. Build a date-scoped market-data input from the normalized KRX OpenAPI rows.
 5. Re-run [[scripts/quant_smoke_validate.py|scripts/quant_smoke_validate.py]] and [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] after each documented KIS OHLCV batch.
 6. Generate paper/smoke `Signal Candidate` outputs from Universe rows, not manual watchlists.
 7. Build `Point-in-Time Universe` path.
