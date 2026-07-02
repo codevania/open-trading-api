@@ -10,6 +10,7 @@
 - Read-only probe script: [[scripts/quant_krx_openapi_probe.py|scripts/quant_krx_openapi_probe.py]]
 - Core read-only collector: [[scripts/quant_krx_openapi_collect.py|scripts/quant_krx_openapi_collect.py]]
 - Saved-raw normalizer: [[scripts/quant_krx_openapi_normalize.py|scripts/quant_krx_openapi_normalize.py]]
+- Historical missing-raw planner: [[scripts/quant_krx_openapi_history_plan.py|scripts/quant_krx_openapi_history_plan.py]]
 
 ## Why This Matters
 
@@ -109,6 +110,7 @@ Passing one KRX OpenAPI smoke test changes the status to:
 
 - KRX OpenAPI access: `usable_for_raw_collection`
 - KRX OpenAPI normalizer: `usable_for_parser_development` on saved `2025-01-02` core raws
+- KRX OpenAPI historical plan: `usable_for_bounded_collection` for `2025-01-02` through `2025-01-10`
 - Backtest readiness: still `hold`
 - Live trading readiness: still `blocked`
 
@@ -118,7 +120,7 @@ Backtest interpretation remains blocked until the pipeline can reproduce `Point-
 
 After `.env.krx` is filled and a KRX service URL is available:
 
-1. Build a small historical collection plan over known trading days.
+1. Execute the bounded `2025-01-02` to `2025-01-10` collection plan.
 2. Collect raw KRX OpenAPI files under `_report/raw/**` without committing raw payloads.
 3. Normalize each collected date through [[scripts/quant_krx_openapi_normalize.py|scripts/quant_krx_openapi_normalize.py]].
 4. Validate row-count continuity and schema stability before connecting normalized rows to `Universe` or `Backtest` code.

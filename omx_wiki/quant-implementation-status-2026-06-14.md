@@ -6,9 +6,9 @@
 - Current Snapshot Universe v0 progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
-- Current phase: `krx_openapi_normalizer_smoke`
+- Current phase: `krx_openapi_history_plan_smoke`
 
-The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, the first 360 read-only KIS captured Universe rows, and approved KRX OpenAPI core market-data services with raw collection plus normalization smoke-tested on `2025-01-02`. It is still not Backtest-ready because full `Point-in-Time Universe` status replay, historical collection coverage, OOS, and Bias Control are incomplete.
+The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, the first 360 read-only KIS captured Universe rows, and approved KRX OpenAPI core market-data services with raw collection, normalization, and a bounded historical missing-raw plan smoke-tested. It is still not Backtest-ready because full `Point-in-Time Universe` status replay, historical collection coverage, OOS, and Bias Control are incomplete.
 
 ## Completed
 
@@ -29,7 +29,9 @@ The project is beyond planning and now has a usable current-snapshot Universe ar
 - KRX OpenAPI core raws for `2025-01-02` were normalized into stable local CSV schemas: `stock_daily=2745`, `issue_base=2745`, `index_daily=91`.
 - [[scripts/quant_krx_openapi_collect.py|scripts/quant_krx_openapi_collect.py]] collects the approved core KRX OpenAPI services while keeping `AUTH_KEY` out of tracked files and command output.
 - [[scripts/quant_krx_openapi_normalize.py|scripts/quant_krx_openapi_normalize.py]] converts saved KRX OpenAPI raw JSON into stable CSV inputs for parser development.
-- Tests for manifest verification, managed issue extraction, current Universe build, OHLCV batch planning, KRX OpenAPI collection/normalization, Liquidity Filter, and calendar audit pass.
+- [[scripts/quant_krx_openapi_history_plan.py|scripts/quant_krx_openapi_history_plan.py]] plans missing read-only KRX OpenAPI raw requests across bounded date ranges.
+- KRX OpenAPI history plan smoke-tested `2025-01-02` to `2025-01-10`: `7` weekday candidate dates, `1` complete date, `6` existing raw files, and `36` missing requests.
+- Tests for manifest verification, managed issue extraction, current Universe build, OHLCV batch planning, KRX OpenAPI collection/normalization/history planning, Liquidity Filter, and calendar audit pass.
 
 ## Current Universe v0
 
@@ -612,7 +614,7 @@ The Quant capture/research files expected to be tracked after the current work i
 1. Continue OHLCV coverage in small resumable batches from generated Universe rows.
 2. In a KIS MCP-capable surface, run `domestic_stock.find_api_detail` for `inquire_daily_itemchartprice`; if unavailable, keep documenting the local API detail fallback explicitly.
 3. Save raw responses under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/` and do not commit raw files.
-4. Build a small historical KRX OpenAPI collection loop over known trading days.
+4. Execute the small historical KRX OpenAPI collection plan and normalize newly saved raws.
 5. Re-run [[scripts/quant_smoke_validate.py|scripts/quant_smoke_validate.py]] and [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] after each documented KIS OHLCV batch.
 6. Generate paper/smoke `Signal Candidate` outputs from Universe rows, not manual watchlists.
 7. Build `Point-in-Time Universe` path.

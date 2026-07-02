@@ -5,7 +5,7 @@
 - Date: 2026-06-14
 - Last updated: 2026-07-03
 - Scope: Quant trading research and implementation workflow
-- Current phase: `krx_openapi_normalizer_smoke`
+- Current phase: `krx_openapi_history_plan_smoke`
 - Overall implementation progress: `50-55%`
 - Current Snapshot Universe progress: `85-90%`
 - Backtest readiness: `hold`
@@ -26,7 +26,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
 | 4. Point-in-Time Universe | in-progress | 25-30% | KRX OpenAPI stock daily/basic endpoints approved, raw-collected, and normalized for one historical date; current snapshot artifacts exist | Historical managed/trading halt/delisting status replay |
-| 5. Market data pipeline | in-progress | 60-65% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector, and KRX OpenAPI normalizer exist | Build historical KRX OpenAPI collection loop |
+| 5. Market data pipeline | in-progress | 60-65% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, and historical missing-raw plan exist | Run bounded historical KRX OpenAPI collection from plan |
 | 6. Liquidity Filter | in-progress | 40-45% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]]; 361 unique saved raw rows evaluated against current Universe | Fill OHLCV coverage beyond the first 361 evaluated rows |
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
 | 8. OOS / Walk-Forward | planned | 10% | OOS plan exists | Run only after Backtest pipeline works |
@@ -257,7 +257,11 @@ KRX OpenAPI core artifacts:
 - [[tests/test_quant_krx_openapi_collect.py|tests/test_quant_krx_openapi_collect.py]]
 - [[scripts/quant_krx_openapi_normalize.py|scripts/quant_krx_openapi_normalize.py]]
 - [[tests/test_quant_krx_openapi_normalize.py|tests/test_quant_krx_openapi_normalize.py]]
+- [[scripts/quant_krx_openapi_history_plan.py|scripts/quant_krx_openapi_history_plan.py]]
+- [[tests/test_quant_krx_openapi_history_plan.py|tests/test_quant_krx_openapi_history_plan.py]]
 - [[_report/quant/research/2026-07-03-krx-openapi-normalize-smoke|_report/quant/research/2026-07-03-krx-openapi-normalize-smoke.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json]]
 - Local secret template: `.env.krx.example`; actual `.env.krx` is git-ignored and must not be committed.
 - Raw smoke evidence is saved under `_report/raw/2026/2026-07-03/krx/openapi/` and remains uncommitted.
 
@@ -358,6 +362,31 @@ Remaining limitation:
 
 - This is a parser/market-data normalization milestone, not a `Point-in-Time Universe` or `Backtest` milestone.
 - Management designation, trading halt, market alert, and delisting replay still need historical status sources.
+
+## KRX OpenAPI Historical Plan Smoke
+
+Status: `usable_for_bounded_collection`
+
+Validated plan over `2025-01-02` to `2025-01-10`:
+
+| metric | value |
+| --- | ---: |
+| candidate dates | 7 |
+| complete dates | 1 |
+| existing raw files | 6 |
+| missing requests | 36 |
+
+Artifacts:
+
+- [[scripts/quant_krx_openapi_history_plan.py|scripts/quant_krx_openapi_history_plan.py]]
+- [[tests/test_quant_krx_openapi_history_plan.py|tests/test_quant_krx_openapi_history_plan.py]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.md]]
+- [[_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json|_report/quant/research/2026-07-03-krx-openapi-history-plan-20250102-20250110.requests.json]]
+
+Remaining limitation:
+
+- The plan filters weekends only; it is not a verified KRX trading calendar.
+- Holidays and unavailable dates must be interpreted from saved collector metadata and normalized row counts.
 
 Soft blockers:
 
