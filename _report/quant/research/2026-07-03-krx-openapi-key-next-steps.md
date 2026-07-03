@@ -19,6 +19,14 @@
 - Point-in-Time status replay scaffold: [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]]
 - KRX Data Marketplace status-source probe: [[scripts/quant_krx_data_marketplace_status_probe.py|scripts/quant_krx_data_marketplace_status_probe.py]]
 - KRX Data Marketplace status-source probe result: [[_report/quant/research/2026-07-03-krx-data-marketplace-status-source-probe|_report/quant/research/2026-07-03-krx-data-marketplace-status-source-probe.md]]
+- KIND status-source probe: [[scripts/quant_kind_status_source_probe.py|scripts/quant_kind_status_source_probe.py]]
+- KIND status-event extractor: [[scripts/quant_kind_status_events_extract.py|scripts/quant_kind_status_events_extract.py]]
+- KIND status-source probe result: [[_report/quant/research/2026-07-03-kind-status-source-probe|_report/quant/research/2026-07-03-kind-status-source-probe.md]]
+- KIND status-event extraction result: [[_report/quant/research/2026-07-03-kind-status-events-extract|_report/quant/research/2026-07-03-kind-status-events-extract.md]]
+- KIND status-event validation result: [[_report/quant/research/2026-07-03-kind-status-events-validation|_report/quant/research/2026-07-03-kind-status-events-validation.md]]
+- KIND status replay result: [[_report/quant/research/2026-07-03-kind-status-replay-on-openapi-20250102-20250124|_report/quant/research/2026-07-03-kind-status-replay-on-openapi-20250102-20250124.md]]
+- Point-in-Time status-event market enrichment: [[scripts/quant_point_in_time_status_events_enrich_market.py|scripts/quant_point_in_time_status_events_enrich_market.py]]
+- KIND status-event market enrichment result: [[_report/quant/research/2026-07-03-kind-status-events-market-enrich|_report/quant/research/2026-07-03-kind-status-events-market-enrich.md]]
 
 ## Why This Matters
 
@@ -121,9 +129,13 @@ Passing one KRX OpenAPI smoke test changes the status to:
 - KRX OpenAPI historical window: `usable_for_multi_date_parser_development` for `2025-01-02` through `2025-01-24`
 - KRX OpenAPI continuity audit: `passed_for_17_date_window`
 - KRX OpenAPI market-data join: `usable_for_date_scoped_market_data_input`
-- Point-in-Time status-event validator: `ready_for_one_official_raw_sample`
-- Point-in-Time status replay scaffold: `ready_for_validated_event_rows`
 - KRX Data Marketplace unattended status JSON access: `auth_required`
+- KIND public status fallback: `344_valid_events_replayed_on_17_date_smoke`
+- KIND market enrichment: `310_of_344_events_resolved_from_17_date_market_data_join`
+- Point-in-Time status-event validator: `validated_kind_current_snapshot`
+- Point-in-Time status replay scaffold: `validated_kind_snapshot_replayed_on_17_date_market_data`
+- Point-in-Time Universe smoke: `43553_include_3106_exclude_on_17_date_window`
+- KIS demo trading readiness: `not_ready_but_preflight_started`
 - Backtest readiness: still `hold`
 - Live trading readiness: still `blocked`
 
@@ -131,11 +143,13 @@ Backtest interpretation remains blocked until the pipeline can reproduce `Point-
 
 ## Agent Next Steps
 
-After `.env.krx` is filled and a KRX service URL is available:
+After core KRX OpenAPI coverage and the KIND current snapshot smoke:
 
 1. Preserve the `2025-01-08` row-count movement as an event-validation item.
-2. Save one official status raw sample from authenticated/manual KRX Data Marketplace download or KIND under `_report/raw/**`.
-3. Normalize that sample into [[_report/quant/data/schemas/point_in_time_status_events.schema.json|_report/quant/data/schemas/point_in_time_status_events.schema.json]] and validate it with [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]].
-4. Replay the validated events against the 17-date KRX OpenAPI market-data join with [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]].
-5. Validate status replay coverage before connecting normalized market-data rows to `Universe` or `Backtest` code.
-6. Keep `Backtest` readiness at `hold` until historical status replay is solved.
+2. Extend KIND or authenticated/manual KRX status coverage across the selected historical date range.
+3. Resolve remaining `34` `UNKNOWN` KIND market rows only where official source evidence or a deterministic market-data join can support it.
+4. Validate the expanded event rows with [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]] and replay them with [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]].
+5. Rebuild the `Point-in-Time Universe` smoke with [[scripts/quant_point_in_time_universe_build.py|scripts/quant_point_in_time_universe_build.py]] after each expanded status-event set.
+6. Keep KIS demo trading at dry-run preflight only until auth/account read-only preflight, buying-power/sellable-quantity checks, status/cancel flow, kill switch, and explicit confirmation gate exist. See [[_report/quant/research/2026-07-03-kis-demo-trading-readiness|_report/quant/research/2026-07-03-kis-demo-trading-readiness.md]].
+7. Validate status replay coverage before connecting normalized market-data rows to `Universe` or `Backtest` code.
+8. Keep `Backtest` readiness at `hold` until historical status replay is solved.

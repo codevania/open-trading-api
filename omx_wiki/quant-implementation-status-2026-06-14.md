@@ -2,13 +2,13 @@
 
 ## Summary
 
-- Overall Quant implementation progress: `60-64%`
+- Overall Quant implementation progress: `66-69%`
 - Current Snapshot Universe v0 progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
-- Current phase: `point_in_time_status_replay_scaffold`
+- Current phase: `point_in_time_universe_smoke`
 
-The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, the first 360 read-only KIS captured Universe rows, approved KRX OpenAPI core market-data services with raw collection, normalization, continuity auditing, and date-scoped market-data joining smoke-tested across a 17-date historical window, plus local `Point-in-Time` status-event schema/config/replay scaffolding. KRX Data Marketplace status screens are mapped, but unattended JSON probes returned `auth_required`; the next blocker is one authenticated/manual KRX Data Marketplace or KIND status raw sample. It is still not Backtest-ready.
+The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, the first 360 read-only KIS captured Universe rows, approved KRX OpenAPI core market-data services with raw collection, normalization, continuity auditing, and date-scoped market-data joining smoke-tested across a 17-date historical window. Local `Point-in-Time` status-event schema/config/replay scaffolding is implemented, KRX Data Marketplace status screens are mapped but unattended JSON probes returned `auth_required`, and a KIND public current snapshot has been normalized into `344` valid status-event rows, market-enriched for `310/344` rows, replayed against the 17-date market-data join, and converted into a `Point-in-Time Universe` smoke with `43553` include / `3106` exclude rows. KIS demo trading has dry-run order intent preflight only. It is still not Backtest-ready because historical status coverage is incomplete.
 
 ## Completed
 
@@ -43,7 +43,15 @@ The project is beyond planning and now has a usable current-snapshot Universe ar
 - Point-in-Time status-event schema/config scaffolding is documented in [[_report/quant/research/2026-07-03-point-in-time-status-event-schema|_report/quant/research/2026-07-03-point-in-time-status-event-schema.md]].
 - Point-in-Time status replay scaffold is documented in [[_report/quant/research/2026-07-03-point-in-time-status-replay-scaffold|_report/quant/research/2026-07-03-point-in-time-status-replay-scaffold.md]].
 - KRX Data Marketplace status-source probe found official status screen `bld` identifiers but classified all core unattended JSON calls as `auth_required`.
-- Tests for manifest verification, managed issue extraction, current Universe build, OHLCV batch planning, KRX OpenAPI collection/normalization/history planning/continuity auditing/market-data joining, KRX Data Marketplace status-source probing, status-event validation/replay, Liquidity Filter, and calendar audit pass.
+- KIND public status-source probe returned usable table downloads for `6/7` sources without login.
+- [[scripts/quant_kind_status_events_extract.py|scripts/quant_kind_status_events_extract.py]] normalized the KIND current snapshot into `344` status-event rows, all valid.
+- [[scripts/quant_point_in_time_status_events_enrich_market.py|scripts/quant_point_in_time_status_events_enrich_market.py]] resolved `310/344` KIND event market labels from the 17-date KRX OpenAPI market-data join.
+- KIND current snapshot status events replayed against the 17-date KRX OpenAPI market-data join and marked `280/46659` rows as `exclude_by_status_event`.
+- [[scripts/quant_point_in_time_universe_build.py|scripts/quant_point_in_time_universe_build.py]] converts status-replayed market data into `Point-in-Time Universe` smoke rows.
+- The latest 17-date `Point-in-Time Universe` smoke produced `43553` include rows and `3106` exclude rows.
+- [[scripts/quant_kis_demo_order_preflight.py|scripts/quant_kis_demo_order_preflight.py]] validates constrained KIS demo order intent CSVs without calling KIS or placing orders.
+- [[_report/quant/research/2026-07-03-kis-demo-trading-readiness|_report/quant/research/2026-07-03-kis-demo-trading-readiness.md]] records KIS demo readiness as `not_ready_but_preflight_started`: controlled first demo order `3-7 working days`, Quant-pipeline-driven demo trading `3-6 weeks`.
+- Tests for manifest verification, managed issue extraction, current Universe build, OHLCV batch planning, KRX OpenAPI collection/normalization/history planning/continuity auditing/market-data joining, KRX Data Marketplace status-source probing, KIND status probing/extraction, status-event validation/replay/enrichment, Point-in-Time Universe smoke, KIS demo order preflight, Liquidity Filter, and calendar audit pass.
 
 ## Current Universe v0
 
@@ -626,11 +634,12 @@ The Quant capture/research files expected to be tracked after the current work i
 1. Continue OHLCV coverage in small resumable batches from generated Universe rows.
 2. In a KIS MCP-capable surface, run `domestic_stock.find_api_detail` for `inquire_daily_itemchartprice`; if unavailable, keep documenting the local API detail fallback explicitly.
 3. Save raw responses under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/` and do not commit raw files.
-4. Save one official authenticated/manual KRX Data Marketplace or KIND status raw sample under `_report/raw/**`, normalize it into the status-event schema, validate it, then run [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]] against the 17-date market-data join.
+4. Extend KIND or authenticated/manual KRX status coverage across the selected historical date range, resolve the remaining `34` `UNKNOWN` KIND market rows where supported, validate/replay the expanded event rows, and rebuild [[scripts/quant_point_in_time_universe_build.py|scripts/quant_point_in_time_universe_build.py]] output.
 5. Re-run [[scripts/quant_smoke_validate.py|scripts/quant_smoke_validate.py]] and [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] after each documented KIS OHLCV batch.
 6. Generate paper/smoke `Signal Candidate` outputs from Universe rows, not manual watchlists.
-7. Build `Point-in-Time Universe` path.
-8. Only then run Backtest/OOS/Walk-Forward and Bias Control pass.
+7. Add Liquidity Filter and Strategy Candidate generation on top of the `Point-in-Time Universe` smoke.
+8. Add KIS demo auth/account read-only preflight, buying-power/sellable-quantity checks, status/cancel workflow, kill switch, and explicit confirmation gate before any order executor.
+9. Only then run Backtest/OOS/Walk-Forward and Bias Control pass.
 
 ## Do Not Do
 
@@ -640,3 +649,4 @@ The Quant capture/research files expected to be tracked after the current work i
 - Do not strip alphanumeric KRX short codes to digits. Preserve codes like `0004V0`.
 - Do not treat `auth_required` KRX Data Marketplace status endpoint probes as collected status data.
 - Do not move toward live trading while Backtest readiness is `hold`.
+- Do not place KIS demo or live orders from this Quant pipeline until the explicit order-execution gate is implemented and intentionally invoked.

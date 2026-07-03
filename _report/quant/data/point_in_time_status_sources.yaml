@@ -35,6 +35,9 @@ sources:
       - "Delisting disclosure"
     notes:
       - "Fallback source when KRX Data Marketplace does not provide a clean table."
+      - "2026-07-03 public KIND status download probe returned table downloads for 6/7 status sources without login."
+      - "The same capture normalized to 344 valid status-event rows and replayed against the 17-date KRX OpenAPI market-data join, but remains a current snapshot, not full historical coverage."
+      - "Market enrichment from the 17-date KRX OpenAPI market-data join resolved 310/344 KIND event rows; 34 remain UNKNOWN because the codes were not present in that market-data window."
   manual_snapshot:
     display_name: "Manual official snapshot"
     source_kind: "manual_snapshot"

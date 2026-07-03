@@ -5,7 +5,7 @@
 - Date: `2026-07-03`
 - Scope: apply validated status-event rows to date/code market-data rows
 - Backtest readiness: `hold`
-- Raw status collection: `not_started_for_status_events`
+- Raw status collection: `kind_current_snapshot_validated`
 
 The replay scaffold turns normalized status events into row-level status flags on a market-data input. It is intentionally separate from KRX/KIND collection and from `Backtest`.
 
@@ -14,6 +14,7 @@ The replay scaffold turns normalized status events into row-level status flags o
 - Replay script: [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]]
 - Tests: [[tests/test_quant_point_in_time_status_replay.py|tests/test_quant_point_in_time_status_replay.py]]
 - Required validator: [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]]
+- KIND current snapshot replay result: [[_report/quant/research/2026-07-03-kind-status-replay-on-openapi-20250102-20250124|_report/quant/research/2026-07-03-kind-status-replay-on-openapi-20250102-20250124.md]]
 
 ## Replay Behavior
 
@@ -48,12 +49,14 @@ Output rows receive:
 
 ## Current Judgment
 
-This is useful local plumbing, but it still depends on real official status events.
+This is useful local plumbing and has now been smoke-tested with one official KIND current snapshot.
+The KIND replay used `344` valid status-event rows against the 17-date KRX OpenAPI market-data join and marked `280/46659` rows as `exclude_by_status_event`.
+Market enrichment from the same join resolved `310/344` event rows; `34` remain `UNKNOWN`.
 `include_by_status_event` means "not excluded by the provided event rows"; it does not prove complete historical status coverage.
 
 Next gate:
 
-1. Save one official KRX Data Marketplace or KIND status raw sample.
-2. Normalize it into [[_report/quant/data/schemas/point_in_time_status_events.schema.json|_report/quant/data/schemas/point_in_time_status_events.schema.json]].
-3. Validate with [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]].
-4. Run the replay scaffold against the 17-date KRX OpenAPI market-data join.
+1. Extend KIND or authenticated/manual KRX status coverage across the selected historical date range.
+2. Add market classification where an official source or deterministic join can support it.
+3. Validate the expanded events with [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]].
+4. Replay the expanded event set before wiring status flags into `Universe`.

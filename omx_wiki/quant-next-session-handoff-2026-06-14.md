@@ -27,7 +27,7 @@ Use Lore commit protocol.
 
 ## Current Best Next Task
 
-Use the 17-date KRX OpenAPI market-data join as the clean market-data input, then validate one official KRX Data Marketplace or KIND status raw sample and replay the normalized events against that market-data window. KRX Data Marketplace status screens are now mapped, but unattended JSON probes returned `auth_required`, so the immediate next lane is authenticated/manual KRX status download or KIND fallback.
+Use the 17-date KIND status replay and `Point-in-Time Universe` smoke as the local plumbing baseline. The next lane is to extend KIND or authenticated/manual KRX status coverage by date/source, resolve remaining `UNKNOWN` market rows where official evidence supports it, and keep the Universe smoke aligned until it can become a Backtest input. KIS demo trading is only at dry-run intent-preflight level; do not build or run an order executor until demo auth/account, buying-power, sellable-quantity, status/cancel, kill-switch, and explicit confirmation gates are implemented.
 
 Already implemented in the latest local work:
 
@@ -78,6 +78,30 @@ Already implemented in the latest local work:
 - [[scripts/quant_krx_data_marketplace_status_probe.py|scripts/quant_krx_data_marketplace_status_probe.py]]
 - [[tests/test_quant_krx_data_marketplace_status_probe.py|tests/test_quant_krx_data_marketplace_status_probe.py]]
 - [[_report/quant/research/2026-07-03-krx-data-marketplace-status-source-probe|_report/quant/research/2026-07-03-krx-data-marketplace-status-source-probe.md]]
+- [[scripts/quant_kind_status_source_probe.py|scripts/quant_kind_status_source_probe.py]]
+- [[tests/test_quant_kind_status_source_probe.py|tests/test_quant_kind_status_source_probe.py]]
+- [[_report/quant/research/2026-07-03-kind-status-source-probe|_report/quant/research/2026-07-03-kind-status-source-probe.md]]
+- [[scripts/quant_kind_status_events_extract.py|scripts/quant_kind_status_events_extract.py]]
+- [[tests/test_quant_kind_status_events_extract.py|tests/test_quant_kind_status_events_extract.py]]
+- [[_report/quant/data/point_in_time_status_events/2026-07-03-kind-current-status-events.csv|_report/quant/data/point_in_time_status_events/2026-07-03-kind-current-status-events.csv]]
+- [[_report/quant/research/2026-07-03-kind-status-events-extract|_report/quant/research/2026-07-03-kind-status-events-extract.md]]
+- [[_report/quant/research/2026-07-03-kind-status-events-validation|_report/quant/research/2026-07-03-kind-status-events-validation.md]]
+- [[_report/quant/research/2026-07-03-kind-status-events-validation.rows.csv|_report/quant/research/2026-07-03-kind-status-events-validation.rows.csv]]
+- [[_report/quant/research/2026-07-03-kind-status-replay-on-openapi-20250102-20250124|_report/quant/research/2026-07-03-kind-status-replay-on-openapi-20250102-20250124.md]]
+- [[_report/quant/research/2026-07-03-kind-status-replay-on-openapi-20250102-20250124.rows.csv|_report/quant/research/2026-07-03-kind-status-replay-on-openapi-20250102-20250124.rows.csv]]
+- [[scripts/quant_point_in_time_status_events_enrich_market.py|scripts/quant_point_in_time_status_events_enrich_market.py]]
+- [[tests/test_quant_point_in_time_status_events_enrich_market.py|tests/test_quant_point_in_time_status_events_enrich_market.py]]
+- [[_report/quant/data/point_in_time_status_events/2026-07-03-kind-current-status-events.market-enriched.csv|_report/quant/data/point_in_time_status_events/2026-07-03-kind-current-status-events.market-enriched.csv]]
+- [[_report/quant/research/2026-07-03-kind-status-events-market-enrich|_report/quant/research/2026-07-03-kind-status-events-market-enrich.md]]
+- [[_report/quant/research/2026-07-03-kind-status-events-market-enriched-validation|_report/quant/research/2026-07-03-kind-status-events-market-enriched-validation.md]]
+- [[_report/quant/research/2026-07-03-kind-status-events-market-enriched-validation.rows.csv|_report/quant/research/2026-07-03-kind-status-events-market-enriched-validation.rows.csv]]
+- [[scripts/quant_point_in_time_universe_build.py|scripts/quant_point_in_time_universe_build.py]]
+- [[tests/test_quant_point_in_time_universe_build.py|tests/test_quant_point_in_time_universe_build.py]]
+- [[_report/quant/research/2026-07-03-kind-status-point-in-time-universe-smoke-20250102-20250124|_report/quant/research/2026-07-03-kind-status-point-in-time-universe-smoke-20250102-20250124.md]]
+- [[_report/quant/research/2026-07-03-kind-status-point-in-time-universe-smoke-20250102-20250124.rows.csv|_report/quant/research/2026-07-03-kind-status-point-in-time-universe-smoke-20250102-20250124.rows.csv]]
+- [[scripts/quant_kis_demo_order_preflight.py|scripts/quant_kis_demo_order_preflight.py]]
+- [[tests/test_quant_kis_demo_order_preflight.py|tests/test_quant_kis_demo_order_preflight.py]]
+- [[_report/quant/research/2026-07-03-kis-demo-trading-readiness|_report/quant/research/2026-07-03-kis-demo-trading-readiness.md]]
 - [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]]
 - [[tests/test_quant_liquidity_filter.py|tests/test_quant_liquidity_filter.py]]
 - [[scripts/quant_kis_ohlcv_batch_plan.py|scripts/quant_kis_ohlcv_batch_plan.py]]
@@ -314,27 +338,34 @@ Already implemented in the latest local work:
 - KRX OpenAPI combined normalization over `2025-01-02` to `2025-01-24` produced `stock_daily=46659`, `issue_base=46659`, and `index_daily=1547` rows.
 - KRX OpenAPI combined continuity audit over the 17-date window passed with `0` row-count alerts, `0` duplicate date/code keys, and `0` stock/issue code mismatches.
 - KRX OpenAPI combined market-data join over the 17-date window produced `46659` joined rows with `0` stock/issue mismatches: `16337` KOSPI rows and `30322` KOSDAQ rows.
-- Point-in-Time status source gap is documented: KRX OpenAPI handles market data, while status replay still needs KRX Data Marketplace and/or KIND evidence.
-- Point-in-Time status-event schema/config scaffolding and validator are implemented; next step is one official raw status sample normalization test.
-- Point-in-Time status replay scaffold is implemented; it can apply validated event rows to date/code market-data rows, but still needs real official status events.
+- Point-in-Time status source gap is documented: KRX OpenAPI handles market data, while historical status replay still needs broader KRX Data Marketplace and/or KIND coverage.
+- Point-in-Time status-event schema/config scaffolding and validator are implemented; one KIND current snapshot normalized into `344` valid rows with `0` invalid rows.
+- Point-in-Time status replay scaffold is implemented; the KIND current snapshot replay marked `280/46659` 17-date KRX OpenAPI market-data rows as `exclude_by_status_event`.
+- Point-in-Time status-event market enrichment is implemented; `310/344` KIND event rows resolved from the 17-date market-data join and `34` remain `UNKNOWN`.
+- Point-in-Time Universe smoke is implemented; 17-date replayed market-data rows produced `43553` include and `3106` exclude rows.
+- KIS demo order intent preflight is implemented as dry-run validation only. Controlled first KIS demo order estimate is `3-7 working days` after local demo auth/account verification; Quant-pipeline-driven demo trading estimate is `3-6 weeks`.
 - KRX Data Marketplace status-source probe is implemented; it found the official status screen `bld` values but all core unattended JSON probes returned `auth_required`/`LOGOUT`.
+- KIND public fallback probe is implemented; `6/7` status-source downloads produced usable table snapshots without login, but the result is still current-snapshot evidence, not full historical coverage.
 - KRX OpenAPI `2026-07-02` smoke returned HTTP `200` but `0` rows for all six core services, so use known historical trading days for parser development until latest-date availability is confirmed.
 - Current Codex App surface did not expose the KIS MCP tool, so `find_api_detail` was not callable here. Local [[MCP/Kis Trading MCP/configs/domestic_stock.json|MCP/Kis Trading MCP/configs/domestic_stock.json]] and `examples_llm` sample docs were used as the fallback API detail evidence, and only the read-only quotation endpoint was called.
 
 Likely needed work:
 
 1. Preserve `2025-01-08` row-count movement as an event-validation item, not as a Backtest conclusion.
-2. Save one official authenticated/manual KRX Data Marketplace or KIND status raw sample under `_report/raw/**`.
-3. Normalize that sample into the status-event schema and run [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]].
-4. Replay validated status events with [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]] against the 17-date market-data join.
+2. Extend KIND or authenticated/manual KRX status coverage across the selected historical date range.
+3. Resolve the remaining `34` `UNKNOWN` KIND market rows only where an official source or deterministic join can support it.
+4. Re-run [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]], [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]], and [[scripts/quant_point_in_time_universe_build.py|scripts/quant_point_in_time_universe_build.py]] on the expanded event set.
 5. Continue KIS OHLCV batch capture only as secondary cross-check or to fill fields KRX OpenAPI does not provide.
-6. Keep result as paper/smoke only until full `Point-in-Time` status replay is solved.
+6. Add KIS demo auth/account read-only preflight before any order executor work.
+7. Keep result as paper/smoke only until full `Point-in-Time` status replay is solved.
 
 ## Current Blockers
 
 - Full generated Universe OHLCV coverage is still incomplete.
 - KRX OpenAPI stock daily/basic/index market data is available, but historical managed issue / trading halt / delisting status replay is still incomplete.
 - KRX Data Marketplace status JSON is not yet unattended-accessible; probes returned `auth_required` without a login session.
+- KIND current snapshot fallback is validated, but it is not full historical `Point-in-Time` coverage.
+- KIS demo trading remains blocked beyond dry-run intent validation.
 - Backtest remains `hold`.
 
 ## User Preferences
