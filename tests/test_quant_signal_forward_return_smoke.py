@@ -114,6 +114,8 @@ class QuantSignalForwardReturnSmokeTest(unittest.TestCase):
                 self.assertEqual(main(), 0)
 
             report = report_output.read_text(encoding="utf-8")
+            report_bytes = report_output.read_bytes()
+            rows_bytes = rows_output.read_bytes()
             with rows_output.open("r", encoding="utf-8-sig", newline="") as handle:
                 written = list(csv.DictReader(handle))
 
@@ -123,6 +125,8 @@ class QuantSignalForwardReturnSmokeTest(unittest.TestCase):
         self.assertIn("- KRX API call: `false`", report)
         self.assertIn("- Order intent generated: `false`", report)
         self.assertIn("- Backtest readiness: `hold`", report)
+        self.assertNotIn(b"\r\n", report_bytes)
+        self.assertNotIn(b"\r\n", rows_bytes)
 
     def test_rejects_non_positive_horizons(self) -> None:
         with self.assertRaisesRegex(ValueError, "horizons must be positive"):

@@ -135,7 +135,7 @@ def write_csv(candidates: list[SignalCandidate], path: Path) -> None:
         "pit_liquidity_final_status",
     )
     with path.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         for candidate in candidates:
             row = candidate.source
@@ -263,7 +263,8 @@ def main() -> int:
     )
     if args.report_output:
         args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        args.report_output.write_text(report, encoding="utf-8")
+        with args.report_output.open("w", encoding="utf-8", newline="\n") as handle:
+            handle.write(report)
     else:
         print(report, end="")
     return 0
