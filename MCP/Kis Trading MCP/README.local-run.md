@@ -50,3 +50,14 @@ Confirm it with:
 codex mcp list
 codex mcp get kis_trade_mcp
 ```
+
+## Codex App troubleshooting notes
+
+- If `codex mcp list` shows `kis_trade_mcp` as `enabled` but the current Codex App thread does not expose `mcp__kis_trade_mcp__...` tools, treat it as a session tool-surface issue, not missing registration. Start a fresh Codex App thread or restart the app so MCP metadata is loaded into the tool surface.
+- The KIS Trading MCP registers category tools such as `domestic_stock` and `overseas_stock`. `find_api_detail` is an `api_type` passed to that category tool, not a separate top-level tool name.
+- For daily-report automation while direct MCP tools are not exposed, keep using `scripts/daily_report_collect.py`. It writes `preflight_find_api_detail.json` from the repo-local MCP configs before live data calls, then stores the raw KIS responses under `_report/raw/YYYY/YYYY-MM-DD/`.
+- If `uv run` fails with a Windows cache permission error under `C:\Users\...\AppData\Local\uv\cache`, run uv through the repo-local cache wrapper:
+
+```powershell
+.\scripts\uv-workspace.ps1 run python scripts\daily_report_collect.py --run-date 2026-07-03 --raw-dir _report\raw\2026\2026-07-03
+```

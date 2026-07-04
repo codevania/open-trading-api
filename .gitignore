@@ -97,6 +97,7 @@ venv.bak/
 
 # ===== uv =====
 .python-version
+.uv-cache/
 
 # ===== Type checkers =====
 .mypy_cache/
