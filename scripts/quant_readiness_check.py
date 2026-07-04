@@ -50,6 +50,16 @@ def _int_value(row: dict[str, str], column: str) -> int:
         return 0
 
 
+def _sorted_numeric_strings(values: set[str]) -> list[str]:
+    def key(value: str) -> tuple[int, float | str]:
+        try:
+            return (0, float(value))
+        except ValueError:
+            return (1, value)
+
+    return sorted(values, key=key)
+
+
 def _read_text(path: Path | None) -> str:
     if path is None or not path.exists():
         return ""
@@ -83,6 +93,7 @@ def evaluate_readiness(
     *,
     liquidity_rows: list[dict[str, str]],
     signal_rows: list[dict[str, str]],
+    forward_return_rows: list[dict[str, str]] | None = None,
     kis_preflight_report: Path | None,
     min_market_dates: int = DEFAULT_MIN_MARKET_DATES,
     min_liquidity_lookback: int = DEFAULT_MIN_LIQUIDITY_LOOKBACK,
@@ -99,6 +110,11 @@ def evaluate_readiness(
     signal_date_count = _date_count(signal_rows)
     buy_candidates = _count(signal_rows, "signal_state", "BUY candidate")
     sell_candidates = _count(signal_rows, "signal_state", "SELL candidate")
+    forward_rows = forward_return_rows or []
+    forward_complete_rows = _count(forward_rows, "evaluation_status", "complete")
+    forward_horizons = _sorted_numeric_strings(
+        {row.get("horizon_trading_days", "") for row in forward_rows if row.get("horizon_trading_days", "")}
+    )
 
     gates = [
         Gate(
@@ -120,6 +136,15 @@ def evaluate_readiness(
             "keep candidates paper-only until Backtest/OOS/Bias Control pass",
         ),
     ]
+    if forward_return_rows is not None:
+        gates.append(
+            Gate(
+                "forward_return_smoke",
+                "pass_smoke" if forward_complete_rows > 0 else "hold",
+                f"{forward_complete_rows}/{len(forward_rows)} forward-return rows complete across horizons {','.join(forward_horizons) or 'none'}",
+                "extend market-data window so forward-return coverage reaches production horizons",
+            )
+        )
 
     status_ready = status_coverage == "historical_complete"
     gates.append(
@@ -155,6 +180,9 @@ def evaluate_readiness(
         "signal_dates": signal_date_count,
         "buy_candidates": buy_candidates,
         "sell_candidates": sell_candidates,
+        "forward_return_rows": len(forward_rows) if forward_return_rows is not None else None,
+        "forward_return_complete_rows": forward_complete_rows if forward_return_rows is not None else None,
+        "forward_return_horizons": ",".join(forward_horizons) if forward_return_rows is not None else None,
         "backtest_readiness": "hold",
         "live_trading_readiness": "blocked",
     }
@@ -172,6 +200,7 @@ def _render_report(
     summary: dict[str, Any],
     liquidity_input: Path,
     signals_input: Path,
+    forward_returns_input: Path | None,
     kis_preflight_report: Path | None,
     status_coverage: str,
 ) -> str:
@@ -180,6 +209,7 @@ def _render_report(
         "",
         f"- Liquidity input: {_wikilink(liquidity_input)}",
         f"- Signal input: {_wikilink(signals_input)}",
+        f"- Forward-return input: {_wikilink(forward_returns_input) if forward_returns_input else '`not_supplied`'}",
         f"- KIS preflight report: {_wikilink(kis_preflight_report) if kis_preflight_report else '`not_supplied`'}",
         f"- Status coverage mode: `{status_coverage}`",
         "- KIS API call: `false`",
@@ -198,12 +228,26 @@ def _render_report(
         f"| Signal dates | {summary['signal_dates']} |",
         f"| BUY candidates | {summary['buy_candidates']} |",
         f"| SELL candidates | {summary['sell_candidates']} |",
-        "",
-        "## Gates",
-        "",
-        "| Gate | Status | Evidence | Next action |",
-        "| --- | --- | --- | --- |",
     ]
+    if summary.get("forward_return_rows") is not None:
+        lines.extend(
+            [
+                f"| Forward-return rows | {summary['forward_return_rows']} |",
+                f"| Forward-return complete rows | {summary['forward_return_complete_rows']} |",
+            ]
+        )
+        if summary.get("forward_return_horizons"):
+            lines.append(f"| Forward-return horizons | {summary['forward_return_horizons']} |")
+
+    lines.extend(
+        [
+            "",
+            "## Gates",
+            "",
+            "| Gate | Status | Evidence | Next action |",
+            "| --- | --- | --- | --- |",
+        ]
+    )
     for gate in gates:
         lines.append(f"| `{gate.name}` | `{gate.status}` | {gate.evidence} | {gate.next_action} |")
 
@@ -224,6 +268,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Summarize Quant Backtest and live-trading readiness gates.")
     parser.add_argument("--liquidity-input", required=True, type=Path)
     parser.add_argument("--signals-input", required=True, type=Path)
+    parser.add_argument("--forward-returns-input", type=Path)
     parser.add_argument("--kis-preflight-report", type=Path)
     parser.add_argument("--status-coverage", default="current_snapshot_smoke")
     parser.add_argument("--min-market-dates", default=DEFAULT_MIN_MARKET_DATES, type=int)
@@ -234,9 +279,11 @@ def main() -> int:
     try:
         liquidity_rows = _read_csv(args.liquidity_input)
         signal_rows = _read_csv(args.signals_input)
+        forward_return_rows = _read_csv(args.forward_returns_input) if args.forward_returns_input else None
         gates, summary = evaluate_readiness(
             liquidity_rows=liquidity_rows,
             signal_rows=signal_rows,
+            forward_return_rows=forward_return_rows,
             kis_preflight_report=args.kis_preflight_report,
             min_market_dates=args.min_market_dates,
             min_liquidity_lookback=args.min_liquidity_lookback,
@@ -250,6 +297,7 @@ def main() -> int:
         summary=summary,
         liquidity_input=args.liquidity_input,
         signals_input=args.signals_input,
+        forward_returns_input=args.forward_returns_input,
         kis_preflight_report=args.kis_preflight_report,
         status_coverage=args.status_coverage,
     )

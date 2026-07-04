@@ -28,6 +28,13 @@ def _signal_rows() -> list[dict[str, str]]:
     ]
 
 
+def _forward_rows() -> list[dict[str, str]]:
+    return [
+        {"date": "2025-01-20", "code": "005930", "horizon_trading_days": "1", "evaluation_status": "complete"},
+        {"date": "2025-01-20", "code": "000660", "horizon_trading_days": "5", "evaluation_status": "missing_forward_price"},
+    ]
+
+
 def _write_csv(path: Path, rows: list[dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
@@ -55,6 +62,22 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertEqual(by_name["backtest_engine"].status, "hold")
         self.assertEqual(by_name["live_trading_controls"].status, "blocked")
         self.assertEqual(by_name["kis_demo_account"].status, "blocked")
+
+    def test_forward_return_smoke_is_a_diagnostic_gate_only(self) -> None:
+        gates, summary = evaluate_readiness(
+            liquidity_rows=_liquidity_rows(),
+            signal_rows=_signal_rows(),
+            forward_return_rows=_forward_rows(),
+            kis_preflight_report=None,
+            status_coverage="current_snapshot_smoke",
+        )
+        by_name = {gate.name: gate for gate in gates}
+
+        self.assertEqual(by_name["forward_return_smoke"].status, "pass_smoke")
+        self.assertEqual(summary["forward_return_rows"], 2)
+        self.assertEqual(summary["forward_return_complete_rows"], 1)
+        self.assertEqual(summary["backtest_readiness"], "hold")
+        self.assertEqual(summary["live_trading_readiness"], "blocked")
 
     def test_historical_status_gate_still_does_not_authorize_trading(self) -> None:
         gates, summary = evaluate_readiness(
@@ -97,9 +120,11 @@ class QuantReadinessCheckTest(unittest.TestCase):
             root = Path(tmp)
             liquidity = root / "liquidity.rows.csv"
             signals = root / "signals.rows.csv"
+            forward_returns = root / "forward.rows.csv"
             output = root / "readiness.md"
             _write_csv(liquidity, _liquidity_rows())
             _write_csv(signals, _signal_rows())
+            _write_csv(forward_returns, _forward_rows())
 
             with patch(
                 "sys.argv",
@@ -109,6 +134,8 @@ class QuantReadinessCheckTest(unittest.TestCase):
                     str(liquidity),
                     "--signals-input",
                     str(signals),
+                    "--forward-returns-input",
+                    str(forward_returns),
                     "--report-output",
                     str(output),
                 ],
@@ -122,6 +149,8 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertIn("- Backtest readiness: `hold`", report)
         self.assertIn("- Live trading readiness: `blocked`", report)
         self.assertIn("| `signal_candidates` | `pass_smoke` |", report)
+        self.assertIn("| `forward_return_smoke` | `pass_smoke` |", report)
+        self.assertIn("| Forward-return complete rows | 1 |", report)
 
     def test_positive_thresholds_are_required(self) -> None:
         with self.assertRaisesRegex(ValueError, "min_market_dates must be positive"):

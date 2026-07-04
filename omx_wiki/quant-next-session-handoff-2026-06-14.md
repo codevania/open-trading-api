@@ -27,7 +27,7 @@ Use Lore commit protocol.
 
 ## Current Best Next Task
 
-Use the 23-date KRX OpenAPI market-data merge, KIND status replay, `Point-in-Time Universe` smoke, 20-day `Point-in-Time` Liquidity Filter smoke, paper-only Momentum Signal Candidate smoke, and local Quant readiness check as the plumbing baseline. The next lane is to extend KIND or authenticated/manual KRX status coverage by date/source, resolve remaining `UNKNOWN` market rows where official evidence supports it, and keep the Universe/Liquidity/Signal/readiness smoke aligned until it can become a Backtest input. KIS demo trading is only at local preflight level; do not build or run an order executor until demo auth/account, buying-power, sellable-quantity, status/cancel, kill-switch, and explicit confirmation gates are implemented.
+Use the 23-date KRX OpenAPI market-data merge, KIND status replay, `Point-in-Time Universe` smoke, 20-day `Point-in-Time` Liquidity Filter smoke, paper-only Momentum Signal Candidate smoke, Signal forward-return smoke, and local Quant readiness check as the plumbing baseline. The next lane is to extend KIND or authenticated/manual KRX status coverage by date/source, resolve remaining `UNKNOWN` market rows where official evidence supports it, extend the market-data window enough to cover production forward-return horizons, and keep the Universe/Liquidity/Signal/readiness smoke aligned until it can become a Backtest input. KIS demo trading is only at local preflight level; do not build or run an order executor until demo auth/account, buying-power, sellable-quantity, status/cancel, kill-switch, and explicit confirmation gates are implemented.
 
 Already implemented in the latest local work:
 
@@ -126,6 +126,10 @@ Already implemented in the latest local work:
 - [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.rows.csv|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.rows.csv]]
 - [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250207|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250207.md]]
 - [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250207.rows.csv|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250207.rows.csv]]
+- [[scripts/quant_signal_forward_return_smoke.py|scripts/quant_signal_forward_return_smoke.py]]
+- [[tests/test_quant_signal_forward_return_smoke.py|tests/test_quant_signal_forward_return_smoke.py]]
+- [[_report/quant/research/2026-07-05-signal-forward-return-smoke-20d-20250102-20250207|_report/quant/research/2026-07-05-signal-forward-return-smoke-20d-20250102-20250207.md]]
+- [[_report/quant/research/2026-07-05-signal-forward-return-smoke-20d-20250102-20250207.rows.csv|_report/quant/research/2026-07-05-signal-forward-return-smoke-20d-20250102-20250207.rows.csv]]
 - [[scripts/quant_readiness_check.py|scripts/quant_readiness_check.py]]
 - [[tests/test_quant_readiness_check.py|tests/test_quant_readiness_check.py]]
 - [[_report/quant/research/2026-07-04-quant-readiness-check-20d|_report/quant/research/2026-07-04-quant-readiness-check-20d.md]]
@@ -380,7 +384,8 @@ Already implemented in the latest local work:
 - Point-in-Time Universe smoke is implemented; 23-date replayed market-data rows produced `58961` include and `4204` exclude rows.
 - Point-in-Time Liquidity Filter smoke is implemented; 23-date replayed market-data rows with a 20-day rule produced `4034` include and `59131` exclude rows, with `10236` rows evaluated on the full 20-day lookback.
 - Point-in-Time Momentum Signal Candidate smoke is implemented; 23-date, 20-day Momentum over the Liquidity rows produced `120` paper-only candidates across `3` candidate dates: `60` BUY candidates and `60` SELL candidates. This is not a Backtest result and does not generate order intents.
-- Quant readiness check is implemented; the latest 20-day local report marks market-data window `pass`, Liquidity Filter `pass_smoke`, Signal Candidate `pass_smoke`, Point-in-Time status coverage `hold`, Backtest engine `hold`, live trading controls `blocked`, and KIS demo account `blocked`.
+- Signal forward-return smoke is implemented; it joined the `120` Signal Candidate rows to local future close prices across `1,5` trading-day horizons and produced `240` diagnostic rows: `80` complete and `160` `missing_forward_price`.
+- Quant readiness check is implemented; the latest 20-day local report marks market-data window `pass`, Liquidity Filter `pass_smoke`, Signal Candidate `pass_smoke`, forward-return smoke `pass_smoke`, Point-in-Time status coverage `hold`, Backtest engine `hold`, live trading controls `blocked`, and KIS demo account `blocked`.
 - KIS demo order intent preflight and local demo account preflight are implemented. The latest local MCP `.env.kis` check found `KIS_PAPER_STOCK` empty without printing or storing account values. Controlled first KIS demo order estimate remains `3-7 working days` after local demo auth/account verification; Quant-pipeline-driven demo trading estimate is `3-6 weeks`.
 - KRX Data Marketplace status-source probe is implemented; it found the official status screen `bld` values but all core unattended JSON probes returned `auth_required`/`LOGOUT`.
 - KIND public fallback probe is implemented; `6/7` status-source downloads produced usable table snapshots without login, but the result is still current-snapshot evidence, not full historical coverage.
@@ -396,9 +401,10 @@ Likely needed work:
 5. Continue KIS OHLCV batch capture only as secondary cross-check or to fill fields KRX OpenAPI does not provide.
 6. After the user fills `KIS_PAPER_STOCK` in the ignored MCP `.env.kis`, rerun [[scripts/quant_kis_demo_account_preflight.py|scripts/quant_kis_demo_account_preflight.py]] before any read-only account API calls.
 7. Re-run [[scripts/quant_point_in_time_signal_candidates.py|scripts/quant_point_in_time_signal_candidates.py]] only as paper/smoke after the Universe and Liquidity rows are rebuilt; do not treat its output as orders.
-8. Re-run [[scripts/quant_readiness_check.py|scripts/quant_readiness_check.py]] after each Point-in-Time, Liquidity Filter, Signal Candidate, or KIS account milestone.
-9. Extend the KRX OpenAPI market-data window further before attempting production Momentum lookbacks.
-10. Keep result as paper/smoke only until full `Point-in-Time` status replay is solved.
+8. Re-run [[scripts/quant_signal_forward_return_smoke.py|scripts/quant_signal_forward_return_smoke.py]] after extending market-data coverage enough to cover forward horizons beyond the last Signal Candidate date.
+9. Re-run [[scripts/quant_readiness_check.py|scripts/quant_readiness_check.py]] after each Point-in-Time, Liquidity Filter, Signal Candidate, forward-return, or KIS account milestone.
+10. Extend the KRX OpenAPI market-data window further before attempting production Momentum lookbacks.
+11. Keep result as paper/smoke only until full `Point-in-Time` status replay is solved.
 
 ## Current Blockers
 
@@ -409,6 +415,7 @@ Likely needed work:
 - KIS demo trading remains blocked beyond local preflight; `KIS_PAPER_STOCK` is empty in the ignored MCP `.env.kis`.
 - Backtest remains `hold`.
 - Latest readiness check confirms the same state: Backtest `hold`, live trading `blocked`.
+- Forward-return smoke has partial coverage only because the current market-data window ends on `2025-02-07`; production horizons need additional future trading dates.
 
 ## User Preferences
 
