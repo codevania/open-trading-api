@@ -45,7 +45,10 @@
 
 ## 다음 구현 후보
 
-1. OpenDART 수집 스크립트: 회사 고유번호, 공시목록, 전체 재무제표 저장
-2. SEC EDGAR 수집 스크립트: ticker-CIK, submissions, companyfacts 저장
-3. ETF 비교 스크립트: KIS ETF/ETN API와 운용사 수동 입력을 합친 체크리스트 생성
-4. DI watchlist에 미국 기술주와 Core ETF 후보 추가
+1. ETF 비교 스크립트: KIS ETF/ETN API와 운용사 수동 입력을 합친 체크리스트 생성
+2. DI watchlist에 미국 기술주와 Core ETF 후보 추가
+
+## 구현된 수집 스크립트
+
+- `scripts/di_opendart_collect.py`: OpenDART 회사 고유번호, 공시목록, 기업개황, 전체 재무제표 raw 저장
+- `scripts/di_sec_edgar_collect.py`: SEC ticker-CIK, submissions, companyfacts, 주요 companyconcept raw 저장

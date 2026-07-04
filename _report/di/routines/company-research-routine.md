@@ -87,6 +87,22 @@ _report/raw/YYYY/YYYY-MM-DD/
   kis/SYMBOL/
 ```
 
+## 수집 스크립트
+
+국내 기업 OpenDART raw 수집:
+
+```bash
+python scripts/di_opendart_collect.py --stock-code 005930 --business-year 2025
+```
+
+미국 기업 SEC EDGAR raw 수집:
+
+```bash
+python scripts/di_sec_edgar_collect.py --ticker MSFT
+```
+
+두 스크립트 모두 `--dry-run`을 지원하며, 키와 User-Agent는 출력하지 않는다.
+
 ## 완료 기준
 
 - 투자 논리와 반대 논리가 둘 다 적혀 있다.
