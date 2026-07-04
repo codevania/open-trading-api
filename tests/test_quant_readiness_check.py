@@ -35,6 +35,25 @@ def _forward_rows() -> list[dict[str, str]]:
     ]
 
 
+def _portfolio_target_rows() -> list[dict[str, str]]:
+    return [
+        {
+            "date": "2025-01-20",
+            "code": "005930",
+            "target_weight": "0.050000",
+            "target_mode": "paper_portfolio_target_smoke_only",
+            "order_intent_generated": "false",
+        },
+        {
+            "date": "2025-01-20",
+            "code": "000660",
+            "target_weight": "0.050000",
+            "target_mode": "paper_portfolio_target_smoke_only",
+            "order_intent_generated": "false",
+        },
+    ]
+
+
 def _write_csv(path: Path, rows: list[dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
@@ -79,6 +98,38 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertEqual(summary["backtest_readiness"], "hold")
         self.assertEqual(summary["live_trading_readiness"], "blocked")
 
+    def test_portfolio_targets_smoke_is_diagnostic_only(self) -> None:
+        gates, summary = evaluate_readiness(
+            liquidity_rows=_liquidity_rows(),
+            signal_rows=_signal_rows(),
+            forward_return_rows=_forward_rows(),
+            portfolio_target_rows=_portfolio_target_rows(),
+            kis_preflight_report=None,
+            status_coverage="current_snapshot_smoke",
+        )
+        by_name = {gate.name: gate for gate in gates}
+
+        self.assertEqual(by_name["portfolio_targets_smoke"].status, "pass_smoke")
+        self.assertEqual(summary["portfolio_target_rows"], 2)
+        self.assertEqual(summary["portfolio_target_dates"], 1)
+        self.assertEqual(summary["portfolio_target_max_gross_weight"], 0.1)
+        self.assertEqual(summary["backtest_readiness"], "hold")
+        self.assertEqual(summary["live_trading_readiness"], "blocked")
+
+    def test_portfolio_targets_with_order_intents_do_not_pass(self) -> None:
+        rows = [dict(row) for row in _portfolio_target_rows()]
+        rows[0]["order_intent_generated"] = "true"
+
+        gates, _summary = evaluate_readiness(
+            liquidity_rows=_liquidity_rows(),
+            signal_rows=_signal_rows(),
+            portfolio_target_rows=rows,
+            kis_preflight_report=None,
+            status_coverage="current_snapshot_smoke",
+        )
+
+        self.assertEqual({gate.name: gate for gate in gates}["portfolio_targets_smoke"].status, "hold")
+
     def test_historical_status_gate_still_does_not_authorize_trading(self) -> None:
         gates, summary = evaluate_readiness(
             liquidity_rows=_liquidity_rows(),
@@ -121,10 +172,12 @@ class QuantReadinessCheckTest(unittest.TestCase):
             liquidity = root / "liquidity.rows.csv"
             signals = root / "signals.rows.csv"
             forward_returns = root / "forward.rows.csv"
+            portfolio_targets = root / "portfolio-targets.rows.csv"
             output = root / "readiness.md"
             _write_csv(liquidity, _liquidity_rows())
             _write_csv(signals, _signal_rows())
             _write_csv(forward_returns, _forward_rows())
+            _write_csv(portfolio_targets, _portfolio_target_rows())
 
             with patch(
                 "sys.argv",
@@ -136,6 +189,8 @@ class QuantReadinessCheckTest(unittest.TestCase):
                     str(signals),
                     "--forward-returns-input",
                     str(forward_returns),
+                    "--portfolio-targets-input",
+                    str(portfolio_targets),
                     "--report-output",
                     str(output),
                 ],
@@ -143,6 +198,7 @@ class QuantReadinessCheckTest(unittest.TestCase):
                 self.assertEqual(main(), 0)
 
             report = output.read_text(encoding="utf-8")
+            report_bytes = output.read_bytes()
 
         self.assertIn("- KIS API call: `false`", report)
         self.assertIn("- Order intent generated: `false`", report)
@@ -150,7 +206,10 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertIn("- Live trading readiness: `blocked`", report)
         self.assertIn("| `signal_candidates` | `pass_smoke` |", report)
         self.assertIn("| `forward_return_smoke` | `pass_smoke` |", report)
+        self.assertIn("| `portfolio_targets_smoke` | `pass_smoke` |", report)
         self.assertIn("| Forward-return complete rows | 1 |", report)
+        self.assertIn("| Portfolio target rows | 2 |", report)
+        self.assertNotIn(b"\r\n", report_bytes)
 
     def test_positive_thresholds_are_required(self) -> None:
         with self.assertRaisesRegex(ValueError, "min_market_dates must be positive"):

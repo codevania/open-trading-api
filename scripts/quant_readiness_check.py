@@ -60,6 +60,16 @@ def _sorted_numeric_strings(values: set[str]) -> list[str]:
     return sorted(values, key=key)
 
 
+def _float_value(row: dict[str, str], column: str) -> float:
+    text = row.get(column, "").strip()
+    if not text:
+        return 0.0
+    try:
+        return float(text)
+    except ValueError:
+        return 0.0
+
+
 def _read_text(path: Path | None) -> str:
     if path is None or not path.exists():
         return ""
@@ -94,6 +104,7 @@ def evaluate_readiness(
     liquidity_rows: list[dict[str, str]],
     signal_rows: list[dict[str, str]],
     forward_return_rows: list[dict[str, str]] | None = None,
+    portfolio_target_rows: list[dict[str, str]] | None = None,
     kis_preflight_report: Path | None,
     min_market_dates: int = DEFAULT_MIN_MARKET_DATES,
     min_liquidity_lookback: int = DEFAULT_MIN_LIQUIDITY_LOOKBACK,
@@ -115,6 +126,16 @@ def evaluate_readiness(
     forward_horizons = _sorted_numeric_strings(
         {row.get("horizon_trading_days", "") for row in forward_rows if row.get("horizon_trading_days", "")}
     )
+    portfolio_rows = portfolio_target_rows or []
+    portfolio_date_count = _date_count(portfolio_rows)
+    portfolio_order_intents = sum(1 for row in portfolio_rows if row.get("order_intent_generated", "").lower() != "false")
+    portfolio_modes = {row.get("target_mode", "") for row in portfolio_rows if row.get("target_mode", "")}
+    portfolio_gross_by_date: dict[str, float] = {}
+    for row in portfolio_rows:
+        date = row.get("date", "")
+        if not date:
+            continue
+        portfolio_gross_by_date[date] = portfolio_gross_by_date.get(date, 0.0) + _float_value(row, "target_weight")
 
     gates = [
         Gate(
@@ -143,6 +164,18 @@ def evaluate_readiness(
                 "pass_smoke" if forward_complete_rows > 0 else "hold",
                 f"{forward_complete_rows}/{len(forward_rows)} forward-return rows complete across horizons {','.join(forward_horizons) or 'none'}",
                 "extend market-data window so forward-return coverage reaches production horizons",
+            )
+        )
+    if portfolio_target_rows is not None:
+        portfolio_is_smoke_only = bool(portfolio_rows) and portfolio_order_intents == 0 and portfolio_modes == {
+            "paper_portfolio_target_smoke_only"
+        }
+        gates.append(
+            Gate(
+                "portfolio_targets_smoke",
+                "pass_smoke" if portfolio_is_smoke_only else "hold",
+                f"{len(portfolio_rows)} target rows across {portfolio_date_count} dates; order-intent rows={portfolio_order_intents}",
+                "keep target weights diagnostic-only until Backtest cost/benchmark/OOS gates are wired",
             )
         )
 
@@ -183,6 +216,11 @@ def evaluate_readiness(
         "forward_return_rows": len(forward_rows) if forward_return_rows is not None else None,
         "forward_return_complete_rows": forward_complete_rows if forward_return_rows is not None else None,
         "forward_return_horizons": ",".join(forward_horizons) if forward_return_rows is not None else None,
+        "portfolio_target_rows": len(portfolio_rows) if portfolio_target_rows is not None else None,
+        "portfolio_target_dates": portfolio_date_count if portfolio_target_rows is not None else None,
+        "portfolio_target_max_gross_weight": max(portfolio_gross_by_date.values(), default=0.0)
+        if portfolio_target_rows is not None
+        else None,
         "backtest_readiness": "hold",
         "live_trading_readiness": "blocked",
     }
@@ -201,6 +239,7 @@ def _render_report(
     liquidity_input: Path,
     signals_input: Path,
     forward_returns_input: Path | None,
+    portfolio_targets_input: Path | None,
     kis_preflight_report: Path | None,
     status_coverage: str,
 ) -> str:
@@ -210,6 +249,7 @@ def _render_report(
         f"- Liquidity input: {_wikilink(liquidity_input)}",
         f"- Signal input: {_wikilink(signals_input)}",
         f"- Forward-return input: {_wikilink(forward_returns_input) if forward_returns_input else '`not_supplied`'}",
+        f"- Portfolio-target input: {_wikilink(portfolio_targets_input) if portfolio_targets_input else '`not_supplied`'}",
         f"- KIS preflight report: {_wikilink(kis_preflight_report) if kis_preflight_report else '`not_supplied`'}",
         f"- Status coverage mode: `{status_coverage}`",
         "- KIS API call: `false`",
@@ -238,6 +278,14 @@ def _render_report(
         )
         if summary.get("forward_return_horizons"):
             lines.append(f"| Forward-return horizons | {summary['forward_return_horizons']} |")
+    if summary.get("portfolio_target_rows") is not None:
+        lines.extend(
+            [
+                f"| Portfolio target rows | {summary['portfolio_target_rows']} |",
+                f"| Portfolio target dates | {summary['portfolio_target_dates']} |",
+                f"| Portfolio max gross target weight | {summary['portfolio_target_max_gross_weight']:.4f} |",
+            ]
+        )
 
     lines.extend(
         [
@@ -269,6 +317,7 @@ def main() -> int:
     parser.add_argument("--liquidity-input", required=True, type=Path)
     parser.add_argument("--signals-input", required=True, type=Path)
     parser.add_argument("--forward-returns-input", type=Path)
+    parser.add_argument("--portfolio-targets-input", type=Path)
     parser.add_argument("--kis-preflight-report", type=Path)
     parser.add_argument("--status-coverage", default="current_snapshot_smoke")
     parser.add_argument("--min-market-dates", default=DEFAULT_MIN_MARKET_DATES, type=int)
@@ -280,10 +329,12 @@ def main() -> int:
         liquidity_rows = _read_csv(args.liquidity_input)
         signal_rows = _read_csv(args.signals_input)
         forward_return_rows = _read_csv(args.forward_returns_input) if args.forward_returns_input else None
+        portfolio_target_rows = _read_csv(args.portfolio_targets_input) if args.portfolio_targets_input else None
         gates, summary = evaluate_readiness(
             liquidity_rows=liquidity_rows,
             signal_rows=signal_rows,
             forward_return_rows=forward_return_rows,
+            portfolio_target_rows=portfolio_target_rows,
             kis_preflight_report=args.kis_preflight_report,
             min_market_dates=args.min_market_dates,
             min_liquidity_lookback=args.min_liquidity_lookback,
@@ -298,12 +349,14 @@ def main() -> int:
         liquidity_input=args.liquidity_input,
         signals_input=args.signals_input,
         forward_returns_input=args.forward_returns_input,
+        portfolio_targets_input=args.portfolio_targets_input,
         kis_preflight_report=args.kis_preflight_report,
         status_coverage=args.status_coverage,
     )
     if args.report_output:
         args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        args.report_output.write_text(report, encoding="utf-8")
+        with args.report_output.open("w", encoding="utf-8", newline="\n") as handle:
+            handle.write(report)
     else:
         print(report, end="")
     return 0

@@ -5,8 +5,8 @@
 - Date: 2026-06-14
 - Last updated: 2026-07-05
 - Scope: Quant trading research and implementation workflow
-- Current phase: `signal_forward_return_smoke`
-- Overall implementation progress: `73-76%`
+- Current phase: `portfolio_target_smoke`
+- Overall implementation progress: `74-77%`
 - Current Snapshot Universe progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
@@ -28,10 +28,10 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 4. Point-in-Time Universe | in-progress | 62-66% | KRX OpenAPI market-data path works; KIND status replay produced `344` valid event rows, `310/344` market labels resolved, and a 23-date `Point-in-Time Universe` smoke produced `58961` include / `4204` exclude rows | Extend status coverage by date/source and keep Universe eligibility smoke aligned |
 | 5. Market data pipeline | in-progress | 85-88% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 23-date historical market-data merge, continuity audit, date-scoped market-data join, and status replay smoke exist | Extend another bounded historical window and keep status replay coverage aligned |
 | 6. Liquidity Filter | in-progress | 58-63% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] evaluates 361 current Universe saved-raw rows; [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] produced a 23-date, 20-day Point-in-Time smoke | Keep 20-day rule aligned while status coverage expands |
-| 7. Backtest engine connection | preflight | 15-18% | [[scripts/quant_readiness_check.py|scripts/quant_readiness_check.py]] reports 20-day smoke gates, including forward-return coverage, while Backtest remains `hold` | Wire engine only after Point-in-Time status coverage is acceptable for the selected scope |
+| 7. Backtest engine connection | preflight | 18-22% | [[scripts/quant_readiness_check.py|scripts/quant_readiness_check.py]] reports 20-day smoke gates, including forward-return and portfolio target coverage, while Backtest remains `hold` | Wire engine only after Point-in-Time status coverage is acceptable for the selected scope |
 | 8. OOS / Walk-Forward | planned | 10% | OOS plan exists | Run only after Backtest pipeline works |
 | 9. Bias Control pass | hold | 20% | Bias checklists exist; blockers documented | Point-in-Time and OOS evidence |
-| 10. Paper Signal tracking | partial | 50-55% | 20-day Point-in-Time Liquidity rows now feed paper-only Momentum `Signal Candidate` and forward-return smoke outputs | Keep candidates signal-only until production Point-in-Time coverage, Backtest, OOS, and Bias Control pass |
+| 10. Paper Signal tracking | partial | 55-60% | 20-day Point-in-Time Liquidity rows now feed paper-only Momentum `Signal Candidate`, forward-return, and long-only portfolio target smoke outputs | Keep candidates signal-only until production Point-in-Time coverage, Backtest, OOS, and Bias Control pass |
 | 11. Execution / live trading | blocked | 5% | Demo-only order intent preflight exists; no KIS order executor exists | Only after Backtest/OOS/Bias Control pass |
 
 ## Completed Artifacts
@@ -666,12 +666,22 @@ Signal forward-return smoke:
 - Result: `240` horizon evaluation rows from `120` Signal Candidate rows across `1,5` trading-day horizons; `80` rows complete and `160` rows are `missing_forward_price`.
 - Limitation: the current 23-date market-data window ends too soon after latest Signal Candidate dates, so this is a coverage/diagnostic smoke, not a Backtest.
 
+Signal portfolio target smoke:
+
+- [[scripts/quant_signal_portfolio_targets_smoke.py|scripts/quant_signal_portfolio_targets_smoke.py]]
+- [[tests/test_quant_signal_portfolio_targets_smoke.py|tests/test_quant_signal_portfolio_targets_smoke.py]]
+- [[_report/quant/research/2026-07-05-signal-portfolio-targets-smoke-20d-20250102-20250207|_report/quant/research/2026-07-05-signal-portfolio-targets-smoke-20d-20250102-20250207.md]]
+- [[_report/quant/research/2026-07-05-signal-portfolio-targets-smoke-20d-20250102-20250207.rows.csv|_report/quant/research/2026-07-05-signal-portfolio-targets-smoke-20d-20250102-20250207.rows.csv]]
+- Result: `60` long-only paper target rows across `3` rebalance dates, using `20` BUY candidates per date at `5%` target weight each; `SELL candidate` rows remain exclusions, not short targets.
+- Limitation: this is target-weight diagnostics only. It does not model costs, slippage, taxes, benchmark returns, cash drag, or order quantities.
+
 Quant readiness check:
 
 - [[scripts/quant_readiness_check.py|scripts/quant_readiness_check.py]]
 - [[tests/test_quant_readiness_check.py|tests/test_quant_readiness_check.py]]
 - [[_report/quant/research/2026-07-04-quant-readiness-check-20d|_report/quant/research/2026-07-04-quant-readiness-check-20d.md]]
-- Result: market-data window `pass`, Liquidity Filter `pass_smoke`, Signal Candidate `pass_smoke`, forward-return smoke `pass_smoke`, Point-in-Time status coverage `hold`, Backtest engine `hold`, live trading controls `blocked`, KIS demo account `blocked`.
+- [[_report/quant/research/2026-07-05-quant-readiness-check-20d-with-portfolio-targets|_report/quant/research/2026-07-05-quant-readiness-check-20d-with-portfolio-targets.md]]
+- Result: market-data window `pass`, Liquidity Filter `pass_smoke`, Signal Candidate `pass_smoke`, forward-return smoke `pass_smoke`, portfolio target smoke `pass_smoke`, Point-in-Time status coverage `hold`, Backtest engine `hold`, live trading controls `blocked`, KIS demo account `blocked`.
 - Guardrail: the readiness checker makes no KIS API calls and generates no order intents.
 
 Next gate:
@@ -849,7 +859,8 @@ Current state:
 - Point-in-Time Liquidity Filter smoke: a 23-date, 20-day smoke produced `4034` include rows and `59131` exclude rows, with `10236` rows evaluated on the full 20-day lookback.
 - Point-in-Time Momentum Signal Candidate smoke: 23-date, 20-day Momentum smoke produced `120` paper-only candidates across `3` candidate dates; this is not a Backtest result and does not generate order intents.
 - Signal forward-return smoke: `120` Signal Candidate rows were evaluated over `1,5` trading-day horizons, producing `240` diagnostic rows with `80` complete and `160` missing forward prices due to the short smoke window.
-- Quant readiness check: latest 20-day smoke gate report marks market-data window `pass`, Liquidity Filter, Signal Candidate, and forward-return as `pass_smoke`, Point-in-Time status coverage `hold`, Backtest engine `hold`, live trading controls `blocked`, and KIS demo account `blocked`.
+- Signal portfolio target smoke: `60` long-only paper target rows were generated across `3` rebalance dates at `5%` per selected BUY candidate, with no order intents.
+- Quant readiness check: latest 20-day smoke gate report marks market-data window `pass`, Liquidity Filter, Signal Candidate, forward-return, and portfolio targets as `pass_smoke`, Point-in-Time status coverage `hold`, Backtest engine `hold`, live trading controls `blocked`, and KIS demo account `blocked`.
 - KIS demo trading: dry-run order intent and local account preflight exist, but the local MCP `.env.kis` is missing `KIS_PAPER_STOCK`; buying-power checks, order status/cancel flow, kill switch, and explicit confirmation gate are not implemented.
 - Backtest readiness: `hold`.
 - Live trading readiness: `blocked`.
