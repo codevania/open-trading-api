@@ -5,3 +5,7 @@
 - Created canonical `omx_wiki/` knowledge base.
 - Captured Quant implementation status, KRX current Universe v0, and next-session handoff notes.
 
+## 2026-07-05
+
+- Captured GitHub-safe personal asset portfolio policy for debt stabilization, tax reserve handling, and DI core-satellite strategy.
+- Captured GitHub-safe DI next-session handoff so discretionary investing can continue from a fresh Codex session.

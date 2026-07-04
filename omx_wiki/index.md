@@ -8,3 +8,7 @@ This repository wiki captures durable project knowledge that should survive Code
 - [[quant-krx-current-universe-v0]] - KRX current snapshot Universe v0 inputs, filters, artifacts, and guardrails.
 - [[quant-next-session-handoff-2026-06-14]] - Exact handoff notes for a fresh session.
 
+## Discretionary Investing
+
+- [[personal-asset-portfolio-policy-2026-07-05]] - GitHub-safe personal asset allocation policy, debt repayment decision, tax reserve rules, and core-satellite DI strategy.
+- [[di-next-session-handoff-2026-07-05]] - GitHub-safe fresh-session handoff for continuing the discretionary investing discussion.
