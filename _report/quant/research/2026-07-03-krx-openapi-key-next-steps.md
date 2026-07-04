@@ -30,6 +30,7 @@
 - KIND status-event market enrichment result: [[_report/quant/research/2026-07-03-kind-status-events-market-enrich|_report/quant/research/2026-07-03-kind-status-events-market-enrich.md]]
 - Point-in-Time Momentum Signal Candidate generator: [[scripts/quant_point_in_time_signal_candidates.py|scripts/quant_point_in_time_signal_candidates.py]]
 - Point-in-Time Momentum Signal Candidate smoke result: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.md]]
+- Latest 20-day Point-in-Time Momentum Signal Candidate smoke result: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250207|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250207.md]]
 - Latest KRX OpenAPI market-data merge: [[_report/quant/research/2026-07-04-krx-openapi-market-data-merge-20250102-20250207|_report/quant/research/2026-07-04-krx-openapi-market-data-merge-20250102-20250207.md]]
 - Latest Point-in-Time Liquidity Filter 20-day smoke: [[_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250207|_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250207.md]]
 
@@ -141,7 +142,7 @@ Passing one KRX OpenAPI smoke test changes the status to:
 - Point-in-Time status replay scaffold: `validated_kind_snapshot_replayed_on_23_date_market_data`
 - Point-in-Time Universe smoke: `58961_include_4204_exclude_on_23_date_window`
 - Point-in-Time Liquidity Filter smoke: `4034_include_59131_exclude_on_23_date_20_day_window`
-- Point-in-Time Momentum Signal Candidate smoke: `480_candidates_12_dates_paper_only`
+- Point-in-Time Momentum Signal Candidate smoke: `120_candidates_3_dates_20_day_paper_only`
 - KIS demo trading readiness: `blocked_missing_kis_paper_stock`
 - Backtest readiness: still `hold`
 - Live trading readiness: still `blocked`

@@ -2,13 +2,13 @@
 
 ## Summary
 
-- Overall Quant implementation progress: `70-73%`
+- Overall Quant implementation progress: `71-74%`
 - Current Snapshot Universe v0 progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
-- Current phase: `point_in_time_liquidity_20d_smoke`
+- Current phase: `point_in_time_momentum_signal_20d_smoke`
 
-The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, the first 360 read-only KIS captured Universe rows, approved KRX OpenAPI core market-data services with raw collection, normalization, continuity auditing, date-scoped market-data joining, and a 23-date market-data merge. Local `Point-in-Time` status-event schema/config/replay scaffolding is implemented, KRX Data Marketplace status screens are mapped but unattended JSON probes returned `auth_required`, and a KIND public current snapshot has been normalized into `344` valid status-event rows, market-enriched for `310/344` rows, replayed against the 23-date market-data merge, converted into a `Point-in-Time Universe` smoke with `58961` include / `4204` exclude rows, filtered through a 20-day `Point-in-Time` Liquidity Filter smoke with `4034` include / `59131` exclude rows, and converted into `480` paper-only Momentum Signal Candidate rows on the earlier 5-day signal smoke. KIS demo trading has local preflight only and is blocked by missing `KIS_PAPER_STOCK` in the ignored MCP `.env.kis`. It is still not Backtest-ready because historical status coverage, production Momentum lookbacks, and Backtest/OOS/Bias Control are incomplete.
+The project is beyond planning and now has a usable current-snapshot Universe artifact, a saved-raw Liquidity Filter smoke artifact, a Universe-based OHLCV request queue, the first 360 read-only KIS captured Universe rows, approved KRX OpenAPI core market-data services with raw collection, normalization, continuity auditing, date-scoped market-data joining, and a 23-date market-data merge. Local `Point-in-Time` status-event schema/config/replay scaffolding is implemented, KRX Data Marketplace status screens are mapped but unattended JSON probes returned `auth_required`, and a KIND public current snapshot has been normalized into `344` valid status-event rows, market-enriched for `310/344` rows, replayed against the 23-date market-data merge, converted into a `Point-in-Time Universe` smoke with `58961` include / `4204` exclude rows, filtered through a 20-day `Point-in-Time` Liquidity Filter smoke with `4034` include / `59131` exclude rows, and converted into `120` paper-only 20-day Momentum Signal Candidate rows. KIS demo trading has local preflight only and is blocked by missing `KIS_PAPER_STOCK` in the ignored MCP `.env.kis`. It is still not Backtest-ready because historical status coverage, production Momentum lookbacks, and Backtest/OOS/Bias Control are incomplete.
 
 ## Completed
 
@@ -56,7 +56,7 @@ The project is beyond planning and now has a usable current-snapshot Universe ar
 - [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] applies a date-scoped Liquidity Filter to `Point-in-Time Universe` smoke rows.
 - The latest 23-date, 20-day `Point-in-Time` Liquidity Filter smoke produced `4034` include rows and `59131` exclude rows, with `10236` rows evaluated on the full 20-day lookback.
 - [[scripts/quant_point_in_time_signal_candidates.py|scripts/quant_point_in_time_signal_candidates.py]] generates paper-only Momentum Signal Candidate rows from Point-in-Time Liquidity Filter rows without calling KIS or generating order intents.
-- The latest 17-date, 5-day Momentum Signal Candidate smoke produced `480` rows across `12` candidate dates: `240` BUY candidates and `240` SELL candidates.
+- The latest 23-date, 20-day Momentum Signal Candidate smoke produced `120` rows across `3` candidate dates: `60` BUY candidates and `60` SELL candidates.
 - [[scripts/quant_kis_demo_order_preflight.py|scripts/quant_kis_demo_order_preflight.py]] validates constrained KIS demo order intent CSVs without calling KIS or placing orders.
 - [[scripts/quant_kis_demo_account_preflight.py|scripts/quant_kis_demo_account_preflight.py]] checks ignored local KIS demo account config without printing or storing credential/account values.
 - [[_report/quant/research/2026-07-03-kis-demo-trading-readiness|_report/quant/research/2026-07-03-kis-demo-trading-readiness.md]] records KIS demo readiness as `not_ready_but_preflight_started`: controlled first demo order `3-7 working days`, Quant-pipeline-driven demo trading `3-6 weeks`.

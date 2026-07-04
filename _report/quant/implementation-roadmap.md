@@ -5,8 +5,8 @@
 - Date: 2026-06-14
 - Last updated: 2026-07-04
 - Scope: Quant trading research and implementation workflow
-- Current phase: `point_in_time_liquidity_20d_smoke`
-- Overall implementation progress: `70-73%`
+- Current phase: `point_in_time_momentum_signal_20d_smoke`
+- Overall implementation progress: `71-74%`
 - Current Snapshot Universe progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
@@ -31,7 +31,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
 | 8. OOS / Walk-Forward | planned | 10% | OOS plan exists | Run only after Backtest pipeline works |
 | 9. Bias Control pass | hold | 20% | Bias checklists exist; blockers documented | Point-in-Time and OOS evidence |
-| 10. Paper Signal tracking | partial | 35-40% | Point-in-Time Liquidity rows now feed a paper-only Momentum `Signal Candidate` smoke | Keep candidates signal-only until production Point-in-Time coverage, Backtest, OOS, and Bias Control pass |
+| 10. Paper Signal tracking | partial | 42-47% | 20-day Point-in-Time Liquidity rows now feed a paper-only Momentum `Signal Candidate` smoke | Keep candidates signal-only until production Point-in-Time coverage, Backtest, OOS, and Bias Control pass |
 | 11. Execution / live trading | blocked | 5% | Demo-only order intent preflight exists; no KIS order executor exists | Only after Backtest/OOS/Bias Control pass |
 
 ## Completed Artifacts
@@ -651,10 +651,11 @@ Point-in-Time Momentum Signal Candidate smoke:
 
 - [[scripts/quant_point_in_time_signal_candidates.py|scripts/quant_point_in_time_signal_candidates.py]]
 - [[tests/test_quant_point_in_time_signal_candidates.py|tests/test_quant_point_in_time_signal_candidates.py]]
-- Latest 17-date, 5-day Momentum smoke output: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.md]]
-- Machine-readable rows: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.rows.csv|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.rows.csv]]
-- Result: `480` paper-only Signal Candidate rows across `12` candidate dates: `240` BUY candidates and `240` SELL candidates.
-- Limitation: this uses `5d ROC` because the current smoke window has only `17` trading dates; it is not the production Momentum lookback set and does not generate order intents.
+- Previous 17-date, 5-day Momentum smoke output: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.md]]
+- Latest 23-date, 20-day Momentum smoke output: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250207|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250207.md]]
+- Machine-readable rows: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250207.rows.csv|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250207.rows.csv]]
+- Result: `120` paper-only Signal Candidate rows across `3` candidate dates: `60` BUY candidates and `60` SELL candidates.
+- Limitation: this uses `20d ROC` over a bounded 23-date smoke range; it is not a Backtest result and does not generate order intents.
 
 Next gate:
 
@@ -771,9 +772,9 @@ Goal:
 Current implemented path:
 
 - [[scripts/quant_point_in_time_signal_candidates.py|scripts/quant_point_in_time_signal_candidates.py]] reads Point-in-Time Liquidity Filter rows and emits paper-only Momentum Signal Candidate rows.
-- Latest smoke output: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.md]]
-- Latest smoke rows: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.rows.csv|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.rows.csv]]
-- Latest smoke produced `480` Signal Candidate rows across `12` candidate dates with `top_n_per_state=20`.
+- Latest smoke output: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250207|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250207.md]]
+- Latest smoke rows: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250207.rows.csv|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250207.rows.csv]]
+- Latest smoke produced `120` Signal Candidate rows across `3` candidate dates with `lookback=20` and `top_n_per_state=20`.
 
 Guardrail:
 
@@ -829,7 +830,7 @@ Current state:
 - Point-in-Time status-event schema: one KIND current snapshot sample normalized and validated.
 - Point-in-Time status replay and Universe smoke: KIND current snapshot events replayed on a 23-date market-data smoke, then converted to `58961` include / `4204` exclude Universe rows; historical coverage still incomplete.
 - Point-in-Time Liquidity Filter smoke: a 23-date, 20-day smoke produced `4034` include rows and `59131` exclude rows, with `10236` rows evaluated on the full 20-day lookback.
-- Point-in-Time Momentum Signal Candidate smoke: 17-date, 5-day Momentum smoke produced `480` paper-only candidates across `12` candidate dates; this is not a Backtest result and does not generate order intents.
+- Point-in-Time Momentum Signal Candidate smoke: 23-date, 20-day Momentum smoke produced `120` paper-only candidates across `3` candidate dates; this is not a Backtest result and does not generate order intents.
 - KIS demo trading: dry-run order intent and local account preflight exist, but the local MCP `.env.kis` is missing `KIS_PAPER_STOCK`; buying-power checks, order status/cancel flow, kill switch, and explicit confirmation gate are not implemented.
 - Backtest readiness: `hold`.
 - Live trading readiness: `blocked`.
