@@ -99,12 +99,39 @@ def _kis_preflight_gate(path: Path | None) -> Gate:
     return Gate("kis_demo_account", "blocked", evidence, "fill KIS_PAPER_STOCK locally and rerun account preflight")
 
 
+def _backtest_contract_gate(path: Path | None) -> Gate | None:
+    if path is None:
+        return None
+    text = _read_text(path)
+    if not text:
+        return Gate(
+            "backtest_input_contract",
+            "hold",
+            "no local Backtest input contract report supplied",
+            "run quant_backtest_input_contract_validate.py on current smoke artifacts",
+        )
+    if "Contract status: `pass_smoke`" in text and "Order intent generated: `false`" in text:
+        return Gate(
+            "backtest_input_contract",
+            "pass_smoke",
+            "local contract report is pass_smoke and reports no order intents",
+            "keep contract validation aligned whenever smoke inputs change",
+        )
+    return Gate(
+        "backtest_input_contract",
+        "hold",
+        "local contract report is not pass_smoke",
+        "repair contract failures before wiring a Backtest engine",
+    )
+
+
 def evaluate_readiness(
     *,
     liquidity_rows: list[dict[str, str]],
     signal_rows: list[dict[str, str]],
     forward_return_rows: list[dict[str, str]] | None = None,
     portfolio_target_rows: list[dict[str, str]] | None = None,
+    backtest_contract_report: Path | None = None,
     kis_preflight_report: Path | None,
     min_market_dates: int = DEFAULT_MIN_MARKET_DATES,
     min_liquidity_lookback: int = DEFAULT_MIN_LIQUIDITY_LOOKBACK,
@@ -179,6 +206,10 @@ def evaluate_readiness(
             )
         )
 
+    contract_gate = _backtest_contract_gate(backtest_contract_report)
+    if contract_gate is not None:
+        gates.append(contract_gate)
+
     status_ready = status_coverage == "historical_complete"
     gates.append(
         Gate(
@@ -221,6 +252,7 @@ def evaluate_readiness(
         "portfolio_target_max_gross_weight": max(portfolio_gross_by_date.values(), default=0.0)
         if portfolio_target_rows is not None
         else None,
+        "backtest_contract_report_supplied": backtest_contract_report is not None,
         "backtest_readiness": "hold",
         "live_trading_readiness": "blocked",
     }
@@ -240,6 +272,7 @@ def _render_report(
     signals_input: Path,
     forward_returns_input: Path | None,
     portfolio_targets_input: Path | None,
+    backtest_contract_report: Path | None,
     kis_preflight_report: Path | None,
     status_coverage: str,
 ) -> str:
@@ -250,6 +283,7 @@ def _render_report(
         f"- Signal input: {_wikilink(signals_input)}",
         f"- Forward-return input: {_wikilink(forward_returns_input) if forward_returns_input else '`not_supplied`'}",
         f"- Portfolio-target input: {_wikilink(portfolio_targets_input) if portfolio_targets_input else '`not_supplied`'}",
+        f"- Backtest contract report: {_wikilink(backtest_contract_report) if backtest_contract_report else '`not_supplied`'}",
         f"- KIS preflight report: {_wikilink(kis_preflight_report) if kis_preflight_report else '`not_supplied`'}",
         f"- Status coverage mode: `{status_coverage}`",
         "- KIS API call: `false`",
@@ -318,6 +352,7 @@ def main() -> int:
     parser.add_argument("--signals-input", required=True, type=Path)
     parser.add_argument("--forward-returns-input", type=Path)
     parser.add_argument("--portfolio-targets-input", type=Path)
+    parser.add_argument("--backtest-contract-report", type=Path)
     parser.add_argument("--kis-preflight-report", type=Path)
     parser.add_argument("--status-coverage", default="current_snapshot_smoke")
     parser.add_argument("--min-market-dates", default=DEFAULT_MIN_MARKET_DATES, type=int)
@@ -335,6 +370,7 @@ def main() -> int:
             signal_rows=signal_rows,
             forward_return_rows=forward_return_rows,
             portfolio_target_rows=portfolio_target_rows,
+            backtest_contract_report=args.backtest_contract_report,
             kis_preflight_report=args.kis_preflight_report,
             min_market_dates=args.min_market_dates,
             min_liquidity_lookback=args.min_liquidity_lookback,
@@ -350,6 +386,7 @@ def main() -> int:
         signals_input=args.signals_input,
         forward_returns_input=args.forward_returns_input,
         portfolio_targets_input=args.portfolio_targets_input,
+        backtest_contract_report=args.backtest_contract_report,
         kis_preflight_report=args.kis_preflight_report,
         status_coverage=args.status_coverage,
     )

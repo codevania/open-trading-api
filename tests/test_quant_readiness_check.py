@@ -130,6 +130,46 @@ class QuantReadinessCheckTest(unittest.TestCase):
 
         self.assertEqual({gate.name: gate for gate in gates}["portfolio_targets_smoke"].status, "hold")
 
+    def test_backtest_contract_report_is_smoke_gate_only(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            report = Path(tmp) / "contract.md"
+            report.write_text(
+                "\n".join(
+                    [
+                        "- Contract status: `pass_smoke`",
+                        "- Order intent generated: `false`",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            gates, summary = evaluate_readiness(
+                liquidity_rows=_liquidity_rows(),
+                signal_rows=_signal_rows(),
+                portfolio_target_rows=_portfolio_target_rows(),
+                backtest_contract_report=report,
+                kis_preflight_report=None,
+                status_coverage="current_snapshot_smoke",
+            )
+        by_name = {gate.name: gate for gate in gates}
+
+        self.assertEqual(by_name["backtest_input_contract"].status, "pass_smoke")
+        self.assertTrue(summary["backtest_contract_report_supplied"])
+        self.assertEqual(summary["backtest_readiness"], "hold")
+        self.assertEqual(summary["live_trading_readiness"], "blocked")
+
+    def test_backtest_contract_report_hold_when_not_pass_smoke(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            report = Path(tmp) / "contract.md"
+            report.write_text("- Contract status: `hold`\n", encoding="utf-8")
+            gates, _summary = evaluate_readiness(
+                liquidity_rows=_liquidity_rows(),
+                signal_rows=_signal_rows(),
+                backtest_contract_report=report,
+                kis_preflight_report=None,
+            )
+
+        self.assertEqual({gate.name: gate for gate in gates}["backtest_input_contract"].status, "hold")
+
     def test_historical_status_gate_still_does_not_authorize_trading(self) -> None:
         gates, summary = evaluate_readiness(
             liquidity_rows=_liquidity_rows(),
@@ -173,11 +213,16 @@ class QuantReadinessCheckTest(unittest.TestCase):
             signals = root / "signals.rows.csv"
             forward_returns = root / "forward.rows.csv"
             portfolio_targets = root / "portfolio-targets.rows.csv"
+            contract_report = root / "contract.md"
             output = root / "readiness.md"
             _write_csv(liquidity, _liquidity_rows())
             _write_csv(signals, _signal_rows())
             _write_csv(forward_returns, _forward_rows())
             _write_csv(portfolio_targets, _portfolio_target_rows())
+            contract_report.write_text(
+                "- Contract status: `pass_smoke`\n- Order intent generated: `false`\n",
+                encoding="utf-8",
+            )
 
             with patch(
                 "sys.argv",
@@ -191,6 +236,8 @@ class QuantReadinessCheckTest(unittest.TestCase):
                     str(forward_returns),
                     "--portfolio-targets-input",
                     str(portfolio_targets),
+                    "--backtest-contract-report",
+                    str(contract_report),
                     "--report-output",
                     str(output),
                 ],
@@ -207,6 +254,7 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertIn("| `signal_candidates` | `pass_smoke` |", report)
         self.assertIn("| `forward_return_smoke` | `pass_smoke` |", report)
         self.assertIn("| `portfolio_targets_smoke` | `pass_smoke` |", report)
+        self.assertIn("| `backtest_input_contract` | `pass_smoke` |", report)
         self.assertIn("| Forward-return complete rows | 1 |", report)
         self.assertIn("| Portfolio target rows | 2 |", report)
         self.assertNotIn(b"\r\n", report_bytes)
