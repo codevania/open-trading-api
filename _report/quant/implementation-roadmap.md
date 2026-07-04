@@ -3,10 +3,10 @@
 ## Metadata
 
 - Date: 2026-06-14
-- Last updated: 2026-07-03
+- Last updated: 2026-07-04
 - Scope: Quant trading research and implementation workflow
-- Current phase: `point_in_time_liquidity_smoke`
-- Overall implementation progress: `67-70%`
+- Current phase: `point_in_time_momentum_signal_smoke`
+- Overall implementation progress: `68-71%`
 - Current Snapshot Universe progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
@@ -31,7 +31,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
 | 8. OOS / Walk-Forward | planned | 10% | OOS plan exists | Run only after Backtest pipeline works |
 | 9. Bias Control pass | hold | 20% | Bias checklists exist; blockers documented | Point-in-Time and OOS evidence |
-| 10. Paper Signal tracking | partial | 20-30% | Paper signal logs exist for smoke symbols | Use generated Universe input, not watchlist-only |
+| 10. Paper Signal tracking | partial | 35-40% | Point-in-Time Liquidity rows now feed a paper-only Momentum `Signal Candidate` smoke | Keep candidates signal-only until production Point-in-Time coverage, Backtest, OOS, and Bias Control pass |
 | 11. Execution / live trading | blocked | 5% | Demo-only order intent preflight exists; no KIS order executor exists | Only after Backtest/OOS/Bias Control pass |
 
 ## Completed Artifacts
@@ -620,9 +620,18 @@ Point-in-Time Liquidity Filter smoke:
 - Result: `11877` include rows and `34782` exclude rows after `avg_trading_value_5d_krw >= 1,000,000,000`.
 - Limitation: production `20 trading days` Liquidity Filter is still not available from this 17-date smoke window.
 
+Point-in-Time Momentum Signal Candidate smoke:
+
+- [[scripts/quant_point_in_time_signal_candidates.py|scripts/quant_point_in_time_signal_candidates.py]]
+- [[tests/test_quant_point_in_time_signal_candidates.py|tests/test_quant_point_in_time_signal_candidates.py]]
+- Latest 17-date, 5-day Momentum smoke output: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.md]]
+- Machine-readable rows: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.rows.csv|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.rows.csv]]
+- Result: `480` paper-only Signal Candidate rows across `12` candidate dates: `240` BUY candidates and `240` SELL candidates.
+- Limitation: this uses `5d ROC` because the current smoke window has only `17` trading dates; it is not the production Momentum lookback set and does not generate order intents.
+
 Next gate:
 
-- Extend status coverage and Liquidity Filter coverage before treating `pit_universe_status=include` as a Backtest input.
+- Extend status coverage and Liquidity Filter coverage before treating `pit_universe_status=include` or generated Signal Candidate rows as a Backtest input.
 
 KIS demo trading preflight artifacts:
 
@@ -708,6 +717,7 @@ Current implemented path:
 - [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.md]] records the latest expanded paper/smoke run.
 - Latest expanded run evaluates `361` saved raw rows against the current Universe: `180` pass, `181` fail, `2029` `liquidity_raw_missing`, and `485` `not_evaluated_preexisting_exclude`.
 - Saved raw coverage currently evaluates 361 unique rows. See [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.rows.csv|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.rows.csv]] for the authoritative pass/fail row set.
+- [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] also applies a 5-day date-scoped Liquidity Filter to the 17-date Point-in-Time smoke rows.
 
 Target rule:
 
@@ -731,9 +741,17 @@ Goal:
 - Stop using manual watchlist-only smoke symbols as the main Quant input.
 - Use `current snapshot Universe v0` as the input list for paper/smoke validation.
 
+Current implemented path:
+
+- [[scripts/quant_point_in_time_signal_candidates.py|scripts/quant_point_in_time_signal_candidates.py]] reads Point-in-Time Liquidity Filter rows and emits paper-only Momentum Signal Candidate rows.
+- Latest smoke output: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.md]]
+- Latest smoke rows: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.rows.csv|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.rows.csv]]
+- Latest smoke produced `480` Signal Candidate rows across `12` candidate dates with `top_n_per_state=20`.
+
 Guardrail:
 
 - Paper/smoke signals are not trade instructions.
+- These candidates are not order intents and should not be used for trading execution.
 
 ### Step D. Build Point-in-Time Path
 
@@ -784,6 +802,7 @@ Current state:
 - Point-in-Time status-event schema: one KIND current snapshot sample normalized and validated.
 - Point-in-Time status replay and Universe smoke: KIND current snapshot events replayed on a 17-date market-data smoke, then converted to `43553` include / `3106` exclude Universe rows; historical coverage still incomplete.
 - Point-in-Time Liquidity Filter smoke: a 17-date, 5-day smoke produced `11877` include rows and `34782` exclude rows; this is not the production 20-day rule.
+- Point-in-Time Momentum Signal Candidate smoke: 17-date, 5-day Momentum smoke produced `480` paper-only candidates across `12` candidate dates; this is not a Backtest result and does not generate order intents.
 - KIS demo trading: dry-run order intent and local account preflight exist, but the local MCP `.env.kis` is missing `KIS_PAPER_STOCK`; buying-power checks, order status/cancel flow, kill switch, and explicit confirmation gate are not implemented.
 - Backtest readiness: `hold`.
 - Live trading readiness: `blocked`.
