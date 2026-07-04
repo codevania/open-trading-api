@@ -154,6 +154,110 @@ class QuantKrxOpenapiMarketDataJoinTest(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("stock rows without issue rows", result.stderr)
 
+    def test_can_drop_issue_only_non_trading_dates(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            normalized_dir = root / "normalized"
+            output = root / "market_data.csv"
+            report = root / "market_data.md"
+            _write_csv(
+                normalized_dir / "stock_daily.csv",
+                ("date", "code", "name", "market", "source_service", "source_path"),
+                [
+                    {
+                        "date": "2025-01-31",
+                        "code": "005930",
+                        "name": "Samsung Electronics",
+                        "market": "KOSPI",
+                        "source_service": "kospi_stock_daily",
+                        "source_path": "stock.raw.json",
+                    }
+                ],
+            )
+            _write_csv(
+                normalized_dir / "issue_base.csv",
+                (
+                    "date",
+                    "standard_code",
+                    "code",
+                    "name",
+                    "short_name",
+                    "english_name",
+                    "listing_date",
+                    "market",
+                    "security_group",
+                    "section",
+                    "stock_certificate_type",
+                    "par_value_krw",
+                    "listed_shares",
+                    "source_service",
+                    "source_path",
+                ),
+                [
+                    {
+                        "date": "2025-01-27",
+                        "standard_code": "KR7000020008",
+                        "code": "000020",
+                        "name": "Issue only holiday row",
+                        "short_name": "Issue only",
+                        "english_name": "Issue Only",
+                        "listing_date": "1975-06-11",
+                        "market": "KOSPI",
+                        "security_group": "Stock",
+                        "section": "",
+                        "stock_certificate_type": "Common",
+                        "par_value_krw": "1000",
+                        "listed_shares": "10",
+                        "source_service": "kospi_issue_base",
+                        "source_path": "issue_holiday.raw.json",
+                    },
+                    {
+                        "date": "2025-01-31",
+                        "standard_code": "KR7005930003",
+                        "code": "005930",
+                        "name": "Samsung Electronics Common",
+                        "short_name": "Samsung Electronics",
+                        "english_name": "Samsung Electronics Co., Ltd.",
+                        "listing_date": "1975-06-11",
+                        "market": "KOSPI",
+                        "security_group": "Stock",
+                        "section": "",
+                        "stock_certificate_type": "Common",
+                        "par_value_krw": "100",
+                        "listed_shares": "10",
+                        "source_service": "kospi_issue_base",
+                        "source_path": "issue.raw.json",
+                    },
+                ],
+            )
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(JOIN),
+                    "--normalized-dir",
+                    str(normalized_dir),
+                    "--output",
+                    str(output),
+                    "--report-output",
+                    str(report),
+                    "--drop-issue-only-dates",
+                ],
+                cwd=REPO_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            with output.open("r", encoding="utf-8-sig", newline="") as handle:
+                joined_rows = list(csv.DictReader(handle))
+            self.assertEqual(len(joined_rows), 1)
+            self.assertEqual(joined_rows[0]["code"], "005930")
+            report_text = report.read_text(encoding="utf-8")
+            self.assertIn("| Dropped issue-only dates | 1 |", report_text)
+            self.assertIn("| Dropped issue-only rows | 1 |", report_text)
+
 
 if __name__ == "__main__":
     unittest.main()

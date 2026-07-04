@@ -5,8 +5,8 @@
 - Date: 2026-06-14
 - Last updated: 2026-07-04
 - Scope: Quant trading research and implementation workflow
-- Current phase: `point_in_time_momentum_signal_smoke`
-- Overall implementation progress: `68-71%`
+- Current phase: `point_in_time_liquidity_20d_smoke`
+- Overall implementation progress: `70-73%`
 - Current Snapshot Universe progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
@@ -25,9 +25,9 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 1. Quant learning baseline | in-progress | 35% | [[_report/quant/learning-roadmap|_report/quant/learning-roadmap.md]], week 01 study log | Continue weekly study logs tied to outputs |
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
-| 4. Point-in-Time Universe | in-progress | 58-62% | KRX OpenAPI market-data path works; KIND status replay produced `344` valid event rows, `310/344` market labels resolved, and a 17-date `Point-in-Time Universe` smoke produced `43553` include / `3106` exclude rows | Extend status coverage by date/source and keep Universe eligibility smoke aligned |
-| 5. Market data pipeline | in-progress | 80-85% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 17-date historical collection smoke, continuity audit, date-scoped market-data join, and status replay smoke exist | Extend another bounded historical window and keep status replay coverage aligned |
-| 6. Liquidity Filter | in-progress | 45-50% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] evaluates 361 current Universe saved-raw rows; [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] produced a 17-date, 5-day Point-in-Time smoke | Extend date coverage to production 20-day window and keep status coverage aligned |
+| 4. Point-in-Time Universe | in-progress | 62-66% | KRX OpenAPI market-data path works; KIND status replay produced `344` valid event rows, `310/344` market labels resolved, and a 23-date `Point-in-Time Universe` smoke produced `58961` include / `4204` exclude rows | Extend status coverage by date/source and keep Universe eligibility smoke aligned |
+| 5. Market data pipeline | in-progress | 85-88% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 23-date historical market-data merge, continuity audit, date-scoped market-data join, and status replay smoke exist | Extend another bounded historical window and keep status replay coverage aligned |
+| 6. Liquidity Filter | in-progress | 58-63% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] evaluates 361 current Universe saved-raw rows; [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] produced a 23-date, 20-day Point-in-Time smoke | Keep 20-day rule aligned while status coverage expands |
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
 | 8. OOS / Walk-Forward | planned | 10% | OOS plan exists | Run only after Backtest pipeline works |
 | 9. Bias Control pass | hold | 20% | Bias checklists exist; blockers documented | Point-in-Time and OOS evidence |
@@ -365,7 +365,7 @@ Known limitation:
 
 Hard blockers before Backtest interpretation:
 
-- `Point-in-Time Universe` full historical path is not built; only a 17-date KIND current-snapshot replay smoke exists.
+- `Point-in-Time Universe` full historical path is not built; only a 23-date KIND current-snapshot replay smoke exists.
 - Historical managed issue / trading suspension / market alert / delisting status is not reproducible across the full target Rebalance date range; only one KIND current snapshot has been normalized and replayed.
 - Full-Universe `Liquidity Filter` coverage is incomplete because only the first 360 generated Universe OHLCV rows have been captured.
 
@@ -503,6 +503,26 @@ Artifacts:
 - [[_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250110|_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250110.md]]
 - [[_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250113-20250124|_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250113-20250124.md]]
 - [[_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250124|_report/quant/research/2026-07-03-krx-openapi-market-data-join-20250102-20250124.md]]
+- [[_report/quant/research/2026-07-04-krx-openapi-history-plan-20250127-20250207|_report/quant/research/2026-07-04-krx-openapi-history-plan-20250127-20250207.md]]
+- [[_report/quant/research/2026-07-04-krx-openapi-history-collection-result-20250127-20250207|_report/quant/research/2026-07-04-krx-openapi-history-collection-result-20250127-20250207.md]]
+- [[_report/quant/research/2026-07-04-krx-openapi-history-normalize-result-20250127-20250207|_report/quant/research/2026-07-04-krx-openapi-history-normalize-result-20250127-20250207.md]]
+- [[_report/quant/research/2026-07-04-krx-openapi-continuity-audit-20250127-20250207|_report/quant/research/2026-07-04-krx-openapi-continuity-audit-20250127-20250207.md]]
+- [[_report/quant/research/2026-07-04-krx-openapi-continuity-audit-20250127-20250207.rows.csv|_report/quant/research/2026-07-04-krx-openapi-continuity-audit-20250127-20250207.rows.csv]]
+- [[_report/quant/research/2026-07-04-krx-openapi-market-data-join-20250127-20250207|_report/quant/research/2026-07-04-krx-openapi-market-data-join-20250127-20250207.md]]
+- [[scripts/quant_krx_openapi_market_data_merge.py|scripts/quant_krx_openapi_market_data_merge.py]]
+- [[tests/test_quant_krx_openapi_market_data_merge.py|tests/test_quant_krx_openapi_market_data_merge.py]]
+- [[_report/quant/research/2026-07-04-krx-openapi-market-data-merge-20250102-20250207|_report/quant/research/2026-07-04-krx-openapi-market-data-merge-20250102-20250207.md]]
+
+Latest merged market-data smoke over `2025-01-02` to `2025-02-07`:
+
+| metric | value |
+| --- | ---: |
+| merged rows | 63165 |
+| date count | 23 |
+| KOSPI rows | 22106 |
+| KOSDAQ rows | 41059 |
+
+The `2025-01-27` through `2025-01-30` KRX rows had issue-base data but no stock-daily/index rows and were dropped from joined market data as non-trading-date evidence.
 
 Remaining limitation:
 
@@ -525,8 +545,8 @@ KIND fallback result:
 - KIND public status downloads were usable for `6/7` probed sources without login.
 - KIND current snapshots normalized into `344` valid status-event rows: managed issue `104`, trading halt `126`, market alert `52`, and delisting `62`.
 - Market enrichment from the 17-date market-data join resolved `310/344` KIND event rows and left `34` as `UNKNOWN`.
-- The validated KIND events replayed against the 17-date KRX OpenAPI market-data join and marked `280/46659` rows as `exclude_by_status_event`.
-- The replayed market-data rows were converted into a 17-date `Point-in-Time Universe` smoke with `43553` include rows and `3106` exclude rows.
+- The validated KIND events replayed against the 23-date KRX OpenAPI market-data merge and marked `382/63165` rows as `exclude_by_status_event`.
+- The replayed market-data rows were converted into a 23-date `Point-in-Time Universe` smoke with `58961` include rows and `4204` exclude rows.
 
 Artifact:
 
@@ -536,10 +556,14 @@ Artifact:
 - [[_report/quant/research/2026-07-03-kind-status-events-extract|_report/quant/research/2026-07-03-kind-status-events-extract.md]]
 - [[_report/quant/research/2026-07-03-kind-status-events-validation|_report/quant/research/2026-07-03-kind-status-events-validation.md]]
 - [[_report/quant/research/2026-07-03-kind-status-replay-on-openapi-20250102-20250124|_report/quant/research/2026-07-03-kind-status-replay-on-openapi-20250102-20250124.md]]
+- [[_report/quant/research/2026-07-04-kind-status-replay-on-openapi-20250102-20250207|_report/quant/research/2026-07-04-kind-status-replay-on-openapi-20250102-20250207.md]]
+- [[_report/quant/research/2026-07-04-kind-status-replay-on-openapi-20250102-20250207.rows.csv|_report/quant/research/2026-07-04-kind-status-replay-on-openapi-20250102-20250207.rows.csv]]
 - [[scripts/quant_point_in_time_universe_build.py|scripts/quant_point_in_time_universe_build.py]]
 - [[tests/test_quant_point_in_time_universe_build.py|tests/test_quant_point_in_time_universe_build.py]]
 - [[_report/quant/research/2026-07-03-kind-status-point-in-time-universe-smoke-20250102-20250124|_report/quant/research/2026-07-03-kind-status-point-in-time-universe-smoke-20250102-20250124.md]]
 - [[_report/quant/research/2026-07-03-kind-status-point-in-time-universe-smoke-20250102-20250124.rows.csv|_report/quant/research/2026-07-03-kind-status-point-in-time-universe-smoke-20250102-20250124.rows.csv]]
+- [[_report/quant/research/2026-07-04-kind-status-point-in-time-universe-smoke-20250102-20250207|_report/quant/research/2026-07-04-kind-status-point-in-time-universe-smoke-20250102-20250207.md]]
+- [[_report/quant/research/2026-07-04-kind-status-point-in-time-universe-smoke-20250102-20250207.rows.csv|_report/quant/research/2026-07-04-kind-status-point-in-time-universe-smoke-20250102-20250207.rows.csv]]
 
 Next gate:
 
@@ -579,7 +603,7 @@ Next gate:
 
 ## Point-in-Time Status Replay Scaffold
 
-Status: `validated_kind_snapshot_replayed_on_17_date_market_data`
+Status: `validated_kind_snapshot_replayed_on_23_date_market_data`
 
 Implemented local replay:
 
@@ -593,32 +617,35 @@ Artifact:
 - [[_report/quant/research/2026-07-03-point-in-time-status-replay-scaffold|_report/quant/research/2026-07-03-point-in-time-status-replay-scaffold.md]]
 - [[_report/quant/research/2026-07-03-kind-status-replay-on-openapi-20250102-20250124|_report/quant/research/2026-07-03-kind-status-replay-on-openapi-20250102-20250124.md]]
 - [[_report/quant/research/2026-07-03-kind-status-replay-on-openapi-20250102-20250124.rows.csv|_report/quant/research/2026-07-03-kind-status-replay-on-openapi-20250102-20250124.rows.csv]]
+- [[_report/quant/research/2026-07-04-kind-status-replay-on-openapi-20250102-20250207|_report/quant/research/2026-07-04-kind-status-replay-on-openapi-20250102-20250207.md]]
+- [[_report/quant/research/2026-07-04-kind-status-replay-on-openapi-20250102-20250207.rows.csv|_report/quant/research/2026-07-04-kind-status-replay-on-openapi-20250102-20250207.rows.csv]]
 
 Latest smoke result:
 
-- Market data input rows: `46659`
+- Market data input rows: `63165`
 - Status event rows: `344`
 - Codes with events: `265`
-- Include rows by event state: `46379`
-- Exclude rows by event state: `280`
+- Include rows by event state: `62783`
+- Exclude rows by event state: `382`
 
 Universe eligibility smoke:
 
 - [[scripts/quant_point_in_time_universe_build.py|scripts/quant_point_in_time_universe_build.py]] consumes status-replayed market-data rows and emits local `pit_universe_*` eligibility fields.
-- Latest 17-date smoke output: [[_report/quant/research/2026-07-03-kind-status-point-in-time-universe-smoke-20250102-20250124|_report/quant/research/2026-07-03-kind-status-point-in-time-universe-smoke-20250102-20250124.md]]
-- Input rows: `46659`
-- Include rows: `43553`
-- Exclude rows: `3106`
-- Exclusion reason counts: `stock_certificate_not_common=1972`, `security_group_not_plain_equity=854`, `status_event:managed_issue_active=280`
+- Latest 23-date smoke output: [[_report/quant/research/2026-07-04-kind-status-point-in-time-universe-smoke-20250102-20250207|_report/quant/research/2026-07-04-kind-status-point-in-time-universe-smoke-20250102-20250207.md]]
+- Input rows: `63165`
+- Include rows: `58961`
+- Exclude rows: `4204`
+- Exclusion reason counts: `stock_certificate_not_common=2668`, `security_group_not_plain_equity=1154`, `status_event:managed_issue_active=382`
 
 Point-in-Time Liquidity Filter smoke:
 
 - [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]]
 - [[tests/test_quant_point_in_time_liquidity_filter.py|tests/test_quant_point_in_time_liquidity_filter.py]]
-- Latest 17-date, 5-day smoke output: [[_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20250102-20250124|_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20250102-20250124.md]]
-- Machine-readable rows: [[_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20250102-20250124.rows.csv|_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20250102-20250124.rows.csv]]
-- Result: `11877` include rows and `34782` exclude rows after `avg_trading_value_5d_krw >= 1,000,000,000`.
-- Limitation: production `20 trading days` Liquidity Filter is still not available from this 17-date smoke window.
+- Previous 17-date, 5-day smoke output: [[_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20250102-20250124|_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20250102-20250124.md]]
+- Latest 23-date, 20-day smoke output: [[_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250207|_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250207.md]]
+- Machine-readable rows: [[_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250207.rows.csv|_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250207.rows.csv]]
+- Result: `4034` include rows and `59131` exclude rows after `avg_trading_value_20d_krw >= 1,000,000,000`; `10236` rows had full 20-day lookback evaluation.
+- Limitation: historical status coverage is still incomplete, so this is not a Backtest input even though the Liquidity Filter lookback is now production-length for the bounded smoke range.
 
 Point-in-Time Momentum Signal Candidate smoke:
 
@@ -717,7 +744,7 @@ Current implemented path:
 - [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.md]] records the latest expanded paper/smoke run.
 - Latest expanded run evaluates `361` saved raw rows against the current Universe: `180` pass, `181` fail, `2029` `liquidity_raw_missing`, and `485` `not_evaluated_preexisting_exclude`.
 - Saved raw coverage currently evaluates 361 unique rows. See [[_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.rows.csv|_report/quant/research/2026-07-01-krx-current-universe-v0-liquidity-smoke-expanded-thirtysixth10.rows.csv]] for the authoritative pass/fail row set.
-- [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] also applies a 5-day date-scoped Liquidity Filter to the 17-date Point-in-Time smoke rows.
+- [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] also applies a 20-day date-scoped Liquidity Filter to the 23-date Point-in-Time smoke rows.
 
 Target rule:
 
@@ -725,8 +752,8 @@ Target rule:
 
 Remaining input needed:
 
-- Daily OHLCV / trading value for all generated candidate Universe rows, or for additional documented current Universe subsets.
-- At minimum, enough data to calculate recent `20 trading days` average trading value.
+- More daily OHLCV / trading value windows for stability checks beyond the first 23-date smoke range.
+- Expanded status-event coverage for the same dates before using the 20-day Liquidity Filter output as Backtest input.
 
 Output already added:
 
@@ -796,12 +823,12 @@ Current state:
 - Research and policy foundation: strong enough to proceed.
 - Current Snapshot Universe: usable for paper/smoke validation.
 - KRX OpenAPI core raw collection and normalization: usable for parser development and historical market-data collection.
-- KRX OpenAPI date-scoped market-data join: usable as a 17-date smoke input for status replay development.
+- KRX OpenAPI date-scoped market-data join/merge: usable as a 23-date smoke input for status replay development.
 - KRX Data Marketplace status-source probe: official status screen `bld` identifiers found, but unattended JSON access is `auth_required`.
-- KIND public status fallback: `344` valid current-snapshot status-event rows replayed against the 17-date KRX OpenAPI market-data join, marking `280/46659` rows as `exclude_by_status_event`; `310/344` event market labels resolved from the same market-data join.
+- KIND public status fallback: `344` valid current-snapshot status-event rows replayed against the 23-date KRX OpenAPI market-data merge, marking `382/63165` rows as `exclude_by_status_event`; `310/344` event market labels resolved from the original 17-date join.
 - Point-in-Time status-event schema: one KIND current snapshot sample normalized and validated.
-- Point-in-Time status replay and Universe smoke: KIND current snapshot events replayed on a 17-date market-data smoke, then converted to `43553` include / `3106` exclude Universe rows; historical coverage still incomplete.
-- Point-in-Time Liquidity Filter smoke: a 17-date, 5-day smoke produced `11877` include rows and `34782` exclude rows; this is not the production 20-day rule.
+- Point-in-Time status replay and Universe smoke: KIND current snapshot events replayed on a 23-date market-data smoke, then converted to `58961` include / `4204` exclude Universe rows; historical coverage still incomplete.
+- Point-in-Time Liquidity Filter smoke: a 23-date, 20-day smoke produced `4034` include rows and `59131` exclude rows, with `10236` rows evaluated on the full 20-day lookback.
 - Point-in-Time Momentum Signal Candidate smoke: 17-date, 5-day Momentum smoke produced `480` paper-only candidates across `12` candidate dates; this is not a Backtest result and does not generate order intents.
 - KIS demo trading: dry-run order intent and local account preflight exist, but the local MCP `.env.kis` is missing `KIS_PAPER_STOCK`; buying-power checks, order status/cancel flow, kill switch, and explicit confirmation gate are not implemented.
 - Backtest readiness: `hold`.

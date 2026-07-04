@@ -296,7 +296,7 @@ def render_report(
             "",
             "## Limitations",
             "",
-            "- This is still a smoke artifact because the current input covers only a bounded 17-date window.",
+            f"- This is still a smoke artifact because the current input covers only a bounded `{len(dates)}`-date window.",
             "- The first `lookback - 1` rows per code are excluded as `liquidity_history_insufficient` by design.",
             "- Historical status coverage is still incomplete, so this output is not a Backtest input yet.",
             "- Keep `Backtest readiness` at `hold` until full `Point-in-Time` status and Liquidity Filter coverage are available.",

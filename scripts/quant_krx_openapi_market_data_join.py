@@ -102,9 +102,35 @@ def _join_row(stock: dict[str, str], issue: dict[str, str]) -> dict[str, str]:
     }
 
 
-def join_market_data(normalized_dir: Path) -> tuple[list[dict[str, str]], dict[str, Any]]:
+def _date_set(rows: list[dict[str, str]]) -> set[str]:
+    return {row.get("date", "") for row in rows if row.get("date")}
+
+
+def _drop_issue_only_dates(
+    stock_rows: list[dict[str, str]],
+    issue_rows: list[dict[str, str]],
+) -> tuple[list[dict[str, str]], dict[str, Any]]:
+    stock_dates = _date_set(stock_rows)
+    issue_dates = _date_set(issue_rows)
+    issue_only_dates = sorted(issue_dates - stock_dates)
+    if not issue_only_dates:
+        return issue_rows, {"dropped_issue_only_dates": [], "dropped_issue_only_rows": 0}
+
+    dropped = [row for row in issue_rows if row.get("date", "") in issue_only_dates]
+    kept = [row for row in issue_rows if row.get("date", "") not in issue_only_dates]
+    return kept, {"dropped_issue_only_dates": issue_only_dates, "dropped_issue_only_rows": len(dropped)}
+
+
+def join_market_data(
+    normalized_dir: Path,
+    drop_issue_only_dates: bool = False,
+) -> tuple[list[dict[str, str]], dict[str, Any]]:
     stock_rows = _read_csv(normalized_dir / "stock_daily.csv")
     issue_rows = _read_csv(normalized_dir / "issue_base.csv")
+    dropped_summary: dict[str, Any] = {"dropped_issue_only_dates": [], "dropped_issue_only_rows": 0}
+    if drop_issue_only_dates:
+        issue_rows, dropped_summary = _drop_issue_only_dates(stock_rows, issue_rows)
+
     stock_by_key = _index_by_date_code(stock_rows, "stock_daily")
     issue_by_key = _index_by_date_code(issue_rows, "issue_base")
 
@@ -133,6 +159,7 @@ def join_market_data(normalized_dir: Path) -> tuple[list[dict[str, str]], dict[s
         "by_market": dict(sorted(by_market.items())),
         "missing_issue_for_stock": len(missing_issue),
         "missing_stock_for_issue": len(missing_stock),
+        **dropped_summary,
     }
     return rows, summary
 
@@ -168,6 +195,8 @@ def _render_markdown(summary: dict[str, Any], normalized_dir: Path, output: Path
         f"| Date count | {summary['date_count']} |",
         f"| Missing issue rows for stock rows | {summary['missing_issue_for_stock']} |",
         f"| Missing stock rows for issue rows | {summary['missing_stock_for_issue']} |",
+        f"| Dropped issue-only dates | {len(summary.get('dropped_issue_only_dates', []))} |",
+        f"| Dropped issue-only rows | {summary.get('dropped_issue_only_rows', 0)} |",
         "",
         "## Market Counts",
         "",
@@ -187,6 +216,7 @@ def _render_markdown(summary: dict[str, Any], normalized_dir: Path, output: Path
             "## Guardrails",
             "",
             "- This join validates table alignment for stock daily and issue base rows only.",
+            "- If issue-only dates were dropped, those dates had issue-base rows but no stock-daily rows and are treated as non-trading-date evidence, not joined market data.",
             "- It does not replay historical managed issue, trading halt, market alert, or delisting status.",
             "- Backtest readiness remains `hold` until `Point-in-Time` status replay and broader historical coverage are validated.",
         ]
@@ -199,10 +229,15 @@ def main() -> int:
     parser.add_argument("--normalized-dir", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--report-output", type=Path)
+    parser.add_argument(
+        "--drop-issue-only-dates",
+        action="store_true",
+        help="Drop dates that have issue-base rows but no stock-daily rows before strict date/code joining.",
+    )
     args = parser.parse_args()
 
     try:
-        rows, summary = join_market_data(args.normalized_dir)
+        rows, summary = join_market_data(args.normalized_dir, args.drop_issue_only_dates)
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc
 

@@ -13,6 +13,7 @@
 - Historical missing-raw planner: [[scripts/quant_krx_openapi_history_plan.py|scripts/quant_krx_openapi_history_plan.py]]
 - Continuity auditor: [[scripts/quant_krx_openapi_continuity_audit.py|scripts/quant_krx_openapi_continuity_audit.py]]
 - Market-data join: [[scripts/quant_krx_openapi_market_data_join.py|scripts/quant_krx_openapi_market_data_join.py]]
+- Market-data merge: [[scripts/quant_krx_openapi_market_data_merge.py|scripts/quant_krx_openapi_market_data_merge.py]]
 - Point-in-Time status source gap: [[_report/quant/research/2026-07-03-point-in-time-status-source-gap|_report/quant/research/2026-07-03-point-in-time-status-source-gap.md]]
 - Point-in-Time status-event schema: [[_report/quant/research/2026-07-03-point-in-time-status-event-schema|_report/quant/research/2026-07-03-point-in-time-status-event-schema.md]]
 - Point-in-Time status-event validator: [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]]
@@ -29,6 +30,8 @@
 - KIND status-event market enrichment result: [[_report/quant/research/2026-07-03-kind-status-events-market-enrich|_report/quant/research/2026-07-03-kind-status-events-market-enrich.md]]
 - Point-in-Time Momentum Signal Candidate generator: [[scripts/quant_point_in_time_signal_candidates.py|scripts/quant_point_in_time_signal_candidates.py]]
 - Point-in-Time Momentum Signal Candidate smoke result: [[_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124|_report/quant/research/2026-07-04-kind-status-point-in-time-momentum-signal-candidates-smoke-20250102-20250124.md]]
+- Latest KRX OpenAPI market-data merge: [[_report/quant/research/2026-07-04-krx-openapi-market-data-merge-20250102-20250207|_report/quant/research/2026-07-04-krx-openapi-market-data-merge-20250102-20250207.md]]
+- Latest Point-in-Time Liquidity Filter 20-day smoke: [[_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250207|_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250207.md]]
 
 ## Why This Matters
 
@@ -130,14 +133,14 @@ Passing one KRX OpenAPI smoke test changes the status to:
 - KRX OpenAPI normalizer: `usable_for_parser_development` on saved `2025-01-02` core raws
 - KRX OpenAPI historical window: `usable_for_multi_date_parser_development` for `2025-01-02` through `2025-01-24`
 - KRX OpenAPI continuity audit: `passed_for_17_date_window`
-- KRX OpenAPI market-data join: `usable_for_date_scoped_market_data_input`
+- KRX OpenAPI market-data join/merge: `usable_for_23_date_market_data_input`
 - KRX Data Marketplace unattended status JSON access: `auth_required`
 - KIND public status fallback: `344_valid_events_replayed_on_17_date_smoke`
 - KIND market enrichment: `310_of_344_events_resolved_from_17_date_market_data_join`
 - Point-in-Time status-event validator: `validated_kind_current_snapshot`
-- Point-in-Time status replay scaffold: `validated_kind_snapshot_replayed_on_17_date_market_data`
-- Point-in-Time Universe smoke: `43553_include_3106_exclude_on_17_date_window`
-- Point-in-Time Liquidity Filter smoke: `11877_include_34782_exclude_on_17_date_5_day_window`
+- Point-in-Time status replay scaffold: `validated_kind_snapshot_replayed_on_23_date_market_data`
+- Point-in-Time Universe smoke: `58961_include_4204_exclude_on_23_date_window`
+- Point-in-Time Liquidity Filter smoke: `4034_include_59131_exclude_on_23_date_20_day_window`
 - Point-in-Time Momentum Signal Candidate smoke: `480_candidates_12_dates_paper_only`
 - KIS demo trading readiness: `blocked_missing_kis_paper_stock`
 - Backtest readiness: still `hold`
@@ -154,8 +157,9 @@ After core KRX OpenAPI coverage and the KIND current snapshot smoke:
 3. Resolve remaining `34` `UNKNOWN` KIND market rows only where official source evidence or a deterministic market-data join can support it.
 4. Validate the expanded event rows with [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]] and replay them with [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]].
 5. Rebuild the `Point-in-Time Universe` smoke with [[scripts/quant_point_in_time_universe_build.py|scripts/quant_point_in_time_universe_build.py]] after each expanded status-event set.
-6. Rebuild the `Point-in-Time` Liquidity Filter smoke with [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] and keep the production rule blocked until a 20-day window exists.
+6. Rebuild the `Point-in-Time` Liquidity Filter smoke with [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] after each expanded status/date set; the 20-day lookback now works on the 23-date smoke but is still not Backtest-ready.
 7. Rebuild the Momentum Signal Candidate smoke with [[scripts/quant_point_in_time_signal_candidates.py|scripts/quant_point_in_time_signal_candidates.py]] only after the Point-in-Time Universe and Liquidity rows are refreshed; keep it paper-only.
 8. Keep KIS demo trading at dry-run/local preflight only until `KIS_PAPER_STOCK` is filled, auth/account read-only preflight passes, buying-power/sellable-quantity checks exist, and status/cancel flow, kill switch, and explicit confirmation gate exist. See [[_report/quant/research/2026-07-03-kis-demo-trading-readiness|_report/quant/research/2026-07-03-kis-demo-trading-readiness.md]].
 9. Validate status replay coverage before connecting normalized market-data rows to `Universe` or `Backtest` code.
-10. Keep `Backtest` readiness at `hold` until historical status replay is solved.
+10. Extend KRX OpenAPI market-data coverage further before production Momentum lookbacks.
+11. Keep `Backtest` readiness at `hold` until historical status replay is solved.
