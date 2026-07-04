@@ -7,6 +7,7 @@
 - KIS API order execution in this document: `false`
 - Demo trading readiness: `not_ready_but_preflight_started`
 - Live trading readiness: `blocked`
+- Latest local account preflight: `blocked_missing_kis_paper_stock`
 
 The repo has read-only KIS/KRX market-data collection, status replay, and `Point-in-Time Universe` smoke plumbing. It does not yet have a safe order executor.
 
@@ -22,6 +23,9 @@ The repo has read-only KIS/KRX market-data collection, status replay, and `Point
 
 - Demo-only order intent preflight: [[scripts/quant_kis_demo_order_preflight.py|scripts/quant_kis_demo_order_preflight.py]]
 - Tests: [[tests/test_quant_kis_demo_order_preflight.py|tests/test_quant_kis_demo_order_preflight.py]]
+- Demo account config preflight without printing secrets: [[scripts/quant_kis_demo_account_preflight.py|scripts/quant_kis_demo_account_preflight.py]]
+- Tests: [[tests/test_quant_kis_demo_account_preflight.py|tests/test_quant_kis_demo_account_preflight.py]]
+- Latest local result: [[_report/quant/research/2026-07-04-kis-demo-account-preflight|_report/quant/research/2026-07-04-kis-demo-account-preflight.md]]
 
 The preflight accepts only conservative demo order intents by default:
 
@@ -33,6 +37,15 @@ The preflight accepts only conservative demo order intents by default:
 - `order_side=buy`
 
 Sell intents are intentionally invalid until a separate demo position check exists.
+
+The local MCP `.env.kis` preflight found:
+
+- demo app key: present
+- demo app secret: present
+- demo stock account: blocked because `KIS_PAPER_STOCK` is empty
+- demo REST URL: warning only; KIS template default may apply
+
+No credential or account values are stored in the report.
 
 ## Readiness Estimate
 
@@ -47,6 +60,10 @@ Fastest safe path to first KIS demo order:
 | Logging, raw response storage, and regression tests | 1-2 days |
 
 Practical estimate: `3-7 working days` for a controlled first demo order after credentials and account config are verified locally.
+
+Current user-side action item:
+
+- Fill `KIS_PAPER_STOCK` in the ignored local file `MCP/Kis Trading MCP/.env.kis`.
 
 Quant-system demo trading from generated signals is longer:
 

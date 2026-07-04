@@ -5,8 +5,8 @@
 - Date: 2026-06-14
 - Last updated: 2026-07-03
 - Scope: Quant trading research and implementation workflow
-- Current phase: `point_in_time_universe_smoke`
-- Overall implementation progress: `66-69%`
+- Current phase: `point_in_time_liquidity_smoke`
+- Overall implementation progress: `67-70%`
 - Current Snapshot Universe progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
@@ -27,7 +27,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
 | 4. Point-in-Time Universe | in-progress | 58-62% | KRX OpenAPI market-data path works; KIND status replay produced `344` valid event rows, `310/344` market labels resolved, and a 17-date `Point-in-Time Universe` smoke produced `43553` include / `3106` exclude rows | Extend status coverage by date/source and keep Universe eligibility smoke aligned |
 | 5. Market data pipeline | in-progress | 80-85% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 17-date historical collection smoke, continuity audit, date-scoped market-data join, and status replay smoke exist | Extend another bounded historical window and keep status replay coverage aligned |
-| 6. Liquidity Filter | in-progress | 40-45% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]]; 361 unique saved raw rows evaluated against current Universe | Fill OHLCV coverage beyond the first 361 evaluated rows |
+| 6. Liquidity Filter | in-progress | 45-50% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] evaluates 361 current Universe saved-raw rows; [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] produced a 17-date, 5-day Point-in-Time smoke | Extend date coverage to production 20-day window and keep status coverage aligned |
 | 7. Backtest engine connection | not-started | 10% | Strategy `.kis.yaml` configs exist | Universe + OHLCV + cost model connected |
 | 8. OOS / Walk-Forward | planned | 10% | OOS plan exists | Run only after Backtest pipeline works |
 | 9. Bias Control pass | hold | 20% | Bias checklists exist; blockers documented | Point-in-Time and OOS evidence |
@@ -611,6 +611,15 @@ Universe eligibility smoke:
 - Exclude rows: `3106`
 - Exclusion reason counts: `stock_certificate_not_common=1972`, `security_group_not_plain_equity=854`, `status_event:managed_issue_active=280`
 
+Point-in-Time Liquidity Filter smoke:
+
+- [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]]
+- [[tests/test_quant_point_in_time_liquidity_filter.py|tests/test_quant_point_in_time_liquidity_filter.py]]
+- Latest 17-date, 5-day smoke output: [[_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20250102-20250124|_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20250102-20250124.md]]
+- Machine-readable rows: [[_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20250102-20250124.rows.csv|_report/quant/research/2026-07-04-kind-status-point-in-time-liquidity-smoke-20250102-20250124.rows.csv]]
+- Result: `11877` include rows and `34782` exclude rows after `avg_trading_value_5d_krw >= 1,000,000,000`.
+- Limitation: production `20 trading days` Liquidity Filter is still not available from this 17-date smoke window.
+
 Next gate:
 
 - Extend status coverage and Liquidity Filter coverage before treating `pit_universe_status=include` as a Backtest input.
@@ -619,7 +628,10 @@ KIS demo trading preflight artifacts:
 
 - [[scripts/quant_kis_demo_order_preflight.py|scripts/quant_kis_demo_order_preflight.py]]
 - [[tests/test_quant_kis_demo_order_preflight.py|tests/test_quant_kis_demo_order_preflight.py]]
+- [[scripts/quant_kis_demo_account_preflight.py|scripts/quant_kis_demo_account_preflight.py]]
+- [[tests/test_quant_kis_demo_account_preflight.py|tests/test_quant_kis_demo_account_preflight.py]]
 - [[_report/quant/research/2026-07-03-kis-demo-trading-readiness|_report/quant/research/2026-07-03-kis-demo-trading-readiness.md]]
+- [[_report/quant/research/2026-07-04-kis-demo-account-preflight|_report/quant/research/2026-07-04-kis-demo-account-preflight.md]]
 
 KIS demo readiness judgment:
 
@@ -627,6 +639,7 @@ KIS demo readiness judgment:
 - Controlled first KIS demo order estimate: `3-7 working days` after local demo auth/account verification.
 - Quant-pipeline-driven demo trading estimate: `3-6 weeks`.
 - The current preflight is dry-run validation only; it does not call KIS and cannot place orders.
+- Local demo account preflight found `KIS_PAPER_STOCK` empty in the ignored MCP `.env.kis`; no credential or account values were stored in the report.
 
 Soft blockers:
 
@@ -770,6 +783,7 @@ Current state:
 - KIND public status fallback: `344` valid current-snapshot status-event rows replayed against the 17-date KRX OpenAPI market-data join, marking `280/46659` rows as `exclude_by_status_event`; `310/344` event market labels resolved from the same market-data join.
 - Point-in-Time status-event schema: one KIND current snapshot sample normalized and validated.
 - Point-in-Time status replay and Universe smoke: KIND current snapshot events replayed on a 17-date market-data smoke, then converted to `43553` include / `3106` exclude Universe rows; historical coverage still incomplete.
-- KIS demo trading: dry-run order intent preflight exists, but demo auth/account preflight, buying-power checks, order status/cancel flow, kill switch, and explicit confirmation gate are not implemented.
+- Point-in-Time Liquidity Filter smoke: a 17-date, 5-day smoke produced `11877` include rows and `34782` exclude rows; this is not the production 20-day rule.
+- KIS demo trading: dry-run order intent and local account preflight exist, but the local MCP `.env.kis` is missing `KIS_PAPER_STOCK`; buying-power checks, order status/cancel flow, kill switch, and explicit confirmation gate are not implemented.
 - Backtest readiness: `hold`.
 - Live trading readiness: `blocked`.

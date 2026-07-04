@@ -135,7 +135,8 @@ Passing one KRX OpenAPI smoke test changes the status to:
 - Point-in-Time status-event validator: `validated_kind_current_snapshot`
 - Point-in-Time status replay scaffold: `validated_kind_snapshot_replayed_on_17_date_market_data`
 - Point-in-Time Universe smoke: `43553_include_3106_exclude_on_17_date_window`
-- KIS demo trading readiness: `not_ready_but_preflight_started`
+- Point-in-Time Liquidity Filter smoke: `11877_include_34782_exclude_on_17_date_5_day_window`
+- KIS demo trading readiness: `blocked_missing_kis_paper_stock`
 - Backtest readiness: still `hold`
 - Live trading readiness: still `blocked`
 
@@ -150,6 +151,7 @@ After core KRX OpenAPI coverage and the KIND current snapshot smoke:
 3. Resolve remaining `34` `UNKNOWN` KIND market rows only where official source evidence or a deterministic market-data join can support it.
 4. Validate the expanded event rows with [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]] and replay them with [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]].
 5. Rebuild the `Point-in-Time Universe` smoke with [[scripts/quant_point_in_time_universe_build.py|scripts/quant_point_in_time_universe_build.py]] after each expanded status-event set.
-6. Keep KIS demo trading at dry-run preflight only until auth/account read-only preflight, buying-power/sellable-quantity checks, status/cancel flow, kill switch, and explicit confirmation gate exist. See [[_report/quant/research/2026-07-03-kis-demo-trading-readiness|_report/quant/research/2026-07-03-kis-demo-trading-readiness.md]].
-7. Validate status replay coverage before connecting normalized market-data rows to `Universe` or `Backtest` code.
-8. Keep `Backtest` readiness at `hold` until historical status replay is solved.
+6. Rebuild the `Point-in-Time` Liquidity Filter smoke with [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] and keep the production rule blocked until a 20-day window exists.
+7. Keep KIS demo trading at dry-run/local preflight only until `KIS_PAPER_STOCK` is filled, auth/account read-only preflight passes, buying-power/sellable-quantity checks exist, and status/cancel flow, kill switch, and explicit confirmation gate exist. See [[_report/quant/research/2026-07-03-kis-demo-trading-readiness|_report/quant/research/2026-07-03-kis-demo-trading-readiness.md]].
+8. Validate status replay coverage before connecting normalized market-data rows to `Universe` or `Backtest` code.
+9. Keep `Backtest` readiness at `hold` until historical status replay is solved.
