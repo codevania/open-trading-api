@@ -189,6 +189,7 @@ _report/holdings*.csv
 _report/di/watchlist.yaml
 _report/di/portfolio.yaml
 _report/di/holdings*.csv
+_report/private/**
 _report/raw/**
 !_report/raw/
 !_report/raw/.gitkeep
