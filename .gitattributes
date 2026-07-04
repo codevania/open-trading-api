@@ -1,0 +1,37 @@
+# Keep text normalization deterministic across Windows and Unix tools.
+* text=auto
+
+# Repo-authored text files are reviewed and generated with LF.
+.gitattributes text eol=lf
+*.md text eol=lf
+*.markdown text eol=lf
+*.txt text eol=lf
+*.csv text eol=lf
+*.json text eol=lf
+*.jsonl text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.py text eol=lf
+*.toml text eol=lf
+*.lock text eol=lf
+*.gitignore text eol=lf
+*.dockerignore text eol=lf
+*.env.example text eol=lf
+
+# Windows command entrypoints.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary assets.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.xlsx binary
+*.xls binary
+*.docx binary
+*.pptx binary
