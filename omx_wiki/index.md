@@ -12,3 +12,4 @@ This repository wiki captures durable project knowledge that should survive Code
 
 - [[personal-asset-portfolio-policy-2026-07-05]] - GitHub-safe personal asset allocation policy, debt repayment decision, tax reserve rules, and core-satellite DI strategy.
 - [[di-next-session-handoff-2026-07-05]] - GitHub-safe fresh-session handoff for continuing the discretionary investing discussion.
+- [[di-research-setup-2026-07-05]] - Data-source setup, environment files, routines, and templates for DI company and ETF research.

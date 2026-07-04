@@ -9,3 +9,4 @@
 
 - Captured GitHub-safe personal asset portfolio policy for debt stabilization, tax reserve handling, and DI core-satellite strategy.
 - Captured GitHub-safe DI next-session handoff so discretionary investing can continue from a fresh Codex session.
+- Added DI research setup notes, OpenDART/SEC environment examples, and reusable company/ETF research routines.
