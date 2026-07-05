@@ -6,6 +6,7 @@ Use the GitHub-safe candidate manifest before adding any ETF to the active DI wa
 
 ```bash
 python scripts/di_etf_compare.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --output _report/di/research/ETF-COMPARISON/etf-checklist.md
+python scripts/di_candidate_evidence_check.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --output _report/di/research/ETF-COMPARISON/evidence-gate.md
 ```
 
 Rules:
@@ -13,6 +14,7 @@ Rules:
 - Treat `_report/di/candidates/core-satellite-candidates.yaml` as a research queue, not a buy list.
 - Fill expense, AUM, spread, NAV gap, distribution, tax, and account-wrapper fields before a buy decision.
 - Keep Korea-listed ETF candidates at `needs_issuer_and_tax_verification` until issuer and brokerage/tax evidence is recorded.
+- Treat `evidence-gate.md` as the blocker list before promoting candidates into active monitoring.
 - Move an ETF into `_report/di/watchlist.yaml` only after `etf-checklist.md` and `decision.md` exist.
 
 ## 목적

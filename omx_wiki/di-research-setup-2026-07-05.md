@@ -3,7 +3,9 @@
 ## Implemented Candidate Comparison
 
 - `scripts/di_etf_compare.py`: renders Core ETF, Korea-listed ETF verification queue, and US tech satellite candidates from `_report/di/candidates/core-satellite-candidates.yaml`
+- `scripts/di_candidate_evidence_check.py`: checks whether each candidate has enough issuer, fee, tax/account, thesis, and decision evidence before watchlist promotion
 - Suggested output: `_report/di/research/ETF-COMPARISON/etf-checklist.md`
+- Evidence gate output: `_report/di/research/ETF-COMPARISON/evidence-gate.md`
 - The candidate manifest is a research queue, not a buy list. Move candidates into `_report/di/watchlist.yaml` only after checklist and decision notes exist.
 
 ## Remaining DI Research Setup Work
