@@ -11,3 +11,4 @@
 - Captured GitHub-safe DI next-session handoff so discretionary investing can continue from a fresh Codex session.
 - Added DI research setup notes, OpenDART/SEC environment examples, and reusable company/ETF research routines.
 - Added OpenDART and SEC EDGAR raw collection scripts for repeatable DI company research.
+- Added a DI core ETF and US tech satellite candidate manifest plus a Markdown comparison generator.

@@ -1,5 +1,20 @@
 # DI ETF Research Routine
 
+## Candidate Manifest Workflow
+
+Use the GitHub-safe candidate manifest before adding any ETF to the active DI watchlist.
+
+```bash
+python scripts/di_etf_compare.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --output _report/di/research/ETF-COMPARISON/etf-checklist.md
+```
+
+Rules:
+
+- Treat `_report/di/candidates/core-satellite-candidates.yaml` as a research queue, not a buy list.
+- Fill expense, AUM, spread, NAV gap, distribution, tax, and account-wrapper fields before a buy decision.
+- Keep Korea-listed ETF candidates at `needs_issuer_and_tax_verification` until issuer and brokerage/tax evidence is recorded.
+- Move an ETF into `_report/di/watchlist.yaml` only after `etf-checklist.md` and `decision.md` exist.
+
 ## 목적
 
 장기 Core ETF와 보조 ETF를 고를 때 같은 기준으로 비교하기 위한 루틴이다.

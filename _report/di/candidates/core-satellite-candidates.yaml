@@ -1,0 +1,215 @@
+version: 1
+created_on: "2026-07-05"
+purpose: >
+  GitHub-safe candidate manifest for discretionary investing research.
+  This is a research queue, not a buy list.
+
+portfolio_frame:
+  name: debt-stabilized core-satellite
+  horizon: 5-10 years
+  priority_order:
+    - keep tax and short-term cash outside risk assets
+    - reduce interest-rate and cash-flow risk first
+    - build broad-market ETF core before single-stock satellites
+    - add satellite equities only after a written thesis and invalidation rule
+  guardrails:
+    core_first: true
+    exclude_from_long_term_core:
+      - leveraged ETF
+      - inverse ETF
+      - single-theme concentrated ETF
+      - product with unclear fee or tax treatment
+    satellite_total_limit_policy: keep small until the process is proven
+    single_name_limit_policy: start small; do not average down without a fresh thesis
+
+core_etfs:
+  - symbol: VOO
+    name: Vanguard S&P 500 ETF
+    listing: US
+    market: NYSEARCA
+    role: US large-cap core
+    benchmark: S&P 500 Index
+    currency: USD
+    currency_hedge: unhedged
+    distribution_policy: distributes
+    tax_account_fit: US direct account; Korean tax treatment must be checked
+    expense_ratio: null
+    status: candidate
+    source_url: https://investor.vanguard.com/investment-products/etfs/profile/voo
+    notes: Broad S&P 500 exposure; compare with domestic-listed S&P 500 ETFs.
+  - symbol: VTI
+    name: Vanguard Total Stock Market ETF
+    listing: US
+    market: NYSEARCA
+    role: total US equity core
+    benchmark: CRSP US Total Market Index
+    currency: USD
+    currency_hedge: unhedged
+    distribution_policy: distributes
+    tax_account_fit: US direct account; Korean tax treatment must be checked
+    expense_ratio: null
+    status: candidate
+    source_url: https://investor.vanguard.com/investment-products/etfs/profile/vti
+    notes: Broader than S&P 500; includes mid/small-cap US exposure.
+  - symbol: VT
+    name: Vanguard Total World Stock ETF
+    listing: US
+    market: NYSEARCA
+    role: global equity core
+    benchmark: FTSE Global All Cap Index
+    currency: USD
+    currency_hedge: unhedged
+    distribution_policy: distributes
+    tax_account_fit: US direct account; Korean tax treatment must be checked
+    expense_ratio: null
+    status: candidate
+    source_url: https://investor.vanguard.com/investment-products/etfs/profile/vt
+    notes: One-ticket global equity exposure; compare US concentration and currency exposure.
+korea_listed_etfs_to_verify:
+  - symbol: "360750"
+    name: TIGER US S&P500
+    listing: Korea
+    market: KRX
+    role: domestic-listed S&P 500 candidate
+    benchmark: S&P 500 Index
+    currency: KRW product with overseas USD assets
+    currency_hedge: verify
+    distribution_policy: verify
+    tax_account_fit: check ISA/pension/IRP eligibility and taxable-account treatment
+    expense_ratio: null
+    status: needs_issuer_and_tax_verification
+    source_url: null
+    notes: Verify exact Korean fund name, total expense, tracking method, distribution, and tax wrapper fit.
+  - symbol: "360200"
+    name: ACE US S&P500
+    listing: Korea
+    market: KRX
+    role: domestic-listed S&P 500 candidate
+    benchmark: S&P 500 Index
+    currency: KRW product with overseas USD assets
+    currency_hedge: verify
+    distribution_policy: verify
+    tax_account_fit: check ISA/pension/IRP eligibility and taxable-account treatment
+    expense_ratio: null
+    status: needs_issuer_and_tax_verification
+    source_url: null
+    notes: Verify exact Korean fund name, total expense, tracking method, distribution, and tax wrapper fit.
+  - symbol: "379800"
+    name: KODEX US S&P500TR
+    listing: Korea
+    market: KRX
+    role: domestic-listed S&P 500 total-return candidate
+    benchmark: S&P 500 total-return style index
+    currency: KRW product with overseas USD assets
+    currency_hedge: verify
+    distribution_policy: likely reinvestment/TR style; verify
+    tax_account_fit: check ISA/pension/IRP eligibility and taxable-account treatment
+    expense_ratio: null
+    status: needs_issuer_and_tax_verification
+    source_url: null
+    notes: Verify TR structure, taxable events, tracking difference, and whether it fits the account wrapper.
+
+satellite_etfs_to_verify:
+  - symbol: QQQ
+    name: Invesco QQQ Trust
+    listing: US
+    market: NASDAQ
+    role: growth satellite ETF, not broad core
+    benchmark: Nasdaq-100 Index
+    currency: USD
+    currency_hedge: unhedged
+    distribution_policy: distributes
+    tax_account_fit: US direct account; Korean tax treatment must be checked
+    expense_ratio: null
+    status: satellite_candidate
+    source_url: https://www.invesco.com/qqq-etf/en/about.html
+    notes: Technology/growth-heavy; keep outside the long-term core bucket unless risk budget allows.
+
+satellite_equities:
+  primary_queue:
+    - symbol: MSFT
+      name: Microsoft
+      market: NASDAQ
+      role: cloud, enterprise software, AI platform
+      filings_to_read: [10-K, 10-Q, 8-K, XBRL]
+      status: candidate
+      notes: Start with revenue growth, operating margin, cloud backlog, capex, and AI monetization risk.
+    - symbol: GOOGL
+      name: Alphabet
+      market: NASDAQ
+      role: search, ads, cloud, AI
+      filings_to_read: [10-K, 10-Q, 8-K, XBRL]
+      status: candidate
+      notes: Watch search share, AI disruption, cloud margin, regulatory risk, and capital returns.
+    - symbol: AMZN
+      name: Amazon
+      market: NASDAQ
+      role: ecommerce, AWS, advertising, logistics
+      filings_to_read: [10-K, 10-Q, 8-K, XBRL]
+      status: candidate
+      notes: Separate retail margin, AWS growth, advertising, capex, and free cash flow.
+    - symbol: META
+      name: Meta Platforms
+      market: NASDAQ
+      role: social platforms, ads, AI infrastructure
+      filings_to_read: [10-K, 10-Q, 8-K, XBRL]
+      status: candidate
+      notes: Track ad growth, engagement, Reality Labs losses, AI capex, and regulatory risk.
+    - symbol: NVDA
+      name: NVIDIA
+      market: NASDAQ
+      role: AI accelerators and platform ecosystem
+      filings_to_read: [10-K, 10-Q, 8-K, XBRL]
+      status: candidate
+      notes: High-quality but valuation/cycle sensitive; require explicit downside scenario before buying.
+    - symbol: AVGO
+      name: Broadcom
+      market: NASDAQ
+      role: networking semiconductors and infrastructure software
+      filings_to_read: [10-K, 10-Q, 8-K, XBRL]
+      status: candidate
+      notes: Track AI networking, VMware integration, debt, margins, and capital allocation.
+  secondary_queue:
+    - symbol: AAPL
+      name: Apple
+      market: NASDAQ
+      role: devices, services, ecosystem
+      filings_to_read: [10-K, 10-Q, 8-K, XBRL]
+      status: secondary_candidate
+      notes: Mature compounder; watch device cycle, China exposure, services growth, and buybacks.
+    - symbol: TSM
+      name: Taiwan Semiconductor Manufacturing
+      market: NYSE
+      role: advanced foundry
+      filings_to_read: [20-F, 6-K, annual report]
+      status: secondary_candidate
+      notes: Foreign issuer/ADR; include geopolitical, FX, and customer concentration risk.
+    - symbol: ASML
+      name: ASML Holding
+      market: NASDAQ
+      role: lithography equipment
+      filings_to_read: [20-F, 6-K, annual report]
+      status: secondary_candidate
+      notes: Foreign issuer/ADR; check order cycle, export controls, and EU tax/dividend handling.
+    - symbol: AMD
+      name: Advanced Micro Devices
+      market: NASDAQ
+      role: CPUs, GPUs, AI accelerators
+      filings_to_read: [10-K, 10-Q, 8-K, XBRL]
+      status: secondary_candidate
+      notes: More competitive/cyclical thesis; compare data-center GPU traction versus NVIDIA.
+
+manual_checks_before_buy:
+  etf:
+    - exact index and replication method
+    - total expense and other implicit costs
+    - AUM, average trading value, spread, and NAV premium/discount
+    - distribution policy and dividend tax
+    - domestic-listed versus US-direct tax and reporting
+    - ISA, pension, and IRP eligibility
+  stock:
+    - latest annual and quarterly filings
+    - 5-year revenue, operating income, free cash flow, debt, dilution, and buyback trend
+    - valuation range and reverse DCF assumptions
+    - bear case and invalidation rule
+    - maximum position size and add/trim rule

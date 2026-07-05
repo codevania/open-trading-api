@@ -1,5 +1,17 @@
 # DI Research Setup - 2026-07-05
 
+## Implemented Candidate Comparison
+
+- `scripts/di_etf_compare.py`: renders Core ETF, Korea-listed ETF verification queue, and US tech satellite candidates from `_report/di/candidates/core-satellite-candidates.yaml`
+- Suggested output: `_report/di/research/ETF-COMPARISON/etf-checklist.md`
+- The candidate manifest is a research queue, not a buy list. Move candidates into `_report/di/watchlist.yaml` only after checklist and decision notes exist.
+
+## Remaining DI Research Setup Work
+
+1. Store issuer factsheet, NAV, fee, distribution, and tax-account evidence for each ETF candidate.
+2. Automate a Korea-listed ETF versus US-direct ETF tax/account comparison table.
+3. Promote only approved candidates into `_report/di/watchlist.yaml`.
+
 ## 목적
 
 재량투자에서 KIS MCP, KRX, DART, SEC EDGAR, ETF 원천자료를 역할별로 나눠 쓰기 위한 설정 메모다.
