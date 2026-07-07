@@ -14,3 +14,4 @@
 - Added a DI core ETF and US tech satellite candidate manifest plus a Markdown comparison generator.
 - Added a DI candidate evidence gate to block watchlist promotion until required research evidence exists.
 - Added a DI ETF source-page collector so official issuer evidence can be preserved before candidate fields are filled.
+- Tightened the DI candidate evidence gate so empty stock templates and unchecked decision notes cannot pass watchlist promotion.

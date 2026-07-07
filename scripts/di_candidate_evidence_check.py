@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -21,6 +22,19 @@ DEFAULT_CANDIDATE_FILE = Path("_report/di/candidates/core-satellite-candidates.y
 DEFAULT_RESEARCH_ROOT = Path("_report/di/research")
 
 UNCHECKED_TOKENS = ("todo", "verify", "check", "must be checked", "needs_", "null")
+MIN_RESEARCH_LINES = {
+    "thesis.md": 6,
+    "decision.md": 4,
+}
+PLACEHOLDER_LINE_PATTERNS = (
+    re.compile(r"^-+$"),
+    re.compile(r"^\d+\.$"),
+    re.compile(r"^[-*]\s*$"),
+    re.compile(r"^[-*]\s+\[\s\]\s+\S+"),
+    re.compile(r"^[-*]\s+[^:]+:\s*$"),
+    re.compile(r"^\|\s*[-:|\s]+\|$"),
+    re.compile(r"^\|\s*(?:[^|]*\|\s*)+$"),
+)
 
 
 @dataclass(frozen=True)
@@ -71,8 +85,35 @@ def _missing_fields(row: dict[str, Any], fields: tuple[str, ...]) -> list[str]:
     return [field for field in fields if not _is_filled(row.get(field))]
 
 
-def _research_file_missing(symbol: str, research_root: Path, filename: str) -> bool:
-    return not (research_root / symbol.upper() / filename).exists()
+def _is_checked_decision_line(line: str) -> bool:
+    return bool(re.match(r"^[-*]\s+\[[xX]\]\s+\S+", line))
+
+
+def _meaningful_lines(text: str) -> list[str]:
+    lines: list[str] = []
+    for raw_line in text.splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if any(pattern.match(line) for pattern in PLACEHOLDER_LINE_PATTERNS):
+            if not _is_checked_decision_line(line):
+                continue
+        if line.lower() in UNCHECKED_TOKENS:
+            continue
+        lines.append(line)
+    return lines
+
+
+def _research_file_status(symbol: str, research_root: Path, filename: str) -> str | None:
+    path = research_root / symbol.upper() / filename
+    if not path.exists():
+        return f"research {filename}"
+    lines = _meaningful_lines(path.read_text(encoding="utf-8"))
+    if len(lines) < MIN_RESEARCH_LINES[filename]:
+        return f"research {filename} content"
+    if filename == "decision.md" and not any(_is_checked_decision_line(line) for line in lines):
+        return "research decision.md checked decision"
+    return None
 
 
 def _etf_gate(section: str, row: dict[str, Any]) -> CandidateGate:
@@ -99,10 +140,10 @@ def _etf_gate(section: str, row: dict[str, Any]) -> CandidateGate:
 def _stock_gate(section: str, row: dict[str, Any], research_root: Path) -> CandidateGate:
     missing = _missing_fields(row, ("filings_to_read",))
     symbol = _text(row.get("symbol")).upper()
-    if _research_file_missing(symbol, research_root, "thesis.md"):
-        missing.append("research thesis.md")
-    if _research_file_missing(symbol, research_root, "decision.md"):
-        missing.append("research decision.md")
+    for filename in ("thesis.md", "decision.md"):
+        file_status = _research_file_status(symbol, research_root, filename)
+        if file_status:
+            missing.append(file_status)
     status = "ready_for_watchlist_review" if not missing else "hold"
     return CandidateGate(
         section=section,

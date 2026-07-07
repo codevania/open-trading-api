@@ -54,6 +54,8 @@
 7. 회사 IR 페이지의 shareholder letter, earnings release, presentation을 보조 자료로 사용한다.
 8. `_report/di/templates/research/`의 템플릿을 채운다.
 
+주의: `thesis.md`와 `decision.md`는 파일 존재만으로 완료로 보지 않는다. 핵심 논리/반대 논리/리스크/무효화 조건이 실제 문장으로 채워져야 하며, `decision.md`는 결정 항목 중 하나가 체크되어 있어야 한다.
+
 ## SEC EDGAR 최소 조회 URL
 
 SEC API는 인증키가 필요 없지만 `SEC_USER_AGENT`를 요청 헤더에 넣는다.
@@ -110,3 +112,4 @@ python scripts/di_sec_edgar_collect.py --ticker MSFT
 - 밸류에이션은 확정값이 아니라 범위와 가정으로 적혀 있다.
 - 매수/보류/제외 판단과 무효화 조건이 있다.
 - 원천 출처와 확인일을 남긴다.
+- `di_candidate_evidence_check.py`가 빈 템플릿 또는 체크되지 않은 `decision.md`를 계속 `hold`로 판정한다.
