@@ -31,6 +31,9 @@ Use the 62-date KRX OpenAPI market-data merge, merged KIND status replay, local 
 
 Already implemented in the latest local work:
 
+- Source coverage manifest template:
+  - [[_report/quant/data/templates/point_in_time_status_source_coverage_manifest.template.csv|_report/quant/data/templates/point_in_time_status_source_coverage_manifest.template.csv]]
+
 - Latest 62-date baseline artifacts:
   - [[_report/quant/research/2026-07-08-krx-openapi-history-plan-20250324-20250404|_report/quant/research/2026-07-08-krx-openapi-history-plan-20250324-20250404.md]]
   - [[_report/quant/research/2026-07-08-krx-openapi-history-plan-20250324-20250404.requests.json|_report/quant/research/2026-07-08-krx-openapi-history-plan-20250324-20250404.requests.json]]

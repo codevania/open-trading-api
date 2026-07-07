@@ -8,6 +8,7 @@ required_before_backtest:
   - "At least one official raw sample is saved under _report/raw/**."
   - "The raw sample is normalized into point-in-time status-event rows."
   - "The normalized rows pass scripts/quant_point_in_time_status_events_validate.py."
+  - "A source coverage manifest covers the selected market-data window for every required status type."
   - "Historical coverage is sufficient for the selected Backtest scope."
 
 sources:

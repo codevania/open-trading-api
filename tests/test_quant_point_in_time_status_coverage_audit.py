@@ -218,6 +218,37 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
         self.assertTrue(all(row["coverage_status"] == "hold" for row in rows))
         self.assertIn("source_coverage_manifest_not_supplied", rows[0]["coverage_notes"])
 
+    def test_historical_complete_holds_when_source_manifest_misses_market_window(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            market = root / "market.csv"
+            events = root / "events.csv"
+            replayed = root / "replayed.csv"
+            manifest = root / "source_manifest.csv"
+            _write_csv(market, _market_rows())
+            _write_csv(
+                events,
+                [
+                    _event(event_date="2025-01-01", status_value="designated"),
+                    _event(event_date="2025-01-03", status_value="released"),
+                ],
+            )
+            _write_csv(replayed, _replayed_rows())
+            _write_csv(manifest, [_source_manifest_row(coverage_start="2025-01-03", coverage_end="2025-01-03")])
+
+            rows, summary = audit_status_coverage(
+                market_data_path=market,
+                events_path=events,
+                replayed_market_data_path=replayed,
+                source_coverage_manifest_path=manifest,
+                coverage_mode="historical_complete",
+                required_status_types=("managed_issue",),
+            )
+
+        self.assertEqual(summary["coverage_status"], "hold")
+        self.assertEqual(summary["source_coverage_manifest_missing_status_types"], ["managed_issue"])
+        self.assertIn("source_coverage_manifest_missing_status_types", rows[0]["coverage_notes"])
+
     def test_historical_complete_holds_when_any_lifecycle_type_lacks_release(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

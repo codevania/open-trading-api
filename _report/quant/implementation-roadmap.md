@@ -829,6 +829,7 @@ Status coverage audit:
 
 - [[scripts/quant_point_in_time_status_coverage_audit.py|scripts/quant_point_in_time_status_coverage_audit.py]]
 - [[tests/test_quant_point_in_time_status_coverage_audit.py|tests/test_quant_point_in_time_status_coverage_audit.py]]
+- [[_report/quant/data/templates/point_in_time_status_source_coverage_manifest.template.csv|_report/quant/data/templates/point_in_time_status_source_coverage_manifest.template.csv]]
 - [[_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221|_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221.md]]
 - [[_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221.rows.csv|_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221.rows.csv]]
 - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307.md]]
