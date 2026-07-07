@@ -71,4 +71,5 @@
 - `scripts/di_sec_edgar_collect.py`: SEC ticker-CIK, submissions, companyfacts, 주요 companyconcept raw 저장
 - `scripts/di_sec_filing_summary.py`: SEC raw JSON에서 최근 10-K/10-Q/8-K와 XBRL concept snapshot을 Markdown으로 요약
 - `scripts/di_sec_filing_document_collect.py`: SEC raw submissions에서 최신 filing 원문 HTML을 `_report/raw/`에 저장하고 source map Markdown 생성
+- `scripts/di_sec_filing_section_extract.py`: 저장된 SEC filing HTML에서 Business, Risk Factors, MD&A 섹션을 ignored raw text로 추출하고 source map Markdown 생성
 - `scripts/di_etf_source_collect.py`: ETF 후보의 공식 운용사 페이지 HTML과 메타데이터를 `_report/raw/YYYY/YYYY-MM-DD/di/etf-sources/` 아래에 저장
