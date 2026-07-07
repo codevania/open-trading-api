@@ -13,3 +13,4 @@
 - Added OpenDART and SEC EDGAR raw collection scripts for repeatable DI company research.
 - Added a DI core ETF and US tech satellite candidate manifest plus a Markdown comparison generator.
 - Added a DI candidate evidence gate to block watchlist promotion until required research evidence exists.
+- Added a DI ETF source-page collector so official issuer evidence can be preserved before candidate fields are filled.

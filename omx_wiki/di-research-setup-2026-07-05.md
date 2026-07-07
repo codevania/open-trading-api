@@ -4,6 +4,7 @@
 
 - `scripts/di_etf_compare.py`: renders Core ETF, Korea-listed ETF verification queue, and US tech satellite candidates from `_report/di/candidates/core-satellite-candidates.yaml`
 - `scripts/di_candidate_evidence_check.py`: checks whether each candidate has enough issuer, fee, tax/account, thesis, and decision evidence before watchlist promotion
+- `scripts/di_etf_source_collect.py`: preserves official ETF issuer source pages from the candidate manifest under ignored raw storage before any facts are copied into research notes
 - Suggested output: `_report/di/research/ETF-COMPARISON/etf-checklist.md`
 - Evidence gate output: `_report/di/research/ETF-COMPARISON/evidence-gate.md`
 - The candidate manifest is a research queue, not a buy list. Move candidates into `_report/di/watchlist.yaml` only after checklist and decision notes exist.
@@ -66,3 +67,4 @@
 
 - `scripts/di_opendart_collect.py`: OpenDART 회사 고유번호, 공시목록, 기업개황, 전체 재무제표 raw 저장
 - `scripts/di_sec_edgar_collect.py`: SEC ticker-CIK, submissions, companyfacts, 주요 companyconcept raw 저장
+- `scripts/di_etf_source_collect.py`: ETF 후보의 공식 운용사 페이지 HTML과 메타데이터를 `_report/raw/YYYY/YYYY-MM-DD/di/etf-sources/` 아래에 저장
