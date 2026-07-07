@@ -17,3 +17,4 @@
 - Tightened the DI candidate evidence gate so empty stock templates and unchecked decision notes cannot pass watchlist promotion.
 - Verified official source URLs for `360750` and `360200`, and left `379800` unresolved pending a confirmed KODEX detail page.
 - Added an SEC filing-summary renderer for satellite equity source-readiness checks.
+- Generated SEC filing summaries for primary U.S. satellite equities: `MSFT`, `GOOGL`, `AMZN`, `META`, `NVDA`, and `AVGO`.
