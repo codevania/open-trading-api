@@ -3,7 +3,7 @@
 ## Metadata
 
 - Date: 2026-06-14
-- Last updated: 2026-07-06
+- Last updated: 2026-07-08
 - Scope: Quant trading research and implementation workflow
 - Current phase: `extended_market_data_backtest_input_smoke`
 - Overall implementation progress: `78-81%`
@@ -25,7 +25,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 1. Quant learning baseline | in-progress | 35% | [[_report/quant/learning-roadmap|_report/quant/learning-roadmap.md]], week 01 study log | Continue weekly study logs tied to outputs |
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
-| 4. Point-in-Time Universe | in-progress | 68-72% | KRX OpenAPI market-data path works; KIND status replay produced `344` valid event rows, `310/344` market labels resolved, a 33-date `Point-in-Time Universe` smoke produced `84644` include / `6034` exclude rows, and status coverage audit keeps this at `hold` because the source is `current_snapshot_smoke` with `0` release/resume-like events | Extend status coverage by date/source and keep Universe eligibility smoke aligned |
+| 4. Point-in-Time Universe | in-progress | 68-72% | KRX OpenAPI market-data path works; KIND status replay produced `344` valid event rows, `310/344` market labels resolved after both 17-date and 33-date market-data joins, a 33-date `Point-in-Time Universe` smoke produced `84644` include / `6034` exclude rows, and status coverage audit keeps this at `hold` because the source is `current_snapshot_smoke` with `0` release/resume-like events | Extend status coverage by date/source and keep Universe eligibility smoke aligned |
 | 5. Market data pipeline | in-progress | 88-91% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 33-date historical market-data merge, continuity audit, date-scoped market-data join, and status replay smoke exist | Extend another bounded historical window and keep status replay coverage aligned |
 | 6. Liquidity Filter | in-progress | 63-68% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] evaluates 361 current Universe saved-raw rows; [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] produced a 33-date, 20-day Point-in-Time smoke with `14292` include rows | Keep 20-day rule aligned while status coverage expands |
 | 7. Backtest engine connection | preflight | 30-35% | [[scripts/quant_backtest_input_contract_validate.py|scripts/quant_backtest_input_contract_validate.py]] validates the 33-date, 20-day smoke artifacts as internally joinable, and [[scripts/quant_backtest_pnl_smoke.py|scripts/quant_backtest_pnl_smoke.py]] computes diagnostic weighted-return smoke rows, while Backtest remains `hold` | Wire engine only after Point-in-Time status coverage, costs, benchmark, OOS, and Bias Control are acceptable |
@@ -51,6 +51,9 @@ Latest 2026-07-06 smoke artifacts:
 - [[_report/quant/research/2026-07-06-kind-status-replay-on-openapi-20250102-20250221.rows.csv|_report/quant/research/2026-07-06-kind-status-replay-on-openapi-20250102-20250221.rows.csv]]
 - [[_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221|_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221.md]]
 - [[_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221.rows.csv|_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221.rows.csv]]
+- [[_report/quant/research/2026-07-08-kind-status-events-market-enrich-33d|_report/quant/research/2026-07-08-kind-status-events-market-enrich-33d.md]]
+- [[_report/quant/research/2026-07-08-kind-status-events-market-enriched-33d-validation|_report/quant/research/2026-07-08-kind-status-events-market-enriched-33d-validation.md]]
+- [[_report/quant/research/2026-07-08-kind-status-events-market-enriched-33d-validation.rows.csv|_report/quant/research/2026-07-08-kind-status-events-market-enriched-33d-validation.rows.csv]]
 - [[_report/quant/research/2026-07-06-kind-status-point-in-time-universe-smoke-20250102-20250221|_report/quant/research/2026-07-06-kind-status-point-in-time-universe-smoke-20250102-20250221.md]]
 - [[_report/quant/research/2026-07-06-kind-status-point-in-time-universe-smoke-20250102-20250221.rows.csv|_report/quant/research/2026-07-06-kind-status-point-in-time-universe-smoke-20250102-20250221.rows.csv]]
 - [[_report/quant/research/2026-07-06-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250221|_report/quant/research/2026-07-06-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250221.md]]
@@ -344,6 +347,10 @@ KRX OpenAPI core artifacts:
 - [[_report/quant/research/2026-07-03-kind-status-events-market-enrich|_report/quant/research/2026-07-03-kind-status-events-market-enrich.md]]
 - [[_report/quant/research/2026-07-03-kind-status-events-market-enriched-validation|_report/quant/research/2026-07-03-kind-status-events-market-enriched-validation.md]]
 - [[_report/quant/research/2026-07-03-kind-status-events-market-enriched-validation.rows.csv|_report/quant/research/2026-07-03-kind-status-events-market-enriched-validation.rows.csv]]
+- [[_report/quant/data/point_in_time_status_events/2026-07-03-kind-current-status-events.market-enriched-33d.csv|_report/quant/data/point_in_time_status_events/2026-07-03-kind-current-status-events.market-enriched-33d.csv]]
+- [[_report/quant/research/2026-07-08-kind-status-events-market-enrich-33d|_report/quant/research/2026-07-08-kind-status-events-market-enrich-33d.md]]
+- [[_report/quant/research/2026-07-08-kind-status-events-market-enriched-33d-validation|_report/quant/research/2026-07-08-kind-status-events-market-enriched-33d-validation.md]]
+- [[_report/quant/research/2026-07-08-kind-status-events-market-enriched-33d-validation.rows.csv|_report/quant/research/2026-07-08-kind-status-events-market-enriched-33d-validation.rows.csv]]
 - Local secret template: `.env.krx.example`; actual `.env.krx` is git-ignored and must not be committed.
 - Raw smoke evidence is saved under `_report/raw/2026/2026-07-03/krx/openapi/` and remains uncommitted.
 
@@ -579,6 +586,7 @@ KIND fallback result:
 - KIND public status downloads were usable for `6/7` probed sources without login.
 - KIND current snapshots normalized into `344` valid status-event rows: managed issue `104`, trading halt `126`, market alert `52`, and delisting `62`.
 - Market enrichment from the 17-date market-data join resolved `310/344` KIND event rows and left `34` as `UNKNOWN`.
+- Re-running market enrichment with the 33-date market-data join still resolved `310/344` and left `34` event rows as `UNKNOWN`; validation stayed `344/344` valid with `0` duplicate event keys.
 - The validated KIND events replayed against the 33-date KRX OpenAPI market-data merge and marked `552/90678` rows as `exclude_by_status_event`.
 - The replayed market-data rows were converted into a 33-date `Point-in-Time Universe` smoke with `84644` include rows and `6034` exclude rows.
 

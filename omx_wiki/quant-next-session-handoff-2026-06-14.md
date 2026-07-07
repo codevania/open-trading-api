@@ -139,6 +139,10 @@ Already implemented in the latest local work:
 - [[_report/quant/research/2026-07-03-kind-status-events-market-enrich|_report/quant/research/2026-07-03-kind-status-events-market-enrich.md]]
 - [[_report/quant/research/2026-07-03-kind-status-events-market-enriched-validation|_report/quant/research/2026-07-03-kind-status-events-market-enriched-validation.md]]
 - [[_report/quant/research/2026-07-03-kind-status-events-market-enriched-validation.rows.csv|_report/quant/research/2026-07-03-kind-status-events-market-enriched-validation.rows.csv]]
+- [[_report/quant/data/point_in_time_status_events/2026-07-03-kind-current-status-events.market-enriched-33d.csv|_report/quant/data/point_in_time_status_events/2026-07-03-kind-current-status-events.market-enriched-33d.csv]]
+- [[_report/quant/research/2026-07-08-kind-status-events-market-enrich-33d|_report/quant/research/2026-07-08-kind-status-events-market-enrich-33d.md]]
+- [[_report/quant/research/2026-07-08-kind-status-events-market-enriched-33d-validation|_report/quant/research/2026-07-08-kind-status-events-market-enriched-33d-validation.md]]
+- [[_report/quant/research/2026-07-08-kind-status-events-market-enriched-33d-validation.rows.csv|_report/quant/research/2026-07-08-kind-status-events-market-enriched-33d-validation.rows.csv]]
 - [[scripts/quant_point_in_time_universe_build.py|scripts/quant_point_in_time_universe_build.py]]
 - [[tests/test_quant_point_in_time_universe_build.py|tests/test_quant_point_in_time_universe_build.py]]
 - [[_report/quant/research/2026-07-03-kind-status-point-in-time-universe-smoke-20250102-20250124|_report/quant/research/2026-07-03-kind-status-point-in-time-universe-smoke-20250102-20250124.md]]
@@ -433,7 +437,7 @@ Already implemented in the latest local work:
 - Point-in-Time status-event schema/config scaffolding and validator are implemented; one KIND current snapshot normalized into `344` valid rows with `0` invalid rows.
 - Point-in-Time status replay scaffold is implemented; the KIND current snapshot replay marked `552/90678` 33-date KRX OpenAPI market-data rows as `exclude_by_status_event`.
 - Point-in-Time status coverage audit is implemented; the latest audit is `hold` because coverage mode is `current_snapshot_smoke` and release/resume-like event rows are `0`, even though replay matched `90678/90678` market rows.
-- Point-in-Time status-event market enrichment is implemented; `310/344` KIND event rows resolved from the 17-date market-data join and `34` remain `UNKNOWN`.
+- Point-in-Time status-event market enrichment is implemented; `310/344` KIND event rows resolved from the 17-date market-data join, and a 33-date re-run still resolved `310/344`, so `34` remain `UNKNOWN`.
 - Point-in-Time Universe smoke is implemented; 33-date replayed market-data rows produced `84644` include and `6034` exclude rows.
 - Point-in-Time Liquidity Filter smoke is implemented; 33-date replayed market-data rows with a 20-day rule produced `14292` include and `76386` exclude rows, with `35792` rows evaluated on the full 20-day lookback.
 - Point-in-Time Momentum Signal Candidate smoke is implemented; 33-date, 20-day Momentum over the Liquidity rows produced `520` paper-only candidates across `13` candidate dates: `260` BUY candidates and `260` SELL candidates. This is not a Backtest result and does not generate order intents.
@@ -452,7 +456,7 @@ Likely needed work:
 
 1. Preserve `2025-01-08` row-count movement as an event-validation item, not as a Backtest conclusion.
 2. Extend KIND or authenticated/manual KRX status coverage across the selected historical date range.
-3. Resolve the remaining `34` `UNKNOWN` KIND market rows only where an official source or deterministic join can support it.
+3. Resolve the remaining `34` `UNKNOWN` KIND market rows only where an official source or deterministic join beyond the current 33-date market-data join can support it.
 4. Re-run [[scripts/quant_point_in_time_status_events_validate.py|scripts/quant_point_in_time_status_events_validate.py]], [[scripts/quant_point_in_time_status_replay.py|scripts/quant_point_in_time_status_replay.py]], [[scripts/quant_point_in_time_universe_build.py|scripts/quant_point_in_time_universe_build.py]], and [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] on the expanded event/date set.
 5. Continue KIS OHLCV batch capture only as secondary cross-check or to fill fields KRX OpenAPI does not provide.
 6. After the user fills `KIS_PAPER_STOCK` in the ignored MCP `.env.kis`, rerun [[scripts/quant_kis_demo_account_preflight.py|scripts/quant_kis_demo_account_preflight.py]] before any read-only account API calls.
