@@ -1,6 +1,6 @@
 # DI Core ETF and Satellite Candidate Comparison
 
-- Run date: `2026-07-06`
+- Run date: `2026-07-08`
 - Candidate manifest: `_report/di/candidates/core-satellite-candidates.yaml`
 - Manifest version: `1`
 - Interpretation: candidate screening aid only; final buy decisions require a written thesis and tax/account verification

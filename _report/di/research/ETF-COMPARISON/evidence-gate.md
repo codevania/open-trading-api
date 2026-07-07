@@ -21,8 +21,8 @@
 | `core_etfs` | `VOO` | Vanguard S&P 500 ETF | `hold` | `tax_account_fit`, `expense_ratio` | fill issuer, fee, NAV, distribution, tax, and account evidence |
 | `core_etfs` | `VTI` | Vanguard Total Stock Market ETF | `hold` | `tax_account_fit`, `expense_ratio` | fill issuer, fee, NAV, distribution, tax, and account evidence |
 | `core_etfs` | `VT` | Vanguard Total World Stock ETF | `hold` | `tax_account_fit`, `expense_ratio` | fill issuer, fee, NAV, distribution, tax, and account evidence |
-| `korea_listed_etfs_to_verify` | `360750` | TIGER US S&P500 | `hold` | `source_url`, `currency_hedge`, `distribution_policy`, `tax_account_fit`, `expense_ratio` | fill issuer, fee, NAV, distribution, tax, and account evidence |
-| `korea_listed_etfs_to_verify` | `360200` | ACE US S&P500 | `hold` | `source_url`, `currency_hedge`, `distribution_policy`, `tax_account_fit`, `expense_ratio` | fill issuer, fee, NAV, distribution, tax, and account evidence |
+| `korea_listed_etfs_to_verify` | `360750` | TIGER US S&P500 | `hold` | `currency_hedge`, `distribution_policy`, `tax_account_fit`, `expense_ratio` | fill issuer, fee, NAV, distribution, tax, and account evidence |
+| `korea_listed_etfs_to_verify` | `360200` | ACE US S&P500 | `hold` | `currency_hedge`, `distribution_policy`, `tax_account_fit`, `expense_ratio` | fill issuer, fee, NAV, distribution, tax, and account evidence |
 | `korea_listed_etfs_to_verify` | `379800` | KODEX US S&P500TR | `hold` | `source_url`, `currency_hedge`, `distribution_policy`, `tax_account_fit`, `expense_ratio` | fill issuer, fee, NAV, distribution, tax, and account evidence |
 | `satellite_etfs_to_verify` | `QQQ` | Invesco QQQ Trust | `hold` | `tax_account_fit`, `expense_ratio` | fill issuer, fee, NAV, distribution, tax, and account evidence |
 | `satellite_equities.primary_queue` | `MSFT` | Microsoft | `hold` | `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |

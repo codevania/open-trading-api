@@ -17,6 +17,7 @@ Rules:
 - Keep Korea-listed ETF candidates at `needs_issuer_and_tax_verification` until issuer and brokerage/tax evidence is recorded.
 - Treat `evidence-gate.md` as the blocker list before promoting candidates into active monitoring.
 - Run `di_etf_source_collect.py` first in `--dry-run` mode, then live only when official issuer source pages need to be preserved under `_report/raw/YYYY/YYYY-MM-DD/di/etf-sources/`.
+- Record domestic ETF source URL verification in `_report/di/research/ETF-COMPARISON/domestic-etf-source-url-check.md` when issuer URLs are added or rejected.
 - Move an ETF into `_report/di/watchlist.yaml` only after `etf-checklist.md` and `decision.md` exist.
 
 ## 목적

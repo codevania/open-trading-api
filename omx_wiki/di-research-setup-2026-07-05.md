@@ -8,6 +8,7 @@
 - Stock thesis and decision evidence must contain filled research content; placeholder templates and unchecked decisions remain blocked.
 - Suggested output: `_report/di/research/ETF-COMPARISON/etf-checklist.md`
 - Evidence gate output: `_report/di/research/ETF-COMPARISON/evidence-gate.md`
+- Domestic ETF source URL checks: `_report/di/research/ETF-COMPARISON/domestic-etf-source-url-check.md`
 - The candidate manifest is a research queue, not a buy list. Move candidates into `_report/di/watchlist.yaml` only after checklist and decision notes exist.
 
 ## Remaining DI Research Setup Work

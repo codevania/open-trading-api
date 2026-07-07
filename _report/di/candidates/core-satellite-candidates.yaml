@@ -78,8 +78,8 @@ korea_listed_etfs_to_verify:
     tax_account_fit: check ISA/pension/IRP eligibility and taxable-account treatment
     expense_ratio: null
     status: needs_issuer_and_tax_verification
-    source_url: null
-    notes: Verify exact Korean fund name, total expense, tracking method, distribution, and tax wrapper fit.
+    source_url: https://investments.miraeasset.com/tigeretf/ko/product/search/detail/index.do?ksdFund=KR7360750004
+    notes: Official issuer page URL verified on 2026-07-08; still verify exact total expense, tracking method, distribution, and tax wrapper fit.
   - symbol: "360200"
     name: ACE US S&P500
     listing: Korea
@@ -92,8 +92,8 @@ korea_listed_etfs_to_verify:
     tax_account_fit: check ISA/pension/IRP eligibility and taxable-account treatment
     expense_ratio: null
     status: needs_issuer_and_tax_verification
-    source_url: null
-    notes: Verify exact Korean fund name, total expense, tracking method, distribution, and tax wrapper fit.
+    source_url: https://www.aceetf.co.kr/fund/360200
+    notes: Official issuer page URL verified on 2026-07-08; still verify exact total expense, tracking method, distribution, and tax wrapper fit.
   - symbol: "379800"
     name: KODEX US S&P500TR
     listing: Korea
@@ -107,7 +107,7 @@ korea_listed_etfs_to_verify:
     expense_ratio: null
     status: needs_issuer_and_tax_verification
     source_url: null
-    notes: Verify TR structure, taxable events, tracking difference, and whether it fits the account wrapper.
+    notes: Official KODEX detail URL was not confirmed on 2026-07-08; verify product existence/source URL, TR structure, taxable events, tracking difference, and whether it fits the account wrapper.
 
 satellite_etfs_to_verify:
   - symbol: QQQ
