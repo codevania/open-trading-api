@@ -21,6 +21,8 @@ from zoneinfo import ZoneInfo
 
 import requests
 
+from quant_io import write_json_lf, write_text_lf
+
 
 KST = ZoneInfo("Asia/Seoul")
 KRX_BASE_URL = "https://data.krx.co.kr"
@@ -247,8 +249,7 @@ def _probe_json(
 
 
 def _write_json(path: Path, payload: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_json_lf(path, payload)
 
 
 def _wikilink(path: str | Path) -> str:
@@ -394,8 +395,7 @@ def main() -> int:
     if output is not None:
         _write_json(output, payload)
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        args.report_output.write_text(_render_report(payload, output), encoding="utf-8")
+        write_text_lf(args.report_output, _render_report(payload, output))
     if output is None and args.report_output is None:
         print(json.dumps(payload, ensure_ascii=False, indent=2))
     return 0

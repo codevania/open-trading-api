@@ -16,6 +16,8 @@ from typing import Any
 
 import yaml
 
+from quant_io import write_text_lf
+
 
 PLACEHOLDERS = ("TO_BE_FILLED", "TO_BE_VERIFIED", "YYYY", "pending")
 CSV_ENCODINGS = ("utf-8-sig", "utf-8", "cp949", "euc-kr")
@@ -212,8 +214,7 @@ def main() -> int:
     results = [_check_dataset(dataset, repo_root) for dataset in datasets]
     report = _render_report(manifest_path, manifest, results)
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(report, encoding="utf-8")
+        write_text_lf(args.output, report)
     else:
         print(report, end="")
 

@@ -12,6 +12,7 @@ from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
+from quant_io import write_text_lf
 from quant_smoke_validate import _extract_rows, _find_raw_files, _load_json, _load_symbol_labels, _symbol_from_path
 
 
@@ -170,8 +171,7 @@ def main() -> int:
 
     report = render_markdown(args.raw_dir, results, expected_source)
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(report, encoding="utf-8")
+        write_text_lf(args.output, report)
     else:
         print(report, end="")
 

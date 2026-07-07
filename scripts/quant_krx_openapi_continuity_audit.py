@@ -12,6 +12,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
+from quant_io import write_text_lf
 
 TABLE_FILES = {
     "stock_daily": "stock_daily.csv",
@@ -122,7 +123,7 @@ def audit_normalized_dir(normalized_dir: Path, max_row_delta: int) -> list[dict[
 def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=AUDIT_FIELDS)
+        writer = csv.DictWriter(handle, fieldnames=AUDIT_FIELDS, lineterminator="\n")
         writer.writeheader()
         for row in rows:
             writer.writerow(row)
@@ -204,8 +205,7 @@ def main() -> int:
         _write_csv(args.rows_output, rows)
     report = _render_markdown(rows, args.normalized_dir, args.rows_output)
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        args.report_output.write_text(report, encoding="utf-8")
+        write_text_lf(args.report_output, report)
     else:
         print(report, end="")
     return 0

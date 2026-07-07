@@ -15,6 +15,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
+from quant_io import write_text_lf
 
 BAS_DD_RE = re.compile(r"^\d{8}$")
 
@@ -267,7 +268,7 @@ def _discover_raw_files(raw_dir: Path, bas_dd: str | None, start_bas_dd: str | N
 def _write_csv(table: NormalizedTable, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=table.fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=table.fieldnames, lineterminator="\n")
         writer.writeheader()
         for row in table.rows:
             writer.writerow(row)
@@ -353,8 +354,7 @@ def main() -> int:
 
     report = _render_markdown(tables, raw_files, args.output_dir)
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        args.report_output.write_text(report, encoding="utf-8")
+        write_text_lf(args.report_output, report)
     else:
         print(report, end="")
     return 0

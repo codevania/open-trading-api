@@ -15,6 +15,7 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
+from quant_io import write_text_lf
 from quant_krx_managed_issues_extract import CSV_ENCODINGS, parse_managed_issues
 
 
@@ -197,6 +198,7 @@ def _write_csv(rows: list[UniverseRow], path: Path) -> None:
                 "status",
                 "reason",
             ),
+            lineterminator="\n",
         )
         writer.writeheader()
         for row in rows:
@@ -326,8 +328,7 @@ def main() -> int:
         args.csv_output,
     )
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(report, encoding="utf-8")
+        write_text_lf(args.output, report)
     else:
         print(report, end="")
     return 0

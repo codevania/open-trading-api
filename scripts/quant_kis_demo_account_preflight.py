@@ -16,6 +16,8 @@ from typing import Any
 
 import yaml
 
+from quant_io import write_text_lf
+
 
 DEFAULT_ENV_CONFIG = Path("MCP/Kis Trading MCP/.env.kis")
 DEFAULT_YAML_CONFIG = Path("kis_devlp.yaml")
@@ -265,8 +267,7 @@ def main() -> int:
 
     report = render_report(summary)
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        args.report_output.write_text(report, encoding="utf-8")
+        write_text_lf(args.report_output, report)
     else:
         print(report, end="")
     return 0 if summary["ready_for_read_only_demo_account_calls"] else 1

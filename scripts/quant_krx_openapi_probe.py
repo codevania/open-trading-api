@@ -17,6 +17,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 
+from quant_io import write_json_lf
 
 KST = ZoneInfo("Asia/Seoul")
 
@@ -82,8 +83,7 @@ def _redacted_request(url: str, params: dict[str, str]) -> dict[str, Any]:
 
 
 def _write_metadata(path: Path, metadata: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_json_lf(path, metadata)
 
 
 def _save_response(output: Path, content: bytes) -> None:

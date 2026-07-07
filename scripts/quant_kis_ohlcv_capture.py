@@ -18,6 +18,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from quant_io import write_json_lf, write_text_lf
+
 
 API_TYPE = "inquire_daily_itemchartprice"
 API_PATH = "/uapi/domestic-stock/v1/quotations/inquire-daily-itemchartprice"
@@ -165,8 +167,7 @@ def _write_manifest(
                 f"    message: {_yaml_scalar(result.message)}",
             ]
         )
-    raw_dir.mkdir(parents=True, exist_ok=True)
-    (raw_dir / "manifest.yaml").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    write_text_lf(raw_dir / "manifest.yaml", "\n".join(lines) + "\n")
 
 
 def execute_capture(
@@ -207,7 +208,7 @@ def execute_capture(
                 authenticated_env = env_dv
             response = ka._url_fetch(API_PATH, TR_ID, "", _kis_params(params))
             payload = _response_json(response)
-            output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+            write_json_lf(output_path, payload, sort_keys=True)
             if response.isOK():
                 results.append(CaptureResult(code, name, "saved", output_file, "ok"))
             else:
@@ -311,8 +312,7 @@ def main() -> int:
 
     report = render_markdown(results, args.queue, args.raw_dir, args.dry_run)
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(report, encoding="utf-8")
+        write_text_lf(args.output, report)
     else:
         print(report, end="")
     return 0

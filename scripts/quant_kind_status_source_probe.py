@@ -19,6 +19,8 @@ from zoneinfo import ZoneInfo
 
 import requests
 
+from quant_io import write_json_lf, write_text_lf
+
 
 KST = ZoneInfo("Asia/Seoul")
 KIND_BASE_URL = "https://kind.krx.co.kr"
@@ -429,20 +431,15 @@ def probe_kind_status_sources(
         )
 
     manifest_path = raw_base / "status-source-probe.raw.json"
-    manifest_path.write_text(
-        json.dumps(
-            {
-                "capture_date": capture_date,
-                "captured_at": _now_kst().isoformat(),
-                "source": "kind",
-                "source_base_url": KIND_BASE_URL,
-                "results": [asdict(result) for result in results],
-            },
-            ensure_ascii=False,
-            indent=2,
-        )
-        + "\n",
-        encoding="utf-8",
+    write_json_lf(
+        manifest_path,
+        {
+            "capture_date": capture_date,
+            "captured_at": _now_kst().isoformat(),
+            "source": "kind",
+            "source_base_url": KIND_BASE_URL,
+            "results": [asdict(result) for result in results],
+        },
     )
     return results, manifest_path
 
@@ -514,8 +511,7 @@ def main() -> int:
     )
     report = render_report(args.capture_date, results, manifest_path)
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        args.report_output.write_text(report, encoding="utf-8")
+        write_text_lf(args.report_output, report)
     else:
         print(report, end="")
     return 0

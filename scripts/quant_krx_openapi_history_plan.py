@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from quant_io import write_json_lf, write_text_lf
 from quant_krx_openapi_collect import CORE_SERVICES, SERVICES, _now_kst, _raw_output_path, _validate_bas_dd, _validate_capture_date
 
 
@@ -127,8 +128,7 @@ def build_plan(
 
 
 def _write_json(path: Path, payload: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_json_lf(path, payload)
 
 
 def _wikilink(path: str | Path) -> str:
@@ -212,8 +212,7 @@ def main() -> int:
     if args.output:
         _write_json(args.output, plan)
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        args.report_output.write_text(_render_markdown(plan, args.output), encoding="utf-8")
+        write_text_lf(args.report_output, _render_markdown(plan, args.output))
     if not args.output and not args.report_output:
         print(json.dumps(plan, ensure_ascii=False, indent=2))
     return 0

@@ -15,6 +15,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from quant_io import write_text_lf
+
 
 DEFAULT_LOOKBACK = 20
 DEFAULT_MIN_AVG_TRADING_VALUE_KRW = 1_000_000_000
@@ -199,7 +201,7 @@ def write_csv(rows: list[PitLiquidityRow], path: Path, lookback: int) -> None:
         "pit_liquidity_rows_used",
     ]
     with path.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=base_fields + extra_fields)
+        writer = csv.DictWriter(handle, fieldnames=base_fields + extra_fields, lineterminator="\n")
         writer.writeheader()
         for row in rows:
             writer.writerow(
@@ -332,8 +334,7 @@ def main() -> int:
         args.csv_output,
     )
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        args.report_output.write_text(report, encoding="utf-8")
+        write_text_lf(args.report_output, report)
     else:
         print(report, end="")
     return 0

@@ -15,6 +15,7 @@ from zoneinfo import ZoneInfo
 
 import yaml
 
+from quant_io import write_text_lf
 from quant_krx_manifest_verify import _is_placeholder, _load_yaml, _read_csv_header, _sha256
 
 
@@ -106,8 +107,7 @@ def main() -> int:
         raise SystemExit("required raw files are missing; use --allow-pending only for a preview")
 
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(output, encoding="utf-8")
+        write_text_lf(args.output, output)
     else:
         print(output, end="")
 

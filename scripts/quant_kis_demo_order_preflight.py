@@ -14,6 +14,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from quant_io import write_text_lf
+
 
 REQUIRED_COLUMNS = (
     "env_dv",
@@ -140,7 +142,7 @@ def validate_order_intents(
 def _write_rows(path: Path, results: list[PreflightResult]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=VALIDATION_COLUMNS)
+        writer = csv.DictWriter(handle, fieldnames=VALIDATION_COLUMNS, lineterminator="\n")
         writer.writeheader()
         for result in results:
             row = result.row
@@ -227,8 +229,7 @@ def main() -> int:
         _write_rows(args.rows_output, results)
     report = _render_report(summary, args.rows_output)
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        args.report_output.write_text(report, encoding="utf-8")
+        write_text_lf(args.report_output, report)
     else:
         print(report, end="")
     return 0 if summary["invalid_rows"] == 0 else 1

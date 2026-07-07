@@ -14,6 +14,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from quant_io import write_text_lf
+
 
 API_TYPE = "inquire_daily_itemchartprice"
 DEFAULT_API_CONFIG = Path("MCP/Kis Trading MCP/configs/domestic_stock.json")
@@ -319,8 +321,7 @@ def main() -> int:
         args.skip_existing,
     )
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(report, encoding="utf-8")
+        write_text_lf(args.output, report)
     else:
         print(report, end="")
     return 0

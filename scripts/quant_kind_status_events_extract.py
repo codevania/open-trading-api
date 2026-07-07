@@ -17,6 +17,8 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
+from quant_io import write_text_lf
+
 
 KST = ZoneInfo("Asia/Seoul")
 KIND_BASE_URL = "https://kind.krx.co.kr"
@@ -361,7 +363,7 @@ def _dedupe_events(rows: list[dict[str, str]]) -> list[dict[str, str]]:
 def _write_csv(path: Path, rows: list[dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=EVENT_FIELDS)
+        writer = csv.DictWriter(handle, fieldnames=EVENT_FIELDS, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -424,8 +426,7 @@ def main() -> int:
     rows, summary = extract_kind_status_events(raw_dir, args.capture_date)
     _write_csv(args.output, rows)
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        args.report_output.write_text(render_report(summary, args.output), encoding="utf-8")
+        write_text_lf(args.report_output, render_report(summary, args.output))
     return 0
 
 

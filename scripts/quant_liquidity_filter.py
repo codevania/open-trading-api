@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from quant_io import write_text_lf
 from quant_smoke_validate import _as_float, _extract_rows, _load_json, _symbol_from_path
 
 
@@ -223,7 +224,7 @@ def write_csv(rows: list[LiquidityRow], path: Path) -> None:
         "liquidity_raw_path",
     )
     with path.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         for row in rows:
             source = row.source
@@ -388,8 +389,7 @@ def main() -> int:
         args.csv_output,
     )
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(report, encoding="utf-8")
+        write_text_lf(args.output, report)
     else:
         print(report, end="")
     return 0

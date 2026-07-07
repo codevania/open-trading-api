@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from quant_io import write_text_lf
 
 CSV_ENCODINGS = ("utf-8-sig", "utf-8", "cp949", "euc-kr")
 REQUIRED_COLUMNS = ("종목코드", "종목명", "지정일자")
@@ -139,8 +140,7 @@ def main() -> int:
     issues, encoding = parse_managed_issues(args.raw)
     report = _render_markdown(issues, args.raw, encoding, args.as_of_date)
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(report, encoding="utf-8")
+        write_text_lf(args.output, report)
     else:
         print(report, end="")
     return 0

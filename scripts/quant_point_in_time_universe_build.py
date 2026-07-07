@@ -12,6 +12,8 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+from quant_io import write_text_lf
+
 
 ALLOWED_MARKETS = {"KOSPI", "KOSDAQ"}
 COMMON_SECURITY_GROUP = "주권"
@@ -64,7 +66,7 @@ def _read_csv(path: Path) -> tuple[list[str], list[dict[str, str]]]:
 def _write_csv(path: Path, rows: list[dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=OUTPUT_COLUMNS)
+        writer = csv.DictWriter(handle, fieldnames=OUTPUT_COLUMNS, lineterminator="\n")
         writer.writeheader()
         for row in rows:
             writer.writerow(row)
@@ -232,8 +234,7 @@ def main() -> int:
     _write_csv(args.output, rows)
     report = _render_report(summary, args.output)
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        args.report_output.write_text(report, encoding="utf-8")
+        write_text_lf(args.report_output, report)
     else:
         print(report, end="")
     return 0

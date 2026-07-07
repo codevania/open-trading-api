@@ -15,6 +15,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from quant_io import write_json_lf, write_text_lf
+
 
 DAILY_API_TYPE = "inquire_daily_itemchartprice"
 
@@ -72,7 +74,7 @@ def _write_manifest(raw_dir: Path, args: argparse.Namespace, output_path: Path, 
                 f"    bytes: {path.stat().st_size}",
             ]
         )
-    (raw_dir / "manifest.yaml").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    write_text_lf(raw_dir / "manifest.yaml", "\n".join(lines) + "\n")
 
 
 def main() -> int:
@@ -93,10 +95,7 @@ def main() -> int:
     raw_dir.mkdir(parents=True, exist_ok=True)
 
     output_path = raw_dir / _file_name(args.symbol, args.api_type)
-    output_path.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
+    write_json_lf(output_path, payload, sort_keys=True)
 
     captured_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     _write_manifest(raw_dir, args, output_path, captured_at)

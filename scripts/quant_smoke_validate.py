@@ -15,6 +15,8 @@ from typing import Any
 
 import yaml
 
+from quant_io import write_text_lf
+
 
 REQUIRED_FIELDS = ("stck_bsop_date", "stck_clpr", "stck_oprc", "stck_hgpr", "stck_lwpr", "acml_vol")
 
@@ -260,8 +262,7 @@ def main() -> int:
 
     report = _render_markdown(results, args.lookback, args.threshold, raw_dir)
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(report, encoding="utf-8")
+        write_text_lf(args.output, report)
     else:
         print(report, end="")
     return 0

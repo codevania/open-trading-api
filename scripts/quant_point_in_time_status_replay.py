@@ -14,6 +14,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from quant_io import write_text_lf
 from quant_point_in_time_status_events_validate import (
     DEFAULT_SCHEMA,
     DEFAULT_SOURCE_POLICY,
@@ -194,7 +195,7 @@ def replay_status_events(
 def _write_csv(path: Path, fields: list[str], rows: list[dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         for row in rows:
             writer.writerow(row)
@@ -262,8 +263,7 @@ def main() -> int:
     _write_csv(args.output, fields, rows)
     report = _render_report(summary, args.output)
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        args.report_output.write_text(report, encoding="utf-8")
+        write_text_lf(args.report_output, report)
     else:
         print(report, end="")
     return 0

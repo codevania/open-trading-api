@@ -13,6 +13,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
+from quant_io import write_text_lf
+
 
 VALID_MARKETS = {"KOSPI", "KOSDAQ", "KONEX"}
 
@@ -30,7 +32,7 @@ def _read_csv(path: Path) -> tuple[list[str], list[dict[str, str]]]:
 def _write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         for row in rows:
             writer.writerow(row)
@@ -193,8 +195,7 @@ def main() -> int:
     _write_csv(args.output, fields, rows)
     report = _render_report(summary, args.output)
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        args.report_output.write_text(report, encoding="utf-8")
+        write_text_lf(args.report_output, report)
     else:
         print(report, end="")
     return 0

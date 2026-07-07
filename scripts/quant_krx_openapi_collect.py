@@ -18,6 +18,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 
+from quant_io import write_json_lf
 from quant_krx_openapi_probe import _resolve_auth_key
 
 
@@ -160,8 +161,7 @@ def _metadata(
 
 
 def _write_json(path: Path, payload: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_json_lf(path, payload)
 
 
 def _dry_run_plan(services: list[KrxOpenApiService], bas_dd: str, raw_root: Path, capture_date: str) -> dict[str, Any]:
