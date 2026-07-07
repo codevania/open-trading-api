@@ -41,6 +41,22 @@ satellite_equities:
 """
 
 
+def _write_sec_documents(path: Path) -> None:
+    path.write_text(
+        """\
+# SEC Filing Documents
+
+- Source: SEC EDGAR primary filing documents
+- Order intent generated: `false`
+- Latest 10-K document: available
+- Latest 10-Q document: available
+- Local raw paths: recorded
+- Reading checklist: recorded
+""",
+        encoding="utf-8",
+    )
+
+
 class DiCandidateEvidenceCheckTest(unittest.TestCase):
     def test_reports_ready_and_hold_candidates(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -62,6 +78,7 @@ class DiCandidateEvidenceCheckTest(unittest.TestCase):
 """,
                 encoding="utf-8",
             )
+            _write_sec_documents(msft / "sec-filing-documents.md")
             (msft / "thesis.md").write_text(
                 """\
 # Thesis
@@ -151,6 +168,7 @@ class DiCandidateEvidenceCheckTest(unittest.TestCase):
                 "# MSFT SEC Filing Summary\n\n- Source: SEC\n- 10-K available\n- 10-Q available\n- 8-K available\n- Facts available\n- Order intent generated: `false`\n",
                 encoding="utf-8",
             )
+            _write_sec_documents(msft / "sec-filing-documents.md")
             (msft / "thesis.md").write_text("# Thesis\n\n- Symbol:\n-\n1.\n", encoding="utf-8")
             (msft / "decision.md").write_text("# Decision\n\n- [ ] 관심\n-\n", encoding="utf-8")
             manifest.write_text(MANIFEST, encoding="utf-8")
@@ -188,6 +206,7 @@ class DiCandidateEvidenceCheckTest(unittest.TestCase):
                 "# MSFT SEC Filing Summary\n\n- Source: SEC\n- 10-K available\n- 10-Q available\n- 8-K available\n- Facts available\n- Order intent generated: `false`\n",
                 encoding="utf-8",
             )
+            _write_sec_documents(msft / "sec-filing-documents.md")
             (msft / "thesis.md").write_text(
                 """\
 # Thesis
@@ -295,6 +314,67 @@ class DiCandidateEvidenceCheckTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("`research sec-filing-summary.md`", result.stdout)
+
+    def test_us_stock_requires_sec_filing_documents(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "candidates.yaml"
+            research_root = root / "research"
+            msft = research_root / "MSFT"
+            msft.mkdir(parents=True)
+            (msft / "sec-filing-summary.md").write_text(
+                "# MSFT SEC Filing Summary\n\n- Source: SEC\n- 10-K available\n- 10-Q available\n- 8-K available\n- Facts available\n- Order intent generated: `false`\n",
+                encoding="utf-8",
+            )
+            (msft / "thesis.md").write_text(
+                """\
+# Thesis
+
+- Symbol: MSFT
+- Company: Microsoft
+- 주요 원천: SEC 10-K
+1. First thesis point with evidence.
+2. Second thesis point with evidence.
+3. Third thesis point with evidence.
+- 무효화 조건: evidence changes.
+""",
+                encoding="utf-8",
+            )
+            (msft / "decision.md").write_text(
+                """\
+# Decision
+
+- Symbol: MSFT
+- Company/ETF: Microsoft
+- [x] 관심
+- 결정: source documents missing test.
+1. Evidence was reviewed.
+2. Risk budget remains pending.
+- 무효화 조건: evidence changes.
+""",
+                encoding="utf-8",
+            )
+            manifest.write_text(MANIFEST, encoding="utf-8")
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--candidate-file",
+                    str(manifest),
+                    "--research-root",
+                    str(research_root),
+                    "--run-date",
+                    "2026-07-08",
+                ],
+                cwd=REPO_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("`research sec-filing-documents.md`", result.stdout)
 
     def test_rejects_non_object_manifest(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

@@ -24,6 +24,7 @@ DEFAULT_RESEARCH_ROOT = Path("_report/di/research")
 UNCHECKED_TOKENS = ("todo", "verify", "check", "must be checked", "needs_", "null")
 MIN_RESEARCH_LINES = {
     "sec-filing-summary.md": 6,
+    "sec-filing-documents.md": 6,
     "thesis.md": 6,
     "decision.md": 4,
 }
@@ -143,9 +144,10 @@ def _stock_gate(section: str, row: dict[str, Any], research_root: Path) -> Candi
     symbol = _text(row.get("symbol")).upper()
     market = _text(row.get("market")).upper()
     if market in {"NASDAQ", "NYSE"}:
-        file_status = _research_file_status(symbol, research_root, "sec-filing-summary.md")
-        if file_status:
-            missing.append(file_status)
+        for filename in ("sec-filing-summary.md", "sec-filing-documents.md"):
+            file_status = _research_file_status(symbol, research_root, filename)
+            if file_status:
+                missing.append(file_status)
     for filename in ("thesis.md", "decision.md"):
         file_status = _research_file_status(symbol, research_root, filename)
         if file_status:
@@ -235,7 +237,7 @@ def render_report(
             "## Promotion Rules",
             "",
             "- ETF candidates stay out of `_report/di/watchlist.yaml` until issuer, cost, NAV/liquidity, distribution, tax, and account evidence are filled.",
-            "- Stock candidates stay out of active position review until SEC/DART evidence, `thesis.md`, and `decision.md` exist.",
+            "- Stock candidates stay out of active position review until SEC/DART source evidence, primary filing document maps, `thesis.md`, and `decision.md` exist.",
             "- A `ready_*` status means research process readiness only, not a recommendation to buy.",
             "",
         ]
