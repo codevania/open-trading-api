@@ -485,8 +485,8 @@ Known limitation:
 
 Hard blockers before Backtest interpretation:
 
-- `Point-in-Time Universe` full historical path is not built; only a 42-date KIND current-snapshot replay smoke exists.
-- Historical managed issue / trading suspension / market alert / delisting status is not reproducible across the full target Rebalance date range; only one KIND current snapshot has been normalized and replayed.
+- `Point-in-Time Universe` full historical path is not built; the latest evidence is a 52-date KIND current-snapshot replay smoke over two merged capture dates.
+- Historical managed issue / trading suspension / market alert / delisting status is not reproducible across the full target Rebalance date range; two KIND current snapshots have been normalized and replayed, but release/resume-like lifecycle rows are still absent.
 - Full-Universe `Liquidity Filter` coverage is incomplete because only the first 360 generated Universe OHLCV rows have been captured.
 
 ## KRX OpenAPI Core Raw Smoke
@@ -637,14 +637,14 @@ Artifacts:
 - [[_report/quant/research/2026-07-06-krx-openapi-market-data-join-20250210-20250221|_report/quant/research/2026-07-06-krx-openapi-market-data-join-20250210-20250221.md]]
 - [[_report/quant/research/2026-07-06-krx-openapi-market-data-merge-20250102-20250221|_report/quant/research/2026-07-06-krx-openapi-market-data-merge-20250102-20250221.md]]
 
-Latest merged market-data smoke over `2025-01-02` to `2025-03-07`:
+Latest merged market-data smoke over `2025-01-02` to `2025-03-21`:
 
 | metric | value |
 | --- | ---: |
-| merged rows | 115447 |
-| date count | 42 |
-| KOSPI rows | 40375 |
-| KOSDAQ rows | 75072 |
+| merged rows | 142990 |
+| date count | 52 |
+| KOSPI rows | 49996 |
+| KOSDAQ rows | 92994 |
 
 The `2025-01-27` through `2025-01-30` and `2025-03-03` KRX rows had issue-base data but no stock-daily/index rows and were dropped from joined market data as non-trading-date evidence.
 
@@ -669,7 +669,7 @@ KIND fallback result:
 - KIND public status downloads were usable for `6/7` probed sources without login on both `2026-07-03` and `2026-07-08`.
 - The `2026-07-08` KIND current snapshot normalized into `327` valid status-event rows with `0` invalid rows.
 - Market enrichment from the 42-date market-data join resolved `297/327` second-snapshot event rows and left `30` as `UNKNOWN`.
-- A local evidence merge combined the `2026-07-03` and `2026-07-08` KIND current snapshots into `497` logical status-event rows, preserving `2` raw capture dates and `12` raw source paths.
+- A local evidence merge combined the `2026-07-03` and `2026-07-08` KIND current snapshots into `497` logical status-event rows, preserving `2` raw capture dates and `14` raw source paths; the merged set has `48` `UNKNOWN` market rows.
 - Merged status-event validation stayed `497/497` valid with `0` duplicate event keys.
 - The merged KIND events replayed against the latest 52-date KRX OpenAPI market-data merge and marked `889/142990` rows as `exclude_by_status_event`.
 - The merged replayed market-data rows were converted into a 52-date `Point-in-Time Universe` smoke with `133465` include rows and `9525` exclude rows.
@@ -760,7 +760,7 @@ Next gate:
 
 ## Point-in-Time Status Replay Scaffold
 
-Status: `validated_kind_merged_snapshots_replayed_on_42_date_market_data`
+Status: `validated_kind_merged_snapshots_replayed_on_52_date_market_data`
 
 Implemented local replay:
 
@@ -782,14 +782,16 @@ Artifact:
 - [[_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250307.rows.csv|_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250307.rows.csv]]
 - [[_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250307-merged-snapshots|_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250307-merged-snapshots.md]]
 - [[_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250307-merged-snapshots.rows.csv|_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250307-merged-snapshots.rows.csv]]
+- [[_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250321-merged-snapshots|_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250321-merged-snapshots.md]]
+- [[_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250321-merged-snapshots.rows.csv|_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250321-merged-snapshots.rows.csv]]
 
 Latest smoke result:
 
-- Market data input rows: `115447`
+- Market data input rows: `142990`
 - Status event rows: `497`
 - Codes with events: `286`
-- Include rows by event state: `114742`
-- Exclude rows by event state: `705`
+- Include rows by event state: `142101`
+- Exclude rows by event state: `889`
 
 Status coverage audit:
 
@@ -801,13 +803,16 @@ Status coverage audit:
 - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307.rows.csv|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307.rows.csv]]
 - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307-merged-snapshots|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307-merged-snapshots.md]]
 - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307-merged-snapshots.rows.csv|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307-merged-snapshots.rows.csv]]
+- [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250321-merged-snapshots|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250321-merged-snapshots.md]]
+- [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250321-merged-snapshots.rows.csv|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250321-merged-snapshots.rows.csv]]
 - Coverage status: `hold`
 - Coverage mode: `current_snapshot_smoke`
-- Replayed rows: `115447`; replay missing rows: `0`
-- Rows with any status-event code: `10670`; rows with applied status event: `705`; rows excluded by status event: `705`
+- Replayed rows: `142990`; replay missing rows: `0`
+- Rows with any status-event code: `13220`; rows with applied status event: `889`; rows excluded by status event: `889`
 - Raw status capture dates: `2` (`2026-07-03..2026-07-08`)
 - Release/resume-like event rows: `0`, so active-state lifetimes remain one-sided and not historical-complete.
 - Lifecycle diagnostics: `managed_issue` `105/0`, `market_alert` `75/0`, and `trading_halt` `253/0` active-like/release-resume rows.
+- The audit pass gate now also requires every lifecycle status type with active-like rows to have release/resume-like rows and at least one dated raw capture path; a single release row for another status type is not enough.
 
 Universe eligibility smoke:
 

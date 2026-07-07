@@ -167,6 +167,64 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
         self.assertEqual(summary["lifecycle_status_types_without_release"], [])
         self.assertTrue(all(row["coverage_status"] == "pass" for row in rows))
 
+    def test_historical_complete_holds_when_any_lifecycle_type_lacks_release(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            market = root / "market.csv"
+            events = root / "events.csv"
+            replayed = root / "replayed.csv"
+            _write_csv(market, _market_rows())
+            _write_csv(
+                events,
+                [
+                    _event(event_date="2025-01-01", status_type="managed_issue", status_value="designated"),
+                    _event(event_date="2025-01-03", status_type="managed_issue", status_value="released"),
+                    _event(event_date="2025-01-01", status_type="trading_halt", status_value="halted"),
+                ],
+            )
+            _write_csv(replayed, _replayed_rows())
+
+            rows, summary = audit_status_coverage(
+                market_data_path=market,
+                events_path=events,
+                replayed_market_data_path=replayed,
+                coverage_mode="historical_complete",
+                required_status_types=("managed_issue", "trading_halt"),
+            )
+
+        self.assertEqual(summary["coverage_status"], "hold")
+        self.assertEqual(summary["release_like_event_rows"], 1)
+        self.assertEqual(summary["lifecycle_status_types_without_release"], ["trading_halt"])
+        self.assertTrue(all(row["coverage_status"] == "hold" for row in rows))
+        self.assertIn("missing_lifecycle_release_events", rows[0]["coverage_notes"])
+
+    def test_historical_complete_holds_without_raw_capture_dates(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            market = root / "market.csv"
+            events = root / "events.csv"
+            replayed = root / "replayed.csv"
+            designated = _event(event_date="2025-01-01", status_value="designated")
+            released = _event(event_date="2025-01-03", status_value="released")
+            designated["raw_path"] = "_report/raw/kind/status-source-probe/managed_issue.xls"
+            released["raw_path"] = "_report/raw/kind/status-source-probe/managed_issue.xls"
+            _write_csv(market, _market_rows())
+            _write_csv(events, [designated, released])
+            _write_csv(replayed, _replayed_rows())
+
+            rows, summary = audit_status_coverage(
+                market_data_path=market,
+                events_path=events,
+                replayed_market_data_path=replayed,
+                coverage_mode="historical_complete",
+                required_status_types=("managed_issue",),
+            )
+
+        self.assertEqual(summary["coverage_status"], "hold")
+        self.assertEqual(summary["raw_capture_dates"], [])
+        self.assertTrue(all(row["coverage_status"] == "hold" for row in rows))
+        self.assertIn("raw_capture_date_unknown", rows[0]["coverage_notes"])
+
     def test_cli_writes_lf_report_and_rows(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

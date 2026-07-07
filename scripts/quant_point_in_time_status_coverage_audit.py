@@ -248,8 +248,10 @@ def audit_status_coverage(
         coverage_mode == "historical_complete"
         and not missing_required_types
         and release_like_event_rows > 0
+        and not lifecycle_status_types_without_release
         and replayed_market_data_path is not None
         and replay_missing_rows == 0
+        and raw_capture_dates
     ) else "hold"
     if coverage_status == "pass":
         for row in date_rows:
