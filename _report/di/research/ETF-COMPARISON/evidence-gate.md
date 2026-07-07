@@ -26,7 +26,7 @@
 | `korea_listed_etfs_to_verify` | `379800` | KODEX US S&P500TR | `hold` | `source_url`, `currency_hedge`, `distribution_policy`, `tax_account_fit`, `expense_ratio` | fill issuer, fee, NAV, distribution, tax, and account evidence |
 | `satellite_etfs_to_verify` | `QQQ` | Invesco QQQ Trust | `hold` | `tax_account_fit`, `expense_ratio` | fill issuer, fee, NAV, distribution, tax, and account evidence |
 | `satellite_equities.primary_queue` | `MSFT` | Microsoft | `hold` | `research decision.md` | collect filings and write thesis/decision notes |
-| `satellite_equities.primary_queue` | `GOOGL` | Alphabet | `hold` | `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
+| `satellite_equities.primary_queue` | `GOOGL` | Alphabet | `hold` | `research decision.md` | collect filings and write thesis/decision notes |
 | `satellite_equities.primary_queue` | `AMZN` | Amazon | `hold` | `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
 | `satellite_equities.primary_queue` | `META` | Meta Platforms | `hold` | `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
 | `satellite_equities.primary_queue` | `NVDA` | NVIDIA | `hold` | `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
