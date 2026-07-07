@@ -37,6 +37,7 @@ DATE_ROWS_FIELDS = (
     "coverage_status",
     "coverage_notes",
 )
+SOURCE_COVERAGE_REQUIRED_FIELDS = {"status_type", "coverage_start", "coverage_end", "source", "raw_path"}
 
 
 def _read_csv(path: Path, label: str) -> tuple[list[str], list[dict[str, str]]]:
@@ -110,6 +111,40 @@ def _raw_capture_dates(raw_path: str) -> set[str]:
     return dates
 
 
+def _read_source_coverage_manifest(path: Path) -> list[dict[str, str]]:
+    fields, rows = _read_csv(path, "source coverage manifest")
+    _require_columns(fields, SOURCE_COVERAGE_REQUIRED_FIELDS, "source coverage manifest")
+    for row in rows:
+        start = _iso_date(row.get("coverage_start", ""), "coverage_start")
+        end = _iso_date(row.get("coverage_end", ""), "coverage_end")
+        if start > end:
+            raise ValueError(f"source coverage manifest has coverage_start after coverage_end: {start}>{end}")
+        if not row.get("status_type", ""):
+            raise ValueError("source coverage manifest row has empty status_type")
+        if not row.get("source", ""):
+            raise ValueError("source coverage manifest row has empty source")
+        raw_path = row.get("raw_path", "").replace("\\", "/")
+        if not raw_path.startswith("_report/raw/"):
+            raise ValueError("source coverage manifest raw_path must be under _report/raw/")
+    return rows
+
+
+def _source_coverage_missing_status_types(
+    manifest_rows: list[dict[str, str]],
+    required_status_types: tuple[str, ...],
+    market_start: str,
+    market_end: str,
+) -> list[str]:
+    covered: set[str] = set()
+    for row in manifest_rows:
+        status_type = row.get("status_type", "")
+        if status_type not in required_status_types:
+            continue
+        if row.get("coverage_start", "") <= market_start and row.get("coverage_end", "") >= market_end:
+            covered.add(status_type)
+    return sorted(set(required_status_types) - covered)
+
+
 def _lifecycle_counts(event_rows: list[dict[str, str]]) -> dict[str, dict[str, int]]:
     counts: dict[str, dict[str, int]] = {}
     for status_type in sorted({row.get("status_type", "") for row in event_rows} & LIFECYCLE_STATUS_TYPES):
@@ -136,6 +171,7 @@ def audit_status_coverage(
     market_data_path: Path,
     events_path: Path,
     replayed_market_data_path: Path | None = None,
+    source_coverage_manifest_path: Path | None = None,
     coverage_mode: str = "current_snapshot_smoke",
     required_status_types: tuple[str, ...] = DEFAULT_REQUIRED_STATUS_TYPES,
 ) -> tuple[list[dict[str, str]], dict[str, Any]]:
@@ -152,6 +188,19 @@ def audit_status_coverage(
         _iso_date(row.get("event_date", ""), "event_date")
         if not _normalize_code(row.get("code", "")):
             raise ValueError("status-events row has empty code")
+
+    market_start = min(row["date"] for row in market_rows)
+    market_end = max(row["date"] for row in market_rows)
+    source_manifest_rows = (
+        _read_source_coverage_manifest(source_coverage_manifest_path)
+        if source_coverage_manifest_path is not None
+        else []
+    )
+    source_manifest_missing_types = (
+        _source_coverage_missing_status_types(source_manifest_rows, required_status_types, market_start, market_end)
+        if source_coverage_manifest_path is not None
+        else list(required_status_types)
+    )
 
     replayed_rows: list[dict[str, str]] = []
     replayed: dict[tuple[str, str], dict[str, str]] = {}
@@ -225,6 +274,10 @@ def audit_status_coverage(
             notes.append("replay_missing_rows")
         if not raw_capture_dates:
             notes.append("raw_capture_date_unknown")
+        if source_coverage_manifest_path is None:
+            notes.append("source_coverage_manifest_not_supplied")
+        elif source_manifest_missing_types:
+            notes.append("source_coverage_manifest_missing_status_types")
 
         date_rows.append(
             {
@@ -252,6 +305,8 @@ def audit_status_coverage(
         and replayed_market_data_path is not None
         and replay_missing_rows == 0
         and raw_capture_dates
+        and source_coverage_manifest_path is not None
+        and not source_manifest_missing_types
     ) else "hold"
     if coverage_status == "pass":
         for row in date_rows:
@@ -267,8 +322,8 @@ def audit_status_coverage(
         "market_rows": len(market_rows),
         "market_dates": len(rows_by_date),
         "market_codes": len({_normalize_code(row["code"]) for row in market_rows}),
-        "market_start": min(row["date"] for row in market_rows),
-        "market_end": max(row["date"] for row in market_rows),
+        "market_start": market_start,
+        "market_end": market_end,
         "event_rows": len(event_rows),
         "event_codes": len(event_codes),
         "event_start": min(row["event_date"] for row in event_rows),
@@ -286,6 +341,9 @@ def audit_status_coverage(
         "replayed_rows": len(replayed_rows),
         "replay_match_rows": replay_match_rows,
         "replay_missing_rows": replay_missing_rows,
+        "source_coverage_manifest_path": source_coverage_manifest_path,
+        "source_coverage_manifest_rows": len(source_manifest_rows),
+        "source_coverage_manifest_missing_status_types": source_manifest_missing_types,
         "rows_with_any_status_event_code": sum(_parse_int(row["rows_with_event_code"]) for row in date_rows),
         "rows_with_applied_status_event": sum(_parse_int(row["rows_with_applied_status_event"]) for row in date_rows),
         "rows_excluded_by_status_event": sum(_parse_int(row["rows_excluded_by_status_event"]) for row in date_rows),
@@ -358,6 +416,14 @@ def _render_report(summary: dict[str, Any], output_path: Path) -> str:
             + summary["raw_capture_dates"][0]
             + "`"
         )
+    if summary["source_coverage_manifest_path"] is None:
+        hold_reasons.append("source coverage manifest was not supplied")
+    elif summary["source_coverage_manifest_missing_status_types"]:
+        hold_reasons.append(
+            "source coverage manifest does not cover the market window for: `"
+            + ",".join(summary["source_coverage_manifest_missing_status_types"])
+            + "`"
+        )
     if not hold_reasons and summary["coverage_status"] == "pass":
         hold_reasons.append("none")
 
@@ -367,6 +433,7 @@ def _render_report(summary: dict[str, Any], output_path: Path) -> str:
         f"- Market data: {_wikilink(summary['market_data_path'])}",
         f"- Status events: {_wikilink(summary['events_path'])}",
         f"- Replayed market-data: {_wikilink(summary['replayed_market_data_path'])}",
+        f"- Source coverage manifest: {_wikilink(summary['source_coverage_manifest_path'])}",
         f"- Output: {_wikilink(output_path)}",
         f"- Coverage mode: `{summary['coverage_mode']}`",
         f"- Coverage status: `{summary['coverage_status']}`",
@@ -392,6 +459,8 @@ def _render_report(summary: dict[str, Any], output_path: Path) -> str:
         f"| Replayed rows | {summary['replayed_rows']} |",
         f"| Replay matched market rows | {summary['replay_match_rows']} |",
         f"| Replay missing market rows | {summary['replay_missing_rows']} |",
+        f"| Source coverage manifest rows | {summary['source_coverage_manifest_rows']} |",
+        f"| Source coverage missing status types | `{','.join(summary['source_coverage_manifest_missing_status_types']) or 'none'}` |",
         f"| Rows with any status-event code | {summary['rows_with_any_status_event_code']} |",
         f"| Rows with applied status event | {summary['rows_with_applied_status_event']} |",
         f"| Rows excluded by status event | {summary['rows_excluded_by_status_event']} |",
@@ -432,6 +501,7 @@ def _render_report(summary: dict[str, Any], output_path: Path) -> str:
             "",
             "- Event-code ratios are diagnostic; a stock with no status event is not automatically a data gap.",
             "- Current snapshot events can exclude active issues, but they do not prove historical state transitions.",
+            "- `historical_complete` also requires a source coverage manifest that covers the market-data window for every required status type.",
             "- Keep `Backtest readiness` at `hold` until source coverage is reproducible for every rebalance date.",
         ]
     )
@@ -443,6 +513,7 @@ def main() -> int:
     parser.add_argument("--market-data", required=True, type=Path)
     parser.add_argument("--events", required=True, type=Path)
     parser.add_argument("--replayed-market-data", type=Path)
+    parser.add_argument("--source-coverage-manifest", type=Path)
     parser.add_argument("--coverage-mode", default="current_snapshot_smoke")
     parser.add_argument("--required-status-types", default=",".join(DEFAULT_REQUIRED_STATUS_TYPES))
     parser.add_argument("--output", required=True, type=Path)
@@ -454,6 +525,7 @@ def main() -> int:
             market_data_path=args.market_data,
             events_path=args.events,
             replayed_market_data_path=args.replayed_market_data,
+            source_coverage_manifest_path=args.source_coverage_manifest,
             coverage_mode=args.coverage_mode,
             required_status_types=_split_required_status_types(args.required_status_types),
         )

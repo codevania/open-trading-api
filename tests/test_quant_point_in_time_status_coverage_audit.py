@@ -83,6 +83,24 @@ def _replayed_rows() -> list[dict[str, str]]:
     ]
 
 
+def _source_manifest_row(
+    *,
+    status_type: str = "managed_issue",
+    coverage_start: str = "2025-01-02",
+    coverage_end: str = "2025-01-03",
+) -> dict[str, str]:
+    return {
+        "status_type": status_type,
+        "coverage_start": coverage_start,
+        "coverage_end": coverage_end,
+        "source": "kind",
+        "source_url": "https://kind.krx.co.kr/example",
+        "raw_path": "_report/raw/2026/2026-07-03/kind/status-source-probe/managed_issue.xls",
+        "confidence": "high",
+        "notes": "unit-test fixture",
+    }
+
+
 class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
     def test_current_snapshot_smoke_stays_hold(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -144,6 +162,39 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
             market = root / "market.csv"
             events = root / "events.csv"
             replayed = root / "replayed.csv"
+            manifest = root / "source_manifest.csv"
+            _write_csv(market, _market_rows())
+            _write_csv(
+                events,
+                [
+                    _event(event_date="2025-01-01", status_value="designated"),
+                    _event(event_date="2025-01-03", status_value="released"),
+                ],
+            )
+            _write_csv(replayed, _replayed_rows())
+            _write_csv(manifest, [_source_manifest_row()])
+
+            rows, summary = audit_status_coverage(
+                market_data_path=market,
+                events_path=events,
+                replayed_market_data_path=replayed,
+                source_coverage_manifest_path=manifest,
+                coverage_mode="historical_complete",
+                required_status_types=("managed_issue",),
+            )
+
+        self.assertEqual(summary["coverage_status"], "pass")
+        self.assertEqual(summary["release_like_event_rows"], 1)
+        self.assertEqual(summary["lifecycle_status_types_without_release"], [])
+        self.assertEqual(summary["source_coverage_manifest_missing_status_types"], [])
+        self.assertTrue(all(row["coverage_status"] == "pass" for row in rows))
+
+    def test_historical_complete_holds_without_source_coverage_manifest(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            market = root / "market.csv"
+            events = root / "events.csv"
+            replayed = root / "replayed.csv"
             _write_csv(market, _market_rows())
             _write_csv(
                 events,
@@ -162,10 +213,10 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
                 required_status_types=("managed_issue",),
             )
 
-        self.assertEqual(summary["coverage_status"], "pass")
-        self.assertEqual(summary["release_like_event_rows"], 1)
-        self.assertEqual(summary["lifecycle_status_types_without_release"], [])
-        self.assertTrue(all(row["coverage_status"] == "pass" for row in rows))
+        self.assertEqual(summary["coverage_status"], "hold")
+        self.assertEqual(summary["source_coverage_manifest_missing_status_types"], ["managed_issue"])
+        self.assertTrue(all(row["coverage_status"] == "hold" for row in rows))
+        self.assertIn("source_coverage_manifest_not_supplied", rows[0]["coverage_notes"])
 
     def test_historical_complete_holds_when_any_lifecycle_type_lacks_release(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -173,6 +224,7 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
             market = root / "market.csv"
             events = root / "events.csv"
             replayed = root / "replayed.csv"
+            manifest = root / "source_manifest.csv"
             _write_csv(market, _market_rows())
             _write_csv(
                 events,
@@ -183,11 +235,19 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
                 ],
             )
             _write_csv(replayed, _replayed_rows())
+            _write_csv(
+                manifest,
+                [
+                    _source_manifest_row(status_type="managed_issue"),
+                    _source_manifest_row(status_type="trading_halt"),
+                ],
+            )
 
             rows, summary = audit_status_coverage(
                 market_data_path=market,
                 events_path=events,
                 replayed_market_data_path=replayed,
+                source_coverage_manifest_path=manifest,
                 coverage_mode="historical_complete",
                 required_status_types=("managed_issue", "trading_halt"),
             )
@@ -204,6 +264,7 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
             market = root / "market.csv"
             events = root / "events.csv"
             replayed = root / "replayed.csv"
+            manifest = root / "source_manifest.csv"
             designated = _event(event_date="2025-01-01", status_value="designated")
             released = _event(event_date="2025-01-03", status_value="released")
             designated["raw_path"] = "_report/raw/kind/status-source-probe/managed_issue.xls"
@@ -211,11 +272,13 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
             _write_csv(market, _market_rows())
             _write_csv(events, [designated, released])
             _write_csv(replayed, _replayed_rows())
+            _write_csv(manifest, [_source_manifest_row()])
 
             rows, summary = audit_status_coverage(
                 market_data_path=market,
                 events_path=events,
                 replayed_market_data_path=replayed,
+                source_coverage_manifest_path=manifest,
                 coverage_mode="historical_complete",
                 required_status_types=("managed_issue",),
             )

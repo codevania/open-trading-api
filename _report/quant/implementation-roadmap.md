@@ -25,7 +25,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 1. Quant learning baseline | in-progress | 35% | [[_report/quant/learning-roadmap|_report/quant/learning-roadmap.md]], week 01 study log | Continue weekly study logs tied to outputs |
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
-| 4. Point-in-Time Universe | in-progress | 75-79% | KRX OpenAPI market-data path works; two KIND current snapshots are merged into `497` logical status-event rows, a 62-date `Point-in-Time Universe` smoke produced `159048` include / `11519` exclude rows, and status coverage audit keeps this at `hold` because the source is still `current_snapshot_smoke` with `0` release/resume-like events | Extend status coverage by date/source and keep Universe eligibility smoke aligned |
+| 4. Point-in-Time Universe | in-progress | 75-79% | KRX OpenAPI market-data path works; two KIND current snapshots are merged into `497` logical status-event rows, a 62-date `Point-in-Time Universe` smoke produced `159048` include / `11519` exclude rows, and status coverage audit keeps this at `hold` because the source is still `current_snapshot_smoke` with `0` release/resume-like events and no source coverage manifest | Obtain historical transition coverage plus a source coverage manifest, then keep Universe eligibility smoke aligned |
 | 5. Market data pipeline | in-progress | 93-95% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 62-date historical market-data merge, continuity audit, date-scoped market-data join, and status replay smoke exist | Extend another bounded historical window and keep status replay coverage aligned |
 | 6. Liquidity Filter | in-progress | 70-74% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] evaluates 361 current Universe saved-raw rows; [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] produced a 62-date, 20-day Point-in-Time smoke with `44235` include rows | Keep 20-day rule aligned while status coverage expands |
 | 7. Backtest engine connection | preflight | 37-42% | [[scripts/quant_backtest_input_contract_validate.py|scripts/quant_backtest_input_contract_validate.py]] validates the 62-date, 20-day smoke artifacts as internally joinable, and [[scripts/quant_backtest_pnl_smoke.py|scripts/quant_backtest_pnl_smoke.py]] computes diagnostic weighted-return smoke rows, while Backtest remains `hold` | Wire engine only after Point-in-Time status coverage, costs, benchmark, OOS, and Bias Control are acceptable |
@@ -845,8 +845,9 @@ Status coverage audit:
 - Rows with any status-event code: `15770`; rows with applied status event: `1227`; rows excluded by status event: `1227`
 - Raw status capture dates: `2` (`2026-07-03..2026-07-08`)
 - Release/resume-like event rows: `0`, so active-state lifetimes remain one-sided and not historical-complete.
+- Source coverage manifest rows: `0`; missing manifest coverage for `managed_issue`, `trading_halt`, `market_alert`, and `delisting`.
 - Lifecycle diagnostics: `managed_issue` `105/0`, `market_alert` `75/0`, and `trading_halt` `253/0` active-like/release-resume rows.
-- The audit pass gate now also requires every lifecycle status type with active-like rows to have release/resume-like rows and at least one dated raw capture path; a single release row for another status type is not enough.
+- The audit pass gate now also requires every lifecycle status type with active-like rows to have release/resume-like rows, at least one dated raw capture path, and a source coverage manifest covering the market-data window for every required status type.
 
 Universe eligibility smoke:
 
@@ -1096,7 +1097,7 @@ Current state:
 - KRX OpenAPI core raw collection and normalization: usable for parser development and historical market-data collection.
 - KRX OpenAPI date-scoped market-data join/merge: usable as a 62-date smoke input for status replay development.
 - KRX Data Marketplace status-source probe: official status screen `bld` identifiers found, but unattended JSON access is `auth_required`.
-- KIND public status fallback: two current snapshots (`2026-07-03`, `2026-07-08`) were merged into `497` logical status-event rows and replayed against the 62-date KRX OpenAPI market-data merge, marking `1227/170567` rows as `exclude_by_status_event`; the merged coverage audit now sees `2` raw capture dates but still has `0` release/resume-like rows.
+- KIND public status fallback: two current snapshots (`2026-07-03`, `2026-07-08`) were merged into `497` logical status-event rows and replayed against the 62-date KRX OpenAPI market-data merge, marking `1227/170567` rows as `exclude_by_status_event`; the merged coverage audit now sees `2` raw capture dates but still has `0` release/resume-like rows and no source coverage manifest.
 - Point-in-Time status-event schema: KIND current snapshot samples are normalized, market-enriched, merged, and validated.
 - Point-in-Time status replay and Universe smoke: merged KIND current snapshot events replayed on a 62-date market-data smoke, then converted to `159048` include / `11519` exclude Universe rows; historical coverage still incomplete.
 - Point-in-Time Liquidity Filter smoke: a 62-date, 20-day smoke produced `44235` include rows and `126332` exclude rows, with `109890` rows evaluated on the full 20-day lookback.

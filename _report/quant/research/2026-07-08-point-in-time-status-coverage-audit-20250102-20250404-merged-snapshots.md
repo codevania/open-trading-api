@@ -3,6 +3,7 @@
 - Market data: [[_report/raw/2026/2026-07-08/krx/openapi-market-data/20250102-20250404/market_data.csv|_report/raw/2026/2026-07-08/krx/openapi-market-data/20250102-20250404/market_data.csv]]
 - Status events: [[_report/quant/data/point_in_time_status_events/2026-07-08-kind-current-status-events.merged-20260703-20260708.csv|_report/quant/data/point_in_time_status_events/2026-07-08-kind-current-status-events.merged-20260703-20260708.csv]]
 - Replayed market-data: [[_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250404-merged-snapshots.rows.csv|_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250404-merged-snapshots.rows.csv]]
+- Source coverage manifest: `not_supplied`
 - Output: [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250404-merged-snapshots.rows.csv|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250404-merged-snapshots.rows.csv]]
 - Coverage mode: `current_snapshot_smoke`
 - Coverage status: `hold`
@@ -28,6 +29,8 @@
 | Replayed rows | 170567 |
 | Replay matched market rows | 170567 |
 | Replay missing market rows | 0 |
+| Source coverage manifest rows | 0 |
+| Source coverage missing status types | `managed_issue,trading_halt,market_alert,delisting` |
 | Rows with any status-event code | 15770 |
 | Rows with applied status event | 1227 |
 | Rows excluded by status event | 1227 |
@@ -71,9 +74,11 @@
 - coverage mode is not `historical_complete`
 - no release/resume-like events are present, so active-state lifetimes are one-sided
 - status types with active-like events but no release/resume rows: `managed_issue,market_alert,trading_halt`
+- source coverage manifest was not supplied
 
 ## Guardrails
 
 - Event-code ratios are diagnostic; a stock with no status event is not automatically a data gap.
 - Current snapshot events can exclude active issues, but they do not prove historical state transitions.
+- `historical_complete` also requires a source coverage manifest that covers the market-data window for every required status type.
 - Keep `Backtest readiness` at `hold` until source coverage is reproducible for every rebalance date.
