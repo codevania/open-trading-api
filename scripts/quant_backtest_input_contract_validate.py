@@ -16,6 +16,11 @@ from datetime import datetime
 from pathlib import Path
 from typing import Iterable
 
+try:
+    from quant_io import write_text_lf
+except ModuleNotFoundError:  # pragma: no cover - used when imported as scripts.* in tests.
+    from scripts.quant_io import write_text_lf
+
 
 LIQUIDITY_REQUIRED = {
     "date",
@@ -467,9 +472,7 @@ def main() -> int:
         max_gross_exposure=args.max_gross_exposure,
     )
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        with args.report_output.open("w", encoding="utf-8", newline="\n") as handle:
-            handle.write(report)
+        write_text_lf(args.report_output, report)
     else:
         print(report, end="")
     return 0

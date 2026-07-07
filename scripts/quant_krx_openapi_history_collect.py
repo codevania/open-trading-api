@@ -14,6 +14,11 @@ from pathlib import Path
 from typing import Any, Callable
 
 try:
+    from quant_io import write_text_lf
+except ModuleNotFoundError:  # pragma: no cover - used when imported as scripts.* in tests.
+    from scripts.quant_io import write_text_lf
+
+try:
     from quant_krx_openapi_collect import SERVICES, _collect_one, _resolve_auth_key
 except ModuleNotFoundError:  # pragma: no cover - used when imported as scripts.* in tests.
     from scripts.quant_krx_openapi_collect import SERVICES, _collect_one, _resolve_auth_key
@@ -198,9 +203,7 @@ def main() -> int:
         _write_json(args.output, summary)
     report = _render_report(summary, args.plan, args.output)
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        with args.report_output.open("w", encoding="utf-8", newline="\n") as handle:
-            handle.write(report)
+        write_text_lf(args.report_output, report)
     else:
         print(report, end="")
     return 0

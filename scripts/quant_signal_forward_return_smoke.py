@@ -13,6 +13,11 @@ from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean
 
+try:
+    from quant_io import write_text_lf
+except ModuleNotFoundError:  # pragma: no cover - used when imported as scripts.* in tests.
+    from scripts.quant_io import write_text_lf
+
 
 DEFAULT_HORIZONS = (1, 5)
 
@@ -340,9 +345,7 @@ def main() -> int:
         csv_output=args.csv_output,
     )
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        with args.report_output.open("w", encoding="utf-8", newline="\n") as handle:
-            handle.write(report)
+        write_text_lf(args.report_output, report)
     else:
         print(report, end="")
     return 0
