@@ -113,6 +113,31 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
         self.assertIn("no_release_like_events", rows[0]["coverage_notes"])
         self.assertIn("missing_lifecycle_release_events", rows[0]["coverage_notes"])
 
+    def test_counts_multiple_raw_capture_dates_in_merged_raw_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            market = root / "market.csv"
+            events = root / "events.csv"
+            replayed = root / "replayed.csv"
+            merged_event = _event(event_date="2025-01-01")
+            merged_event["raw_path"] = (
+                "_report/raw/2026/2026-07-03/kind/status-source-probe/managed_issue.xls;"
+                "_report/raw/2026/2026-07-08/kind/status-source-probe/managed_issue.xls"
+            )
+            _write_csv(market, _market_rows())
+            _write_csv(events, [merged_event])
+            _write_csv(replayed, _replayed_rows())
+
+            _rows, summary = audit_status_coverage(
+                market_data_path=market,
+                events_path=events,
+                replayed_market_data_path=replayed,
+                coverage_mode="current_snapshot_smoke",
+                required_status_types=("managed_issue",),
+            )
+
+        self.assertEqual(summary["raw_capture_dates"], ["2026-07-03", "2026-07-08"])
+
     def test_historical_complete_can_pass_when_release_events_and_replay_are_present(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

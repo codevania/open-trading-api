@@ -98,16 +98,16 @@ def _is_release_like(event: dict[str, str]) -> bool:
     return status_type in RELEASE_LIKE_STATUS_TYPES or status_value in RELEASE_LIKE_STATUS_VALUES
 
 
-def _raw_capture_date(raw_path: str) -> str | None:
-    match = RAW_CAPTURE_DATE_RE.search(str(raw_path or ""))
-    if not match:
-        return None
-    value = match.group(1)
-    try:
-        datetime.strptime(value, "%Y-%m-%d")
-    except ValueError:
-        return None
-    return value
+def _raw_capture_dates(raw_path: str) -> set[str]:
+    dates: set[str] = set()
+    for match in RAW_CAPTURE_DATE_RE.finditer(str(raw_path or "")):
+        value = match.group(1)
+        try:
+            datetime.strptime(value, "%Y-%m-%d")
+        except ValueError:
+            continue
+        dates.add(value)
+    return dates
 
 
 def _lifecycle_counts(event_rows: list[dict[str, str]]) -> dict[str, dict[str, int]]:
@@ -171,7 +171,7 @@ def audit_status_coverage(
     confidence_counts = Counter(row.get("confidence", "") or "blank" for row in event_rows)
     raw_path_counts = Counter(row["raw_path"] for row in event_rows)
     raw_capture_dates = sorted(
-        {capture_date for row in event_rows if (capture_date := _raw_capture_date(row.get("raw_path", "")))}
+        {capture_date for row in event_rows for capture_date in _raw_capture_dates(row.get("raw_path", ""))}
     )
     release_like_event_rows = sum(1 for row in event_rows if _is_release_like(row))
     lifecycle_status_type_rows = _lifecycle_counts(event_rows)
