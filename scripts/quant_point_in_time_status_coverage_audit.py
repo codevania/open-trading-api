@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import re
 from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
@@ -17,8 +18,10 @@ from quant_io import write_text_lf
 
 
 DEFAULT_REQUIRED_STATUS_TYPES = ("managed_issue", "trading_halt", "market_alert", "delisting")
+LIFECYCLE_STATUS_TYPES = {"managed_issue", "trading_halt", "market_alert"}
 RELEASE_LIKE_STATUS_TYPES = {"trading_resume"}
 RELEASE_LIKE_STATUS_VALUES = {"released", "resumed", "cleared", "normal", "delisting_withdrawn"}
+RAW_CAPTURE_DATE_RE = re.compile(r"(?:^|[\\/])raw[\\/]\d{4}[\\/](\d{4}-\d{2}-\d{2})(?:[\\/]|$)")
 DATE_ROWS_FIELDS = (
     "date",
     "market_rows",
@@ -95,6 +98,30 @@ def _is_release_like(event: dict[str, str]) -> bool:
     return status_type in RELEASE_LIKE_STATUS_TYPES or status_value in RELEASE_LIKE_STATUS_VALUES
 
 
+def _raw_capture_date(raw_path: str) -> str | None:
+    match = RAW_CAPTURE_DATE_RE.search(str(raw_path or ""))
+    if not match:
+        return None
+    value = match.group(1)
+    try:
+        datetime.strptime(value, "%Y-%m-%d")
+    except ValueError:
+        return None
+    return value
+
+
+def _lifecycle_counts(event_rows: list[dict[str, str]]) -> dict[str, dict[str, int]]:
+    counts: dict[str, dict[str, int]] = {}
+    for status_type in sorted({row.get("status_type", "") for row in event_rows} & LIFECYCLE_STATUS_TYPES):
+        type_rows = [row for row in event_rows if row.get("status_type", "") == status_type]
+        release_like_rows = sum(1 for row in type_rows if _is_release_like(row))
+        counts[status_type] = {
+            "active_like_rows": len(type_rows) - release_like_rows,
+            "release_like_rows": release_like_rows,
+        }
+    return counts
+
+
 def _replayed_index(rows: list[dict[str, str]]) -> dict[tuple[str, str], dict[str, str]]:
     indexed: dict[tuple[str, str], dict[str, str]] = {}
     for row in rows:
@@ -143,7 +170,16 @@ def audit_status_coverage(
     source_counts = Counter(row["source"] for row in event_rows)
     confidence_counts = Counter(row.get("confidence", "") or "blank" for row in event_rows)
     raw_path_counts = Counter(row["raw_path"] for row in event_rows)
+    raw_capture_dates = sorted(
+        {capture_date for row in event_rows if (capture_date := _raw_capture_date(row.get("raw_path", "")))}
+    )
     release_like_event_rows = sum(1 for row in event_rows if _is_release_like(row))
+    lifecycle_status_type_rows = _lifecycle_counts(event_rows)
+    lifecycle_status_types_without_release = [
+        status_type
+        for status_type, counts in lifecycle_status_type_rows.items()
+        if counts["active_like_rows"] > 0 and counts["release_like_rows"] == 0
+    ]
     missing_required_types = sorted(set(required_status_types) - set(status_type_counts))
 
     rows_by_date: dict[str, list[dict[str, str]]] = defaultdict(list)
@@ -181,10 +217,14 @@ def audit_status_coverage(
             notes.append("missing_required_status_types")
         if release_like_event_rows == 0:
             notes.append("no_release_like_events")
+        if lifecycle_status_types_without_release:
+            notes.append("missing_lifecycle_release_events")
         if replayed_market_data_path is None:
             notes.append("replay_not_supplied")
         elif replay_missing_rows:
             notes.append("replay_missing_rows")
+        if not raw_capture_dates:
+            notes.append("raw_capture_date_unknown")
 
         date_rows.append(
             {
@@ -236,7 +276,10 @@ def audit_status_coverage(
         "source_counts": dict(sorted(source_counts.items())),
         "confidence_counts": dict(sorted(confidence_counts.items())),
         "raw_path_count": len(raw_path_counts),
+        "raw_capture_dates": raw_capture_dates,
         "release_like_event_rows": release_like_event_rows,
+        "lifecycle_status_type_rows": lifecycle_status_type_rows,
+        "lifecycle_status_types_without_release": lifecycle_status_types_without_release,
         "missing_required_status_types": missing_required_types,
         "replayed_rows": len(replayed_rows),
         "replay_match_rows": replay_match_rows,
@@ -270,6 +313,21 @@ def _render_counter(counter: dict[str, int]) -> list[str]:
     return [f"| `{key}` | {count} |" for key, count in counter.items()]
 
 
+def _render_capture_date_window(capture_dates: list[str]) -> str:
+    if not capture_dates:
+        return "unknown"
+    return f"{capture_dates[0]}..{capture_dates[-1]}"
+
+
+def _render_lifecycle_rows(lifecycle_rows: dict[str, dict[str, int]]) -> list[str]:
+    if not lifecycle_rows:
+        return ["| `none` | 0 | 0 |"]
+    return [
+        f"| `{status_type}` | {counts['active_like_rows']} | {counts['release_like_rows']} |"
+        for status_type, counts in lifecycle_rows.items()
+    ]
+
+
 def _render_report(summary: dict[str, Any], output_path: Path) -> str:
     hold_reasons: list[str] = []
     if summary["coverage_mode"] != "historical_complete":
@@ -280,10 +338,24 @@ def _render_report(summary: dict[str, Any], output_path: Path) -> str:
         )
     if summary["release_like_event_rows"] == 0:
         hold_reasons.append("no release/resume-like events are present, so active-state lifetimes are one-sided")
+    if summary["lifecycle_status_types_without_release"]:
+        hold_reasons.append(
+            "status types with active-like events but no release/resume rows: `"
+            + ",".join(summary["lifecycle_status_types_without_release"])
+            + "`"
+        )
     if summary["replayed_market_data_path"] is None:
         hold_reasons.append("status replay rows were not supplied")
     elif summary["replay_missing_rows"]:
         hold_reasons.append(f"status replay is missing {summary['replay_missing_rows']} market rows")
+    if not summary["raw_capture_dates"]:
+        hold_reasons.append("raw status capture dates could not be inferred from source paths")
+    elif summary["coverage_status"] == "hold" and len(summary["raw_capture_dates"]) == 1:
+        hold_reasons.append(
+            "status events currently map to a single raw capture date: `"
+            + summary["raw_capture_dates"][0]
+            + "`"
+        )
     if not hold_reasons and summary["coverage_status"] == "pass":
         hold_reasons.append("none")
 
@@ -312,6 +384,8 @@ def _render_report(summary: dict[str, Any], output_path: Path) -> str:
         f"| Status event codes | {summary['event_codes']} |",
         f"| Event date window | `{summary['event_start']}..{summary['event_end']}` |",
         f"| Raw status source paths | {summary['raw_path_count']} |",
+        f"| Raw status capture dates | {len(summary['raw_capture_dates'])} |",
+        f"| Raw status capture date window | `{_render_capture_date_window(summary['raw_capture_dates'])}` |",
         f"| Release/resume-like event rows | {summary['release_like_event_rows']} |",
         f"| Replayed rows | {summary['replayed_rows']} |",
         f"| Replay matched market rows | {summary['replay_match_rows']} |",
@@ -331,6 +405,12 @@ def _render_report(summary: dict[str, Any], output_path: Path) -> str:
         "| Status value | Rows |",
         "| --- | ---: |",
         *_render_counter(summary["status_value_counts"]),
+        "",
+        "## Lifecycle Diagnostics",
+        "",
+        "| Status type | Active-like rows | Release/resume-like rows |",
+        "| --- | ---: | ---: |",
+        *_render_lifecycle_rows(summary["lifecycle_status_type_rows"]),
         "",
         "## Source Counts",
         "",

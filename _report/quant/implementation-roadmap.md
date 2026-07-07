@@ -25,7 +25,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 1. Quant learning baseline | in-progress | 35% | [[_report/quant/learning-roadmap|_report/quant/learning-roadmap.md]], week 01 study log | Continue weekly study logs tied to outputs |
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
-| 4. Point-in-Time Universe | in-progress | 70-74% | KRX OpenAPI market-data path works; KIND status replay produced `344` valid event rows, `310/344` market labels resolved after both 17-date and 33-date market-data joins, a 42-date `Point-in-Time Universe` smoke produced `107766` include / `7681` exclude rows, and status coverage audit keeps this at `hold` because the source is `current_snapshot_smoke` with `0` release/resume-like events | Extend status coverage by date/source and keep Universe eligibility smoke aligned |
+| 4. Point-in-Time Universe | in-progress | 70-74% | KRX OpenAPI market-data path works; KIND status replay produced `344` valid event rows, `310/344` market labels resolved after both 17-date and 33-date market-data joins, a 42-date `Point-in-Time Universe` smoke produced `107766` include / `7681` exclude rows, and status coverage audit keeps this at `hold` because the source is `current_snapshot_smoke` from one raw capture date with `0` release/resume-like events | Extend status coverage by date/source and keep Universe eligibility smoke aligned |
 | 5. Market data pipeline | in-progress | 90-93% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 42-date historical market-data merge, continuity audit, date-scoped market-data join, and status replay smoke exist | Extend another bounded historical window and keep status replay coverage aligned |
 | 6. Liquidity Filter | in-progress | 66-71% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] evaluates 361 current Universe saved-raw rows; [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] produced a 42-date, 20-day Point-in-Time smoke with `23961` include rows | Keep 20-day rule aligned while status coverage expands |
 | 7. Backtest engine connection | preflight | 33-38% | [[scripts/quant_backtest_input_contract_validate.py|scripts/quant_backtest_input_contract_validate.py]] validates the 42-date, 20-day smoke artifacts as internally joinable, and [[scripts/quant_backtest_pnl_smoke.py|scripts/quant_backtest_pnl_smoke.py]] computes diagnostic weighted-return smoke rows, while Backtest remains `hold` | Wire engine only after Point-in-Time status coverage, costs, benchmark, OOS, and Bias Control are acceptable |
@@ -728,7 +728,9 @@ Status coverage audit:
 - Coverage mode: `current_snapshot_smoke`
 - Replayed rows: `115447`; replay missing rows: `0`
 - Rows with any status-event code: `9788`; rows with applied status event: `705`; rows excluded by status event: `705`
+- Raw status capture dates: `1` (`2026-07-03..2026-07-03`)
 - Release/resume-like event rows: `0`, so active-state lifetimes remain one-sided and not historical-complete.
+- Lifecycle diagnostics: `managed_issue`, `market_alert`, and `trading_halt` all have active-like rows but `0` release/resume-like rows.
 
 Universe eligibility smoke:
 

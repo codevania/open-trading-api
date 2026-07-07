@@ -22,6 +22,8 @@
 | Status event codes | 265 |
 | Event date window | `2022-03-24..2026-07-03` |
 | Raw status source paths | 6 |
+| Raw status capture dates | 1 |
+| Raw status capture date window | `2026-07-03..2026-07-03` |
 | Release/resume-like event rows | 0 |
 | Replayed rows | 115447 |
 | Replay matched market rows | 115447 |
@@ -50,6 +52,14 @@
 | `risk` | 1 |
 | `warning` | 16 |
 
+## Lifecycle Diagnostics
+
+| Status type | Active-like rows | Release/resume-like rows |
+| --- | ---: | ---: |
+| `managed_issue` | 104 | 0 |
+| `market_alert` | 52 | 0 |
+| `trading_halt` | 126 | 0 |
+
 ## Source Counts
 
 | Source | Rows |
@@ -60,6 +70,8 @@
 
 - coverage mode is not `historical_complete`
 - no release/resume-like events are present, so active-state lifetimes are one-sided
+- status types with active-like events but no release/resume rows: `managed_issue,market_alert,trading_halt`
+- status events currently map to a single raw capture date: `2026-07-03`
 
 ## Guardrails
 

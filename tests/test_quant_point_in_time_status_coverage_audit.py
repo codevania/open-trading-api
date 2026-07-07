@@ -107,8 +107,11 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
         self.assertEqual(summary["replay_match_rows"], 4)
         self.assertEqual(summary["rows_with_applied_status_event"], 2)
         self.assertEqual(summary["rows_excluded_by_status_event"], 1)
+        self.assertEqual(summary["raw_capture_dates"], ["2026-07-03"])
+        self.assertEqual(summary["lifecycle_status_types_without_release"], ["managed_issue"])
         self.assertIn("mode_not_historical_complete", rows[0]["coverage_notes"])
         self.assertIn("no_release_like_events", rows[0]["coverage_notes"])
+        self.assertIn("missing_lifecycle_release_events", rows[0]["coverage_notes"])
 
     def test_historical_complete_can_pass_when_release_events_and_replay_are_present(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -136,6 +139,7 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
 
         self.assertEqual(summary["coverage_status"], "pass")
         self.assertEqual(summary["release_like_event_rows"], 1)
+        self.assertEqual(summary["lifecycle_status_types_without_release"], [])
         self.assertTrue(all(row["coverage_status"] == "pass" for row in rows))
 
     def test_cli_writes_lf_report_and_rows(self) -> None:
@@ -176,6 +180,9 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
 
         self.assertIn("- Coverage status: `hold`", report_text)
         self.assertIn("| Rows with applied status event | 2 |", report_text)
+        self.assertIn("| Raw status capture dates | 1 |", report_text)
+        self.assertIn("| `managed_issue` | 1 | 0 |", report_text)
+        self.assertIn("status types with active-like events but no release/resume rows", report_text)
         self.assertNotIn(b"\r\n", report_bytes)
         self.assertNotIn(b"\r\n", output_bytes)
 
