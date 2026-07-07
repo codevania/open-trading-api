@@ -21,17 +21,46 @@ If local Quant changes are still present, stage/commit them before expanding mar
 
 Suggested commit intent:
 
-`Capture thirtysixth KIS OHLCV universe batch`
+`Extend KRX market-data smoke through 2025-03-07`
 
 Use Lore commit protocol.
 
 ## Current Best Next Task
 
-Use the 33-date KRX OpenAPI market-data merge, KIND status replay, local status coverage audit, `Point-in-Time Universe` smoke, 20-day `Point-in-Time` Liquidity Filter smoke, paper-only Momentum Signal Candidate smoke, Signal forward-return smoke, long-only portfolio target smoke, Backtest input contract validation, Backtest PnL smoke, and local Quant readiness check as the plumbing baseline. The next lane is to extend KIND or authenticated/manual KRX status coverage by date/source, resolve remaining `UNKNOWN` market rows where official evidence supports it, extend the market-data window enough to cover production forward-return horizons, and keep the Universe/Liquidity/Signal/portfolio/contract/PnL/readiness smoke aligned until it can become a Backtest input. KIS demo trading is only at local preflight level; do not build or run an order executor until demo auth/account, buying-power, sellable-quantity, status/cancel, kill-switch, and explicit confirmation gates are implemented.
+Use the 42-date KRX OpenAPI market-data merge, KIND status replay, local status coverage audit, `Point-in-Time Universe` smoke, 20-day `Point-in-Time` Liquidity Filter smoke, paper-only Momentum Signal Candidate smoke, Signal forward-return smoke, long-only portfolio target smoke, Backtest input contract validation, Backtest PnL smoke, and local Quant readiness check as the plumbing baseline. The next lane is to extend KIND or authenticated/manual KRX status coverage by date/source, resolve remaining `UNKNOWN` market rows where official evidence supports it, extend the market-data window enough to cover production forward-return horizons, and keep the Universe/Liquidity/Signal/portfolio/contract/PnL/readiness smoke aligned until it can become a Backtest input. KIS demo trading is only at local preflight level; do not build or run an order executor until demo auth/account, buying-power, sellable-quantity, status/cancel, kill-switch, and explicit confirmation gates are implemented.
 
 Already implemented in the latest local work:
 
-- Latest 33-date baseline artifacts:
+- Latest 42-date baseline artifacts:
+  - [[_report/quant/research/2026-07-08-krx-openapi-history-plan-20250224-20250307|_report/quant/research/2026-07-08-krx-openapi-history-plan-20250224-20250307.md]]
+  - [[_report/quant/research/2026-07-08-krx-openapi-history-plan-20250224-20250307.requests.json|_report/quant/research/2026-07-08-krx-openapi-history-plan-20250224-20250307.requests.json]]
+  - [[_report/quant/research/2026-07-08-krx-openapi-history-collection-result-20250224-20250307|_report/quant/research/2026-07-08-krx-openapi-history-collection-result-20250224-20250307.md]]
+  - [[_report/quant/research/2026-07-08-krx-openapi-history-collection-result-20250224-20250307.requests.json|_report/quant/research/2026-07-08-krx-openapi-history-collection-result-20250224-20250307.requests.json]]
+  - [[_report/quant/research/2026-07-08-krx-openapi-history-normalize-result-20250224-20250307|_report/quant/research/2026-07-08-krx-openapi-history-normalize-result-20250224-20250307.md]]
+  - [[_report/quant/research/2026-07-08-krx-openapi-continuity-audit-20250224-20250307|_report/quant/research/2026-07-08-krx-openapi-continuity-audit-20250224-20250307.md]]
+  - [[_report/quant/research/2026-07-08-krx-openapi-continuity-audit-20250224-20250307.rows.csv|_report/quant/research/2026-07-08-krx-openapi-continuity-audit-20250224-20250307.rows.csv]]
+  - [[_report/quant/research/2026-07-08-krx-openapi-market-data-join-20250224-20250307|_report/quant/research/2026-07-08-krx-openapi-market-data-join-20250224-20250307.md]]
+  - [[_report/quant/research/2026-07-08-krx-openapi-market-data-merge-20250102-20250307|_report/quant/research/2026-07-08-krx-openapi-market-data-merge-20250102-20250307.md]]
+  - [[_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250307|_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250307.md]]
+  - [[_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250307.rows.csv|_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250307.rows.csv]]
+  - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307.md]]
+  - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307.rows.csv|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307.rows.csv]]
+  - [[_report/quant/research/2026-07-08-kind-status-point-in-time-universe-smoke-20250102-20250307|_report/quant/research/2026-07-08-kind-status-point-in-time-universe-smoke-20250102-20250307.md]]
+  - [[_report/quant/research/2026-07-08-kind-status-point-in-time-universe-smoke-20250102-20250307.rows.csv|_report/quant/research/2026-07-08-kind-status-point-in-time-universe-smoke-20250102-20250307.rows.csv]]
+  - [[_report/quant/research/2026-07-08-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250307|_report/quant/research/2026-07-08-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250307.md]]
+  - [[_report/quant/research/2026-07-08-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250307.rows.csv|_report/quant/research/2026-07-08-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250307.rows.csv]]
+  - [[_report/quant/research/2026-07-08-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250307|_report/quant/research/2026-07-08-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250307.md]]
+  - [[_report/quant/research/2026-07-08-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250307.rows.csv|_report/quant/research/2026-07-08-kind-status-point-in-time-momentum-signal-candidates-smoke-20d-20250102-20250307.rows.csv]]
+  - [[_report/quant/research/2026-07-08-signal-forward-return-smoke-20d-20250102-20250307|_report/quant/research/2026-07-08-signal-forward-return-smoke-20d-20250102-20250307.md]]
+  - [[_report/quant/research/2026-07-08-signal-forward-return-smoke-20d-20250102-20250307.rows.csv|_report/quant/research/2026-07-08-signal-forward-return-smoke-20d-20250102-20250307.rows.csv]]
+  - [[_report/quant/research/2026-07-08-signal-portfolio-targets-smoke-20d-20250102-20250307|_report/quant/research/2026-07-08-signal-portfolio-targets-smoke-20d-20250102-20250307.md]]
+  - [[_report/quant/research/2026-07-08-signal-portfolio-targets-smoke-20d-20250102-20250307.rows.csv|_report/quant/research/2026-07-08-signal-portfolio-targets-smoke-20d-20250102-20250307.rows.csv]]
+  - [[_report/quant/research/2026-07-08-backtest-input-contract-validate-20250102-20250307|_report/quant/research/2026-07-08-backtest-input-contract-validate-20250102-20250307.md]]
+  - [[_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250307|_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250307.md]]
+  - [[_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250307.rows.csv|_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250307.rows.csv]]
+  - [[_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250307|_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250307.md]]
+
+- Previous 33-date baseline artifacts:
   - [[scripts/quant_krx_openapi_history_collect.py|scripts/quant_krx_openapi_history_collect.py]]
   - [[tests/test_quant_krx_openapi_history_collect.py|tests/test_quant_krx_openapi_history_collect.py]]
   - [[_report/quant/research/2026-07-06-krx-openapi-history-plan-20250210-20250221|_report/quant/research/2026-07-06-krx-openapi-history-plan-20250210-20250221.md]]

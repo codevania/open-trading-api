@@ -1,0 +1,11 @@
+﻿date,stock_daily_rows,issue_base_rows,index_daily_rows,stock_kospi_rows,stock_kosdaq_rows,issue_kospi_rows,issue_kosdaq_rows,duplicate_stock_keys,duplicate_issue_keys,missing_issue_for_stock,missing_stock_for_issue,stock_daily_delta_prev,issue_base_delta_prev,row_count_alert
+2025-02-24,2751,2751,91,961,1790,961,1790,0,0,0,0,,,false
+2025-02-25,2752,2752,91,961,1791,961,1791,0,0,0,0,1,1,false
+2025-02-26,2752,2752,91,961,1791,961,1791,0,0,0,0,0,0,false
+2025-02-27,2752,2752,91,961,1791,961,1791,0,0,0,0,0,0,false
+2025-02-28,2752,2752,91,961,1791,961,1791,0,0,0,0,0,0,false
+2025-03-03,0,2752,0,0,0,961,1791,0,0,0,2752,-2752,0,true
+2025-03-04,2752,2752,91,961,1791,961,1791,0,0,0,0,2752,0,true
+2025-03-05,2752,2752,91,961,1791,961,1791,0,0,0,0,0,0,false
+2025-03-06,2753,2753,91,961,1792,961,1792,0,0,0,0,1,1,false
+2025-03-07,2753,2753,91,961,1792,961,1792,0,0,0,0,0,0,false
