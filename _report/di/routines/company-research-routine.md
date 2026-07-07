@@ -101,9 +101,13 @@ python scripts/di_opendart_collect.py --stock-code 005930 --business-year 2025
 
 ```bash
 python scripts/di_sec_edgar_collect.py --ticker MSFT
+python scripts/di_sec_filing_summary.py --symbol MSFT --run-date YYYY-MM-DD
 ```
 
-두 스크립트 모두 `--dry-run`을 지원하며, 키와 User-Agent는 출력하지 않는다.
+OpenDART/SEC raw 수집 스크립트는 `--dry-run`을 지원하며, 키와 User-Agent는 출력하지 않는다.
+
+`di_sec_filing_summary.py`는 SEC raw JSON을 읽어 `_report/di/research/SYMBOL/sec-filing-summary.md`를 생성한다. 이 요약은 원천 준비 상태를 보는 용도이며 `thesis.md` 또는 `decision.md`를 대체하지 않는다.
+XBRL concept snapshot에서 `stale`로 표시된 항목은 최신 10-K/10-Q보다 오래된 태그이므로 재무제표 작성에 그대로 사용하지 않는다.
 
 ## 완료 기준
 
@@ -112,4 +116,5 @@ python scripts/di_sec_edgar_collect.py --ticker MSFT
 - 밸류에이션은 확정값이 아니라 범위와 가정으로 적혀 있다.
 - 매수/보류/제외 판단과 무효화 조건이 있다.
 - 원천 출처와 확인일을 남긴다.
+- 미국 상장 위성주는 `sec-filing-summary.md`가 먼저 있어야 한다.
 - `di_candidate_evidence_check.py`가 빈 템플릿 또는 체크되지 않은 `decision.md`를 계속 `hold`로 판정한다.

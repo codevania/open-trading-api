@@ -23,6 +23,7 @@ TICKER_RE = re.compile(r"^[A-Za-z][A-Za-z0-9.\-]{0,14}$")
 CIK_RE = re.compile(r"^\d{1,10}$")
 
 DEFAULT_CONCEPTS = (
+    "RevenueFromContractWithCustomerExcludingAssessedTax",
     "Revenues",
     "OperatingIncomeLoss",
     "NetIncomeLoss",

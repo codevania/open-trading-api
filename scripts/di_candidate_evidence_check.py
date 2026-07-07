@@ -23,6 +23,7 @@ DEFAULT_RESEARCH_ROOT = Path("_report/di/research")
 
 UNCHECKED_TOKENS = ("todo", "verify", "check", "must be checked", "needs_", "null")
 MIN_RESEARCH_LINES = {
+    "sec-filing-summary.md": 6,
     "thesis.md": 6,
     "decision.md": 4,
 }
@@ -140,6 +141,11 @@ def _etf_gate(section: str, row: dict[str, Any]) -> CandidateGate:
 def _stock_gate(section: str, row: dict[str, Any], research_root: Path) -> CandidateGate:
     missing = _missing_fields(row, ("filings_to_read",))
     symbol = _text(row.get("symbol")).upper()
+    market = _text(row.get("market")).upper()
+    if market in {"NASDAQ", "NYSE"}:
+        file_status = _research_file_status(symbol, research_root, "sec-filing-summary.md")
+        if file_status:
+            missing.append(file_status)
     for filename in ("thesis.md", "decision.md"):
         file_status = _research_file_status(symbol, research_root, filename)
         if file_status:

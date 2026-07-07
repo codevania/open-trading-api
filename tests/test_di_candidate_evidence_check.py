@@ -49,6 +49,19 @@ class DiCandidateEvidenceCheckTest(unittest.TestCase):
             research_root = root / "research"
             msft = research_root / "MSFT"
             msft.mkdir(parents=True)
+            (msft / "sec-filing-summary.md").write_text(
+                """\
+# MSFT SEC Filing Summary
+
+- Source: SEC EDGAR raw JSON collected for DI research
+- Order intent generated: `false`
+- Latest 10-K: available
+- Latest 10-Q: available
+- Latest 8-K: available
+- XBRL facts: available
+""",
+                encoding="utf-8",
+            )
             (msft / "thesis.md").write_text(
                 """\
 # Thesis
@@ -134,6 +147,10 @@ class DiCandidateEvidenceCheckTest(unittest.TestCase):
             research_root = root / "research"
             msft = research_root / "MSFT"
             msft.mkdir(parents=True)
+            (msft / "sec-filing-summary.md").write_text(
+                "# MSFT SEC Filing Summary\n\n- Source: SEC\n- 10-K available\n- 10-Q available\n- 8-K available\n- Facts available\n- Order intent generated: `false`\n",
+                encoding="utf-8",
+            )
             (msft / "thesis.md").write_text("# Thesis\n\n- Symbol:\n-\n1.\n", encoding="utf-8")
             (msft / "decision.md").write_text("# Decision\n\n- [ ] 관심\n-\n", encoding="utf-8")
             manifest.write_text(MANIFEST, encoding="utf-8")
@@ -167,6 +184,10 @@ class DiCandidateEvidenceCheckTest(unittest.TestCase):
             research_root = root / "research"
             msft = research_root / "MSFT"
             msft.mkdir(parents=True)
+            (msft / "sec-filing-summary.md").write_text(
+                "# MSFT SEC Filing Summary\n\n- Source: SEC\n- 10-K available\n- 10-Q available\n- 8-K available\n- Facts available\n- Order intent generated: `false`\n",
+                encoding="utf-8",
+            )
             (msft / "thesis.md").write_text(
                 """\
 # Thesis
@@ -217,6 +238,63 @@ class DiCandidateEvidenceCheckTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("`research decision.md checked decision`", result.stdout)
+
+    def test_us_stock_requires_sec_filing_summary(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "candidates.yaml"
+            research_root = root / "research"
+            msft = research_root / "MSFT"
+            msft.mkdir(parents=True)
+            (msft / "thesis.md").write_text(
+                """\
+# Thesis
+
+- Symbol: MSFT
+- Company: Microsoft
+- 주요 원천: SEC 10-K
+1. First thesis point with evidence.
+2. Second thesis point with evidence.
+3. Third thesis point with evidence.
+- 무효화 조건: evidence changes.
+""",
+                encoding="utf-8",
+            )
+            (msft / "decision.md").write_text(
+                """\
+# Decision
+
+- Symbol: MSFT
+- Company/ETF: Microsoft
+- [x] 관심
+- 결정: source summary missing test.
+1. Evidence was reviewed.
+2. Risk budget remains pending.
+- 무효화 조건: evidence changes.
+""",
+                encoding="utf-8",
+            )
+            manifest.write_text(MANIFEST, encoding="utf-8")
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--candidate-file",
+                    str(manifest),
+                    "--research-root",
+                    str(research_root),
+                    "--run-date",
+                    "2026-07-08",
+                ],
+                cwd=REPO_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("`research sec-filing-summary.md`", result.stdout)
 
     def test_rejects_non_object_manifest(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

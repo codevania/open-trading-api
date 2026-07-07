@@ -69,4 +69,5 @@
 
 - `scripts/di_opendart_collect.py`: OpenDART 회사 고유번호, 공시목록, 기업개황, 전체 재무제표 raw 저장
 - `scripts/di_sec_edgar_collect.py`: SEC ticker-CIK, submissions, companyfacts, 주요 companyconcept raw 저장
+- `scripts/di_sec_filing_summary.py`: SEC raw JSON에서 최근 10-K/10-Q/8-K와 XBRL concept snapshot을 Markdown으로 요약
 - `scripts/di_etf_source_collect.py`: ETF 후보의 공식 운용사 페이지 HTML과 메타데이터를 `_report/raw/YYYY/YYYY-MM-DD/di/etf-sources/` 아래에 저장
