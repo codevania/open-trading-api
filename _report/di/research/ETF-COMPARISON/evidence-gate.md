@@ -31,13 +31,13 @@
 | `satellite_equities.primary_queue` | `META` | Meta Platforms | `hold` | `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
 | `satellite_equities.primary_queue` | `NVDA` | NVIDIA | `hold` | `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
 | `satellite_equities.primary_queue` | `AVGO` | Broadcom | `hold` | `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
-| `satellite_equities.secondary_queue` | `AAPL` | Apple | `hold` | `research sec-filing-summary.md`, `research sec-filing-documents.md`, `research sec-filing-sections.md`, `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
-| `satellite_equities.secondary_queue` | `TSM` | Taiwan Semiconductor Manufacturing | `hold` | `research sec-filing-summary.md`, `research sec-filing-documents.md`, `research sec-filing-sections.md`, `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
-| `satellite_equities.secondary_queue` | `ASML` | ASML Holding | `hold` | `research sec-filing-summary.md`, `research sec-filing-documents.md`, `research sec-filing-sections.md`, `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
-| `satellite_equities.secondary_queue` | `AMD` | Advanced Micro Devices | `hold` | `research sec-filing-summary.md`, `research sec-filing-documents.md`, `research sec-filing-sections.md`, `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
+| `satellite_equities.secondary_queue` | `AAPL` | Apple | `hold` | `research sec-filing-summary.md`, `research sec-filing-documents.md`, `research sec-filing-sections.md`, `research financials.md`, `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
+| `satellite_equities.secondary_queue` | `TSM` | Taiwan Semiconductor Manufacturing | `hold` | `research sec-filing-summary.md`, `research sec-filing-documents.md`, `research sec-filing-sections.md`, `research financials.md`, `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
+| `satellite_equities.secondary_queue` | `ASML` | ASML Holding | `hold` | `research sec-filing-summary.md`, `research sec-filing-documents.md`, `research sec-filing-sections.md`, `research financials.md`, `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
+| `satellite_equities.secondary_queue` | `AMD` | Advanced Micro Devices | `hold` | `research sec-filing-summary.md`, `research sec-filing-documents.md`, `research sec-filing-sections.md`, `research financials.md`, `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
 
 ## Promotion Rules
 
 - ETF candidates stay out of `_report/di/watchlist.yaml` until issuer, cost, NAV/liquidity, distribution, tax, and account evidence are filled.
-- Stock candidates stay out of active position review until SEC/DART source evidence, primary filing document and section maps, `thesis.md`, and `decision.md` exist.
+- Stock candidates stay out of active position review until SEC/DART source evidence, primary filing document and section maps, `financials.md`, `thesis.md`, and `decision.md` exist.
 - A `ready_*` status means research process readiness only, not a recommendation to buy.

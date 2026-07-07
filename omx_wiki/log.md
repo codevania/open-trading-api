@@ -20,3 +20,4 @@
 - Generated SEC filing summaries for primary U.S. satellite equities: `MSFT`, `GOOGL`, `AMZN`, `META`, `NVDA`, and `AVGO`.
 - Added SEC primary filing document collection and source maps for the primary U.S. satellite equity queue.
 - Added SEC filing section maps for primary U.S. satellite equities so thesis work can start from Business, Risk Factors, and MD&A raw text.
+- Generated SEC companyfacts financial summaries for primary U.S. satellite equities.
