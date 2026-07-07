@@ -12,6 +12,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from quant_io import write_text_lf
+
 
 DEFAULT_MIN_MARKET_DATES = 20
 DEFAULT_MIN_LIQUIDITY_LOOKBACK = 20
@@ -125,6 +127,63 @@ def _backtest_contract_gate(path: Path | None) -> Gate | None:
     )
 
 
+def _backtest_pnl_gate(path: Path | None) -> Gate | None:
+    if path is None:
+        return None
+    text = _read_text(path)
+    if not text:
+        return Gate(
+            "backtest_pnl_smoke",
+            "hold",
+            "no local Backtest PnL smoke report supplied",
+            "run quant_backtest_pnl_smoke.py on current portfolio target and forward-return rows",
+        )
+    if "PnL smoke status: `pass_smoke`" in text and "Order intent generated: `false`" in text:
+        return Gate(
+            "backtest_pnl_smoke",
+            "pass_smoke",
+            "local PnL smoke report is pass_smoke and reports no order intents",
+            "keep PnL smoke diagnostic-only until costs, benchmark, OOS, and Bias Control are wired",
+        )
+    return Gate(
+        "backtest_pnl_smoke",
+        "hold",
+        "local PnL smoke report is not pass_smoke",
+        "repair PnL smoke coverage before interpreting any return diagnostics",
+    )
+
+
+def _status_coverage_gate(status_coverage: str, path: Path | None) -> Gate:
+    text = _read_text(path)
+    if path is not None and not text:
+        return Gate(
+            "point_in_time_status_coverage",
+            "hold",
+            "status coverage report path was supplied but could not be read",
+            "rerun quant_point_in_time_status_coverage_audit.py",
+        )
+    if status_coverage == "historical_complete" and (path is None or "Coverage status: `pass`" in text):
+        return Gate(
+            "point_in_time_status_coverage",
+            "pass",
+            f"status coverage mode is {status_coverage}",
+            "keep auditing coverage whenever the market-data window changes",
+        )
+    if text and "Coverage status: `hold`" in text:
+        return Gate(
+            "point_in_time_status_coverage",
+            "hold",
+            f"status coverage mode is {status_coverage}; local coverage audit reports hold",
+            "replace current-snapshot smoke with historical status-event coverage by rebalance date",
+        )
+    return Gate(
+        "point_in_time_status_coverage",
+        "hold",
+        f"status coverage mode is {status_coverage}",
+        "replace current-snapshot smoke with historical status-event coverage by rebalance date",
+    )
+
+
 def evaluate_readiness(
     *,
     liquidity_rows: list[dict[str, str]],
@@ -132,6 +191,8 @@ def evaluate_readiness(
     forward_return_rows: list[dict[str, str]] | None = None,
     portfolio_target_rows: list[dict[str, str]] | None = None,
     backtest_contract_report: Path | None = None,
+    backtest_pnl_report: Path | None = None,
+    status_coverage_report: Path | None = None,
     kis_preflight_report: Path | None,
     min_market_dates: int = DEFAULT_MIN_MARKET_DATES,
     min_liquidity_lookback: int = DEFAULT_MIN_LIQUIDITY_LOOKBACK,
@@ -210,15 +271,11 @@ def evaluate_readiness(
     if contract_gate is not None:
         gates.append(contract_gate)
 
-    status_ready = status_coverage == "historical_complete"
-    gates.append(
-        Gate(
-            "point_in_time_status_coverage",
-            "pass" if status_ready else "hold",
-            f"status coverage mode is {status_coverage}",
-            "replace current-snapshot smoke with historical status-event coverage by rebalance date",
-        )
-    )
+    pnl_gate = _backtest_pnl_gate(backtest_pnl_report)
+    if pnl_gate is not None:
+        gates.append(pnl_gate)
+
+    gates.append(_status_coverage_gate(status_coverage, status_coverage_report))
     gates.extend(
         [
             Gate(
@@ -253,6 +310,8 @@ def evaluate_readiness(
         if portfolio_target_rows is not None
         else None,
         "backtest_contract_report_supplied": backtest_contract_report is not None,
+        "backtest_pnl_report_supplied": backtest_pnl_report is not None,
+        "status_coverage_report_supplied": status_coverage_report is not None,
         "backtest_readiness": "hold",
         "live_trading_readiness": "blocked",
     }
@@ -273,6 +332,8 @@ def _render_report(
     forward_returns_input: Path | None,
     portfolio_targets_input: Path | None,
     backtest_contract_report: Path | None,
+    backtest_pnl_report: Path | None,
+    status_coverage_report: Path | None,
     kis_preflight_report: Path | None,
     status_coverage: str,
 ) -> str:
@@ -284,6 +345,8 @@ def _render_report(
         f"- Forward-return input: {_wikilink(forward_returns_input) if forward_returns_input else '`not_supplied`'}",
         f"- Portfolio-target input: {_wikilink(portfolio_targets_input) if portfolio_targets_input else '`not_supplied`'}",
         f"- Backtest contract report: {_wikilink(backtest_contract_report) if backtest_contract_report else '`not_supplied`'}",
+        f"- Backtest PnL smoke report: {_wikilink(backtest_pnl_report) if backtest_pnl_report else '`not_supplied`'}",
+        f"- Status coverage audit report: {_wikilink(status_coverage_report) if status_coverage_report else '`not_supplied`'}",
         f"- KIS preflight report: {_wikilink(kis_preflight_report) if kis_preflight_report else '`not_supplied`'}",
         f"- Status coverage mode: `{status_coverage}`",
         "- KIS API call: `false`",
@@ -353,6 +416,8 @@ def main() -> int:
     parser.add_argument("--forward-returns-input", type=Path)
     parser.add_argument("--portfolio-targets-input", type=Path)
     parser.add_argument("--backtest-contract-report", type=Path)
+    parser.add_argument("--backtest-pnl-report", type=Path)
+    parser.add_argument("--status-coverage-report", type=Path)
     parser.add_argument("--kis-preflight-report", type=Path)
     parser.add_argument("--status-coverage", default="current_snapshot_smoke")
     parser.add_argument("--min-market-dates", default=DEFAULT_MIN_MARKET_DATES, type=int)
@@ -371,6 +436,8 @@ def main() -> int:
             forward_return_rows=forward_return_rows,
             portfolio_target_rows=portfolio_target_rows,
             backtest_contract_report=args.backtest_contract_report,
+            backtest_pnl_report=args.backtest_pnl_report,
+            status_coverage_report=args.status_coverage_report,
             kis_preflight_report=args.kis_preflight_report,
             min_market_dates=args.min_market_dates,
             min_liquidity_lookback=args.min_liquidity_lookback,
@@ -387,13 +454,13 @@ def main() -> int:
         forward_returns_input=args.forward_returns_input,
         portfolio_targets_input=args.portfolio_targets_input,
         backtest_contract_report=args.backtest_contract_report,
+        backtest_pnl_report=args.backtest_pnl_report,
+        status_coverage_report=args.status_coverage_report,
         kis_preflight_report=args.kis_preflight_report,
         status_coverage=args.status_coverage,
     )
     if args.report_output:
-        args.report_output.parent.mkdir(parents=True, exist_ok=True)
-        with args.report_output.open("w", encoding="utf-8", newline="\n") as handle:
-            handle.write(report)
+        write_text_lf(args.report_output, report)
     else:
         print(report, end="")
     return 0
