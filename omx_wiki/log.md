@@ -32,3 +32,4 @@
 - Updated valuation and decision templates to match the satellite decision-prep gate, and tightened placeholder filtering so TODO-heavy valuation notes cannot pass promotion.
 - Tightened the DI satellite decision-prep report so copied TODO-heavy valuation templates still remain pending before `decision.md`.
 - Added a gitignored DI satellite decision-input path and example template so account route, sizing, overlap, and freshness checks stay separate from the public candidate manifest.
+- Drafted the first MSFT valuation note from local SEC financials, SEC share-count data, and the latest located market close, while keeping ETF overlap, tax/account route, and position sizing blocked in private decision inputs.

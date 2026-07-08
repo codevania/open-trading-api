@@ -1,6 +1,6 @@
 # DI Satellite Equity Decision Prep
 
-- Run date: `2026-07-08`
+- Run date: `2026-07-09`
 - Candidate manifest: `_report/di/candidates/core-satellite-candidates.yaml`
 - Research root: `_report/di/research`
 - Decision input file: `_report/private/di/satellite-decision-inputs.yaml`
@@ -20,7 +20,7 @@
 
 | Queue | Symbol | Name | Status | Research state | Required before decision.md | Safe next action |
 | --- | --- | --- | --- | --- | --- | --- |
-| `primary_queue` | `MSFT` | Microsoft | `needs_decision_inputs` | present: financials.md+thesis.md; pending: valuation.md+decision.md | `valuation.md`, `latest_price`, `valuation_range`, `reverse_dcf_or_scenario`, `etf_overlap`, `tax_account_route`, `max_position_size`, `add_trim_rule`, `source_freshness` | fill valuation, overlap, tax/account, sizing, and freshness inputs before decision.md |
+| `primary_queue` | `MSFT` | Microsoft | `needs_decision_inputs` | present: financials.md+thesis.md+valuation.md; pending: decision.md | `latest_price`, `valuation_range`, `reverse_dcf_or_scenario`, `etf_overlap`, `tax_account_route`, `max_position_size`, `add_trim_rule`, `source_freshness` | fill valuation, overlap, tax/account, sizing, and freshness inputs before decision.md |
 | `primary_queue` | `GOOGL` | Alphabet | `needs_decision_inputs` | present: financials.md+thesis.md; pending: valuation.md+decision.md | `valuation.md`, `latest_price`, `valuation_range`, `reverse_dcf_or_scenario`, `etf_overlap`, `tax_account_route`, `max_position_size`, `add_trim_rule`, `source_freshness` | fill valuation, overlap, tax/account, sizing, and freshness inputs before decision.md |
 | `primary_queue` | `AMZN` | Amazon | `needs_decision_inputs` | present: financials.md+thesis.md; pending: valuation.md+decision.md | `valuation.md`, `latest_price`, `valuation_range`, `reverse_dcf_or_scenario`, `etf_overlap`, `tax_account_route`, `max_position_size`, `add_trim_rule`, `source_freshness` | fill valuation, overlap, tax/account, sizing, and freshness inputs before decision.md |
 | `primary_queue` | `META` | Meta Platforms | `needs_decision_inputs` | present: financials.md+thesis.md; pending: valuation.md+decision.md | `valuation.md`, `latest_price`, `valuation_range`, `reverse_dcf_or_scenario`, `etf_overlap`, `tax_account_route`, `max_position_size`, `add_trim_rule`, `source_freshness` | fill valuation, overlap, tax/account, sizing, and freshness inputs before decision.md |
