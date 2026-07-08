@@ -124,6 +124,53 @@ class DiSatelliteDecisionPrepTest(unittest.TestCase):
         self.assertIn("`valuation.md`", result.stdout)
         self.assertIn("`tax_account_route`", result.stdout)
 
+    def test_placeholder_valuation_stays_pending(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "candidates.yaml"
+            research_root = root / "research"
+            msft = research_root / "MSFT"
+            msft.mkdir(parents=True)
+            manifest.write_text(MANIFEST, encoding="utf-8")
+            _write_thesis(msft / "thesis.md")
+            _write_financials(msft / "financials.md")
+            (msft / "valuation.md").write_text(
+                """\
+# Valuation
+
+- Symbol: TODO
+- Latest price: TODO
+- Market cap: TODO
+- Base scenario: TODO
+- Bear scenario: TODO
+- ETF overlap: TODO
+- Tax/account route: TODO
+- Maximum position size: TODO
+""",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--candidate-file",
+                    str(manifest),
+                    "--research-root",
+                    str(research_root),
+                    "--run-date",
+                    "2026-07-08",
+                ],
+                cwd=REPO_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("pending: valuation.md+decision.md", result.stdout)
+            self.assertIn("`valuation.md`", result.stdout)
+
     def test_rejects_non_object_manifest(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             manifest = Path(tmp) / "bad.yaml"

@@ -39,6 +39,7 @@ MANUAL_DECISION_INPUTS = {
     "source_freshness_checked": "source_freshness",
 }
 UNCHECKED_TOKENS = ("todo", "verify", "check", "needs_", "null", "pending")
+FILE_UNCHECKED_TOKENS = ("todo", "verify", "needs_", "null", "pending")
 
 
 @dataclass(frozen=True)
@@ -92,9 +93,12 @@ def _meaningful_lines(path: Path) -> list[str]:
     lines: list[str] = []
     for raw_line in path.read_text(encoding="utf-8").splitlines():
         line = raw_line.strip()
+        lowered = line.lower()
         if not line or line.startswith("#"):
             continue
         if line in {"-", "*"}:
+            continue
+        if any(token in lowered for token in FILE_UNCHECKED_TOKENS):
             continue
         lines.append(line)
     return lines
