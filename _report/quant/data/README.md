@@ -11,6 +11,7 @@ uncommitted unless a later policy explicitly allows a tiny sanitized fixture.
 - [[_report/quant/data/schemas/point_in_time_status_events.schema.json|_report/quant/data/schemas/point_in_time_status_events.schema.json]] defines normalized `Point-in-Time` status-event rows.
 - [[_report/quant/data/point_in_time_status_sources.yaml|_report/quant/data/point_in_time_status_sources.yaml]] records the source policy for KRX Data Marketplace, KIND, and manual snapshots.
 - [[_report/quant/data/templates/point_in_time_status_source_coverage_manifest.template.csv|_report/quant/data/templates/point_in_time_status_source_coverage_manifest.template.csv]] is the header-only template for source coverage manifests consumed by [[scripts/quant_point_in_time_status_coverage_audit.py|scripts/quant_point_in_time_status_coverage_audit.py]].
+- [[scripts/quant_point_in_time_status_source_manifest_validate.py|scripts/quant_point_in_time_status_source_manifest_validate.py]] validates a filled source coverage manifest against the source policy, raw evidence paths, required status types, and selected market-data window before running the full coverage audit.
 - [[_report/quant/data/backtest_cost_benchmark_assumptions.yaml|_report/quant/data/backtest_cost_benchmark_assumptions.yaml]] records local Backtest cost and benchmark assumptions consumed by [[scripts/quant_backtest_assumptions_validate.py|scripts/quant_backtest_assumptions_validate.py]].
 
 ## Source Coverage Manifest
@@ -26,6 +27,17 @@ Required columns:
 - `raw_path`: repo-relative raw evidence path under `_report/raw/**`.
 - `confidence`: `high`, `medium`, or `low`.
 - `notes`: short evidence note.
+
+The manifest validator checks every row for policy/source/raw-path validity, but only the required status types count toward required market-window coverage. Rows outside the required status type scope can pass row validation while still not satisfying the coverage gate.
+
+Validation command shape:
+
+```powershell
+.venv\Scripts\python.exe scripts\quant_point_in_time_status_source_manifest_validate.py `
+  --manifest _report\quant\data\point_in_time_status_source_coverage_manifest.csv `
+  --market-data _report\raw\2026\2026-07-08\krx\openapi-market-data\20250102-20250418\market_data.csv `
+  --report-output _report\quant\research\YYYY-MM-DD-point-in-time-status-source-manifest-validate.md
+```
 
 ## Guardrails
 

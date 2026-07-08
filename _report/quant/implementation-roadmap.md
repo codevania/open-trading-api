@@ -886,6 +886,8 @@ Status coverage audit:
 - [[scripts/quant_point_in_time_status_coverage_audit.py|scripts/quant_point_in_time_status_coverage_audit.py]]
 - [[tests/test_quant_point_in_time_status_coverage_audit.py|tests/test_quant_point_in_time_status_coverage_audit.py]]
 - [[_report/quant/data/templates/point_in_time_status_source_coverage_manifest.template.csv|_report/quant/data/templates/point_in_time_status_source_coverage_manifest.template.csv]]
+- [[scripts/quant_point_in_time_status_source_manifest_validate.py|scripts/quant_point_in_time_status_source_manifest_validate.py]]
+- [[tests/test_quant_point_in_time_status_source_manifest_validate.py|tests/test_quant_point_in_time_status_source_manifest_validate.py]]
 - [[_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221|_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221.md]]
 - [[_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221.rows.csv|_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221.rows.csv]]
 - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307.md]]
@@ -905,6 +907,7 @@ Status coverage audit:
 - Raw status capture dates: `2` (`2026-07-03..2026-07-08`)
 - Release/resume-like event rows: `0`, so active-state lifetimes remain one-sided and not historical-complete.
 - Source coverage manifest rows: `0`; missing manifest coverage for `managed_issue`, `trading_halt`, `market_alert`, and `delisting`.
+- A filled source coverage manifest should be checked with [[scripts/quant_point_in_time_status_source_manifest_validate.py|scripts/quant_point_in_time_status_source_manifest_validate.py]] before it is passed into the coverage audit; this validates source policy, raw evidence paths, required status types, and market-window coverage only.
 - Lifecycle diagnostics: `managed_issue` `105/0`, `market_alert` `75/0`, and `trading_halt` `253/0` active-like/release-resume rows.
 - The audit pass gate now also requires every lifecycle status type with active-like rows to have release/resume-like rows, at least one dated raw capture path, and a source coverage manifest covering the market-data window for every required status type.
 

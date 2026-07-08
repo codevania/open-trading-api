@@ -90,6 +90,7 @@ The project is beyond planning and now has a usable current-snapshot Universe ar
 - Merged KIND status events replayed against the 72-date KRX OpenAPI market-data merge and marked `1646/198137` rows as `exclude_by_status_event`.
 - [[scripts/quant_point_in_time_status_coverage_audit.py|scripts/quant_point_in_time_status_coverage_audit.py]] audits local status coverage against market-data/replay rows without calling KRX/KIS or generating order intents.
 - [[_report/quant/data/templates/point_in_time_status_source_coverage_manifest.template.csv|_report/quant/data/templates/point_in_time_status_source_coverage_manifest.template.csv]] documents the source coverage manifest columns required before `historical_complete` can pass.
+- [[scripts/quant_point_in_time_status_source_manifest_validate.py|scripts/quant_point_in_time_status_source_manifest_validate.py]] validates filled source coverage manifests against the source policy, raw evidence paths, required status types, and selected market-data window before the full coverage audit consumes them.
 - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots.md]] records coverage status `hold`: mode `current_snapshot_smoke`, replay matched `198137/198137` rows, rows with any status-event code `18320`, rows with applied status event `1646`, rows excluded by status event `1646`, raw status capture dates `2`, release/resume-like event rows `0`, and source coverage manifest rows `0`. Lifecycle diagnostics show `managed_issue` `105/0`, `market_alert` `75/0`, and `trading_halt` `253/0` active-like/release-resume rows.
 - [[scripts/quant_point_in_time_universe_build.py|scripts/quant_point_in_time_universe_build.py]] converts status-replayed market data into `Point-in-Time Universe` smoke rows.
 - The latest 72-date `Point-in-Time Universe` smoke produced `184549` include rows and `13588` exclude rows.
@@ -604,6 +605,8 @@ The Quant capture/research files expected to be tracked after the current work i
 
 ## Verification Already Run
 
+- `.venv\Scripts\python.exe -m unittest tests.test_quant_point_in_time_status_source_manifest_validate tests.test_quant_point_in_time_status_coverage_audit`
+- `.venv\Scripts\python.exe -m unittest discover tests`
 - `uv run python -m unittest discover tests`
 - `uv run python -m unittest tests.test_quant_kis_ohlcv_batch_plan`
 - `uv run python -m unittest tests.test_quant_kis_ohlcv_capture`
@@ -699,7 +702,7 @@ The Quant capture/research files expected to be tracked after the current work i
 1. Continue OHLCV coverage in small resumable batches from generated Universe rows.
 2. In a KIS MCP-capable surface, run `domestic_stock.find_api_detail` for `inquire_daily_itemchartprice`; if unavailable, keep documenting the local API detail fallback explicitly.
 3. Save raw responses under `_report/raw/2026/2026-06-15/quant/universe-ohlcv/` and do not commit raw files.
-4. Extend KIND or authenticated/manual KRX status coverage across the selected historical date range, resolve the remaining `48` merged `UNKNOWN` KIND market rows where supported, validate/replay the expanded event rows, and rebuild [[scripts/quant_point_in_time_universe_build.py|scripts/quant_point_in_time_universe_build.py]] output.
+4. Extend KIND or authenticated/manual KRX status coverage across the selected historical date range, resolve the remaining `48` merged `UNKNOWN` KIND market rows where supported, produce and validate the source coverage manifest with [[scripts/quant_point_in_time_status_source_manifest_validate.py|scripts/quant_point_in_time_status_source_manifest_validate.py]], validate/replay the expanded event rows, and rebuild [[scripts/quant_point_in_time_universe_build.py|scripts/quant_point_in_time_universe_build.py]] output.
 5. Re-run [[scripts/quant_smoke_validate.py|scripts/quant_smoke_validate.py]] and [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] after each documented KIS OHLCV batch.
 6. Extend paper/smoke `Signal Candidate` outputs from generated Universe rows, not manual watchlists, whenever market-data/status windows expand.
 7. Keep the 20-day `Point-in-Time` Liquidity Filter aligned as additional market-data/status windows are added.
