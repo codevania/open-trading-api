@@ -93,6 +93,26 @@ def _write_financials(path: Path) -> None:
     )
 
 
+def _write_valuation(path: Path) -> None:
+    path.write_text(
+        """\
+# Valuation
+
+- Symbol: MSFT
+- Source: latest market data and filing-based financials
+- Order intent generated: `false`
+- Latest price and currency are recorded.
+- Base scenario multiple range is recorded.
+- Bull scenario assumptions are recorded.
+- Bear scenario assumptions are recorded.
+- Reverse DCF assumptions are recorded.
+- ETF overlap is recorded.
+- Tax/account route is recorded.
+""",
+        encoding="utf-8",
+    )
+
+
 class DiCandidateEvidenceCheckTest(unittest.TestCase):
     def test_reports_ready_and_hold_candidates(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -117,6 +137,7 @@ class DiCandidateEvidenceCheckTest(unittest.TestCase):
             _write_sec_documents(msft / "sec-filing-documents.md")
             _write_sec_sections(msft / "sec-filing-sections.md")
             _write_financials(msft / "financials.md")
+            _write_valuation(msft / "valuation.md")
             (msft / "thesis.md").write_text(
                 """\
 # Thesis
@@ -233,7 +254,9 @@ class DiCandidateEvidenceCheckTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("| Ready for next review | 1 |", result.stdout)
             self.assertIn("| `satellite_equities.primary_queue` | `MSFT` | Microsoft | `hold` |", result.stdout)
-            self.assertIn("`research thesis.md content`, `research decision.md content`", result.stdout)
+            self.assertIn("`research thesis.md content`", result.stdout)
+            self.assertIn("`research valuation.md`", result.stdout)
+            self.assertIn("`research decision.md content`", result.stdout)
 
     def test_decision_note_requires_checked_decision(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -249,6 +272,7 @@ class DiCandidateEvidenceCheckTest(unittest.TestCase):
             _write_sec_documents(msft / "sec-filing-documents.md")
             _write_sec_sections(msft / "sec-filing-sections.md")
             _write_financials(msft / "financials.md")
+            _write_valuation(msft / "valuation.md")
             (msft / "thesis.md").write_text(
                 """\
 # Thesis
@@ -299,6 +323,69 @@ class DiCandidateEvidenceCheckTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("`research decision.md checked decision`", result.stdout)
+
+    def test_stock_requires_valuation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "candidates.yaml"
+            research_root = root / "research"
+            msft = research_root / "MSFT"
+            msft.mkdir(parents=True)
+            (msft / "sec-filing-summary.md").write_text(
+                "# MSFT SEC Filing Summary\n\n- Source: SEC\n- 10-K available\n- 10-Q available\n- 8-K available\n- Facts available\n- Order intent generated: `false`\n",
+                encoding="utf-8",
+            )
+            _write_sec_documents(msft / "sec-filing-documents.md")
+            _write_sec_sections(msft / "sec-filing-sections.md")
+            _write_financials(msft / "financials.md")
+            (msft / "thesis.md").write_text(
+                """\
+# Thesis
+
+- Symbol: MSFT
+- Company: Microsoft
+- 二쇱슂 ?먯쿇: SEC 10-K
+1. First thesis point with evidence.
+2. Second thesis point with evidence.
+3. Third thesis point with evidence.
+- 臾댄슚??議곌굔: evidence changes.
+""",
+                encoding="utf-8",
+            )
+            (msft / "decision.md").write_text(
+                """\
+# Decision
+
+- Symbol: MSFT
+- Company/ETF: Microsoft
+- [x] 愿??- 寃곗젙: valuation missing test.
+1. Evidence was reviewed.
+2. Risk budget remains pending.
+- 臾댄슚??議곌굔: evidence changes.
+""",
+                encoding="utf-8",
+            )
+            manifest.write_text(MANIFEST, encoding="utf-8")
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--candidate-file",
+                    str(manifest),
+                    "--research-root",
+                    str(research_root),
+                    "--run-date",
+                    "2026-07-08",
+                ],
+                cwd=REPO_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("`research valuation.md`", result.stdout)
 
     def test_us_stock_requires_sec_filing_summary(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

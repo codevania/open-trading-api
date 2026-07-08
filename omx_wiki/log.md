@@ -28,3 +28,4 @@
 - Drafted the NVDA satellite-equity thesis with Data Center AI infrastructure, Blackwell, customer concentration, supply chain, and export-control risk evidence.
 - Drafted the AVGO satellite-equity thesis with custom AI silicon, Ethernet networking, VMware/VCF software, customer concentration, debt, and integration risk evidence.
 - Added a DI satellite-equity decision-prep report so primary queue stocks stay blocked until valuation, ETF overlap, tax/account route, position sizing, add/trim rules, and source freshness inputs are checked.
+- Tightened the DI candidate evidence gate so satellite equities also require `valuation.md` before watchlist or active position review.

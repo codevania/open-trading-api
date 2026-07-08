@@ -28,6 +28,7 @@ MIN_RESEARCH_LINES = {
     "sec-filing-sections.md": 6,
     "financials.md": 10,
     "thesis.md": 6,
+    "valuation.md": 8,
     "decision.md": 4,
 }
 PLACEHOLDER_LINE_PATTERNS = (
@@ -150,7 +151,7 @@ def _stock_gate(section: str, row: dict[str, Any], research_root: Path) -> Candi
             file_status = _research_file_status(symbol, research_root, filename)
             if file_status:
                 missing.append(file_status)
-    for filename in ("financials.md", "thesis.md", "decision.md"):
+    for filename in ("financials.md", "thesis.md", "valuation.md", "decision.md"):
         file_status = _research_file_status(symbol, research_root, filename)
         if file_status:
             missing.append(file_status)
@@ -161,7 +162,7 @@ def _stock_gate(section: str, row: dict[str, Any], research_root: Path) -> Candi
         name=_text(row.get("name")),
         status=status,
         missing=tuple(missing),
-        next_action="review position size and watchlist promotion" if status != "hold" else "collect filings and write thesis/decision notes",
+        next_action="review position size and watchlist promotion" if status != "hold" else "collect filings and write thesis/valuation/decision notes",
     )
 
 
@@ -239,7 +240,7 @@ def render_report(
             "## Promotion Rules",
             "",
             "- ETF candidates stay out of `_report/di/watchlist.yaml` until issuer, cost, NAV/liquidity, distribution, tax, and account evidence are filled.",
-            "- Stock candidates stay out of active position review until SEC/DART source evidence, primary filing document and section maps, `financials.md`, `thesis.md`, and `decision.md` exist.",
+            "- Stock candidates stay out of active position review until SEC/DART source evidence, primary filing document and section maps, `financials.md`, `thesis.md`, `valuation.md`, and `decision.md` exist.",
             "- A `ready_*` status means research process readiness only, not a recommendation to buy.",
             "",
         ]
