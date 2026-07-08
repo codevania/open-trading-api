@@ -3,7 +3,7 @@
 ## Metadata
 
 - Date: 2026-06-14
-- Last updated: 2026-07-08
+- Last updated: 2026-07-09
 - Scope: Quant trading research and implementation workflow
 - Current phase: `forward_price_81d_readiness_smoke`
 - Overall implementation progress: `85-88%`
@@ -25,7 +25,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 1. Quant learning baseline | in-progress | 35% | [[_report/quant/learning-roadmap|_report/quant/learning-roadmap.md]], week 01 study log | Continue weekly study logs tied to outputs |
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
-| 4. Point-in-Time Universe | in-progress | 78-81% | KRX OpenAPI market-data path works; two KIND current snapshots are merged into `497` logical status-event rows, a 72-date `Point-in-Time Universe` smoke produced `184549` include / `13588` exclude rows, and status coverage audit keeps this at `hold` because the source is still `current_snapshot_smoke` with `0` release/resume-like events and no source coverage manifest | Obtain historical transition coverage plus a source coverage manifest, then keep Universe eligibility smoke aligned |
+| 4. Point-in-Time Universe | in-progress | 78-81% | KRX OpenAPI market-data path works; two KIND current snapshots are merged into `497` logical status-event rows, a 72-date `Point-in-Time Universe` smoke produced `184549` include / `13588` exclude rows, and status coverage audit keeps this at `hold` because the source is still `current_snapshot_smoke` with `0` release/resume-like events and no source coverage manifest; lifecycle gap report identifies `304` code/status groups that need release/resume evidence | Obtain historical transition coverage plus a source coverage manifest, then keep Universe eligibility smoke aligned |
 | 5. Market data pipeline | in-progress | 95-97% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 72-date historical status-replay market-data merge, 81-date forward-price merge through `2025-05-02`, continuity audit, date-scoped market-data join, status replay smoke, and resumable existing-raw verification exist | Extend status coverage, not only prices, before Backtest promotion |
 | 6. Liquidity Filter | in-progress | 72-76% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] evaluates 361 current Universe saved-raw rows; [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] produced a 72-date, 20-day Point-in-Time smoke with `54138` include rows and `135316` full-lookback rows | Keep 20-day rule aligned while status coverage expands |
 | 7. Backtest engine connection | preflight | 47-52% | [[scripts/quant_backtest_input_contract_validate.py|scripts/quant_backtest_input_contract_validate.py]] validates the 72-date, 20-day smoke artifacts as internally joinable, [[scripts/quant_backtest_pnl_smoke.py|scripts/quant_backtest_pnl_smoke.py]] computes diagnostic weighted-return and benchmark-excess smoke rows with complete 1-day target coverage after extending prices through `2025-05-02`, [[scripts/quant_backtest_assumptions_validate.py|scripts/quant_backtest_assumptions_validate.py]] validates local cost/benchmark assumptions as `pass_assumption_only`, and [[scripts/quant_benchmark_return_smoke.py|scripts/quant_benchmark_return_smoke.py]] computes complete benchmark return smoke rows, while Backtest remains `hold` | Wire engine only after Point-in-Time status coverage, actual fee override, production benchmark attribution, OOS, and Bias Control are acceptable |
@@ -888,6 +888,8 @@ Status coverage audit:
 - [[_report/quant/data/templates/point_in_time_status_source_coverage_manifest.template.csv|_report/quant/data/templates/point_in_time_status_source_coverage_manifest.template.csv]]
 - [[scripts/quant_point_in_time_status_source_manifest_validate.py|scripts/quant_point_in_time_status_source_manifest_validate.py]]
 - [[tests/test_quant_point_in_time_status_source_manifest_validate.py|tests/test_quant_point_in_time_status_source_manifest_validate.py]]
+- [[scripts/quant_point_in_time_status_lifecycle_gap_report.py|scripts/quant_point_in_time_status_lifecycle_gap_report.py]]
+- [[tests/test_quant_point_in_time_status_lifecycle_gap_report.py|tests/test_quant_point_in_time_status_lifecycle_gap_report.py]]
 - [[_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221|_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221.md]]
 - [[_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221.rows.csv|_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221.rows.csv]]
 - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307.md]]
@@ -900,6 +902,8 @@ Status coverage audit:
 - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250404-merged-snapshots.rows.csv|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250404-merged-snapshots.rows.csv]]
 - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots.md]]
 - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots.rows.csv|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots.rows.csv]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots.md]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots.rows.csv]]
 - Coverage status: `hold`
 - Coverage mode: `current_snapshot_smoke`
 - Replayed rows: `198137`; replay missing rows: `0`
@@ -910,6 +914,7 @@ Status coverage audit:
 - Source coverage manifest validation: `not_supplied`; row failures: `0`.
 - [[scripts/quant_point_in_time_status_coverage_audit.py|scripts/quant_point_in_time_status_coverage_audit.py]] now applies [[scripts/quant_point_in_time_status_source_manifest_validate.py|scripts/quant_point_in_time_status_source_manifest_validate.py]] when a source coverage manifest is supplied; source policy, raw evidence paths, required status types, and market-window coverage must validate before `historical_complete` can pass.
 - Lifecycle diagnostics: `managed_issue` `105/0`, `market_alert` `75/0`, and `trading_halt` `253/0` active-like/release-resume rows.
+- Lifecycle gap report: `304` code/status lifecycle groups currently have `missing_release_resume_evidence` (`managed_issue=104`, `market_alert=70`, `trading_halt=130`). These rows are collection targets for official transition evidence, not historical truth and not a Backtest promotion.
 - The audit pass gate now also requires every lifecycle status type with active-like rows to have release/resume-like rows, at least one dated raw capture path, and a source coverage manifest that passes source-policy/raw-path validation and covers the market-data window for every required status type.
 
 Universe eligibility smoke:
