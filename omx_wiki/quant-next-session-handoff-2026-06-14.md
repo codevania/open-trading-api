@@ -697,11 +697,11 @@ Likely needed work:
 - KIND current snapshot fallback is validated and two snapshots are merged, but it is not full historical `Point-in-Time` coverage.
 - KIS demo trading remains blocked beyond local preflight; `KIS_PAPER_STOCK` is empty in the ignored MCP `.env.kis`.
 - Backtest remains `hold`.
-- Latest readiness check [[_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-market-enriched-81d-status|_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-market-enriched-81d-status.md]] confirms the same state: Backtest `hold`, live trading `blocked`.
-- Forward-return smoke now has complete `1,5` horizon coverage for the existing 72-date Signal Candidate window, but this does not solve historical status coverage, costs, OOS, or Bias Control.
+- Latest readiness check [[_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-attribution-smoke|_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-attribution-smoke.md]] confirms the same state: Backtest `hold`, live trading `blocked`.
+- Forward-return smoke now has complete `1,5` horizon coverage for the existing 72-date Signal Candidate window, and attribution smoke adds assumption-only costs plus benchmark-active diagnostics, but this does not solve historical status coverage, actual KIS fee override, OOS, or Bias Control.
 - Portfolio target smoke has no costs, benchmark, slippage, taxes, cash drag, or order quantities; it is not a Backtest engine.
 - Backtest input contract is only an internal join/schema/guardrail validator; it does not solve historical status coverage or PnL modeling.
-- Backtest PnL smoke is only a weighted-return diagnostic; even with complete KOSPI benchmark joins, it has no costs, production benchmark attribution, OOS, Bias Control, cash drag, rebalance execution, or delisting/event timing model.
+- Backtest PnL smoke is only a weighted-return diagnostic; even with complete KOSPI benchmark joins and a separate assumption-only attribution smoke, it has no actual KIS fee override, production benchmark attribution, OOS, Bias Control, cash drag, rebalance execution, or delisting/event timing model.
 - Backtest assumptions validation is only an assumption-contract check; it has no actual account/channel fee confirmation and no benchmark return join.
 - Benchmark return smoke is only a comparison input diagnostic; its complete KOSPI join into PnL smoke is still not production benchmark attribution.
 
