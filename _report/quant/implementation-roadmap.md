@@ -54,6 +54,7 @@ Latest 2026-07-08 forward-price coverage artifacts for the existing 72-date sign
 - [[_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250418-price-through-20250502|_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250418-price-through-20250502.md]]
 - [[_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250418-price-through-20250502.rows.csv|_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250418-price-through-20250502.rows.csv]]
 - [[_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250418-price-through-20250502|_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250418-price-through-20250502.md]]
+- [[_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-lifecycle-gaps|_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-lifecycle-gaps.md]]
 
 Baseline 2026-07-08 72-date smoke artifacts:
 
@@ -1017,8 +1018,8 @@ Quant readiness check:
 - [[_report/quant/research/2026-07-06-quant-readiness-check-20d-with-extended-market-data|_report/quant/research/2026-07-06-quant-readiness-check-20d-with-extended-market-data.md]]
 - [[_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250307|_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250307.md]]
 - [[_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250418-merged-status|_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250418-merged-status.md]]
-- Latest price-through readiness: [[_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250418-price-through-20250502|_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250418-price-through-20250502.md]]
-- Result: market-data window `pass`, Liquidity Filter `pass_smoke`, Signal Candidate `pass_smoke`, forward-return smoke `pass_smoke` with complete `1,5` horizon coverage, portfolio target smoke `pass_smoke`, Backtest input contract `pass_smoke`, Backtest PnL smoke `pass_smoke`, Backtest assumptions `pass_assumption_only`, benchmark returns smoke `pass_smoke`, Point-in-Time status coverage `hold` with merged coverage audit evidence including source manifest validation `not_supplied`, Backtest engine `hold`, live trading controls `blocked`, KIS demo account `blocked`.
+- Latest price-through readiness with lifecycle gap evidence: [[_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-lifecycle-gaps|_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-lifecycle-gaps.md]]
+- Result: market-data window `pass`, Liquidity Filter `pass_smoke`, Signal Candidate `pass_smoke`, forward-return smoke `pass_smoke` with complete `1,5` horizon coverage, portfolio target smoke `pass_smoke`, Backtest input contract `pass_smoke`, Backtest PnL smoke `pass_smoke`, Backtest assumptions `pass_assumption_only`, benchmark returns smoke `pass_smoke`, Point-in-Time status coverage `hold` with merged coverage audit evidence including source manifest validation `not_supplied` and lifecycle missing release/resume groups `304`, Backtest engine `hold`, live trading controls `blocked`, KIS demo account `blocked`.
 - Guardrail: the readiness checker makes no KIS API calls and generates no order intents.
 
 Next gate:
@@ -1201,7 +1202,7 @@ Current state:
 - Backtest PnL smoke: latest 1-day horizon diagnostic report is `pass_smoke` with `1060` target/horizon rows, `1060` complete rows, `1060` KOSPI benchmark joined rows, `0` missing forward prices, and average weighted excess vs benchmark of `0.0179%`.
 - Backtest cost/benchmark assumptions: latest local assumption contract is `pass_assumption_only`; it still needs actual KIS fee override and benchmark return wiring before production Backtest.
 - Benchmark return smoke: latest price-through report produced `318` complete benchmark horizon rows for KOSPI, KOSDAQ, and KOSPI200; KOSPI is joined into the PnL smoke as diagnostic benchmark-excess math, not production attribution.
-- Quant readiness check: latest 20-day price-through smoke gate report using the merged status coverage audit marks market-data window `pass`, Liquidity Filter, Signal Candidate, forward-return, portfolio targets, Backtest input contract, Backtest PnL smoke, and benchmark returns as `pass_smoke`, Backtest assumptions as `pass_assumption_only`, Point-in-Time status coverage `hold`, Backtest engine `hold`, live trading controls `blocked`, and KIS demo account `blocked`.
+- Quant readiness check: latest 20-day price-through smoke gate report using the merged status coverage audit and lifecycle gap report marks market-data window `pass`, Liquidity Filter, Signal Candidate, forward-return, portfolio targets, Backtest input contract, Backtest PnL smoke, and benchmark returns as `pass_smoke`, Backtest assumptions as `pass_assumption_only`, Point-in-Time status coverage `hold` with lifecycle missing release/resume groups `304`, Backtest engine `hold`, live trading controls `blocked`, and KIS demo account `blocked`.
 - KIS demo trading: dry-run order intent and local account preflight exist, but the local MCP `.env.kis` is missing `KIS_PAPER_STOCK`; buying-power checks, order status/cancel flow, kill switch, and explicit confirmation gate are not implemented.
 - Backtest readiness: `hold`.
 - Live trading readiness: `blocked`.

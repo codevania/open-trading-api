@@ -272,6 +272,7 @@ class QuantReadinessCheckTest(unittest.TestCase):
     def test_status_coverage_audit_report_can_hold_gate(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             report = Path(tmp) / "status-coverage.md"
+            lifecycle_report = Path(tmp) / "status-lifecycle-gaps.md"
             report.write_text(
                 "\n".join(
                     [
@@ -283,10 +284,24 @@ class QuantReadinessCheckTest(unittest.TestCase):
                 + "\n",
                 encoding="utf-8",
             )
+            lifecycle_report.write_text(
+                "\n".join(
+                    [
+                        "| Missing release/resume groups | 3 |",
+                        "| Status type | Missing release/resume | Active after latest release | Has release/resume | Release without active |",
+                        "| --- | ---: | ---: | ---: | ---: |",
+                        "| `managed_issue` | 2 | 0 | 0 | 0 |",
+                        "| `trading_halt` | 1 | 0 | 0 | 0 |",
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
             gates, summary = evaluate_readiness(
                 liquidity_rows=_liquidity_rows(),
                 signal_rows=_signal_rows(),
                 status_coverage_report=report,
+                status_lifecycle_gap_report=lifecycle_report,
                 kis_preflight_report=None,
                 status_coverage="current_snapshot_smoke",
             )
@@ -296,7 +311,10 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertIn("coverage audit reports hold", by_name["point_in_time_status_coverage"].evidence)
         self.assertIn("source manifest validation=not_supplied", by_name["point_in_time_status_coverage"].evidence)
         self.assertIn("missing source coverage=managed_issue,trading_halt", by_name["point_in_time_status_coverage"].evidence)
+        self.assertIn("lifecycle missing release/resume groups=3", by_name["point_in_time_status_coverage"].evidence)
+        self.assertIn("lifecycle missing by status=managed_issue=2,trading_halt=1", by_name["point_in_time_status_coverage"].evidence)
         self.assertTrue(summary["status_coverage_report_supplied"])
+        self.assertTrue(summary["status_lifecycle_gap_report_supplied"])
 
     def test_kis_paper_stock_gap_is_reported_without_account_value(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -333,6 +351,7 @@ class QuantReadinessCheckTest(unittest.TestCase):
             assumptions_report = root / "assumptions.md"
             benchmark_report = root / "benchmark.md"
             status_coverage_report = root / "status-coverage.md"
+            status_lifecycle_gap_report = root / "status-lifecycle-gaps.md"
             output = root / "readiness.md"
             _write_csv(liquidity, _liquidity_rows())
             _write_csv(signals, _signal_rows())
@@ -355,6 +374,7 @@ class QuantReadinessCheckTest(unittest.TestCase):
                 encoding="utf-8",
             )
             status_coverage_report.write_text("- Coverage status: `hold`\n", encoding="utf-8")
+            status_lifecycle_gap_report.write_text("| Missing release/resume groups | 3 |\n", encoding="utf-8")
 
             with patch(
                 "sys.argv",
@@ -378,6 +398,8 @@ class QuantReadinessCheckTest(unittest.TestCase):
                     str(benchmark_report),
                     "--status-coverage-report",
                     str(status_coverage_report),
+                    "--status-lifecycle-gap-report",
+                    str(status_lifecycle_gap_report),
                     "--report-output",
                     str(output),
                 ],
@@ -402,6 +424,8 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertIn("- Backtest assumptions report: [[", report)
         self.assertIn("- Benchmark returns report: [[", report)
         self.assertIn("- Status coverage audit report: [[", report)
+        self.assertIn("- Status lifecycle gap report: [[", report)
+        self.assertIn("lifecycle missing release/resume groups=3", report)
         self.assertIn("| Forward-return complete rows | 1 |", report)
         self.assertIn("| Portfolio target rows | 2 |", report)
         self.assertNotIn(b"\r\n", report_bytes)

@@ -86,6 +86,18 @@ def _markdown_metric(text: str, metric: str) -> str:
     return match.group(1).strip().strip("`")
 
 
+def _lifecycle_missing_by_status(text: str) -> str:
+    counts: list[str] = []
+    for status_type in ("managed_issue", "market_alert", "trading_halt"):
+        match = re.search(rf"\| `{re.escape(status_type)}` \| ([^|]+) \|", text)
+        if not match:
+            continue
+        value = match.group(1).strip()
+        if value and value != "0":
+            counts.append(f"{status_type}={value}")
+    return ",".join(counts)
+
+
 def _kis_preflight_gate(path: Path | None) -> Gate:
     text = _read_text(path)
     if not text:
@@ -217,8 +229,9 @@ def _benchmark_returns_gate(path: Path | None) -> Gate | None:
     )
 
 
-def _status_coverage_gate(status_coverage: str, path: Path | None) -> Gate:
+def _status_coverage_gate(status_coverage: str, path: Path | None, lifecycle_gap_report: Path | None) -> Gate:
     text = _read_text(path)
+    lifecycle_gap_text = _read_text(lifecycle_gap_report)
     if path is not None and not text:
         return Gate(
             "point_in_time_status_coverage",
@@ -241,6 +254,12 @@ def _status_coverage_gate(status_coverage: str, path: Path | None) -> Gate:
         missing_source_types = _markdown_metric(text, "Source coverage missing status types")
         if missing_source_types and missing_source_types != "none":
             evidence += f"; missing source coverage={missing_source_types}"
+        lifecycle_missing = _markdown_metric(lifecycle_gap_text, "Missing release/resume groups")
+        if lifecycle_missing:
+            evidence += f"; lifecycle missing release/resume groups={lifecycle_missing}"
+        lifecycle_missing_by_status = _lifecycle_missing_by_status(lifecycle_gap_text)
+        if lifecycle_missing_by_status:
+            evidence += f"; lifecycle missing by status={lifecycle_missing_by_status}"
         return Gate(
             "point_in_time_status_coverage",
             "hold",
@@ -266,6 +285,7 @@ def evaluate_readiness(
     backtest_assumptions_report: Path | None = None,
     benchmark_returns_report: Path | None = None,
     status_coverage_report: Path | None = None,
+    status_lifecycle_gap_report: Path | None = None,
     kis_preflight_report: Path | None,
     min_market_dates: int = DEFAULT_MIN_MARKET_DATES,
     min_liquidity_lookback: int = DEFAULT_MIN_LIQUIDITY_LOOKBACK,
@@ -356,7 +376,7 @@ def evaluate_readiness(
     if benchmark_gate is not None:
         gates.append(benchmark_gate)
 
-    gates.append(_status_coverage_gate(status_coverage, status_coverage_report))
+    gates.append(_status_coverage_gate(status_coverage, status_coverage_report, status_lifecycle_gap_report))
     gates.extend(
         [
             Gate(
@@ -395,6 +415,7 @@ def evaluate_readiness(
         "backtest_assumptions_report_supplied": backtest_assumptions_report is not None,
         "benchmark_returns_report_supplied": benchmark_returns_report is not None,
         "status_coverage_report_supplied": status_coverage_report is not None,
+        "status_lifecycle_gap_report_supplied": status_lifecycle_gap_report is not None,
         "backtest_readiness": "hold",
         "live_trading_readiness": "blocked",
     }
@@ -419,6 +440,7 @@ def _render_report(
     backtest_assumptions_report: Path | None,
     benchmark_returns_report: Path | None,
     status_coverage_report: Path | None,
+    status_lifecycle_gap_report: Path | None,
     kis_preflight_report: Path | None,
     status_coverage: str,
 ) -> str:
@@ -434,6 +456,7 @@ def _render_report(
         f"- Backtest assumptions report: {_wikilink(backtest_assumptions_report) if backtest_assumptions_report else '`not_supplied`'}",
         f"- Benchmark returns report: {_wikilink(benchmark_returns_report) if benchmark_returns_report else '`not_supplied`'}",
         f"- Status coverage audit report: {_wikilink(status_coverage_report) if status_coverage_report else '`not_supplied`'}",
+        f"- Status lifecycle gap report: {_wikilink(status_lifecycle_gap_report) if status_lifecycle_gap_report else '`not_supplied`'}",
         f"- KIS preflight report: {_wikilink(kis_preflight_report) if kis_preflight_report else '`not_supplied`'}",
         f"- Status coverage mode: `{status_coverage}`",
         "- KIS API call: `false`",
@@ -507,6 +530,7 @@ def main() -> int:
     parser.add_argument("--backtest-assumptions-report", type=Path)
     parser.add_argument("--benchmark-returns-report", type=Path)
     parser.add_argument("--status-coverage-report", type=Path)
+    parser.add_argument("--status-lifecycle-gap-report", type=Path)
     parser.add_argument("--kis-preflight-report", type=Path)
     parser.add_argument("--status-coverage", default="current_snapshot_smoke")
     parser.add_argument("--min-market-dates", default=DEFAULT_MIN_MARKET_DATES, type=int)
@@ -529,6 +553,7 @@ def main() -> int:
             backtest_assumptions_report=args.backtest_assumptions_report,
             benchmark_returns_report=args.benchmark_returns_report,
             status_coverage_report=args.status_coverage_report,
+            status_lifecycle_gap_report=args.status_lifecycle_gap_report,
             kis_preflight_report=args.kis_preflight_report,
             min_market_dates=args.min_market_dates,
             min_liquidity_lookback=args.min_liquidity_lookback,
@@ -549,6 +574,7 @@ def main() -> int:
         backtest_assumptions_report=args.backtest_assumptions_report,
         benchmark_returns_report=args.benchmark_returns_report,
         status_coverage_report=args.status_coverage_report,
+        status_lifecycle_gap_report=args.status_lifecycle_gap_report,
         kis_preflight_report=args.kis_preflight_report,
         status_coverage=args.status_coverage,
     )
