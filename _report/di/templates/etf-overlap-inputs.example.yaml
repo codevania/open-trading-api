@@ -1,0 +1,59 @@
+version: 1
+purpose: >
+  Example only. Copy to _report/private/di/etf-overlap-inputs.yaml
+  and replace TODO values with official ETF holdings and private ETF portfolio
+  weights. The private path is gitignored.
+
+# Use percent units. Example: 40 means 40% of the investable portfolio.
+# Use 0 for an ETF that is deliberately not held.
+portfolio_etf_weights:
+  VOO: TODO - portfolio percent
+  VTI: TODO - portfolio percent
+  VT: TODO - portfolio percent
+  QQQ: TODO - portfolio percent
+
+etf_holdings:
+  VOO:
+    as_of: TODO - official holdings date
+    source_url: TODO - official issuer holdings or factsheet URL
+    coverage: TODO - full, candidate_only, or top_n
+    holdings:
+      MSFT: TODO - ETF holding percent
+      GOOGL: TODO - ETF holding percent; include GOOG treatment in private notes
+      AMZN: TODO - ETF holding percent
+      META: TODO - ETF holding percent
+      NVDA: TODO - ETF holding percent
+      AVGO: TODO - ETF holding percent
+  VTI:
+    as_of: TODO - official holdings date
+    source_url: TODO - official issuer holdings or factsheet URL
+    coverage: TODO - full, candidate_only, or top_n
+    holdings:
+      MSFT: TODO - ETF holding percent
+      GOOGL: TODO - ETF holding percent; include GOOG treatment in private notes
+      AMZN: TODO - ETF holding percent
+      META: TODO - ETF holding percent
+      NVDA: TODO - ETF holding percent
+      AVGO: TODO - ETF holding percent
+  VT:
+    as_of: TODO - official holdings date
+    source_url: TODO - official issuer holdings or factsheet URL
+    coverage: TODO - full, candidate_only, or top_n
+    holdings:
+      MSFT: TODO - ETF holding percent
+      GOOGL: TODO - ETF holding percent; include GOOG treatment in private notes
+      AMZN: TODO - ETF holding percent
+      META: TODO - ETF holding percent
+      NVDA: TODO - ETF holding percent
+      AVGO: TODO - ETF holding percent
+  QQQ:
+    as_of: TODO - official holdings date
+    source_url: TODO - official issuer holdings or factsheet URL
+    coverage: TODO - full, candidate_only, or top_n
+    holdings:
+      MSFT: TODO - ETF holding percent
+      GOOGL: TODO - ETF holding percent; include GOOG treatment in private notes
+      AMZN: TODO - ETF holding percent
+      META: TODO - ETF holding percent
+      NVDA: TODO - ETF holding percent
+      AVGO: TODO - ETF holding percent
