@@ -31,7 +31,7 @@ benchmark:
     - "KOSPI200"
   source: "krx_openapi_index_daily"
   required_for_backtest: true
-  current_status: "configured_not_wired_to_backtest"
+  current_status: "benchmark_return_smoke_generated_not_wired_to_backtest"
 
 guardrails:
   - "This is an assumption contract, not a production Backtest result."

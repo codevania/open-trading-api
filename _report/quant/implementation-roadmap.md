@@ -28,7 +28,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 4. Point-in-Time Universe | in-progress | 75-79% | KRX OpenAPI market-data path works; two KIND current snapshots are merged into `497` logical status-event rows, a 62-date `Point-in-Time Universe` smoke produced `159048` include / `11519` exclude rows, and status coverage audit keeps this at `hold` because the source is still `current_snapshot_smoke` with `0` release/resume-like events and no source coverage manifest | Obtain historical transition coverage plus a source coverage manifest, then keep Universe eligibility smoke aligned |
 | 5. Market data pipeline | in-progress | 93-95% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 62-date historical market-data merge, continuity audit, date-scoped market-data join, and status replay smoke exist | Extend another bounded historical window and keep status replay coverage aligned |
 | 6. Liquidity Filter | in-progress | 70-74% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] evaluates 361 current Universe saved-raw rows; [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] produced a 62-date, 20-day Point-in-Time smoke with `44235` include rows | Keep 20-day rule aligned while status coverage expands |
-| 7. Backtest engine connection | preflight | 39-44% | [[scripts/quant_backtest_input_contract_validate.py|scripts/quant_backtest_input_contract_validate.py]] validates the 62-date, 20-day smoke artifacts as internally joinable, [[scripts/quant_backtest_pnl_smoke.py|scripts/quant_backtest_pnl_smoke.py]] computes diagnostic weighted-return smoke rows, and [[scripts/quant_backtest_assumptions_validate.py|scripts/quant_backtest_assumptions_validate.py]] validates local cost/benchmark assumptions as `pass_assumption_only`, while Backtest remains `hold` | Wire engine only after Point-in-Time status coverage, actual fee override, benchmark returns, OOS, and Bias Control are acceptable |
+| 7. Backtest engine connection | preflight | 41-46% | [[scripts/quant_backtest_input_contract_validate.py|scripts/quant_backtest_input_contract_validate.py]] validates the 62-date, 20-day smoke artifacts as internally joinable, [[scripts/quant_backtest_pnl_smoke.py|scripts/quant_backtest_pnl_smoke.py]] computes diagnostic weighted-return smoke rows, [[scripts/quant_backtest_assumptions_validate.py|scripts/quant_backtest_assumptions_validate.py]] validates local cost/benchmark assumptions as `pass_assumption_only`, and [[scripts/quant_benchmark_return_smoke.py|scripts/quant_benchmark_return_smoke.py]] computes benchmark return smoke rows, while Backtest remains `hold` | Wire engine only after Point-in-Time status coverage, actual fee override, benchmark return join, OOS, and Bias Control are acceptable |
 | 8. OOS / Walk-Forward | planned | 10% | OOS plan exists | Run only after Backtest pipeline works |
 | 9. Bias Control pass | hold | 20% | Bias checklists exist; blockers documented | Point-in-Time and OOS evidence |
 | 10. Paper Signal tracking | partial | 70-75% | 62-date, 20-day Point-in-Time Liquidity rows now feed `1720` paper-only Momentum `Signal Candidate` rows, forward-return, long-only portfolio target, Backtest input contract, and PnL smoke outputs | Keep candidates signal-only until production Point-in-Time coverage, Backtest, OOS, and Bias Control pass |
@@ -65,6 +65,8 @@ Latest 2026-07-08 smoke artifacts:
 - [[_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250404|_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250404.md]]
 - [[_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250404.rows.csv|_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250404.rows.csv]]
 - [[_report/quant/research/2026-07-08-backtest-cost-benchmark-assumptions-validate|_report/quant/research/2026-07-08-backtest-cost-benchmark-assumptions-validate.md]]
+- [[_report/quant/research/2026-07-08-benchmark-return-smoke-20d-20250102-20250404|_report/quant/research/2026-07-08-benchmark-return-smoke-20d-20250102-20250404.md]]
+- [[_report/quant/research/2026-07-08-benchmark-return-smoke-20d-20250102-20250404.rows.csv|_report/quant/research/2026-07-08-benchmark-return-smoke-20d-20250102-20250404.rows.csv]]
 - [[_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250404-merged-status|_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250404-merged-status.md]]
 
 Previous 52-date baseline artifacts:
@@ -925,6 +927,15 @@ Backtest cost/benchmark assumptions validation:
 - Result: local cost and benchmark assumptions validate as `pass_assumption_only` with `0` hold checks.
 - Limitation: `pass_assumption_only` only proves the assumption contract reconciles. It is not a Backtest result and still needs actual KIS fee override plus benchmark return wiring.
 
+Benchmark return smoke:
+
+- [[scripts/quant_benchmark_return_smoke.py|scripts/quant_benchmark_return_smoke.py]]
+- [[tests/test_quant_benchmark_return_smoke.py|tests/test_quant_benchmark_return_smoke.py]]
+- [[_report/quant/research/2026-07-08-benchmark-return-smoke-20d-20250102-20250404|_report/quant/research/2026-07-08-benchmark-return-smoke-20d-20250102-20250404.md]]
+- [[_report/quant/research/2026-07-08-benchmark-return-smoke-20d-20250102-20250404.rows.csv|_report/quant/research/2026-07-08-benchmark-return-smoke-20d-20250102-20250404.rows.csv]]
+- Result: `258` benchmark horizon rows across `43` Signal Candidate dates, `3` benchmarks, and `1,5` trading-day horizons; `240` rows complete and `18` rows are `missing_forward_index` because the current smoke window ends too soon.
+- Limitation: benchmark return rows are diagnostic comparison inputs only. They are not joined to strategy PnL, costs, cash drag, OOS, or Bias Control.
+
 Quant readiness check:
 
 - [[scripts/quant_readiness_check.py|scripts/quant_readiness_check.py]]
@@ -936,7 +947,7 @@ Quant readiness check:
 - [[_report/quant/research/2026-07-06-quant-readiness-check-20d-with-extended-market-data|_report/quant/research/2026-07-06-quant-readiness-check-20d-with-extended-market-data.md]]
 - [[_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250307|_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250307.md]]
 - [[_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250404-merged-status|_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250404-merged-status.md]]
-- Result: market-data window `pass`, Liquidity Filter `pass_smoke`, Signal Candidate `pass_smoke`, forward-return smoke `pass_smoke`, portfolio target smoke `pass_smoke`, Backtest input contract `pass_smoke`, Backtest PnL smoke `pass_smoke`, Backtest assumptions `pass_assumption_only`, Point-in-Time status coverage `hold` with merged coverage audit evidence, Backtest engine `hold`, live trading controls `blocked`, KIS demo account `blocked`.
+- Result: market-data window `pass`, Liquidity Filter `pass_smoke`, Signal Candidate `pass_smoke`, forward-return smoke `pass_smoke`, portfolio target smoke `pass_smoke`, Backtest input contract `pass_smoke`, Backtest PnL smoke `pass_smoke`, Backtest assumptions `pass_assumption_only`, benchmark returns smoke `pass_smoke`, Point-in-Time status coverage `hold` with merged coverage audit evidence, Backtest engine `hold`, live trading controls `blocked`, KIS demo account `blocked`.
 - Guardrail: the readiness checker makes no KIS API calls and generates no order intents.
 
 Next gate:
@@ -1118,7 +1129,8 @@ Current state:
 - Backtest input contract validation: latest 20-day contract report is `pass_smoke` with `0` hold checks, proving the current smoke artifacts are internally joinable but not a Backtest result.
 - Backtest PnL smoke: latest 1-day horizon diagnostic report is `pass_smoke` with `860` target/horizon rows, `840` complete rows, and `20` missing forward prices on the latest candidate date.
 - Backtest cost/benchmark assumptions: latest local assumption contract is `pass_assumption_only`; it still needs actual KIS fee override and benchmark return wiring before production Backtest.
-- Quant readiness check: latest 20-day smoke gate report using the merged status coverage audit marks market-data window `pass`, Liquidity Filter, Signal Candidate, forward-return, portfolio targets, Backtest input contract, and Backtest PnL smoke as `pass_smoke`, Backtest assumptions as `pass_assumption_only`, Point-in-Time status coverage `hold`, Backtest engine `hold`, live trading controls `blocked`, and KIS demo account `blocked`.
+- Benchmark return smoke: latest 62-date report produced `258` benchmark horizon rows for KOSPI, KOSDAQ, and KOSPI200; it is not joined to strategy PnL yet.
+- Quant readiness check: latest 20-day smoke gate report using the merged status coverage audit marks market-data window `pass`, Liquidity Filter, Signal Candidate, forward-return, portfolio targets, Backtest input contract, Backtest PnL smoke, and benchmark returns as `pass_smoke`, Backtest assumptions as `pass_assumption_only`, Point-in-Time status coverage `hold`, Backtest engine `hold`, live trading controls `blocked`, and KIS demo account `blocked`.
 - KIS demo trading: dry-run order intent and local account preflight exist, but the local MCP `.env.kis` is missing `KIS_PAPER_STOCK`; buying-power checks, order status/cancel flow, kill switch, and explicit confirmation gate are not implemented.
 - Backtest readiness: `hold`.
 - Live trading readiness: `blocked`.

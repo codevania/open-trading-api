@@ -229,6 +229,33 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertEqual(summary["backtest_readiness"], "hold")
         self.assertEqual(summary["live_trading_readiness"], "blocked")
 
+    def test_benchmark_returns_report_is_smoke_gate_only(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            report = Path(tmp) / "benchmark.md"
+            report.write_text(
+                "\n".join(
+                    [
+                        "- Mode: `paper_benchmark_return_smoke_only`",
+                        "- Order intent generated: `false`",
+                        "- Backtest readiness: `hold`",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            gates, summary = evaluate_readiness(
+                liquidity_rows=_liquidity_rows(),
+                signal_rows=_signal_rows(),
+                benchmark_returns_report=report,
+                kis_preflight_report=None,
+                status_coverage="current_snapshot_smoke",
+            )
+        by_name = {gate.name: gate for gate in gates}
+
+        self.assertEqual(by_name["benchmark_returns_smoke"].status, "pass_smoke")
+        self.assertTrue(summary["benchmark_returns_report_supplied"])
+        self.assertEqual(summary["backtest_readiness"], "hold")
+        self.assertEqual(summary["live_trading_readiness"], "blocked")
+
     def test_historical_status_gate_still_does_not_authorize_trading(self) -> None:
         gates, summary = evaluate_readiness(
             liquidity_rows=_liquidity_rows(),
@@ -292,6 +319,7 @@ class QuantReadinessCheckTest(unittest.TestCase):
             contract_report = root / "contract.md"
             pnl_report = root / "pnl.md"
             assumptions_report = root / "assumptions.md"
+            benchmark_report = root / "benchmark.md"
             status_coverage_report = root / "status-coverage.md"
             output = root / "readiness.md"
             _write_csv(liquidity, _liquidity_rows())
@@ -308,6 +336,10 @@ class QuantReadinessCheckTest(unittest.TestCase):
             )
             assumptions_report.write_text(
                 "- Assumption status: `pass_assumption_only`\n- Order intent generated: `false`\n",
+                encoding="utf-8",
+            )
+            benchmark_report.write_text(
+                "- Mode: `paper_benchmark_return_smoke_only`\n- Order intent generated: `false`\n- Backtest readiness: `hold`\n",
                 encoding="utf-8",
             )
             status_coverage_report.write_text("- Coverage status: `hold`\n", encoding="utf-8")
@@ -330,6 +362,8 @@ class QuantReadinessCheckTest(unittest.TestCase):
                     str(pnl_report),
                     "--backtest-assumptions-report",
                     str(assumptions_report),
+                    "--benchmark-returns-report",
+                    str(benchmark_report),
                     "--status-coverage-report",
                     str(status_coverage_report),
                     "--report-output",
@@ -351,8 +385,10 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertIn("| `backtest_input_contract` | `pass_smoke` |", report)
         self.assertIn("| `backtest_pnl_smoke` | `pass_smoke` |", report)
         self.assertIn("| `backtest_assumptions` | `pass_assumption_only` |", report)
+        self.assertIn("| `benchmark_returns_smoke` | `pass_smoke` |", report)
         self.assertIn("| `point_in_time_status_coverage` | `hold` |", report)
         self.assertIn("- Backtest assumptions report: [[", report)
+        self.assertIn("- Benchmark returns report: [[", report)
         self.assertIn("- Status coverage audit report: [[", report)
         self.assertIn("| Forward-return complete rows | 1 |", report)
         self.assertIn("| Portfolio target rows | 2 |", report)
