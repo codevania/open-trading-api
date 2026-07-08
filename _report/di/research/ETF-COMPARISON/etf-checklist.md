@@ -1,7 +1,7 @@
 # DI Core ETF and Satellite Candidate Comparison
 
 - Run date: `2026-07-08`
-- Candidate manifest: `_report/di/candidates/core-satellite-candidates.yaml`
+- Candidate manifest: [[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]
 - Manifest version: `1`
 - Interpretation: candidate screening aid only; final buy decisions require a written thesis and tax/account verification
 
@@ -100,4 +100,4 @@ Excluded from long-term core:
 1. Fill issuer page, factsheet, expense, AUM, spread, NAV gap, and distribution fields for each ETF.
 2. Compare domestic-listed S&P 500 ETFs against US-direct VOO/VTI/VT using the same tax assumptions.
 3. For each satellite stock, run SEC EDGAR collection before writing thesis/valuation/decision notes.
-4. Move only approved candidates into `_report/di/watchlist.yaml` after a decision note exists.
+4. Move only approved candidates into [[_report/di/watchlist.yaml|_report/di/watchlist.yaml]] after a decision note exists.

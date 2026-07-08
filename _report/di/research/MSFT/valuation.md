@@ -61,13 +61,13 @@
 - Core ETF overlap has not been calculated in this tracked note.
 - Satellite ETF overlap has not been calculated in this tracked note.
 - MSFT is likely already present in S&P 500, total-market, and Nasdaq-100 style exposures; exact weights must be checked from issuer holdings before a position decision.
-- Record the actual overlap check in `_report/private/di/satellite-decision-inputs.yaml` before writing `decision.md`.
+- Record the actual overlap check in [[_report/private/di/satellite-decision-inputs.yaml|satellite-decision-inputs.yaml]] before writing `decision.md`.
 
 ## Tax And Account Route
 
 - Account route is not recorded in this tracked note because it may be personal portfolio information.
 - Korean tax treatment for U.S. direct holdings, domestic-listed U.S. equity ETFs, ISA, pension, and IRP routes must be checked separately.
-- Record the selected route in `_report/private/di/satellite-decision-inputs.yaml` before writing `decision.md`.
+- Record the selected route in [[_report/private/di/satellite-decision-inputs.yaml|satellite-decision-inputs.yaml]] before writing `decision.md`.
 
 ## Position Sizing
 

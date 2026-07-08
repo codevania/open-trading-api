@@ -1,7 +1,7 @@
 # Domestic ETF Source URL Check
 
 - Run date: `2026-07-08`
-- Scope: Korea-listed S&P 500 ETF candidates in `_report/di/candidates/core-satellite-candidates.yaml`
+- Scope: Korea-listed S&P 500 ETF candidates in [[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]
 - Interpretation: source URL verification only; no buy or order intent is generated
 - Order intent generated: `false`
 

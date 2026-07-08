@@ -1,8 +1,8 @@
 # DI ETF Research Routine
 
-## Candidate Manifest Workflow
+## 후보 매니페스트 작업 흐름
 
-Use the GitHub-safe candidate manifest before adding any ETF to the active DI watchlist.
+ETF를 [[_report/di/watchlist.yaml|_report/di/watchlist.yaml]]에 추가하기 전에는 GitHub에 올려도 안전한 후보 매니페스트인 [[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]을 먼저 사용한다.
 
 ```bash
 python scripts/di_etf_compare.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --output _report/di/research/ETF-COMPARISON/etf-checklist.md
@@ -10,15 +10,25 @@ python scripts/di_candidate_evidence_check.py --candidate-file _report/di/candid
 python scripts/di_etf_source_collect.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --run-date YYYY-MM-DD --dry-run
 ```
 
-Rules:
+관련 파일:
 
-- Treat `_report/di/candidates/core-satellite-candidates.yaml` as a research queue, not a buy list.
-- Fill expense, AUM, spread, NAV gap, distribution, tax, and account-wrapper fields before a buy decision.
-- Keep Korea-listed ETF candidates at `needs_issuer_and_tax_verification` until issuer and brokerage/tax evidence is recorded.
-- Treat `evidence-gate.md` as the blocker list before promoting candidates into active monitoring.
-- Run `di_etf_source_collect.py` first in `--dry-run` mode, then live only when official issuer source pages need to be preserved under `_report/raw/YYYY/YYYY-MM-DD/di/etf-sources/`.
-- Record domestic ETF source URL verification in `_report/di/research/ETF-COMPARISON/domestic-etf-source-url-check.md` when issuer URLs are added or rejected.
-- Move an ETF into `_report/di/watchlist.yaml` only after `etf-checklist.md` and `decision.md` exist.
+명령어 코드블록은 실행 가능한 형태를 유지하기 위해 원문 경로를 그대로 두고, 실제 파일 참조는 아래 링크로 확인한다.
+
+- [[scripts/di_etf_compare.py|di_etf_compare.py]]
+- [[scripts/di_candidate_evidence_check.py|di_candidate_evidence_check.py]]
+- [[scripts/di_etf_source_collect.py|di_etf_source_collect.py]]
+- [[_report/di/research/ETF-COMPARISON/etf-checklist|etf-checklist.md]]
+- [[_report/di/research/ETF-COMPARISON/evidence-gate|evidence-gate.md]]
+
+## 규칙
+
+- [[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]은 매수 목록이 아니라 리서치 대기열로 취급한다.
+- 매수 판단을 검토하기 전에는 expense, AUM, spread, NAV gap, distribution, tax, account-wrapper 항목을 먼저 채운다.
+- 국내상장 ETF 후보는 운용사 자료와 증권사/세금 근거가 기록될 때까지 `needs_issuer_and_tax_verification` 상태로 둔다.
+- 후보를 active monitoring으로 승격하기 전에는 [[_report/di/research/ETF-COMPARISON/evidence-gate|evidence-gate.md]]를 blocker list로 확인한다.
+- [[scripts/di_etf_source_collect.py|di_etf_source_collect.py]]는 먼저 `--dry-run`으로 실행한다. 공식 운용사 원천 페이지를 `_report/raw/YYYY/YYYY-MM-DD/di/etf-sources/` 아래에 보존해야 할 때만 live 수집을 실행한다.
+- 국내 ETF 운용사 URL을 추가하거나 제외할 때는 [[_report/di/research/ETF-COMPARISON/domestic-etf-source-url-check|domestic-etf-source-url-check.md]]에 검증 결과를 기록한다.
+- ETF를 [[_report/di/watchlist.yaml|_report/di/watchlist.yaml]]에 옮기는 것은 [[_report/di/research/ETF-COMPARISON/etf-checklist|etf-checklist.md]]와 [[_report/di/templates/research/decision|decision.md]]가 준비된 뒤에만 검토한다.
 
 ## 목적
 

@@ -29,7 +29,7 @@
 
 - [[_report/di/routines/etf-research-routine|etf-research-routine.md]]
 - [[_report/di/routines/company-research-routine|company-research-routine.md]]
-- `_report/di/candidates/core-satellite-candidates.yaml`
+- [[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]
 
 ## Day 결정 규칙
 
@@ -136,3 +136,10 @@ _report/di/learning/logs/YYYY-MM.md
 3. 참고 자료와 연결 파일이 적혀 있다.
 4. 투자 결론이 아니라 판단 보류 메모가 있다.
 5. 민감정보가 들어가지 않았다.
+
+## Obsidian Link Rules
+
+- 학습자가 읽는 Markdown 본문에서는 구체적인 repo 내부 파일 참조를 Obsidian wikilink로 쓴다.
+- Markdown 파일은 `[[path/without-md|file.md]]` 형식을 쓴다.
+- Markdown이 아닌 내부 파일은 확장자를 포함해 `[[path/file.yaml|file.yaml]]`, `[[scripts/tool.py|tool.py]]`처럼 쓴다.
+- 실행용 코드블록, glob 패턴, 템플릿 경로는 복사/패턴 의미가 깨지지 않도록 코드 형식을 유지한다.

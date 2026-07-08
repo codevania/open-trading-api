@@ -17,6 +17,13 @@
 - 모의/테스트 요청이면 지원되는 API에서 `env_dv: demo`를 명시한다.
 - 리포트는 투자 판단 보조 자료다. 확정적 투자 조언처럼 쓰지 말고, 가정/불확실성/누락 데이터를 드러낸다.
 
+## Obsidian 링크 규칙
+
+- 사용자가 읽는 Markdown 리포트, 학습 노트, 루틴, wiki 문서에서는 구체적인 repo 내부 파일 참조를 Obsidian wikilink로 쓴다.
+- Markdown 파일은 `[[path/without-md|file.md]]` 형식을 쓴다.
+- YAML, CSV, JSON, Python처럼 Markdown이 아닌 내부 파일은 확장자를 포함해 `[[path/file.yaml|file.yaml]]`, `[[scripts/tool.py|tool.py]]`처럼 쓴다.
+- 실행용 코드블록, glob 패턴, 생성 위치 템플릿은 복사/패턴 의미가 깨지지 않도록 코드 형식을 유지한다.
+
 ## 일일 리포트 최소 항목
 
 각 일일 리포트에는 다음을 포함한다.

@@ -26,7 +26,7 @@
 - Local DI overview: [[_report/di/README|_report/di/README.md]]
 - ETF routine: [[_report/di/routines/etf-research-routine|etf-research-routine.md]]
 - Company routine: [[_report/di/routines/company-research-routine|company-research-routine.md]]
-- Candidate queue: `_report/di/candidates/core-satellite-candidates.yaml`
+- Candidate queue: [[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]
 - Current gate: [[_report/di/research/ETF-COMPARISON/evidence-gate|evidence-gate.md]]
 - SEC Investor.gov ETF overview: `https://www.investor.gov/introduction-investing/investing-basics/investment-products/mutual-funds-and-exchange-traded-2`
 - SEC Investor.gov Researching Investments: `https://www.investor.gov/introduction-investing/getting-started/researching-investments`
@@ -71,7 +71,7 @@
 
 | Day | 주제 | 할 일 | 산출물 |
 | ---: | --- | --- | --- |
-| 15 | 후보 확인 | `core-satellite-candidates.yaml`의 core ETF와 국내상장 ETF 후보를 읽는다. | 후보별 역할 표 |
+| 15 | 후보 확인 | [[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]의 core ETF와 국내상장 ETF 후보를 읽는다. | 후보별 역할 표 |
 | 16 | 환노출 | USD 자산, KRW 표시 상품, 환헤지/비헤지를 구분한다. | 환율이 수익률에 미치는 경로 |
 | 17 | 세금/계좌 | 세금은 확정하지 말고 확인 질문으로 정리한다. | 세무/계좌 확인 질문 7개 |
 | 18 | 운용사 자료 | 운용사 상품 페이지에서 확인해야 할 항목을 뽑는다. | 공식 상품 페이지 체크리스트 |
@@ -144,4 +144,4 @@
 1. core ETF 비교를 먼저 완성한다.
 2. 국내상장 ETF의 세금/계좌 적합성은 확정하지 말고 증권사/세무 확인 질문으로 남긴다.
 3. satellite equity는 [[_report/di/templates/research/thesis|thesis.md]]가 있어도 [[_report/di/templates/research/valuation|valuation.md]]와 [[_report/di/templates/research/decision|decision.md]]가 없으면 계속 `hold`로 둔다.
-4. 후보를 watchlist에 올리기 전 `scripts/di_candidate_evidence_check.py`를 다시 돌린다.
+4. 후보를 watchlist에 올리기 전 [[scripts/di_candidate_evidence_check.py|di_candidate_evidence_check.py]]를 다시 돌린다.

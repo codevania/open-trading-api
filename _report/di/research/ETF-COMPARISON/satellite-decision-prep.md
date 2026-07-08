@@ -1,9 +1,9 @@
 # DI Satellite Equity Decision Prep
 
 - Run date: `2026-07-09`
-- Candidate manifest: `_report/di/candidates/core-satellite-candidates.yaml`
+- Candidate manifest: [[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]
 - Research root: `_report/di/research`
-- Decision input file: `_report/private/di/satellite-decision-inputs.yaml`
+- Decision input file: [[_report/private/di/satellite-decision-inputs.yaml|satellite-decision-inputs.yaml]]
 - Queue scope: `primary_queue`
 - Interpretation: pre-decision checklist only; no buy, sell, hold, or order intent is generated
 - Order intent generated: `false`

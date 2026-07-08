@@ -92,3 +92,10 @@ _report/quant/learning/daily/YYYY/YYYY-MM-DD.md
 - 민감 정보 기록이 필요하다.
 
 Stop condition이 발생하면 파일을 추정으로 채우지 말고, 막힌 이유와 필요한 다음 확인 항목을 짧게 남긴다.
+
+## Obsidian Link Rules
+
+- 학습자가 읽는 Markdown 본문에서는 구체적인 repo 내부 파일 참조를 Obsidian wikilink로 쓴다.
+- Markdown 파일은 `[[path/without-md|file.md]]` 형식을 쓴다.
+- Markdown이 아닌 내부 파일은 확장자를 포함해 `[[path/file.csv|file.csv]]`, `[[scripts/tool.py|tool.py]]`처럼 쓴다.
+- 실행용 코드블록, glob 패턴, 템플릿 경로는 복사/패턴 의미가 깨지지 않도록 코드 형식을 유지한다.

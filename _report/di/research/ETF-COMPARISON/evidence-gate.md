@@ -1,7 +1,7 @@
 # DI Candidate Evidence Gate
 
 - Run date: `2026-07-09`
-- Candidate manifest: `_report/di/candidates/core-satellite-candidates.yaml`
+- Candidate manifest: [[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]
 - Research root: `_report/di/research`
 - Interpretation: readiness gate only; no buy or order intent is generated
 - Order intent generated: `false`
@@ -38,6 +38,6 @@
 
 ## Promotion Rules
 
-- ETF candidates stay out of `_report/di/watchlist.yaml` until issuer, cost, NAV/liquidity, distribution, tax, and account evidence are filled.
+- ETF candidates stay out of [[_report/di/watchlist.yaml|_report/di/watchlist.yaml]] until issuer, cost, NAV/liquidity, distribution, tax, and account evidence are filled.
 - Stock candidates stay out of active position review until SEC/DART source evidence, primary filing document and section maps, `financials.md`, `thesis.md`, `valuation.md`, and `decision.md` exist.
 - A `ready_*` status means research process readiness only, not a recommendation to buy.
