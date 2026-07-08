@@ -44,3 +44,4 @@
 - Expanded the gitignored DI satellite decision-input example to cover every primary U.S. satellite equity candidate and added a test that keeps it aligned with the public candidate manifest.
 - Added a DI ETF overlap input template and calculator so official ETF holding weights plus private ETF portfolio weights can feed the `etf_overlap_checked` blocker without exposing account details.
 - Linked the ETF overlap checker into the ETF and company research routines so future DI sessions can resume the blocker-clearing flow from the repo docs.
+- Added a DI ETF holdings collector and source-status report: QQQ is wired to the official Invesco holdings API, while VOO/VTI/VT remain manual official-source checks until a stable Vanguard holdings endpoint is confirmed.
