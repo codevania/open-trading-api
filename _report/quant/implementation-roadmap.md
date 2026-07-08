@@ -81,6 +81,10 @@ Baseline 2026-07-08 72-date smoke artifacts:
 - [[_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv]]
 - [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d.md]]
 - [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv]]
+- [[scripts/quant_point_in_time_status_source_manifest_draft.py|scripts/quant_point_in_time_status_source_manifest_draft.py]]
+- [[tests/test_quant_point_in_time_status_source_manifest_draft.py|tests/test_quant_point_in_time_status_source_manifest_draft.py]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d.md]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d.rows.csv]]
 - [[_report/quant/research/2026-07-08-kind-status-point-in-time-universe-smoke-merged-snapshots-20250102-20250418|_report/quant/research/2026-07-08-kind-status-point-in-time-universe-smoke-merged-snapshots-20250102-20250418.md]]
 - [[_report/quant/research/2026-07-08-kind-status-point-in-time-universe-smoke-merged-snapshots-20250102-20250418.rows.csv|_report/quant/research/2026-07-08-kind-status-point-in-time-universe-smoke-merged-snapshots-20250102-20250418.rows.csv]]
 - [[_report/quant/research/2026-07-08-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250418|_report/quant/research/2026-07-08-kind-status-point-in-time-liquidity-smoke-20d-20250102-20250418.md]]
@@ -926,6 +930,10 @@ Status coverage audit:
 - [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots.rows.csv]]
 - [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d.md]]
 - [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv]]
+- [[scripts/quant_point_in_time_status_source_manifest_draft.py|scripts/quant_point_in_time_status_source_manifest_draft.py]]
+- [[tests/test_quant_point_in_time_status_source_manifest_draft.py|tests/test_quant_point_in_time_status_source_manifest_draft.py]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d.md]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d.rows.csv]]
 - Latest market enrichment: 81-date local market-data resolves `1` additional merged status-event market label; merged events now have `47` `UNKNOWN` market rows across `31` codes, down from `48`. Unknown-market target rows are split by status type as `trading_halt=28`, `delisting=9`, `managed_issue=6`, and `market_alert=4`.
 - Coverage status: `hold`
 - Coverage mode: `current_snapshot_smoke`
@@ -938,6 +946,7 @@ Status coverage audit:
 - [[scripts/quant_point_in_time_status_coverage_audit.py|scripts/quant_point_in_time_status_coverage_audit.py]] now applies [[scripts/quant_point_in_time_status_source_manifest_validate.py|scripts/quant_point_in_time_status_source_manifest_validate.py]] when a source coverage manifest is supplied; source policy, raw evidence paths, required status types, and market-window coverage must validate before `historical_complete` can pass.
 - Lifecycle diagnostics: `managed_issue` `105/0`, `market_alert` `75/0`, and `trading_halt` `253/0` active-like/release-resume rows.
 - Lifecycle gap report: the latest market-enriched report still has `304` code/status lifecycle groups with `missing_release_resume_evidence` (`managed_issue=104`, `market_alert=70`, `trading_halt=130`). These rows are collection targets for official transition evidence, not historical truth and not a Backtest promotion.
+- Source manifest draft: [[_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d.md]] produces `10` `pending_raw_evidence` draft rows across `managed_issue`, `trading_halt`, `market_alert`, and `delisting`; `source_url`, `raw_path`, and `confidence` are intentionally blank until official raw files are captured.
 - The audit pass gate now also requires every lifecycle status type with active-like rows to have release/resume-like rows, at least one dated raw capture path, and a source coverage manifest that passes source-policy/raw-path validation and covers the market-data window for every required status type.
 
 Universe eligibility smoke:
@@ -1187,6 +1196,10 @@ Required fields:
 Pass condition:
 
 - Historical Rebalance dates can be reconstructed without using future-known membership.
+
+Current next input:
+
+- [[_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d.rows.csv]] is the bounded source-manifest filling queue. Fill it only after official raw status files are captured; do not treat `pending_raw_evidence` rows as coverage.
 
 ### Step E. Backtest and OOS
 
