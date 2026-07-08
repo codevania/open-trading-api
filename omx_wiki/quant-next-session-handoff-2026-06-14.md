@@ -19,15 +19,11 @@ uv run python -m unittest discover tests
 
 If local Quant changes are still present, stage/commit them before expanding market-data or status coverage again.
 
-Suggested commit intent if these local Quant changes are still uncommitted:
-
-`Extend KRX market-data smoke through 2025-04-04`
-
-Use Lore commit protocol.
+Use a scope-specific Lore commit message for any remaining local Quant changes.
 
 ## Current Best Next Task
 
-Use the 62-date KRX OpenAPI market-data merge, merged KIND status replay, local status coverage audit, `Point-in-Time Universe` smoke, 20-day `Point-in-Time` Liquidity Filter smoke, paper-only Momentum Signal Candidate smoke, Signal forward-return smoke, long-only portfolio target smoke, Backtest input contract validation, Backtest PnL smoke, and local Quant readiness check as the plumbing baseline. The latest coverage audit is still `hold`: two KIND current snapshots now produce `497` logical status-event rows across `2` raw capture dates, but `managed_issue`, `market_alert`, and `trading_halt` still have active-like rows with `0` release/resume-like rows, and no source coverage manifest covers the required status types. The audit pass gate now also requires every lifecycle status type with active-like rows to have release/resume-like rows, dated raw capture evidence, and a source coverage manifest covering the market-data window before `historical_complete` can pass. The next lane is to obtain historical transition coverage by date/source, produce the source coverage manifest, resolve remaining `UNKNOWN` market rows only where official evidence supports it, extend the market-data window enough to cover production forward-return horizons, and keep the Universe/Liquidity/Signal/portfolio/contract/PnL/readiness smoke aligned until it can become a Backtest input. KIS demo trading is only at local preflight level; do not build or run an order executor until demo auth/account, buying-power, sellable-quantity, status/cancel, kill-switch, and explicit confirmation gates are implemented.
+Use the 62-date KRX OpenAPI market-data merge, merged KIND status replay, local status coverage audit, `Point-in-Time Universe` smoke, 20-day `Point-in-Time` Liquidity Filter smoke, paper-only Momentum Signal Candidate smoke, Signal forward-return smoke, long-only portfolio target smoke, Backtest input contract validation, Backtest PnL smoke, Backtest cost/benchmark assumptions validation, and local Quant readiness check as the plumbing baseline. The latest coverage audit is still `hold`: two KIND current snapshots now produce `497` logical status-event rows across `2` raw capture dates, but `managed_issue`, `market_alert`, and `trading_halt` still have active-like rows with `0` release/resume-like rows, and no source coverage manifest covers the required status types. The audit pass gate now also requires every lifecycle status type with active-like rows to have release/resume-like rows, dated raw capture evidence, and a source coverage manifest covering the market-data window before `historical_complete` can pass. Backtest cost/benchmark assumptions are now `pass_assumption_only`, not Backtest readiness. The next lane is to obtain historical transition coverage by date/source, produce the source coverage manifest, resolve remaining `UNKNOWN` market rows only where official evidence supports it, extend the market-data window enough to cover production forward-return horizons, wire actual fees and benchmark returns, and keep the Universe/Liquidity/Signal/portfolio/contract/PnL/assumption/readiness smoke aligned until it can become a Backtest input. KIS demo trading is only at local preflight level; do not build or run an order executor until demo auth/account, buying-power, sellable-quantity, status/cancel, kill-switch, and explicit confirmation gates are implemented.
 
 Already implemented in the latest local work:
 
@@ -61,6 +57,7 @@ Already implemented in the latest local work:
   - [[_report/quant/research/2026-07-08-backtest-input-contract-validate-20250102-20250404|_report/quant/research/2026-07-08-backtest-input-contract-validate-20250102-20250404.md]]
   - [[_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250404|_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250404.md]]
   - [[_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250404.rows.csv|_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250404.rows.csv]]
+  - [[_report/quant/research/2026-07-08-backtest-cost-benchmark-assumptions-validate|_report/quant/research/2026-07-08-backtest-cost-benchmark-assumptions-validate.md]]
   - [[_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250404-merged-status|_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250404-merged-status.md]]
 
 - Previous 52-date baseline artifacts:
@@ -570,7 +567,8 @@ Already implemented in the latest local work:
 - Signal portfolio target smoke is implemented; it converts BUY candidates into `860` long-only paper target rows across `43` rebalance dates at `5%` target weight each and excludes SELL candidates instead of treating them as short targets.
 - Backtest input contract validation is implemented; the latest 20-day contract report is `pass_smoke` with `0` hold checks across required columns, key uniqueness, joins, expected forward-return horizons, and portfolio weight bounds.
 - Backtest PnL smoke is implemented; the latest 1-day horizon diagnostic report is `pass_smoke` with `860` rows, `840` complete rows, and `20` missing forward prices due to the short smoke window.
-- Quant readiness check is implemented; the latest 20-day local report with merged status coverage marks market-data window `pass`, Liquidity Filter `pass_smoke`, Signal Candidate `pass_smoke`, forward-return smoke `pass_smoke`, portfolio target smoke `pass_smoke`, Backtest input contract `pass_smoke`, Backtest PnL smoke `pass_smoke`, Point-in-Time status coverage `hold`, Backtest engine `hold`, live trading controls `blocked`, and KIS demo account `blocked`.
+- Backtest cost/benchmark assumptions validation is implemented; the latest local report is `pass_assumption_only`, which means the assumption contract reconciles but actual KIS fee override and benchmark return wiring are still required.
+- Quant readiness check is implemented; the latest 20-day local report with merged status coverage marks market-data window `pass`, Liquidity Filter `pass_smoke`, Signal Candidate `pass_smoke`, forward-return smoke `pass_smoke`, portfolio target smoke `pass_smoke`, Backtest input contract `pass_smoke`, Backtest PnL smoke `pass_smoke`, Backtest assumptions `pass_assumption_only`, Point-in-Time status coverage `hold`, Backtest engine `hold`, live trading controls `blocked`, and KIS demo account `blocked`.
 - Quant report-output LF writer cleanup is complete for the remaining Backtest/Signal/KRX history report generators; they now use [[scripts/quant_io.py|scripts/quant_io.py]] `write_text_lf`.
 - KIS demo order intent preflight and local demo account preflight are implemented. The latest local MCP `.env.kis` check found `KIS_PAPER_STOCK` empty without printing or storing account values. Controlled first KIS demo order estimate remains `3-7 working days` after local demo auth/account verification; Quant-pipeline-driven demo trading estimate is `3-6 weeks`.
 - KRX Data Marketplace status-source probe is implemented; it found the official status screen `bld` values but all core unattended JSON probes returned `auth_required`/`LOGOUT`.
@@ -591,9 +589,10 @@ Likely needed work:
 9. Re-run [[scripts/quant_signal_portfolio_targets_smoke.py|scripts/quant_signal_portfolio_targets_smoke.py]] after Signal Candidate rows change; keep it long-only unless the strategy explicitly supports shorting.
 10. Re-run [[scripts/quant_backtest_input_contract_validate.py|scripts/quant_backtest_input_contract_validate.py]] after Liquidity, Signal Candidate, forward-return, or portfolio-target rows change.
 11. Re-run [[scripts/quant_backtest_pnl_smoke.py|scripts/quant_backtest_pnl_smoke.py]] after portfolio-target or forward-return rows change.
-12. Re-run [[scripts/quant_readiness_check.py|scripts/quant_readiness_check.py]] after each Point-in-Time, Liquidity Filter, Signal Candidate, forward-return, portfolio-target, Backtest contract, PnL smoke, or KIS account milestone.
-13. Extend the KRX OpenAPI market-data window further before attempting production Momentum lookbacks.
-14. Keep result as paper/smoke only until full `Point-in-Time` status replay is solved.
+12. Re-run [[scripts/quant_backtest_assumptions_validate.py|scripts/quant_backtest_assumptions_validate.py]] after actual KIS fee assumptions or benchmark source assumptions change.
+13. Re-run [[scripts/quant_readiness_check.py|scripts/quant_readiness_check.py]] after each Point-in-Time, Liquidity Filter, Signal Candidate, forward-return, portfolio-target, Backtest contract, PnL smoke, assumption, or KIS account milestone.
+14. Extend the KRX OpenAPI market-data window further before attempting production Momentum lookbacks.
+15. Keep result as paper/smoke only until full `Point-in-Time` status replay is solved.
 
 ## Current Blockers
 
@@ -608,6 +607,7 @@ Likely needed work:
 - Portfolio target smoke has no costs, benchmark, slippage, taxes, cash drag, or order quantities; it is not a Backtest engine.
 - Backtest input contract is only an internal join/schema/guardrail validator; it does not solve historical status coverage or PnL modeling.
 - Backtest PnL smoke is only a weighted-return diagnostic; it has no costs, benchmark, OOS, Bias Control, cash drag, rebalance execution, or delisting/event timing model.
+- Backtest assumptions validation is only an assumption-contract check; it has no actual account/channel fee confirmation and no benchmark return join.
 
 ## User Preferences
 

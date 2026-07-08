@@ -153,6 +153,32 @@ def _backtest_pnl_gate(path: Path | None) -> Gate | None:
     )
 
 
+def _backtest_assumptions_gate(path: Path | None) -> Gate | None:
+    if path is None:
+        return None
+    text = _read_text(path)
+    if not text:
+        return Gate(
+            "backtest_assumptions",
+            "hold",
+            "no local Backtest assumption validation report supplied",
+            "run quant_backtest_assumptions_validate.py on the current assumption config",
+        )
+    if "Assumption status: `pass_assumption_only`" in text and "Order intent generated: `false`" in text:
+        return Gate(
+            "backtest_assumptions",
+            "pass_assumption_only",
+            "local cost/benchmark assumptions reconcile but are not a Backtest result",
+            "replace placeholder commission with actual KIS fee schedule and wire benchmark returns into the engine",
+        )
+    return Gate(
+        "backtest_assumptions",
+        "hold",
+        "local Backtest assumption report is not pass_assumption_only",
+        "repair cost or benchmark assumption checks before wiring a Backtest engine",
+    )
+
+
 def _status_coverage_gate(status_coverage: str, path: Path | None) -> Gate:
     text = _read_text(path)
     if path is not None and not text:
@@ -192,6 +218,7 @@ def evaluate_readiness(
     portfolio_target_rows: list[dict[str, str]] | None = None,
     backtest_contract_report: Path | None = None,
     backtest_pnl_report: Path | None = None,
+    backtest_assumptions_report: Path | None = None,
     status_coverage_report: Path | None = None,
     kis_preflight_report: Path | None,
     min_market_dates: int = DEFAULT_MIN_MARKET_DATES,
@@ -275,6 +302,10 @@ def evaluate_readiness(
     if pnl_gate is not None:
         gates.append(pnl_gate)
 
+    assumptions_gate = _backtest_assumptions_gate(backtest_assumptions_report)
+    if assumptions_gate is not None:
+        gates.append(assumptions_gate)
+
     gates.append(_status_coverage_gate(status_coverage, status_coverage_report))
     gates.extend(
         [
@@ -311,6 +342,7 @@ def evaluate_readiness(
         else None,
         "backtest_contract_report_supplied": backtest_contract_report is not None,
         "backtest_pnl_report_supplied": backtest_pnl_report is not None,
+        "backtest_assumptions_report_supplied": backtest_assumptions_report is not None,
         "status_coverage_report_supplied": status_coverage_report is not None,
         "backtest_readiness": "hold",
         "live_trading_readiness": "blocked",
@@ -333,6 +365,7 @@ def _render_report(
     portfolio_targets_input: Path | None,
     backtest_contract_report: Path | None,
     backtest_pnl_report: Path | None,
+    backtest_assumptions_report: Path | None,
     status_coverage_report: Path | None,
     kis_preflight_report: Path | None,
     status_coverage: str,
@@ -346,6 +379,7 @@ def _render_report(
         f"- Portfolio-target input: {_wikilink(portfolio_targets_input) if portfolio_targets_input else '`not_supplied`'}",
         f"- Backtest contract report: {_wikilink(backtest_contract_report) if backtest_contract_report else '`not_supplied`'}",
         f"- Backtest PnL smoke report: {_wikilink(backtest_pnl_report) if backtest_pnl_report else '`not_supplied`'}",
+        f"- Backtest assumptions report: {_wikilink(backtest_assumptions_report) if backtest_assumptions_report else '`not_supplied`'}",
         f"- Status coverage audit report: {_wikilink(status_coverage_report) if status_coverage_report else '`not_supplied`'}",
         f"- KIS preflight report: {_wikilink(kis_preflight_report) if kis_preflight_report else '`not_supplied`'}",
         f"- Status coverage mode: `{status_coverage}`",
@@ -417,6 +451,7 @@ def main() -> int:
     parser.add_argument("--portfolio-targets-input", type=Path)
     parser.add_argument("--backtest-contract-report", type=Path)
     parser.add_argument("--backtest-pnl-report", type=Path)
+    parser.add_argument("--backtest-assumptions-report", type=Path)
     parser.add_argument("--status-coverage-report", type=Path)
     parser.add_argument("--kis-preflight-report", type=Path)
     parser.add_argument("--status-coverage", default="current_snapshot_smoke")
@@ -437,6 +472,7 @@ def main() -> int:
             portfolio_target_rows=portfolio_target_rows,
             backtest_contract_report=args.backtest_contract_report,
             backtest_pnl_report=args.backtest_pnl_report,
+            backtest_assumptions_report=args.backtest_assumptions_report,
             status_coverage_report=args.status_coverage_report,
             kis_preflight_report=args.kis_preflight_report,
             min_market_dates=args.min_market_dates,
@@ -455,6 +491,7 @@ def main() -> int:
         portfolio_targets_input=args.portfolio_targets_input,
         backtest_contract_report=args.backtest_contract_report,
         backtest_pnl_report=args.backtest_pnl_report,
+        backtest_assumptions_report=args.backtest_assumptions_report,
         status_coverage_report=args.status_coverage_report,
         kis_preflight_report=args.kis_preflight_report,
         status_coverage=args.status_coverage,

@@ -1,0 +1,39 @@
+version: "1.0"
+scope: "quant_backtest_cost_benchmark_assumptions"
+status: "baseline_assumption_set_external_fee_override_required"
+backtest_readiness: "hold"
+
+cost_model:
+  currency: "KRW"
+  commission_bps_per_side:
+    baseline: 1.5
+    stress: 5.0
+    source: "_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md"
+    needs_broker_override: true
+  slippage_bps_per_side:
+    baseline: 5.0
+    stress: 20.0
+    source: "_report/quant/research/2026-06-08-transaction-cost-slippage-assumptions.md"
+  markets:
+    KOSPI:
+      sell_tax_bps: 20.0
+      baseline_round_trip_bps: 33.0
+      stress_round_trip_bps: 70.0
+    KOSDAQ:
+      sell_tax_bps: 20.0
+      baseline_round_trip_bps: 33.0
+      stress_round_trip_bps: 70.0
+
+benchmark:
+  primary: "KOSPI"
+  secondary:
+    - "KOSDAQ"
+    - "KOSPI200"
+  source: "krx_openapi_index_daily"
+  required_for_backtest: true
+  current_status: "configured_not_wired_to_backtest"
+
+guardrails:
+  - "This is an assumption contract, not a production Backtest result."
+  - "Override commission with the actual KIS account/channel fee schedule before production Backtest."
+  - "Keep benchmark return wiring separate from Strategy return diagnostics."
