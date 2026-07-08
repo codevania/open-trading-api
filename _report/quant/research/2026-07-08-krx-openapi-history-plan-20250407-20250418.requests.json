@@ -1,0 +1,173 @@
+{
+  "plan_type": "krx_openapi_history_missing_raw",
+  "capture_date": "2026-07-08",
+  "start": "20250407",
+  "end": "20250418",
+  "include_weekends": false,
+  "services": [
+    "kospi_stock_daily",
+    "kosdaq_stock_daily",
+    "kospi_issue_base",
+    "kosdaq_issue_base",
+    "kospi_index_daily",
+    "kosdaq_index_daily"
+  ],
+  "totals": {
+    "candidate_dates": 10,
+    "complete_dates": 10,
+    "existing_raw_files": 60,
+    "missing_requests": 0
+  },
+  "dates": [
+    {
+      "bas_dd": "20250407",
+      "weekday": "Monday",
+      "complete": true,
+      "existing_services": [
+        "kospi_stock_daily",
+        "kosdaq_stock_daily",
+        "kospi_issue_base",
+        "kosdaq_issue_base",
+        "kospi_index_daily",
+        "kosdaq_index_daily"
+      ],
+      "missing_services": [],
+      "requests": []
+    },
+    {
+      "bas_dd": "20250408",
+      "weekday": "Tuesday",
+      "complete": true,
+      "existing_services": [
+        "kospi_stock_daily",
+        "kosdaq_stock_daily",
+        "kospi_issue_base",
+        "kosdaq_issue_base",
+        "kospi_index_daily",
+        "kosdaq_index_daily"
+      ],
+      "missing_services": [],
+      "requests": []
+    },
+    {
+      "bas_dd": "20250409",
+      "weekday": "Wednesday",
+      "complete": true,
+      "existing_services": [
+        "kospi_stock_daily",
+        "kosdaq_stock_daily",
+        "kospi_issue_base",
+        "kosdaq_issue_base",
+        "kospi_index_daily",
+        "kosdaq_index_daily"
+      ],
+      "missing_services": [],
+      "requests": []
+    },
+    {
+      "bas_dd": "20250410",
+      "weekday": "Thursday",
+      "complete": true,
+      "existing_services": [
+        "kospi_stock_daily",
+        "kosdaq_stock_daily",
+        "kospi_issue_base",
+        "kosdaq_issue_base",
+        "kospi_index_daily",
+        "kosdaq_index_daily"
+      ],
+      "missing_services": [],
+      "requests": []
+    },
+    {
+      "bas_dd": "20250411",
+      "weekday": "Friday",
+      "complete": true,
+      "existing_services": [
+        "kospi_stock_daily",
+        "kosdaq_stock_daily",
+        "kospi_issue_base",
+        "kosdaq_issue_base",
+        "kospi_index_daily",
+        "kosdaq_index_daily"
+      ],
+      "missing_services": [],
+      "requests": []
+    },
+    {
+      "bas_dd": "20250414",
+      "weekday": "Monday",
+      "complete": true,
+      "existing_services": [
+        "kospi_stock_daily",
+        "kosdaq_stock_daily",
+        "kospi_issue_base",
+        "kosdaq_issue_base",
+        "kospi_index_daily",
+        "kosdaq_index_daily"
+      ],
+      "missing_services": [],
+      "requests": []
+    },
+    {
+      "bas_dd": "20250415",
+      "weekday": "Tuesday",
+      "complete": true,
+      "existing_services": [
+        "kospi_stock_daily",
+        "kosdaq_stock_daily",
+        "kospi_issue_base",
+        "kosdaq_issue_base",
+        "kospi_index_daily",
+        "kosdaq_index_daily"
+      ],
+      "missing_services": [],
+      "requests": []
+    },
+    {
+      "bas_dd": "20250416",
+      "weekday": "Wednesday",
+      "complete": true,
+      "existing_services": [
+        "kospi_stock_daily",
+        "kosdaq_stock_daily",
+        "kospi_issue_base",
+        "kosdaq_issue_base",
+        "kospi_index_daily",
+        "kosdaq_index_daily"
+      ],
+      "missing_services": [],
+      "requests": []
+    },
+    {
+      "bas_dd": "20250417",
+      "weekday": "Thursday",
+      "complete": true,
+      "existing_services": [
+        "kospi_stock_daily",
+        "kosdaq_stock_daily",
+        "kospi_issue_base",
+        "kosdaq_issue_base",
+        "kospi_index_daily",
+        "kosdaq_index_daily"
+      ],
+      "missing_services": [],
+      "requests": []
+    },
+    {
+      "bas_dd": "20250418",
+      "weekday": "Friday",
+      "complete": true,
+      "existing_services": [
+        "kospi_stock_daily",
+        "kosdaq_stock_daily",
+        "kospi_issue_base",
+        "kosdaq_issue_base",
+        "kospi_index_daily",
+        "kosdaq_index_daily"
+      ],
+      "missing_services": [],
+      "requests": []
+    }
+  ]
+}

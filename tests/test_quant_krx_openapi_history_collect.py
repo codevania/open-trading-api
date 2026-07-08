@@ -33,6 +33,22 @@ def _plan() -> dict[str, object]:
     }
 
 
+def _plan_with_existing_only() -> dict[str, object]:
+    return {
+        "plan_type": "krx_openapi_history_missing_raw",
+        "capture_date": "2026-07-08",
+        "start": "20250407",
+        "end": "20250407",
+        "dates": [
+            {
+                "bas_dd": "20250407",
+                "existing_services": ["kospi_stock_daily", "kosdaq_stock_daily"],
+                "requests": [],
+            }
+        ],
+    }
+
+
 class QuantKrxOpenApiHistoryCollectTest(unittest.TestCase):
     def test_collect_from_plan_summarizes_successes_without_auth_key(self) -> None:
         def collector(bas_dd: str, service_id: str) -> dict[str, object]:
@@ -49,6 +65,44 @@ class QuantKrxOpenApiHistoryCollectTest(unittest.TestCase):
         self.assertEqual(summary["failed_requests"], 0)
         self.assertTrue(summary["guardrails"]["auth_key_redacted"])
         self.assertNotIn("AUTH_KEY", json.dumps(summary, ensure_ascii=False))
+
+    def test_collect_from_plan_verifies_existing_raws_for_resume_evidence(self) -> None:
+        def collector(_bas_dd: str, _service_id: str) -> dict[str, object]:
+            raise AssertionError("collector should not run when the plan has no missing requests")
+
+        def existing_reader(bas_dd: str, service_id: str) -> dict[str, object]:
+            return {
+                "status_code": 200,
+                "row_count": 10 if service_id == "kospi_stock_daily" else 20,
+                "raw_output": f"_report/raw/{service_id}_{bas_dd}.raw.json",
+            }
+
+        summary = collect_from_plan(
+            plan=_plan_with_existing_only(),
+            collector=collector,
+            existing_reader=existing_reader,
+        )
+
+        self.assertEqual(summary["planned_requests"], 0)
+        self.assertEqual(summary["planned_existing_requests"], 2)
+        self.assertEqual(summary["attempted_requests"], 0)
+        self.assertEqual(summary["successful_requests"], 0)
+        self.assertEqual(summary["verified_existing_requests"], 2)
+        self.assertEqual(summary["available_raw_requests"], 2)
+        self.assertEqual(summary["available_results"][0]["result_source"], "existing")
+        self.assertNotIn("AUTH_KEY", json.dumps(summary, ensure_ascii=False))
+
+    def test_collect_from_plan_reports_unverified_existing_raws(self) -> None:
+        summary = collect_from_plan(
+            plan=_plan_with_existing_only(),
+            collector=lambda _bas_dd, _service_id: {},
+            existing_reader=lambda _bas_dd, _service_id: None,
+        )
+
+        self.assertEqual(summary["verified_existing_requests"], 0)
+        self.assertEqual(summary["unverified_existing_requests"], 2)
+        self.assertEqual(summary["available_raw_requests"], 0)
+        self.assertIn("existing raw file referenced by plan", summary["existing_failures"][0]["error"])
 
     def test_collect_from_plan_keeps_partial_failure_evidence(self) -> None:
         def collector(bas_dd: str, service_id: str) -> dict[str, object]:
