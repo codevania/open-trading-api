@@ -33,3 +33,4 @@
 - Tightened the DI satellite decision-prep report so copied TODO-heavy valuation templates still remain pending before `decision.md`.
 - Added a gitignored DI satellite decision-input path and example template so account route, sizing, overlap, and freshness checks stay separate from the public candidate manifest.
 - Drafted the first MSFT valuation note from local SEC financials, SEC share-count data, and the latest located market close, while keeping ETF overlap, tax/account route, and position sizing blocked in private decision inputs.
+- Drafted the GOOGL valuation note from local SEC financials, SEC share-count data, and the latest located market close, with share-class, capex, regulatory, ETF overlap, tax/account route, and sizing caveats left gated before decision.
