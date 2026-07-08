@@ -27,3 +27,4 @@
 - Drafted the META satellite-equity thesis with FoA advertising, AI monetization, Reality Labs losses, capex, and regulatory risk evidence.
 - Drafted the NVDA satellite-equity thesis with Data Center AI infrastructure, Blackwell, customer concentration, supply chain, and export-control risk evidence.
 - Drafted the AVGO satellite-equity thesis with custom AI silicon, Ethernet networking, VMware/VCF software, customer concentration, debt, and integration risk evidence.
+- Added a DI satellite-equity decision-prep report so primary queue stocks stay blocked until valuation, ETF overlap, tax/account route, position sizing, add/trim rules, and source freshness inputs are checked.
