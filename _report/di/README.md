@@ -19,6 +19,7 @@ _report/di/
     daily-report.md
   routines/
     daily-report-routine.md
+    daily-learning-routine.md
     codex-automation-prompt.md
   daily/
     YYYY/
@@ -28,6 +29,10 @@ _report/di/
   research/
     SYMBOL/
       thesis.md
+  learning/
+    learning-plan-YYYY-MM-DD.md
+    logs/
+      YYYY-MM.md
   summaries/
   charts/
 ```
@@ -40,6 +45,12 @@ _report/di/
 4. 원천 응답은 공용 저장소인 `_report/raw/YYYY/YYYY-MM-DD/SYMBOL/`에 저장한다.
 5. 사람이 읽는 리포트는 `_report/di/daily/YYYY/YYYY-MM-DD.md`에 저장한다.
 6. 판단 변경은 [[_report/di/decisions/decision-log|_report/di/decisions/decision-log.md]]에 누적한다.
+
+## 학습 일지
+
+재량 투자 리서치를 공부하는 기록은 [[_report/di/learning/README|_report/di/learning/README.md]]에 둔다. 학습 일지는 매수/매도 판단이 아니라 개념 이해, 원천 확인, 아직 모르는 항목을 분리하기 위한 기록이다.
+
+사용자가 "오늘 학습", "오늘 공부할 내용", "DI 학습 루틴", "투자 공부 루틴"처럼 요청하면 [[_report/di/routines/daily-learning-routine|_report/di/routines/daily-learning-routine.md]]를 따라 오늘의 학습 콘텐츠를 만들고 월별 로그에 누적한다.
 
 ## 작성 원칙
 
