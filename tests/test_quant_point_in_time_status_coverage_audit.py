@@ -95,10 +95,16 @@ def _source_manifest_row(
         "coverage_end": coverage_end,
         "source": "kind",
         "source_url": "https://kind.krx.co.kr/example",
-        "raw_path": "_report/raw/2026/2026-07-03/kind/status-source-probe/managed_issue.xls",
+        "raw_path": f"_report/raw/2026/2026-07-03/kind/status-source-probe/{status_type}.xls",
         "confidence": "high",
         "notes": "unit-test fixture",
     }
+
+
+def _write_source_raw(root: Path, status_type: str = "managed_issue") -> None:
+    raw = root / "_report" / "raw" / "2026" / "2026-07-03" / "kind" / "status-source-probe" / f"{status_type}.xls"
+    raw.parent.mkdir(parents=True, exist_ok=True)
+    raw.write_text("fixture\n", encoding="utf-8")
 
 
 class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
@@ -172,6 +178,7 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
                 ],
             )
             _write_csv(replayed, _replayed_rows())
+            _write_source_raw(root)
             _write_csv(manifest, [_source_manifest_row()])
 
             rows, summary = audit_status_coverage(
@@ -179,6 +186,7 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
                 events_path=events,
                 replayed_market_data_path=replayed,
                 source_coverage_manifest_path=manifest,
+                repo_root=root,
                 coverage_mode="historical_complete",
                 required_status_types=("managed_issue",),
             )
@@ -186,8 +194,42 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
         self.assertEqual(summary["coverage_status"], "pass")
         self.assertEqual(summary["release_like_event_rows"], 1)
         self.assertEqual(summary["lifecycle_status_types_without_release"], [])
+        self.assertEqual(summary["source_coverage_manifest_row_failures"], 0)
         self.assertEqual(summary["source_coverage_manifest_missing_status_types"], [])
         self.assertTrue(all(row["coverage_status"] == "pass" for row in rows))
+
+    def test_historical_complete_holds_when_source_manifest_raw_path_is_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            market = root / "market.csv"
+            events = root / "events.csv"
+            replayed = root / "replayed.csv"
+            manifest = root / "source_manifest.csv"
+            _write_csv(market, _market_rows())
+            _write_csv(
+                events,
+                [
+                    _event(event_date="2025-01-01", status_value="designated"),
+                    _event(event_date="2025-01-03", status_value="released"),
+                ],
+            )
+            _write_csv(replayed, _replayed_rows())
+            _write_csv(manifest, [_source_manifest_row()])
+
+            rows, summary = audit_status_coverage(
+                market_data_path=market,
+                events_path=events,
+                replayed_market_data_path=replayed,
+                source_coverage_manifest_path=manifest,
+                repo_root=root,
+                coverage_mode="historical_complete",
+                required_status_types=("managed_issue",),
+            )
+
+        self.assertEqual(summary["coverage_status"], "hold")
+        self.assertEqual(summary["source_coverage_manifest_row_failures"], 1)
+        self.assertEqual(summary["source_coverage_manifest_validation_status"], "fail")
+        self.assertIn("source_coverage_manifest_row_failures", rows[0]["coverage_notes"])
 
     def test_historical_complete_holds_without_source_coverage_manifest(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -234,6 +276,7 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
                 ],
             )
             _write_csv(replayed, _replayed_rows())
+            _write_source_raw(root)
             _write_csv(manifest, [_source_manifest_row(coverage_start="2025-01-03", coverage_end="2025-01-03")])
 
             rows, summary = audit_status_coverage(
@@ -241,6 +284,7 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
                 events_path=events,
                 replayed_market_data_path=replayed,
                 source_coverage_manifest_path=manifest,
+                repo_root=root,
                 coverage_mode="historical_complete",
                 required_status_types=("managed_issue",),
             )
@@ -266,6 +310,8 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
                 ],
             )
             _write_csv(replayed, _replayed_rows())
+            _write_source_raw(root, "managed_issue")
+            _write_source_raw(root, "trading_halt")
             _write_csv(
                 manifest,
                 [
@@ -279,6 +325,7 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
                 events_path=events,
                 replayed_market_data_path=replayed,
                 source_coverage_manifest_path=manifest,
+                repo_root=root,
                 coverage_mode="historical_complete",
                 required_status_types=("managed_issue", "trading_halt"),
             )
@@ -303,6 +350,7 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
             _write_csv(market, _market_rows())
             _write_csv(events, [designated, released])
             _write_csv(replayed, _replayed_rows())
+            _write_source_raw(root)
             _write_csv(manifest, [_source_manifest_row()])
 
             rows, summary = audit_status_coverage(
@@ -310,6 +358,7 @@ class QuantPointInTimeStatusCoverageAuditTest(unittest.TestCase):
                 events_path=events,
                 replayed_market_data_path=replayed,
                 source_coverage_manifest_path=manifest,
+                repo_root=root,
                 coverage_mode="historical_complete",
                 required_status_types=("managed_issue",),
             )

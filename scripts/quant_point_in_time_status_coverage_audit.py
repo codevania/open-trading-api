@@ -15,6 +15,10 @@ from pathlib import Path
 from typing import Any
 
 from quant_io import write_text_lf
+from quant_point_in_time_status_source_manifest_validate import (
+    DEFAULT_POLICY_PATH as DEFAULT_SOURCE_POLICY_PATH,
+    validate_manifest as validate_source_manifest,
+)
 
 
 DEFAULT_REQUIRED_STATUS_TYPES = ("managed_issue", "trading_halt", "market_alert", "delisting")
@@ -37,7 +41,6 @@ DATE_ROWS_FIELDS = (
     "coverage_status",
     "coverage_notes",
 )
-SOURCE_COVERAGE_REQUIRED_FIELDS = {"status_type", "coverage_start", "coverage_end", "source", "raw_path"}
 
 
 def _read_csv(path: Path, label: str) -> tuple[list[str], list[dict[str, str]]]:
@@ -111,40 +114,6 @@ def _raw_capture_dates(raw_path: str) -> set[str]:
     return dates
 
 
-def _read_source_coverage_manifest(path: Path) -> list[dict[str, str]]:
-    fields, rows = _read_csv(path, "source coverage manifest")
-    _require_columns(fields, SOURCE_COVERAGE_REQUIRED_FIELDS, "source coverage manifest")
-    for row in rows:
-        start = _iso_date(row.get("coverage_start", ""), "coverage_start")
-        end = _iso_date(row.get("coverage_end", ""), "coverage_end")
-        if start > end:
-            raise ValueError(f"source coverage manifest has coverage_start after coverage_end: {start}>{end}")
-        if not row.get("status_type", ""):
-            raise ValueError("source coverage manifest row has empty status_type")
-        if not row.get("source", ""):
-            raise ValueError("source coverage manifest row has empty source")
-        raw_path = row.get("raw_path", "").replace("\\", "/")
-        if not raw_path.startswith("_report/raw/"):
-            raise ValueError("source coverage manifest raw_path must be under _report/raw/")
-    return rows
-
-
-def _source_coverage_missing_status_types(
-    manifest_rows: list[dict[str, str]],
-    required_status_types: tuple[str, ...],
-    market_start: str,
-    market_end: str,
-) -> list[str]:
-    covered: set[str] = set()
-    for row in manifest_rows:
-        status_type = row.get("status_type", "")
-        if status_type not in required_status_types:
-            continue
-        if row.get("coverage_start", "") <= market_start and row.get("coverage_end", "") >= market_end:
-            covered.add(status_type)
-    return sorted(set(required_status_types) - covered)
-
-
 def _lifecycle_counts(event_rows: list[dict[str, str]]) -> dict[str, dict[str, int]]:
     counts: dict[str, dict[str, int]] = {}
     for status_type in sorted({row.get("status_type", "") for row in event_rows} & LIFECYCLE_STATUS_TYPES):
@@ -172,6 +141,8 @@ def audit_status_coverage(
     events_path: Path,
     replayed_market_data_path: Path | None = None,
     source_coverage_manifest_path: Path | None = None,
+    source_policy_path: Path = DEFAULT_SOURCE_POLICY_PATH,
+    repo_root: Path | None = None,
     coverage_mode: str = "current_snapshot_smoke",
     required_status_types: tuple[str, ...] = DEFAULT_REQUIRED_STATUS_TYPES,
 ) -> tuple[list[dict[str, str]], dict[str, Any]]:
@@ -191,16 +162,23 @@ def audit_status_coverage(
 
     market_start = min(row["date"] for row in market_rows)
     market_end = max(row["date"] for row in market_rows)
-    source_manifest_rows = (
-        _read_source_coverage_manifest(source_coverage_manifest_path)
-        if source_coverage_manifest_path is not None
-        else []
-    )
-    source_manifest_missing_types = (
-        _source_coverage_missing_status_types(source_manifest_rows, required_status_types, market_start, market_end)
-        if source_coverage_manifest_path is not None
-        else list(required_status_types)
-    )
+    source_manifest_rows_count = 0
+    source_manifest_row_failures = 0
+    source_manifest_validation_status = "not_supplied"
+    source_manifest_missing_types = list(required_status_types)
+    if source_coverage_manifest_path is not None:
+        _source_manifest_checks, source_manifest_summary = validate_source_manifest(
+            manifest_path=source_coverage_manifest_path,
+            policy_path=source_policy_path,
+            market_start=market_start,
+            market_end=market_end,
+            required_status_types=required_status_types,
+            repo_root=repo_root or Path.cwd(),
+        )
+        source_manifest_rows_count = int(source_manifest_summary["manifest_rows"])
+        source_manifest_row_failures = int(source_manifest_summary["row_failures"])
+        source_manifest_validation_status = str(source_manifest_summary["overall_status"])
+        source_manifest_missing_types = list(source_manifest_summary["missing_coverage_status_types"])
 
     replayed_rows: list[dict[str, str]] = []
     replayed: dict[tuple[str, str], dict[str, str]] = {}
@@ -276,6 +254,8 @@ def audit_status_coverage(
             notes.append("raw_capture_date_unknown")
         if source_coverage_manifest_path is None:
             notes.append("source_coverage_manifest_not_supplied")
+        elif source_manifest_row_failures:
+            notes.append("source_coverage_manifest_row_failures")
         elif source_manifest_missing_types:
             notes.append("source_coverage_manifest_missing_status_types")
 
@@ -306,6 +286,7 @@ def audit_status_coverage(
         and replay_missing_rows == 0
         and raw_capture_dates
         and source_coverage_manifest_path is not None
+        and source_manifest_row_failures == 0
         and not source_manifest_missing_types
     ) else "hold"
     if coverage_status == "pass":
@@ -342,7 +323,10 @@ def audit_status_coverage(
         "replay_match_rows": replay_match_rows,
         "replay_missing_rows": replay_missing_rows,
         "source_coverage_manifest_path": source_coverage_manifest_path,
-        "source_coverage_manifest_rows": len(source_manifest_rows),
+        "source_policy_path": source_policy_path,
+        "source_coverage_manifest_rows": source_manifest_rows_count,
+        "source_coverage_manifest_row_failures": source_manifest_row_failures,
+        "source_coverage_manifest_validation_status": source_manifest_validation_status,
         "source_coverage_manifest_missing_status_types": source_manifest_missing_types,
         "rows_with_any_status_event_code": sum(_parse_int(row["rows_with_event_code"]) for row in date_rows),
         "rows_with_applied_status_event": sum(_parse_int(row["rows_with_applied_status_event"]) for row in date_rows),
@@ -418,6 +402,10 @@ def _render_report(summary: dict[str, Any], output_path: Path) -> str:
         )
     if summary["source_coverage_manifest_path"] is None:
         hold_reasons.append("source coverage manifest was not supplied")
+    elif summary["source_coverage_manifest_row_failures"]:
+        hold_reasons.append(
+            f"source coverage manifest has {summary['source_coverage_manifest_row_failures']} row validation failures"
+        )
     elif summary["source_coverage_manifest_missing_status_types"]:
         hold_reasons.append(
             "source coverage manifest does not cover the market window for: `"
@@ -434,6 +422,7 @@ def _render_report(summary: dict[str, Any], output_path: Path) -> str:
         f"- Status events: {_wikilink(summary['events_path'])}",
         f"- Replayed market-data: {_wikilink(summary['replayed_market_data_path'])}",
         f"- Source coverage manifest: {_wikilink(summary['source_coverage_manifest_path'])}",
+        f"- Source policy: {_wikilink(summary['source_policy_path'])}",
         f"- Output: {_wikilink(output_path)}",
         f"- Coverage mode: `{summary['coverage_mode']}`",
         f"- Coverage status: `{summary['coverage_status']}`",
@@ -460,6 +449,8 @@ def _render_report(summary: dict[str, Any], output_path: Path) -> str:
         f"| Replay matched market rows | {summary['replay_match_rows']} |",
         f"| Replay missing market rows | {summary['replay_missing_rows']} |",
         f"| Source coverage manifest rows | {summary['source_coverage_manifest_rows']} |",
+        f"| Source coverage manifest row failures | {summary['source_coverage_manifest_row_failures']} |",
+        f"| Source coverage manifest validation | `{summary['source_coverage_manifest_validation_status']}` |",
         f"| Source coverage missing status types | `{','.join(summary['source_coverage_manifest_missing_status_types']) or 'none'}` |",
         f"| Rows with any status-event code | {summary['rows_with_any_status_event_code']} |",
         f"| Rows with applied status event | {summary['rows_with_applied_status_event']} |",
@@ -501,7 +492,7 @@ def _render_report(summary: dict[str, Any], output_path: Path) -> str:
             "",
             "- Event-code ratios are diagnostic; a stock with no status event is not automatically a data gap.",
             "- Current snapshot events can exclude active issues, but they do not prove historical state transitions.",
-            "- `historical_complete` also requires a source coverage manifest that covers the market-data window for every required status type.",
+            "- `historical_complete` also requires a source coverage manifest that passes source-policy/raw-path validation and covers the market-data window for every required status type.",
             "- Keep `Backtest readiness` at `hold` until source coverage is reproducible for every rebalance date.",
         ]
     )
@@ -514,6 +505,8 @@ def main() -> int:
     parser.add_argument("--events", required=True, type=Path)
     parser.add_argument("--replayed-market-data", type=Path)
     parser.add_argument("--source-coverage-manifest", type=Path)
+    parser.add_argument("--source-policy", default=DEFAULT_SOURCE_POLICY_PATH, type=Path)
+    parser.add_argument("--repo-root", type=Path)
     parser.add_argument("--coverage-mode", default="current_snapshot_smoke")
     parser.add_argument("--required-status-types", default=",".join(DEFAULT_REQUIRED_STATUS_TYPES))
     parser.add_argument("--output", required=True, type=Path)
@@ -526,6 +519,8 @@ def main() -> int:
             events_path=args.events,
             replayed_market_data_path=args.replayed_market_data,
             source_coverage_manifest_path=args.source_coverage_manifest,
+            source_policy_path=args.source_policy,
+            repo_root=args.repo_root or Path.cwd(),
             coverage_mode=args.coverage_mode,
             required_status_types=_split_required_status_types(args.required_status_types),
         )

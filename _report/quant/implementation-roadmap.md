@@ -907,9 +907,9 @@ Status coverage audit:
 - Raw status capture dates: `2` (`2026-07-03..2026-07-08`)
 - Release/resume-like event rows: `0`, so active-state lifetimes remain one-sided and not historical-complete.
 - Source coverage manifest rows: `0`; missing manifest coverage for `managed_issue`, `trading_halt`, `market_alert`, and `delisting`.
-- A filled source coverage manifest should be checked with [[scripts/quant_point_in_time_status_source_manifest_validate.py|scripts/quant_point_in_time_status_source_manifest_validate.py]] before it is passed into the coverage audit; this validates source policy, raw evidence paths, required status types, and market-window coverage only.
+- [[scripts/quant_point_in_time_status_coverage_audit.py|scripts/quant_point_in_time_status_coverage_audit.py]] now applies [[scripts/quant_point_in_time_status_source_manifest_validate.py|scripts/quant_point_in_time_status_source_manifest_validate.py]] when a source coverage manifest is supplied; source policy, raw evidence paths, required status types, and market-window coverage must validate before `historical_complete` can pass.
 - Lifecycle diagnostics: `managed_issue` `105/0`, `market_alert` `75/0`, and `trading_halt` `253/0` active-like/release-resume rows.
-- The audit pass gate now also requires every lifecycle status type with active-like rows to have release/resume-like rows, at least one dated raw capture path, and a source coverage manifest covering the market-data window for every required status type.
+- The audit pass gate now also requires every lifecycle status type with active-like rows to have release/resume-like rows, at least one dated raw capture path, and a source coverage manifest that passes source-policy/raw-path validation and covers the market-data window for every required status type.
 
 Universe eligibility smoke:
 
