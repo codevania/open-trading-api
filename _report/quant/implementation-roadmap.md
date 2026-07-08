@@ -5,8 +5,8 @@
 - Date: 2026-06-14
 - Last updated: 2026-07-09
 - Scope: Quant trading research and implementation workflow
-- Current phase: `forward_price_81d_readiness_smoke`
-- Overall implementation progress: `85-88%`
+- Current phase: `bias_control_preflight_smoke`
+- Overall implementation progress: `86-89%`
 - Current Snapshot Universe progress: `85-90%`
 - Backtest readiness: `hold`
 - Live trading readiness: `blocked`
@@ -30,7 +30,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 6. Liquidity Filter | in-progress | 72-76% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] evaluates 361 current Universe saved-raw rows; [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] produced a 72-date, 20-day Point-in-Time smoke with `54138` include rows and `135316` full-lookback rows | Keep 20-day rule aligned while status coverage expands |
 | 7. Backtest engine connection | preflight | 52-56% | [[scripts/quant_backtest_input_contract_validate.py|scripts/quant_backtest_input_contract_validate.py]] validates the 72-date, 20-day smoke artifacts as internally joinable, [[scripts/quant_backtest_pnl_smoke.py|scripts/quant_backtest_pnl_smoke.py]] computes diagnostic weighted-return and benchmark-excess smoke rows with complete 1-day target coverage after extending prices through `2025-05-02`, [[scripts/quant_backtest_assumptions_validate.py|scripts/quant_backtest_assumptions_validate.py]] validates local cost/benchmark assumptions as `pass_assumption_only`, [[scripts/quant_benchmark_return_smoke.py|scripts/quant_benchmark_return_smoke.py]] computes complete benchmark return smoke rows, and [[scripts/quant_backtest_attribution_smoke.py|scripts/quant_backtest_attribution_smoke.py]] adds cost/benchmark-active attribution smoke, while Backtest remains `hold` | Wire engine only after Point-in-Time status coverage, actual fee override, production benchmark attribution, OOS, and Bias Control are acceptable |
 | 8. OOS / Walk-Forward | preflight | 18-22% | [[scripts/quant_oos_walk_forward_preflight.py|scripts/quant_oos_walk_forward_preflight.py]] segments attribution smoke into deterministic temporal folds as `pass_smoke_plumbing_only`, while OOS readiness remains `hold` | Run production OOS only after Point-in-Time coverage, actual costs, and Backtest engine gates pass |
-| 9. Bias Control pass | hold | 20% | Bias checklists exist; blockers documented | Point-in-Time and OOS evidence |
+| 9. Bias Control pass | preflight | 25-30% | [[scripts/quant_bias_control_preflight.py|scripts/quant_bias_control_preflight.py]] reads readiness/OOS/status/strategy-bias evidence and keeps Bias Control status at `hold` with machine-readable blocker rows | Resolve Point-in-Time, actual costs, production OOS, and live-control blockers before any Bias Control pass |
 | 10. Paper Signal tracking | partial | 78-82% | 72-date, 20-day Point-in-Time Liquidity rows now feed `2120` paper-only Momentum `Signal Candidate` rows, complete `1,5` trading-day forward-return coverage using prices through `2025-05-02`, long-only portfolio target, Backtest input contract, PnL smoke, and attribution smoke outputs | Keep candidates signal-only until production Point-in-Time coverage, Backtest, OOS, and Bias Control pass |
 | 11. Execution / live trading | blocked | 5% | Demo-only order intent preflight exists; no KIS order executor exists | Only after Backtest/OOS/Bias Control pass |
 
@@ -1056,6 +1056,15 @@ OOS / Walk-Forward preflight:
 - Result: `3` deterministic temporal fold rows over the attribution smoke window, `OOS/WF preflight status=pass_smoke_plumbing_only`, average test baseline net return `-0.0827%`, and average test baseline active return `0.0466%`.
 - Limitation: this is fold plumbing only. It inherits current `Point-in-Time` status coverage gaps and assumption-only costs, so OOS readiness stays `hold`.
 
+Bias Control preflight:
+
+- [[scripts/quant_bias_control_preflight.py|scripts/quant_bias_control_preflight.py]]
+- [[tests/test_quant_bias_control_preflight.py|tests/test_quant_bias_control_preflight.py]]
+- [[_report/quant/research/2026-07-09-bias-control-preflight-20d-20250102-20250418-price-through-20250502|_report/quant/research/2026-07-09-bias-control-preflight-20d-20250102-20250418-price-through-20250502.md]]
+- [[_report/quant/research/2026-07-09-bias-control-preflight-20d-20250102-20250418-price-through-20250502.rows.csv|_report/quant/research/2026-07-09-bias-control-preflight-20d-20250102-20250418-price-through-20250502.rows.csv]]
+- Result: `10` Bias Control checks, status counts `blocked=2`, `hold=5`, `pass_smoke=2`, and `pass_smoke_plumbing_only=1`; final Bias Control status remains `hold`.
+- Limitation: this is a preflight summary only. `Point-in-Time` coverage, actual KIS fee override, production OOS, and live-control gates still block Bias Control pass.
+
 Quant readiness check:
 
 - [[scripts/quant_readiness_check.py|scripts/quant_readiness_check.py]]
@@ -1070,7 +1079,8 @@ Quant readiness check:
 - Latest price-through readiness with market-enriched status evidence: [[_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-market-enriched-81d-status|_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-market-enriched-81d-status.md]]
 - Latest attribution readiness: [[_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-attribution-smoke|_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-attribution-smoke.md]]
 - Latest OOS/WF preflight readiness: [[_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-oos-preflight|_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-oos-preflight.md]]
-- Result: market-data window `pass`, Liquidity Filter `pass_smoke`, Signal Candidate `pass_smoke`, forward-return smoke `pass_smoke` with complete `1,5` horizon coverage, portfolio target smoke `pass_smoke`, Backtest input contract `pass_smoke`, Backtest PnL smoke `pass_smoke`, Backtest assumptions `pass_assumption_only`, benchmark returns smoke `pass_smoke`, Backtest attribution smoke `pass_smoke_assumption_only`, OOS/Walk-Forward preflight `pass_smoke_plumbing_only`, Point-in-Time status coverage `hold` with merged coverage audit evidence including source manifest validation `not_supplied` and lifecycle missing release/resume groups `304`, Backtest engine `hold`, live trading controls `blocked`, KIS demo account `blocked`.
+- Latest Bias Control preflight readiness: [[_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-bias-preflight|_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-bias-preflight.md]]
+- Result: market-data window `pass`, Liquidity Filter `pass_smoke`, Signal Candidate `pass_smoke`, forward-return smoke `pass_smoke` with complete `1,5` horizon coverage, portfolio target smoke `pass_smoke`, Backtest input contract `pass_smoke`, Backtest PnL smoke `pass_smoke`, Backtest assumptions `pass_assumption_only`, benchmark returns smoke `pass_smoke`, Backtest attribution smoke `pass_smoke_assumption_only`, OOS/Walk-Forward preflight `pass_smoke_plumbing_only`, Bias Control preflight `hold`, Point-in-Time status coverage `hold` with merged coverage audit evidence including source manifest validation `not_supplied` and lifecycle missing release/resume groups `304`, Backtest engine `hold`, live trading controls `blocked`, KIS demo account `blocked`.
 - Guardrail: the readiness checker makes no KIS API calls and generates no order intents.
 
 Next gate:
@@ -1257,7 +1267,10 @@ Current state:
 - Backtest PnL smoke: latest 1-day horizon diagnostic report is `pass_smoke` with `1060` target/horizon rows, `1060` complete rows, `1060` KOSPI benchmark joined rows, `0` missing forward prices, and average weighted excess vs benchmark of `0.0179%`.
 - Backtest cost/benchmark assumptions: latest local assumption contract is `pass_assumption_only`; it still needs actual KIS fee override and benchmark return wiring before production Backtest.
 - Benchmark return smoke: latest price-through report produced `318` complete benchmark horizon rows for KOSPI, KOSDAQ, and KOSPI200; KOSPI is joined into the PnL smoke as diagnostic benchmark-excess math, not production attribution.
-- Quant readiness check: latest 20-day price-through smoke gate report using the market-enriched merged status coverage audit, lifecycle gap report, and Backtest attribution smoke marks market-data window `pass`, Liquidity Filter, Signal Candidate, forward-return, portfolio targets, Backtest input contract, Backtest PnL smoke, and benchmark returns as `pass_smoke`, Backtest assumptions as `pass_assumption_only`, Backtest attribution smoke as `pass_smoke_assumption_only`, Point-in-Time status coverage `hold` with lifecycle missing release/resume groups `304`, Backtest engine `hold`, live trading controls `blocked`, and KIS demo account `blocked`.
+- Backtest attribution smoke: latest local report is `pass_smoke_assumption_only` with cost and benchmark-active diagnostics, but actual KIS fee override is still required.
+- OOS/Walk-Forward preflight: latest local report is `pass_smoke_plumbing_only` across `3` temporal folds, but OOS readiness stays `hold`.
+- Bias Control preflight: latest local report keeps Bias Control status at `hold` with `10` machine-readable checks.
+- Quant readiness check: latest 20-day price-through smoke gate report using the market-enriched merged status coverage audit, lifecycle gap report, Backtest attribution smoke, OOS/WF preflight, and Bias Control preflight marks market-data window `pass`, Liquidity Filter, Signal Candidate, forward-return, portfolio targets, Backtest input contract, Backtest PnL smoke, and benchmark returns as `pass_smoke`, Backtest assumptions as `pass_assumption_only`, Backtest attribution smoke as `pass_smoke_assumption_only`, OOS/Walk-Forward preflight as `pass_smoke_plumbing_only`, Bias Control preflight as `hold`, Point-in-Time status coverage `hold` with lifecycle missing release/resume groups `304`, Backtest engine `hold`, live trading controls `blocked`, and KIS demo account `blocked`.
 - KIS demo trading: dry-run order intent and local account preflight exist, but the local MCP `.env.kis` is missing `KIS_PAPER_STOCK`; buying-power checks, order status/cancel flow, kill switch, and explicit confirmation gate are not implemented.
 - Backtest readiness: `hold`.
 - Live trading readiness: `blocked`.
