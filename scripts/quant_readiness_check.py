@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -76,6 +77,13 @@ def _read_text(path: Path | None) -> str:
     if path is None or not path.exists():
         return ""
     return path.read_text(encoding="utf-8", errors="replace")
+
+
+def _markdown_metric(text: str, metric: str) -> str:
+    match = re.search(rf"\| {re.escape(metric)} \| ([^|]+) \|", text)
+    if not match:
+        return ""
+    return match.group(1).strip().strip("`")
 
 
 def _kis_preflight_gate(path: Path | None) -> Gate:
@@ -226,10 +234,17 @@ def _status_coverage_gate(status_coverage: str, path: Path | None) -> Gate:
             "keep auditing coverage whenever the market-data window changes",
         )
     if text and "Coverage status: `hold`" in text:
+        evidence = f"status coverage mode is {status_coverage}; local coverage audit reports hold"
+        manifest_validation = _markdown_metric(text, "Source coverage manifest validation")
+        if manifest_validation:
+            evidence += f"; source manifest validation={manifest_validation}"
+        missing_source_types = _markdown_metric(text, "Source coverage missing status types")
+        if missing_source_types and missing_source_types != "none":
+            evidence += f"; missing source coverage={missing_source_types}"
         return Gate(
             "point_in_time_status_coverage",
             "hold",
-            f"status coverage mode is {status_coverage}; local coverage audit reports hold",
+            evidence,
             "replace current-snapshot smoke with historical status-event coverage by rebalance date",
         )
     return Gate(

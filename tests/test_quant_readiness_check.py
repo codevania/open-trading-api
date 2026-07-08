@@ -272,7 +272,17 @@ class QuantReadinessCheckTest(unittest.TestCase):
     def test_status_coverage_audit_report_can_hold_gate(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             report = Path(tmp) / "status-coverage.md"
-            report.write_text("- Coverage status: `hold`\n", encoding="utf-8")
+            report.write_text(
+                "\n".join(
+                    [
+                        "- Coverage status: `hold`",
+                        "| Source coverage manifest validation | `not_supplied` |",
+                        "| Source coverage missing status types | `managed_issue,trading_halt` |",
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
             gates, summary = evaluate_readiness(
                 liquidity_rows=_liquidity_rows(),
                 signal_rows=_signal_rows(),
@@ -284,6 +294,8 @@ class QuantReadinessCheckTest(unittest.TestCase):
 
         self.assertEqual(by_name["point_in_time_status_coverage"].status, "hold")
         self.assertIn("coverage audit reports hold", by_name["point_in_time_status_coverage"].evidence)
+        self.assertIn("source manifest validation=not_supplied", by_name["point_in_time_status_coverage"].evidence)
+        self.assertIn("missing source coverage=managed_issue,trading_halt", by_name["point_in_time_status_coverage"].evidence)
         self.assertTrue(summary["status_coverage_report_supplied"])
 
     def test_kis_paper_stock_gap_is_reported_without_account_value(self) -> None:
