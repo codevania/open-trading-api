@@ -1,0 +1,319 @@
+﻿date,benchmark,index_class,index_name,horizon_trading_days,evaluation_status,forward_date,signal_close,forward_close,benchmark_return_pct,evaluation_mode
+2025-02-04,KOSPI,KOSPI,코스피,1,complete,2025-02-05,2481.6900,2509.2700,1.1113,paper_benchmark_return_smoke_only
+2025-02-04,KOSPI,KOSPI,코스피,5,complete,2025-02-11,2481.6900,2539.0500,2.3113,paper_benchmark_return_smoke_only
+2025-02-04,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-05,719.9200,730.9800,1.5363,paper_benchmark_return_smoke_only
+2025-02-04,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-02-11,719.9200,749.5900,4.1213,paper_benchmark_return_smoke_only
+2025-02-04,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-05,328.7200,332.4700,1.1408,paper_benchmark_return_smoke_only
+2025-02-04,KOSPI200,KOSPI,코스피 200,5,complete,2025-02-11,328.7200,336.6700,2.4185,paper_benchmark_return_smoke_only
+2025-02-05,KOSPI,KOSPI,코스피,1,complete,2025-02-06,2509.2700,2536.7500,1.0951,paper_benchmark_return_smoke_only
+2025-02-05,KOSPI,KOSPI,코스피,5,complete,2025-02-12,2509.2700,2548.3900,1.5590,paper_benchmark_return_smoke_only
+2025-02-05,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-06,730.9800,740.3200,1.2777,paper_benchmark_return_smoke_only
+2025-02-05,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-02-12,730.9800,745.1800,1.9426,paper_benchmark_return_smoke_only
+2025-02-05,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-06,332.4700,336.5300,1.2212,paper_benchmark_return_smoke_only
+2025-02-05,KOSPI200,KOSPI,코스피 200,5,complete,2025-02-12,332.4700,337.2300,1.4317,paper_benchmark_return_smoke_only
+2025-02-06,KOSPI,KOSPI,코스피,1,complete,2025-02-07,2536.7500,2521.9200,-0.5846,paper_benchmark_return_smoke_only
+2025-02-06,KOSPI,KOSPI,코스피,5,complete,2025-02-13,2536.7500,2583.1700,1.8299,paper_benchmark_return_smoke_only
+2025-02-06,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-07,740.3200,742.9000,0.3485,paper_benchmark_return_smoke_only
+2025-02-06,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-02-13,740.3200,749.2800,1.2103,paper_benchmark_return_smoke_only
+2025-02-06,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-07,336.5300,333.8900,-0.7845,paper_benchmark_return_smoke_only
+2025-02-06,KOSPI200,KOSPI,코스피 200,5,complete,2025-02-13,336.5300,341.0600,1.3461,paper_benchmark_return_smoke_only
+2025-02-07,KOSPI,KOSPI,코스피,1,complete,2025-02-10,2521.9200,2521.2700,-0.0258,paper_benchmark_return_smoke_only
+2025-02-07,KOSPI,KOSPI,코스피,5,complete,2025-02-14,2521.9200,2591.0500,2.7412,paper_benchmark_return_smoke_only
+2025-02-07,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-10,742.9000,749.6700,0.9113,paper_benchmark_return_smoke_only
+2025-02-07,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-02-14,742.9000,756.3200,1.8064,paper_benchmark_return_smoke_only
+2025-02-07,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-10,333.8900,334.5000,0.1827,paper_benchmark_return_smoke_only
+2025-02-07,KOSPI200,KOSPI,코스피 200,5,complete,2025-02-14,333.8900,342.7600,2.6566,paper_benchmark_return_smoke_only
+2025-02-10,KOSPI,KOSPI,코스피,1,complete,2025-02-11,2521.2700,2539.0500,0.7052,paper_benchmark_return_smoke_only
+2025-02-10,KOSPI,KOSPI,코스피,5,complete,2025-02-17,2521.2700,2610.4200,3.5359,paper_benchmark_return_smoke_only
+2025-02-10,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-11,749.6700,749.5900,-0.0107,paper_benchmark_return_smoke_only
+2025-02-10,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-02-17,749.6700,768.4800,2.5091,paper_benchmark_return_smoke_only
+2025-02-10,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-11,334.5000,336.6700,0.6487,paper_benchmark_return_smoke_only
+2025-02-10,KOSPI200,KOSPI,코스피 200,5,complete,2025-02-17,334.5000,345.1100,3.1719,paper_benchmark_return_smoke_only
+2025-02-11,KOSPI,KOSPI,코스피,1,complete,2025-02-12,2539.0500,2548.3900,0.3679,paper_benchmark_return_smoke_only
+2025-02-11,KOSPI,KOSPI,코스피,5,complete,2025-02-18,2539.0500,2626.8100,3.4564,paper_benchmark_return_smoke_only
+2025-02-11,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-12,749.5900,745.1800,-0.5883,paper_benchmark_return_smoke_only
+2025-02-11,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-02-18,749.5900,773.6500,3.2098,paper_benchmark_return_smoke_only
+2025-02-11,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-12,336.6700,337.2300,0.1663,paper_benchmark_return_smoke_only
+2025-02-11,KOSPI200,KOSPI,코스피 200,5,complete,2025-02-18,336.6700,347.8400,3.3178,paper_benchmark_return_smoke_only
+2025-02-12,KOSPI,KOSPI,코스피,1,complete,2025-02-13,2548.3900,2583.1700,1.3648,paper_benchmark_return_smoke_only
+2025-02-12,KOSPI,KOSPI,코스피,5,complete,2025-02-19,2548.3900,2671.5200,4.8317,paper_benchmark_return_smoke_only
+2025-02-12,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-13,745.1800,749.2800,0.5502,paper_benchmark_return_smoke_only
+2025-02-12,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-02-19,745.1800,778.2700,4.4405,paper_benchmark_return_smoke_only
+2025-02-12,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-13,337.2300,341.0600,1.1357,paper_benchmark_return_smoke_only
+2025-02-12,KOSPI200,KOSPI,코스피 200,5,complete,2025-02-19,337.2300,354.5300,5.1300,paper_benchmark_return_smoke_only
+2025-02-13,KOSPI,KOSPI,코스피,1,complete,2025-02-14,2583.1700,2591.0500,0.3051,paper_benchmark_return_smoke_only
+2025-02-13,KOSPI,KOSPI,코스피,5,complete,2025-02-20,2583.1700,2654.0600,2.7443,paper_benchmark_return_smoke_only
+2025-02-13,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-14,749.2800,756.3200,0.9396,paper_benchmark_return_smoke_only
+2025-02-13,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-02-20,749.2800,768.2700,2.5344,paper_benchmark_return_smoke_only
+2025-02-13,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-14,341.0600,342.7600,0.4984,paper_benchmark_return_smoke_only
+2025-02-13,KOSPI200,KOSPI,코스피 200,5,complete,2025-02-20,341.0600,352.1500,3.2516,paper_benchmark_return_smoke_only
+2025-02-14,KOSPI,KOSPI,코스피,1,complete,2025-02-17,2591.0500,2610.4200,0.7476,paper_benchmark_return_smoke_only
+2025-02-14,KOSPI,KOSPI,코스피,5,complete,2025-02-21,2591.0500,2654.5800,2.4519,paper_benchmark_return_smoke_only
+2025-02-14,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-17,756.3200,768.4800,1.6078,paper_benchmark_return_smoke_only
+2025-02-14,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-02-21,756.3200,774.6500,2.4236,paper_benchmark_return_smoke_only
+2025-02-14,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-17,342.7600,345.1100,0.6856,paper_benchmark_return_smoke_only
+2025-02-14,KOSPI200,KOSPI,코스피 200,5,complete,2025-02-21,342.7600,351.9200,2.6724,paper_benchmark_return_smoke_only
+2025-02-17,KOSPI,KOSPI,코스피,1,complete,2025-02-18,2610.4200,2626.8100,0.6279,paper_benchmark_return_smoke_only
+2025-02-17,KOSPI,KOSPI,코스피,5,complete,2025-02-24,2610.4200,2645.2700,1.3350,paper_benchmark_return_smoke_only
+2025-02-17,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-18,768.4800,773.6500,0.6728,paper_benchmark_return_smoke_only
+2025-02-17,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-02-24,768.4800,773.3300,0.6311,paper_benchmark_return_smoke_only
+2025-02-17,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-18,345.1100,347.8400,0.7911,paper_benchmark_return_smoke_only
+2025-02-17,KOSPI200,KOSPI,코스피 200,5,complete,2025-02-24,345.1100,349.9000,1.3880,paper_benchmark_return_smoke_only
+2025-02-18,KOSPI,KOSPI,코스피,1,complete,2025-02-19,2626.8100,2671.5200,1.7021,paper_benchmark_return_smoke_only
+2025-02-18,KOSPI,KOSPI,코스피,5,complete,2025-02-25,2626.8100,2630.2900,0.1325,paper_benchmark_return_smoke_only
+2025-02-18,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-19,773.6500,778.2700,0.5972,paper_benchmark_return_smoke_only
+2025-02-18,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-02-25,773.6500,769.4300,-0.5455,paper_benchmark_return_smoke_only
+2025-02-18,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-19,347.8400,354.5300,1.9233,paper_benchmark_return_smoke_only
+2025-02-18,KOSPI200,KOSPI,코스피 200,5,complete,2025-02-25,347.8400,347.5400,-0.0862,paper_benchmark_return_smoke_only
+2025-02-19,KOSPI,KOSPI,코스피,1,complete,2025-02-20,2671.5200,2654.0600,-0.6536,paper_benchmark_return_smoke_only
+2025-02-19,KOSPI,KOSPI,코스피,5,complete,2025-02-26,2671.5200,2641.0900,-1.1391,paper_benchmark_return_smoke_only
+2025-02-19,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-20,778.2700,768.2700,-1.2849,paper_benchmark_return_smoke_only
+2025-02-19,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-02-26,778.2700,771.4100,-0.8814,paper_benchmark_return_smoke_only
+2025-02-19,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-20,354.5300,352.1500,-0.6713,paper_benchmark_return_smoke_only
+2025-02-19,KOSPI200,KOSPI,코스피 200,5,complete,2025-02-26,354.5300,349.3100,-1.4724,paper_benchmark_return_smoke_only
+2025-02-20,KOSPI,KOSPI,코스피,1,complete,2025-02-21,2654.0600,2654.5800,0.0196,paper_benchmark_return_smoke_only
+2025-02-20,KOSPI,KOSPI,코스피,5,complete,2025-02-27,2654.0600,2621.7500,-1.2174,paper_benchmark_return_smoke_only
+2025-02-20,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-21,768.2700,774.6500,0.8304,paper_benchmark_return_smoke_only
+2025-02-20,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-02-27,768.2700,770.8500,0.3358,paper_benchmark_return_smoke_only
+2025-02-20,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-21,352.1500,351.9200,-0.0653,paper_benchmark_return_smoke_only
+2025-02-20,KOSPI200,KOSPI,코스피 200,5,complete,2025-02-27,352.1500,346.4500,-1.6186,paper_benchmark_return_smoke_only
+2025-02-21,KOSPI,KOSPI,코스피,1,complete,2025-02-24,2654.5800,2645.2700,-0.3507,paper_benchmark_return_smoke_only
+2025-02-21,KOSPI,KOSPI,코스피,5,complete,2025-02-28,2654.5800,2532.7800,-4.5883,paper_benchmark_return_smoke_only
+2025-02-21,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-24,774.6500,773.3300,-0.1704,paper_benchmark_return_smoke_only
+2025-02-21,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-02-28,774.6500,743.9600,-3.9618,paper_benchmark_return_smoke_only
+2025-02-21,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-24,351.9200,349.9000,-0.5740,paper_benchmark_return_smoke_only
+2025-02-21,KOSPI200,KOSPI,코스피 200,5,complete,2025-02-28,351.9200,334.2700,-5.0153,paper_benchmark_return_smoke_only
+2025-02-24,KOSPI,KOSPI,코스피,1,complete,2025-02-25,2645.2700,2630.2900,-0.5663,paper_benchmark_return_smoke_only
+2025-02-24,KOSPI,KOSPI,코스피,5,complete,2025-03-04,2645.2700,2528.9200,-4.3984,paper_benchmark_return_smoke_only
+2025-02-24,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-25,773.3300,769.4300,-0.5043,paper_benchmark_return_smoke_only
+2025-02-24,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-04,773.3300,737.9000,-4.5815,paper_benchmark_return_smoke_only
+2025-02-24,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-25,349.9000,347.5400,-0.6745,paper_benchmark_return_smoke_only
+2025-02-24,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-04,349.9000,334.0200,-4.5384,paper_benchmark_return_smoke_only
+2025-02-25,KOSPI,KOSPI,코스피,1,complete,2025-02-26,2630.2900,2641.0900,0.4106,paper_benchmark_return_smoke_only
+2025-02-25,KOSPI,KOSPI,코스피,5,complete,2025-03-05,2630.2900,2558.1300,-2.7434,paper_benchmark_return_smoke_only
+2025-02-25,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-26,769.4300,771.4100,0.2573,paper_benchmark_return_smoke_only
+2025-02-25,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-05,769.4300,746.9500,-2.9216,paper_benchmark_return_smoke_only
+2025-02-25,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-26,347.5400,349.3100,0.5093,paper_benchmark_return_smoke_only
+2025-02-25,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-05,347.5400,337.0800,-3.0097,paper_benchmark_return_smoke_only
+2025-02-26,KOSPI,KOSPI,코스피,1,complete,2025-02-27,2641.0900,2621.7500,-0.7323,paper_benchmark_return_smoke_only
+2025-02-26,KOSPI,KOSPI,코스피,5,complete,2025-03-06,2641.0900,2576.1600,-2.4585,paper_benchmark_return_smoke_only
+2025-02-26,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-27,771.4100,770.8500,-0.0726,paper_benchmark_return_smoke_only
+2025-02-26,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-06,771.4100,734.9200,-4.7303,paper_benchmark_return_smoke_only
+2025-02-26,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-27,349.3100,346.4500,-0.8188,paper_benchmark_return_smoke_only
+2025-02-26,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-06,349.3100,340.3100,-2.5765,paper_benchmark_return_smoke_only
+2025-02-27,KOSPI,KOSPI,코스피,1,complete,2025-02-28,2621.7500,2532.7800,-3.3935,paper_benchmark_return_smoke_only
+2025-02-27,KOSPI,KOSPI,코스피,5,complete,2025-03-07,2621.7500,2563.4800,-2.2226,paper_benchmark_return_smoke_only
+2025-02-27,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-02-28,770.8500,743.9600,-3.4884,paper_benchmark_return_smoke_only
+2025-02-27,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-07,770.8500,727.7000,-5.5977,paper_benchmark_return_smoke_only
+2025-02-27,KOSPI200,KOSPI,코스피 200,1,complete,2025-02-28,346.4500,334.2700,-3.5157,paper_benchmark_return_smoke_only
+2025-02-27,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-07,346.4500,338.4200,-2.3178,paper_benchmark_return_smoke_only
+2025-02-28,KOSPI,KOSPI,코스피,1,complete,2025-03-04,2532.7800,2528.9200,-0.1524,paper_benchmark_return_smoke_only
+2025-02-28,KOSPI,KOSPI,코스피,5,complete,2025-03-10,2532.7800,2570.3900,1.4849,paper_benchmark_return_smoke_only
+2025-02-28,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-04,743.9600,737.9000,-0.8146,paper_benchmark_return_smoke_only
+2025-02-28,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-10,743.9600,725.8200,-2.4383,paper_benchmark_return_smoke_only
+2025-02-28,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-04,334.2700,334.0200,-0.0748,paper_benchmark_return_smoke_only
+2025-02-28,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-10,334.2700,338.7900,1.3522,paper_benchmark_return_smoke_only
+2025-03-04,KOSPI,KOSPI,코스피,1,complete,2025-03-05,2528.9200,2558.1300,1.1550,paper_benchmark_return_smoke_only
+2025-03-04,KOSPI,KOSPI,코스피,5,complete,2025-03-11,2528.9200,2537.6000,0.3432,paper_benchmark_return_smoke_only
+2025-03-04,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-05,737.9000,746.9500,1.2265,paper_benchmark_return_smoke_only
+2025-03-04,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-11,737.9000,721.5000,-2.2225,paper_benchmark_return_smoke_only
+2025-03-04,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-05,334.0200,337.0800,0.9161,paper_benchmark_return_smoke_only
+2025-03-04,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-11,334.0200,334.9600,0.2814,paper_benchmark_return_smoke_only
+2025-03-05,KOSPI,KOSPI,코스피,1,complete,2025-03-06,2558.1300,2576.1600,0.7048,paper_benchmark_return_smoke_only
+2025-03-05,KOSPI,KOSPI,코스피,5,complete,2025-03-12,2558.1300,2574.8200,0.6524,paper_benchmark_return_smoke_only
+2025-03-05,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-06,746.9500,734.9200,-1.6105,paper_benchmark_return_smoke_only
+2025-03-05,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-12,746.9500,729.4900,-2.3375,paper_benchmark_return_smoke_only
+2025-03-05,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-06,337.0800,340.3100,0.9582,paper_benchmark_return_smoke_only
+2025-03-05,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-12,337.0800,340.8900,1.1303,paper_benchmark_return_smoke_only
+2025-03-06,KOSPI,KOSPI,코스피,1,complete,2025-03-07,2576.1600,2563.4800,-0.4922,paper_benchmark_return_smoke_only
+2025-03-06,KOSPI,KOSPI,코스피,5,complete,2025-03-13,2576.1600,2573.6400,-0.0978,paper_benchmark_return_smoke_only
+2025-03-06,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-07,734.9200,727.7000,-0.9824,paper_benchmark_return_smoke_only
+2025-03-06,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-13,734.9200,722.8000,-1.6492,paper_benchmark_return_smoke_only
+2025-03-06,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-07,340.3100,338.4200,-0.5554,paper_benchmark_return_smoke_only
+2025-03-06,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-13,340.3100,341.4200,0.3262,paper_benchmark_return_smoke_only
+2025-03-07,KOSPI,KOSPI,코스피,1,complete,2025-03-10,2563.4800,2570.3900,0.2696,paper_benchmark_return_smoke_only
+2025-03-07,KOSPI,KOSPI,코스피,5,complete,2025-03-14,2563.4800,2566.3600,0.1123,paper_benchmark_return_smoke_only
+2025-03-07,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-10,727.7000,725.8200,-0.2583,paper_benchmark_return_smoke_only
+2025-03-07,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-14,727.7000,734.2600,0.9015,paper_benchmark_return_smoke_only
+2025-03-07,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-10,338.4200,338.7900,0.1093,paper_benchmark_return_smoke_only
+2025-03-07,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-14,338.4200,340.8000,0.7033,paper_benchmark_return_smoke_only
+2025-03-10,KOSPI,KOSPI,코스피,1,complete,2025-03-11,2570.3900,2537.6000,-1.2757,paper_benchmark_return_smoke_only
+2025-03-10,KOSPI,KOSPI,코스피,5,complete,2025-03-17,2570.3900,2610.6900,1.5679,paper_benchmark_return_smoke_only
+2025-03-10,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-11,725.8200,721.5000,-0.5952,paper_benchmark_return_smoke_only
+2025-03-10,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-17,725.8200,743.5100,2.4372,paper_benchmark_return_smoke_only
+2025-03-10,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-11,338.7900,334.9600,-1.1305,paper_benchmark_return_smoke_only
+2025-03-10,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-17,338.7900,348.1900,2.7746,paper_benchmark_return_smoke_only
+2025-03-11,KOSPI,KOSPI,코스피,1,complete,2025-03-12,2537.6000,2574.8200,1.4667,paper_benchmark_return_smoke_only
+2025-03-11,KOSPI,KOSPI,코스피,5,complete,2025-03-18,2537.6000,2612.3400,2.9453,paper_benchmark_return_smoke_only
+2025-03-11,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-12,721.5000,729.4900,1.1074,paper_benchmark_return_smoke_only
+2025-03-11,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-18,721.5000,745.5400,3.3319,paper_benchmark_return_smoke_only
+2025-03-11,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-12,334.9600,340.8900,1.7704,paper_benchmark_return_smoke_only
+2025-03-11,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-18,334.9600,347.8400,3.8452,paper_benchmark_return_smoke_only
+2025-03-12,KOSPI,KOSPI,코스피,1,complete,2025-03-13,2574.8200,2573.6400,-0.0458,paper_benchmark_return_smoke_only
+2025-03-12,KOSPI,KOSPI,코스피,5,complete,2025-03-19,2574.8200,2628.6200,2.0895,paper_benchmark_return_smoke_only
+2025-03-12,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-13,729.4900,722.8000,-0.9171,paper_benchmark_return_smoke_only
+2025-03-12,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-19,729.4900,738.3500,1.2145,paper_benchmark_return_smoke_only
+2025-03-12,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-13,340.8900,341.4200,0.1555,paper_benchmark_return_smoke_only
+2025-03-12,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-19,340.8900,350.8500,2.9218,paper_benchmark_return_smoke_only
+2025-03-13,KOSPI,KOSPI,코스피,1,complete,2025-03-14,2573.6400,2566.3600,-0.2829,paper_benchmark_return_smoke_only
+2025-03-13,KOSPI,KOSPI,코스피,5,complete,2025-03-20,2573.6400,2637.1000,2.4658,paper_benchmark_return_smoke_only
+2025-03-13,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-14,722.8000,734.2600,1.5855,paper_benchmark_return_smoke_only
+2025-03-13,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-20,722.8000,725.1500,0.3251,paper_benchmark_return_smoke_only
+2025-03-13,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-14,341.4200,340.8000,-0.1816,paper_benchmark_return_smoke_only
+2025-03-13,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-20,341.4200,353.5000,3.5382,paper_benchmark_return_smoke_only
+2025-03-14,KOSPI,KOSPI,코스피,1,complete,2025-03-17,2566.3600,2610.6900,1.7273,paper_benchmark_return_smoke_only
+2025-03-14,KOSPI,KOSPI,코스피,5,complete,2025-03-21,2566.3600,2643.1300,2.9914,paper_benchmark_return_smoke_only
+2025-03-14,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-17,734.2600,743.5100,1.2598,paper_benchmark_return_smoke_only
+2025-03-14,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-21,734.2600,719.4100,-2.0224,paper_benchmark_return_smoke_only
+2025-03-14,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-17,340.8000,348.1900,2.1684,paper_benchmark_return_smoke_only
+2025-03-14,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-21,340.8000,355.1800,4.2195,paper_benchmark_return_smoke_only
+2025-03-17,KOSPI,KOSPI,코스피,1,complete,2025-03-18,2610.6900,2612.3400,0.0632,paper_benchmark_return_smoke_only
+2025-03-17,KOSPI,KOSPI,코스피,5,complete,2025-03-24,2610.6900,2632.0700,0.8189,paper_benchmark_return_smoke_only
+2025-03-17,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-18,743.5100,745.5400,0.2730,paper_benchmark_return_smoke_only
+2025-03-17,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-24,743.5100,720.2200,-3.1324,paper_benchmark_return_smoke_only
+2025-03-17,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-18,348.1900,347.8400,-0.1005,paper_benchmark_return_smoke_only
+2025-03-17,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-24,348.1900,353.2400,1.4504,paper_benchmark_return_smoke_only
+2025-03-18,KOSPI,KOSPI,코스피,1,complete,2025-03-19,2612.3400,2628.6200,0.6232,paper_benchmark_return_smoke_only
+2025-03-18,KOSPI,KOSPI,코스피,5,complete,2025-03-25,2612.3400,2615.8100,0.1328,paper_benchmark_return_smoke_only
+2025-03-18,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-19,745.5400,738.3500,-0.9644,paper_benchmark_return_smoke_only
+2025-03-18,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-25,745.5400,711.2600,-4.5980,paper_benchmark_return_smoke_only
+2025-03-18,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-19,347.8400,350.8500,0.8653,paper_benchmark_return_smoke_only
+2025-03-18,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-25,347.8400,351.0900,0.9343,paper_benchmark_return_smoke_only
+2025-03-19,KOSPI,KOSPI,코스피,1,complete,2025-03-20,2628.6200,2637.1000,0.3226,paper_benchmark_return_smoke_only
+2025-03-19,KOSPI,KOSPI,코스피,5,complete,2025-03-26,2628.6200,2643.9400,0.5828,paper_benchmark_return_smoke_only
+2025-03-19,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-20,738.3500,725.1500,-1.7878,paper_benchmark_return_smoke_only
+2025-03-19,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-26,738.3500,716.4800,-2.9620,paper_benchmark_return_smoke_only
+2025-03-19,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-20,350.8500,353.5000,0.7553,paper_benchmark_return_smoke_only
+2025-03-19,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-26,350.8500,355.0000,1.1828,paper_benchmark_return_smoke_only
+2025-03-20,KOSPI,KOSPI,코스피,1,complete,2025-03-21,2637.1000,2643.1300,0.2287,paper_benchmark_return_smoke_only
+2025-03-20,KOSPI,KOSPI,코스피,5,complete,2025-03-27,2637.1000,2607.1500,-1.1357,paper_benchmark_return_smoke_only
+2025-03-20,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-21,725.1500,719.4100,-0.7916,paper_benchmark_return_smoke_only
+2025-03-20,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-27,725.1500,707.4900,-2.4354,paper_benchmark_return_smoke_only
+2025-03-20,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-21,353.5000,355.1800,0.4752,paper_benchmark_return_smoke_only
+2025-03-20,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-27,353.5000,350.2600,-0.9165,paper_benchmark_return_smoke_only
+2025-03-21,KOSPI,KOSPI,코스피,1,complete,2025-03-24,2643.1300,2632.0700,-0.4184,paper_benchmark_return_smoke_only
+2025-03-21,KOSPI,KOSPI,코스피,5,complete,2025-03-28,2643.1300,2557.9800,-3.2216,paper_benchmark_return_smoke_only
+2025-03-21,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-24,719.4100,720.2200,0.1126,paper_benchmark_return_smoke_only
+2025-03-21,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-28,719.4100,693.7600,-3.5654,paper_benchmark_return_smoke_only
+2025-03-21,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-24,355.1800,353.2400,-0.5462,paper_benchmark_return_smoke_only
+2025-03-21,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-28,355.1800,342.9600,-3.4405,paper_benchmark_return_smoke_only
+2025-03-24,KOSPI,KOSPI,코스피,1,complete,2025-03-25,2632.0700,2615.8100,-0.6178,paper_benchmark_return_smoke_only
+2025-03-24,KOSPI,KOSPI,코스피,5,complete,2025-03-31,2632.0700,2481.1200,-5.7350,paper_benchmark_return_smoke_only
+2025-03-24,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-25,720.2200,711.2600,-1.2441,paper_benchmark_return_smoke_only
+2025-03-24,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-03-31,720.2200,672.8500,-6.5772,paper_benchmark_return_smoke_only
+2025-03-24,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-25,353.2400,351.0900,-0.6087,paper_benchmark_return_smoke_only
+2025-03-24,KOSPI200,KOSPI,코스피 200,5,complete,2025-03-31,353.2400,332.4000,-5.8997,paper_benchmark_return_smoke_only
+2025-03-25,KOSPI,KOSPI,코스피,1,complete,2025-03-26,2615.8100,2643.9400,1.0754,paper_benchmark_return_smoke_only
+2025-03-25,KOSPI,KOSPI,코스피,5,complete,2025-04-01,2615.8100,2521.3900,-3.6096,paper_benchmark_return_smoke_only
+2025-03-25,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-26,711.2600,716.4800,0.7339,paper_benchmark_return_smoke_only
+2025-03-25,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-01,711.2600,691.4500,-2.7852,paper_benchmark_return_smoke_only
+2025-03-25,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-26,351.0900,355.0000,1.1137,paper_benchmark_return_smoke_only
+2025-03-25,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-01,351.0900,338.2200,-3.6657,paper_benchmark_return_smoke_only
+2025-03-26,KOSPI,KOSPI,코스피,1,complete,2025-03-27,2643.9400,2607.1500,-1.3915,paper_benchmark_return_smoke_only
+2025-03-26,KOSPI,KOSPI,코스피,5,complete,2025-04-02,2643.9400,2505.8600,-5.2225,paper_benchmark_return_smoke_only
+2025-03-26,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-27,716.4800,707.4900,-1.2547,paper_benchmark_return_smoke_only
+2025-03-26,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-02,716.4800,684.8500,-4.4146,paper_benchmark_return_smoke_only
+2025-03-26,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-27,355.0000,350.2600,-1.3352,paper_benchmark_return_smoke_only
+2025-03-26,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-02,355.0000,336.2600,-5.2789,paper_benchmark_return_smoke_only
+2025-03-27,KOSPI,KOSPI,코스피,1,complete,2025-03-28,2607.1500,2557.9800,-1.8860,paper_benchmark_return_smoke_only
+2025-03-27,KOSPI,KOSPI,코스피,5,complete,2025-04-03,2607.1500,2486.7000,-4.6200,paper_benchmark_return_smoke_only
+2025-03-27,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-28,707.4900,693.7600,-1.9407,paper_benchmark_return_smoke_only
+2025-03-27,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-03,707.4900,683.4900,-3.3923,paper_benchmark_return_smoke_only
+2025-03-27,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-28,350.2600,342.9600,-2.0842,paper_benchmark_return_smoke_only
+2025-03-27,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-03,350.2600,332.9200,-4.9506,paper_benchmark_return_smoke_only
+2025-03-28,KOSPI,KOSPI,코스피,1,complete,2025-03-31,2557.9800,2481.1200,-3.0047,paper_benchmark_return_smoke_only
+2025-03-28,KOSPI,KOSPI,코스피,5,complete,2025-04-04,2557.9800,2465.4200,-3.6185,paper_benchmark_return_smoke_only
+2025-03-28,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-03-31,693.7600,672.8500,-3.0140,paper_benchmark_return_smoke_only
+2025-03-28,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-04,693.7600,687.3900,-0.9182,paper_benchmark_return_smoke_only
+2025-03-28,KOSPI200,KOSPI,코스피 200,1,complete,2025-03-31,342.9600,332.4000,-3.0791,paper_benchmark_return_smoke_only
+2025-03-28,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-04,342.9600,328.6700,-4.1667,paper_benchmark_return_smoke_only
+2025-03-31,KOSPI,KOSPI,코스피,1,complete,2025-04-01,2481.1200,2521.3900,1.6231,paper_benchmark_return_smoke_only
+2025-03-31,KOSPI,KOSPI,코스피,5,complete,2025-04-07,2481.1200,2328.2000,-6.1633,paper_benchmark_return_smoke_only
+2025-03-31,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-04-01,672.8500,691.4500,2.7644,paper_benchmark_return_smoke_only
+2025-03-31,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-07,672.8500,651.3000,-3.2028,paper_benchmark_return_smoke_only
+2025-03-31,KOSPI200,KOSPI,코스피 200,1,complete,2025-04-01,332.4000,338.2200,1.7509,paper_benchmark_return_smoke_only
+2025-03-31,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-07,332.4000,309.6000,-6.8592,paper_benchmark_return_smoke_only
+2025-04-01,KOSPI,KOSPI,코스피,1,complete,2025-04-02,2521.3900,2505.8600,-0.6159,paper_benchmark_return_smoke_only
+2025-04-01,KOSPI,KOSPI,코스피,5,complete,2025-04-08,2521.3900,2334.2300,-7.4229,paper_benchmark_return_smoke_only
+2025-04-01,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-04-02,691.4500,684.8500,-0.9545,paper_benchmark_return_smoke_only
+2025-04-01,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-08,691.4500,658.4500,-4.7726,paper_benchmark_return_smoke_only
+2025-04-01,KOSPI200,KOSPI,코스피 200,1,complete,2025-04-02,338.2200,336.2600,-0.5795,paper_benchmark_return_smoke_only
+2025-04-01,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-08,338.2200,310.0300,-8.3348,paper_benchmark_return_smoke_only
+2025-04-02,KOSPI,KOSPI,코스피,1,complete,2025-04-03,2505.8600,2486.7000,-0.7646,paper_benchmark_return_smoke_only
+2025-04-02,KOSPI,KOSPI,코스피,5,complete,2025-04-09,2505.8600,2293.7000,-8.4666,paper_benchmark_return_smoke_only
+2025-04-02,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-04-03,684.8500,683.4900,-0.1986,paper_benchmark_return_smoke_only
+2025-04-02,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-09,684.8500,643.3900,-6.0539,paper_benchmark_return_smoke_only
+2025-04-02,KOSPI200,KOSPI,코스피 200,1,complete,2025-04-03,336.2600,332.9200,-0.9933,paper_benchmark_return_smoke_only
+2025-04-02,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-09,336.2600,304.5300,-9.4362,paper_benchmark_return_smoke_only
+2025-04-03,KOSPI,KOSPI,코스피,1,complete,2025-04-04,2486.7000,2465.4200,-0.8558,paper_benchmark_return_smoke_only
+2025-04-03,KOSPI,KOSPI,코스피,5,complete,2025-04-10,2486.7000,2445.0600,-1.6745,paper_benchmark_return_smoke_only
+2025-04-03,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-04-04,683.4900,687.3900,0.5706,paper_benchmark_return_smoke_only
+2025-04-03,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-10,683.4900,681.7900,-0.2487,paper_benchmark_return_smoke_only
+2025-04-03,KOSPI200,KOSPI,코스피 200,1,complete,2025-04-04,332.9200,328.6700,-1.2766,paper_benchmark_return_smoke_only
+2025-04-03,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-10,332.9200,325.0800,-2.3549,paper_benchmark_return_smoke_only
+2025-04-04,KOSPI,KOSPI,코스피,1,complete,2025-04-07,2465.4200,2328.2000,-5.5658,paper_benchmark_return_smoke_only
+2025-04-04,KOSPI,KOSPI,코스피,5,complete,2025-04-11,2465.4200,2432.7200,-1.3263,paper_benchmark_return_smoke_only
+2025-04-04,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-04-07,687.3900,651.3000,-5.2503,paper_benchmark_return_smoke_only
+2025-04-04,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-11,687.3900,695.5900,1.1929,paper_benchmark_return_smoke_only
+2025-04-04,KOSPI200,KOSPI,코스피 200,1,complete,2025-04-07,328.6700,309.6000,-5.8022,paper_benchmark_return_smoke_only
+2025-04-04,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-11,328.6700,322.3200,-1.9320,paper_benchmark_return_smoke_only
+2025-04-07,KOSPI,KOSPI,코스피,1,complete,2025-04-08,2328.2000,2334.2300,0.2590,paper_benchmark_return_smoke_only
+2025-04-07,KOSPI,KOSPI,코스피,5,complete,2025-04-14,2328.2000,2455.8900,5.4845,paper_benchmark_return_smoke_only
+2025-04-07,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-04-08,651.3000,658.4500,1.0978,paper_benchmark_return_smoke_only
+2025-04-07,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-14,651.3000,708.9800,8.8561,paper_benchmark_return_smoke_only
+2025-04-07,KOSPI200,KOSPI,코스피 200,1,complete,2025-04-08,309.6000,310.0300,0.1389,paper_benchmark_return_smoke_only
+2025-04-07,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-14,309.6000,325.3300,5.0807,paper_benchmark_return_smoke_only
+2025-04-08,KOSPI,KOSPI,코스피,1,complete,2025-04-09,2334.2300,2293.7000,-1.7363,paper_benchmark_return_smoke_only
+2025-04-08,KOSPI,KOSPI,코스피,5,complete,2025-04-15,2334.2300,2477.4100,6.1339,paper_benchmark_return_smoke_only
+2025-04-08,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-04-09,658.4500,643.3900,-2.2872,paper_benchmark_return_smoke_only
+2025-04-08,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-15,658.4500,711.9200,8.1206,paper_benchmark_return_smoke_only
+2025-04-08,KOSPI200,KOSPI,코스피 200,1,complete,2025-04-09,310.0300,304.5300,-1.7740,paper_benchmark_return_smoke_only
+2025-04-08,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-15,310.0300,328.1400,5.8414,paper_benchmark_return_smoke_only
+2025-04-09,KOSPI,KOSPI,코스피,1,complete,2025-04-10,2293.7000,2445.0600,6.5989,paper_benchmark_return_smoke_only
+2025-04-09,KOSPI,KOSPI,코스피,5,complete,2025-04-16,2293.7000,2447.4300,6.7023,paper_benchmark_return_smoke_only
+2025-04-09,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-04-10,643.3900,681.7900,5.9684,paper_benchmark_return_smoke_only
+2025-04-09,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-16,643.3900,699.1100,8.6604,paper_benchmark_return_smoke_only
+2025-04-09,KOSPI200,KOSPI,코스피 200,1,complete,2025-04-10,304.5300,325.0800,6.7481,paper_benchmark_return_smoke_only
+2025-04-09,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-16,304.5300,323.5300,6.2391,paper_benchmark_return_smoke_only
+2025-04-10,KOSPI,KOSPI,코스피,1,complete,2025-04-11,2445.0600,2432.7200,-0.5047,paper_benchmark_return_smoke_only
+2025-04-10,KOSPI,KOSPI,코스피,5,complete,2025-04-17,2445.0600,2470.4100,1.0368,paper_benchmark_return_smoke_only
+2025-04-10,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-04-11,681.7900,695.5900,2.0241,paper_benchmark_return_smoke_only
+2025-04-10,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-17,681.7900,711.7500,4.3943,paper_benchmark_return_smoke_only
+2025-04-10,KOSPI200,KOSPI,코스피 200,1,complete,2025-04-11,325.0800,322.3200,-0.8490,paper_benchmark_return_smoke_only
+2025-04-10,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-17,325.0800,326.3000,0.3753,paper_benchmark_return_smoke_only
+2025-04-11,KOSPI,KOSPI,코스피,1,complete,2025-04-14,2432.7200,2455.8900,0.9524,paper_benchmark_return_smoke_only
+2025-04-11,KOSPI,KOSPI,코스피,5,complete,2025-04-18,2432.7200,2483.4200,2.0841,paper_benchmark_return_smoke_only
+2025-04-11,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-04-14,695.5900,708.9800,1.9250,paper_benchmark_return_smoke_only
+2025-04-11,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-18,695.5900,717.7700,3.1887,paper_benchmark_return_smoke_only
+2025-04-11,KOSPI200,KOSPI,코스피 200,1,complete,2025-04-14,322.3200,325.3300,0.9339,paper_benchmark_return_smoke_only
+2025-04-11,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-18,322.3200,328.3500,1.8708,paper_benchmark_return_smoke_only
+2025-04-14,KOSPI,KOSPI,코스피,1,complete,2025-04-15,2455.8900,2477.4100,0.8763,paper_benchmark_return_smoke_only
+2025-04-14,KOSPI,KOSPI,코스피,5,complete,2025-04-21,2455.8900,2488.4200,1.3246,paper_benchmark_return_smoke_only
+2025-04-14,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-04-15,708.9800,711.9200,0.4147,paper_benchmark_return_smoke_only
+2025-04-14,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-21,708.9800,715.4500,0.9126,paper_benchmark_return_smoke_only
+2025-04-14,KOSPI200,KOSPI,코스피 200,1,complete,2025-04-15,325.3300,328.1400,0.8637,paper_benchmark_return_smoke_only
+2025-04-14,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-21,325.3300,329.3100,1.2234,paper_benchmark_return_smoke_only
+2025-04-15,KOSPI,KOSPI,코스피,1,complete,2025-04-16,2477.4100,2447.4300,-1.2101,paper_benchmark_return_smoke_only
+2025-04-15,KOSPI,KOSPI,코스피,5,complete,2025-04-22,2477.4100,2486.6400,0.3726,paper_benchmark_return_smoke_only
+2025-04-15,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-04-16,711.9200,699.1100,-1.7994,paper_benchmark_return_smoke_only
+2025-04-15,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-22,711.9200,716.1200,0.5900,paper_benchmark_return_smoke_only
+2025-04-15,KOSPI200,KOSPI,코스피 200,1,complete,2025-04-16,328.1400,323.5300,-1.4049,paper_benchmark_return_smoke_only
+2025-04-15,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-22,328.1400,328.6100,0.1432,paper_benchmark_return_smoke_only
+2025-04-16,KOSPI,KOSPI,코스피,1,complete,2025-04-17,2447.4300,2470.4100,0.9389,paper_benchmark_return_smoke_only
+2025-04-16,KOSPI,KOSPI,코스피,5,complete,2025-04-23,2447.4300,2525.5600,3.1923,paper_benchmark_return_smoke_only
+2025-04-16,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-04-17,699.1100,711.7500,1.8080,paper_benchmark_return_smoke_only
+2025-04-16,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-23,699.1100,726.0800,3.8578,paper_benchmark_return_smoke_only
+2025-04-16,KOSPI200,KOSPI,코스피 200,1,complete,2025-04-17,323.5300,326.3000,0.8562,paper_benchmark_return_smoke_only
+2025-04-16,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-23,323.5300,333.9400,3.2176,paper_benchmark_return_smoke_only
+2025-04-17,KOSPI,KOSPI,코스피,1,complete,2025-04-18,2470.4100,2483.4200,0.5266,paper_benchmark_return_smoke_only
+2025-04-17,KOSPI,KOSPI,코스피,5,complete,2025-04-24,2470.4100,2522.3300,2.1017,paper_benchmark_return_smoke_only
+2025-04-17,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-04-18,711.7500,717.7700,0.8458,paper_benchmark_return_smoke_only
+2025-04-17,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-24,711.7500,726.0800,2.0133,paper_benchmark_return_smoke_only
+2025-04-17,KOSPI200,KOSPI,코스피 200,1,complete,2025-04-18,326.3000,328.3500,0.6283,paper_benchmark_return_smoke_only
+2025-04-17,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-24,326.3000,333.7200,2.2740,paper_benchmark_return_smoke_only
+2025-04-18,KOSPI,KOSPI,코스피,1,complete,2025-04-21,2483.4200,2488.4200,0.2013,paper_benchmark_return_smoke_only
+2025-04-18,KOSPI,KOSPI,코스피,5,complete,2025-04-25,2483.4200,2546.3000,2.5320,paper_benchmark_return_smoke_only
+2025-04-18,KOSDAQ,KOSDAQ,코스닥,1,complete,2025-04-21,717.7700,715.4500,-0.3232,paper_benchmark_return_smoke_only
+2025-04-18,KOSDAQ,KOSDAQ,코스닥,5,complete,2025-04-25,717.7700,729.6900,1.6607,paper_benchmark_return_smoke_only
+2025-04-18,KOSPI200,KOSPI,코스피 200,1,complete,2025-04-21,328.3500,329.3100,0.2924,paper_benchmark_return_smoke_only
+2025-04-18,KOSPI200,KOSPI,코스피 200,5,complete,2025-04-25,328.3500,336.8700,2.5948,paper_benchmark_return_smoke_only
