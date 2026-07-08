@@ -2,7 +2,8 @@
 
 This joins local portfolio target rows to local forward-return rows. It is a
 diagnostic bridge between Signal Candidate plumbing and a real Backtest engine:
-no broker/API calls, no order intents, no costs, and no benchmark comparison.
+no broker/API calls, no order intents, and no costs. Benchmark returns can be
+joined as an optional diagnostic comparison, but this is still not a Backtest.
 """
 
 from __future__ import annotations
@@ -24,6 +25,7 @@ DEFAULT_HORIZONS = (1,)
 TARGET_MODE = "paper_portfolio_target_smoke_only"
 FORWARD_MODE = "paper_forward_return_smoke_only"
 PNL_MODE = "paper_backtest_pnl_smoke_only"
+BENCHMARK_MODE = "paper_benchmark_return_smoke_only"
 
 
 @dataclass(frozen=True)
@@ -35,6 +37,11 @@ class PnlSmokeRow:
     forward_date: str = ""
     raw_forward_return_pct: float | None = None
     weighted_return_contribution_pct: float | None = None
+    benchmark_label: str = ""
+    benchmark_join_status: str = "not_supplied"
+    benchmark_return_pct: float | None = None
+    excess_return_pct: float | None = None
+    weighted_excess_return_contribution_pct: float | None = None
 
 
 @dataclass(frozen=True)
@@ -103,6 +110,11 @@ def _forward_key(row: dict[str, str]) -> tuple[str, str, int]:
     return (row.get("date", "").strip(), row.get("code", "").strip().upper(), horizon or 0)
 
 
+def _benchmark_key(row: dict[str, str]) -> tuple[str, str, int]:
+    horizon = _parse_int(row.get("horizon_trading_days", ""))
+    return (row.get("date", "").strip(), row.get("benchmark", "").strip().upper(), horizon or 0)
+
+
 def _validate_targets(target_rows: list[dict[str, str]]) -> None:
     bad_order_intents = sum(1 for row in target_rows if row.get("order_intent_generated", "").lower() != "false")
     if bad_order_intents:
@@ -128,10 +140,25 @@ def _forward_index(forward_rows: list[dict[str, str]]) -> dict[tuple[str, str, i
     return index
 
 
+def _benchmark_index(benchmark_rows: list[dict[str, str]]) -> dict[tuple[str, str, int], dict[str, str]]:
+    index: dict[tuple[str, str, int], dict[str, str]] = {}
+    counts = Counter(_benchmark_key(row) for row in benchmark_rows)
+    duplicates = [key for key, count in counts.items() if key[0] and key[1] and key[2] and count > 1]
+    if duplicates:
+        raise ValueError("benchmark-return rows contain duplicate date/benchmark/horizon keys")
+    for row in benchmark_rows:
+        key = _benchmark_key(row)
+        if key[0] and key[1] and key[2]:
+            index[key] = row
+    return index
+
+
 def compute_pnl_smoke(
     target_rows: list[dict[str, str]],
     forward_rows: list[dict[str, str]],
     horizons: tuple[int, ...] = DEFAULT_HORIZONS,
+    benchmark_rows: list[dict[str, str]] | None = None,
+    benchmark_label: str = "KOSPI",
 ) -> tuple[list[PnlSmokeRow], list[DateHorizonDiagnostic]]:
     if not horizons:
         raise ValueError("at least one horizon is required")
@@ -139,6 +166,8 @@ def compute_pnl_smoke(
         raise ValueError("horizons must be positive")
     _validate_targets(target_rows)
     forward_by_key = _forward_index(forward_rows)
+    benchmark_label = benchmark_label.strip().upper()
+    benchmark_by_key = _benchmark_index(benchmark_rows or []) if benchmark_rows is not None else {}
 
     rows: list[PnlSmokeRow] = []
     for target in target_rows:
@@ -147,7 +176,7 @@ def compute_pnl_smoke(
         for horizon in horizons:
             forward = forward_by_key.get((date, code, horizon))
             if forward is None:
-                rows.append(PnlSmokeRow(target, horizon, "missing_forward_row", target_weight))
+                rows.append(PnlSmokeRow(target, horizon, "missing_forward_row", target_weight, benchmark_label=benchmark_label))
                 continue
             status = forward.get("evaluation_status", "")
             if forward.get("evaluation_mode", "") and forward.get("evaluation_mode", "") != FORWARD_MODE:
@@ -156,6 +185,24 @@ def compute_pnl_smoke(
             if status == "complete" and raw_return is None:
                 status = "bad_forward_return"
             contribution = target_weight * raw_return if status == "complete" and raw_return is not None else None
+            benchmark_join_status = "not_supplied"
+            benchmark_return = None
+            excess_return = None
+            weighted_excess = None
+            if benchmark_rows is not None:
+                benchmark = benchmark_by_key.get((date, benchmark_label, horizon))
+                if benchmark is None:
+                    benchmark_join_status = "missing_benchmark_return"
+                elif benchmark.get("evaluation_mode", "") and benchmark.get("evaluation_mode", "") != BENCHMARK_MODE:
+                    benchmark_join_status = "unexpected_benchmark_mode"
+                else:
+                    benchmark_join_status = benchmark.get("evaluation_status", "") or "missing_benchmark_status"
+                    benchmark_return = _parse_float(benchmark.get("benchmark_return_pct", ""))
+                    if benchmark_join_status == "complete" and benchmark_return is None:
+                        benchmark_join_status = "bad_benchmark_return"
+                    if status == "complete" and raw_return is not None and benchmark_join_status == "complete" and benchmark_return is not None:
+                        excess_return = raw_return - benchmark_return
+                        weighted_excess = target_weight * excess_return
             rows.append(
                 PnlSmokeRow(
                     target=target,
@@ -165,6 +212,11 @@ def compute_pnl_smoke(
                     forward_date=forward.get("forward_date", ""),
                     raw_forward_return_pct=raw_return,
                     weighted_return_contribution_pct=contribution,
+                    benchmark_label=benchmark_label,
+                    benchmark_join_status=benchmark_join_status,
+                    benchmark_return_pct=benchmark_return,
+                    excess_return_pct=excess_return,
+                    weighted_excess_return_contribution_pct=weighted_excess,
                 )
             )
 
@@ -221,6 +273,11 @@ def write_csv(rows: list[PnlSmokeRow], path: Path) -> None:
         "target_weight",
         "raw_forward_return_pct",
         "weighted_return_contribution_pct",
+        "benchmark_label",
+        "benchmark_join_status",
+        "benchmark_return_pct",
+        "excess_return_pct",
+        "weighted_excess_return_contribution_pct",
         "source_signal_state",
         "target_mode",
         "pnl_mode",
@@ -244,6 +301,11 @@ def write_csv(rows: list[PnlSmokeRow], path: Path) -> None:
                     "target_weight": _format_weight(row.target_weight),
                     "raw_forward_return_pct": _format_float(row.raw_forward_return_pct),
                     "weighted_return_contribution_pct": _format_float(row.weighted_return_contribution_pct),
+                    "benchmark_label": row.benchmark_label,
+                    "benchmark_join_status": row.benchmark_join_status,
+                    "benchmark_return_pct": _format_float(row.benchmark_return_pct),
+                    "excess_return_pct": _format_float(row.excess_return_pct),
+                    "weighted_excess_return_contribution_pct": _format_float(row.weighted_excess_return_contribution_pct),
                     "source_signal_state": target.get("source_signal_state", ""),
                     "target_mode": target.get("target_mode", ""),
                     "pnl_mode": PNL_MODE,
@@ -254,24 +316,32 @@ def write_csv(rows: list[PnlSmokeRow], path: Path) -> None:
 
 def summarize(rows: list[PnlSmokeRow], diagnostics: list[DateHorizonDiagnostic]) -> dict[str, object]:
     status_counts = Counter(row.evaluation_status for row in rows)
+    benchmark_status_counts = Counter(row.benchmark_join_status for row in rows)
     horizon_counts = Counter(str(row.horizon) for row in rows)
     by_horizon: dict[str, list[float]] = defaultdict(list)
     covered_by_horizon: dict[str, list[float]] = defaultdict(list)
+    excess_by_horizon: dict[str, list[float]] = defaultdict(list)
     for diagnostic in diagnostics:
         key = str(diagnostic.horizon)
         by_horizon[key].append(diagnostic.weighted_return_pct)
         covered_by_horizon[key].append(diagnostic.covered_gross_weight)
+    for row in rows:
+        if row.weighted_excess_return_contribution_pct is not None:
+            excess_by_horizon[str(row.horizon)].append(row.weighted_excess_return_contribution_pct)
     complete_rows = status_counts.get("complete", 0)
     return {
         "pnl_smoke_status": "pass_smoke" if rows and complete_rows > 0 else "hold",
         "rows": len(rows),
         "target_dates": len({row.target.get("date", "") for row in rows if row.target.get("date", "")}),
         "status_counts": dict(sorted(status_counts.items())),
+        "benchmark_join_status_counts": dict(sorted(benchmark_status_counts.items())),
+        "benchmark_joined_rows": benchmark_status_counts.get("complete", 0),
         "horizon_counts": dict(sorted(horizon_counts.items())),
         "complete_rows": complete_rows,
         "date_horizon_rows": len(diagnostics),
         "avg_weighted_return_by_horizon": {key: mean(values) for key, values in sorted(by_horizon.items()) if values},
         "avg_covered_gross_by_horizon": {key: mean(values) for key, values in sorted(covered_by_horizon.items()) if values},
+        "avg_weighted_excess_by_horizon": {key: mean(values) for key, values in sorted(excess_by_horizon.items()) if values},
     }
 
 
@@ -287,6 +357,8 @@ def render_report(
     summary: dict[str, object],
     targets_input: Path,
     forward_returns_input: Path,
+    benchmark_returns_input: Path | None,
+    benchmark_label: str,
     horizons: tuple[int, ...],
     csv_output: Path | None,
 ) -> str:
@@ -295,6 +367,8 @@ def render_report(
         "",
         f"- Portfolio-target input: {_wikilink(targets_input)}",
         f"- Forward-return input: {_wikilink(forward_returns_input)}",
+        f"- Benchmark-return input: {_wikilink(benchmark_returns_input) if benchmark_returns_input else '`not_supplied`'}",
+        f"- Benchmark label: `{benchmark_label}`",
         f"- Horizons: `{','.join(str(horizon) for horizon in horizons)}` trading days",
         f"- Mode: `{PNL_MODE}`",
         "- KIS API call: `false`",
@@ -316,6 +390,7 @@ def render_report(
             "| --- | ---: |",
             f"| PnL rows | {summary['rows']} |",
             f"| Complete rows | {summary['complete_rows']} |",
+            f"| Benchmark joined rows | {summary['benchmark_joined_rows']} |",
             f"| Target dates | {summary['target_dates']} |",
             f"| Date-horizon rows | {summary['date_horizon_rows']} |",
             "",
@@ -333,18 +408,36 @@ def render_report(
     lines.extend(
         [
             "",
+            "## Benchmark Join Status Counts",
+            "",
+            "| Status | Count |",
+            "| --- | ---: |",
+        ]
+    )
+    for status, count in dict(summary["benchmark_join_status_counts"]).items():
+        lines.append(f"| `{status}` | {count} |")
+    if not summary["benchmark_join_status_counts"]:
+        lines.append("| `none` | 0 |")
+
+    lines.extend(
+        [
+            "",
             "## Horizon Diagnostics",
             "",
-            "| Horizon | Avg weighted return % | Avg covered gross weight |",
-            "| ---: | ---: | ---: |",
+            "| Horizon | Avg weighted return % | Avg weighted excess vs benchmark % | Avg covered gross weight |",
+            "| ---: | ---: | ---: | ---: |",
         ]
     )
     returns = dict(summary["avg_weighted_return_by_horizon"])
     covered = dict(summary["avg_covered_gross_by_horizon"])
-    for horizon in sorted({*returns.keys(), *covered.keys()}, key=int):
-        lines.append(f"| {horizon} | {_format_float(returns.get(horizon))} | {_format_weight(float(covered.get(horizon, 0.0)))} |")
-    if not returns and not covered:
-        lines.append("| `none` |  |  |")
+    excess = dict(summary["avg_weighted_excess_by_horizon"])
+    for horizon in sorted({*returns.keys(), *covered.keys(), *excess.keys()}, key=int):
+        lines.append(
+            f"| {horizon} | {_format_float(returns.get(horizon))} | {_format_float(excess.get(horizon))} | "
+            f"{_format_weight(float(covered.get(horizon, 0.0)))} |"
+        )
+    if not returns and not covered and not excess:
+        lines.append("| `none` |  |  |  |")
 
     lines.extend(
         [
@@ -368,8 +461,8 @@ def render_report(
             "",
             "## Complete Row Sample",
             "",
-            "| Signal date | Horizon | Forward date | Code | Company | Weight | Raw return % | Contribution % |",
-            "| --- | ---: | --- | --- | --- | ---: | ---: | ---: |",
+            "| Signal date | Horizon | Forward date | Code | Company | Weight | Raw return % | Benchmark % | Excess % | Contribution % | Excess contribution % |",
+            "| --- | ---: | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
         ]
     )
     for row in complete_sample:
@@ -377,7 +470,9 @@ def render_report(
         lines.append(
             f"| {target.get('date', '')} | {row.horizon} | {row.forward_date} | `{target.get('code', '')}` | "
             f"{target.get('stock_name', '')} | {_format_weight(row.target_weight)} | "
-            f"{_format_float(row.raw_forward_return_pct)} | {_format_float(row.weighted_return_contribution_pct)} |"
+            f"{_format_float(row.raw_forward_return_pct)} | {_format_float(row.benchmark_return_pct)} | "
+            f"{_format_float(row.excess_return_pct)} | {_format_float(row.weighted_return_contribution_pct)} | "
+            f"{_format_float(row.weighted_excess_return_contribution_pct)} |"
         )
 
     lines.extend(
@@ -387,8 +482,9 @@ def render_report(
             "",
             "- This is a PnL smoke diagnostic, not a production Backtest result.",
             "- Weighted return uses target weight multiplied by raw forward return; missing forward rows are not filled as zero.",
-            "- This does not model transaction costs, slippage, taxes, benchmark returns, cash drag, rebalance execution, or delisting/event timing.",
-            "- Keep `Backtest readiness` at `hold` until historical `Point-in-Time` status coverage, cost model, benchmark, OOS, and Bias Control pass.",
+            "- Benchmark excess return is optional diagnostic math, not a production benchmark attribution engine.",
+            "- This does not model transaction costs, slippage, taxes, cash drag, rebalance execution, or delisting/event timing.",
+            "- Keep `Backtest readiness` at `hold` until historical `Point-in-Time` status coverage, cost model, benchmark attribution, OOS, and Bias Control pass.",
             "- Keep `Live trading readiness` at `blocked`; this script never creates order intents.",
         ]
     )
@@ -399,6 +495,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Compute paper-only Backtest PnL smoke diagnostics.")
     parser.add_argument("--targets-input", required=True, type=Path)
     parser.add_argument("--forward-returns-input", required=True, type=Path)
+    parser.add_argument("--benchmark-returns-input", type=Path)
+    parser.add_argument("--benchmark-label", default="KOSPI")
     parser.add_argument("--horizons", default=",".join(str(value) for value in DEFAULT_HORIZONS))
     parser.add_argument("--csv-output", type=Path)
     parser.add_argument("--report-output", type=Path)
@@ -431,7 +529,23 @@ def main() -> int:
             },
             "Forward-return",
         )
-        rows, diagnostics = compute_pnl_smoke(target_rows, forward_rows, horizons)
+        benchmark_rows = (
+            _read_csv(
+                args.benchmark_returns_input,
+                {
+                    "date",
+                    "benchmark",
+                    "horizon_trading_days",
+                    "evaluation_status",
+                    "benchmark_return_pct",
+                    "evaluation_mode",
+                },
+                "Benchmark-return",
+            )
+            if args.benchmark_returns_input
+            else None
+        )
+        rows, diagnostics = compute_pnl_smoke(target_rows, forward_rows, horizons, benchmark_rows, args.benchmark_label)
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc
 
@@ -443,6 +557,8 @@ def main() -> int:
         summary=summarize(rows, diagnostics),
         targets_input=args.targets_input,
         forward_returns_input=args.forward_returns_input,
+        benchmark_returns_input=args.benchmark_returns_input,
+        benchmark_label=args.benchmark_label.strip().upper(),
         horizons=horizons,
         csv_output=args.csv_output,
     )

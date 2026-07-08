@@ -199,7 +199,7 @@ def _benchmark_returns_gate(path: Path | None) -> Gate | None:
             "benchmark_returns_smoke",
             "pass_smoke",
             "local benchmark return smoke report is diagnostic-only and reports no order intents",
-            "join benchmark returns into the Backtest engine only after Point-in-Time and cost gates are ready",
+            "promote benchmark comparison from PnL smoke into the Backtest engine only after Point-in-Time and cost gates are ready",
         )
     return Gate(
         "benchmark_returns_smoke",

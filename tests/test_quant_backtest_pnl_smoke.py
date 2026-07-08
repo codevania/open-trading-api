@@ -59,6 +59,20 @@ def _forward_rows() -> list[dict[str, str]]:
     ]
 
 
+def _benchmark_rows() -> list[dict[str, str]]:
+    return [
+        {
+            "date": "2025-02-05",
+            "benchmark": "KOSPI",
+            "horizon_trading_days": "1",
+            "evaluation_status": "complete",
+            "forward_date": "2025-02-06",
+            "benchmark_return_pct": "2.0000",
+            "evaluation_mode": "paper_benchmark_return_smoke_only",
+        }
+    ]
+
+
 def _write_csv(path: Path, rows: list[dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
@@ -80,6 +94,19 @@ class QuantBacktestPnlSmokeTest(unittest.TestCase):
         self.assertAlmostEqual(diagnostics[0].covered_gross_weight, 0.5)
         self.assertAlmostEqual(diagnostics[0].missing_gross_weight, 0.25)
         self.assertAlmostEqual(diagnostics[0].weighted_return_pct, 5.0)
+
+    def test_optional_benchmark_join_computes_weighted_excess(self) -> None:
+        rows, diagnostics = compute_pnl_smoke(_target_rows(), _forward_rows(), horizons=(1,), benchmark_rows=_benchmark_rows())
+        summary = summarize(rows, diagnostics)
+
+        complete = [row for row in rows if row.evaluation_status == "complete"][0]
+
+        self.assertEqual(summary["benchmark_joined_rows"], 2)
+        self.assertEqual(dict(summary["benchmark_join_status_counts"]), {"complete": 2})
+        self.assertAlmostEqual(complete.benchmark_return_pct or 0, 2.0)
+        self.assertAlmostEqual(complete.excess_return_pct or 0, 8.0)
+        self.assertAlmostEqual(complete.weighted_excess_return_contribution_pct or 0, 4.0)
+        self.assertAlmostEqual(dict(summary["avg_weighted_excess_by_horizon"])["1"], 4.0)
 
     def test_missing_forward_rows_are_reported_not_filled_as_zero(self) -> None:
         rows, diagnostics = compute_pnl_smoke(_target_rows(), _forward_rows(), horizons=(5,))
@@ -108,6 +135,8 @@ class QuantBacktestPnlSmokeTest(unittest.TestCase):
             summary=summarize(rows, diagnostics),
             targets_input=Path("_report/quant/research/targets.rows.csv"),
             forward_returns_input=Path("_report/quant/research/forward.rows.csv"),
+            benchmark_returns_input=None,
+            benchmark_label="KOSPI",
             horizons=(1,),
             csv_output=Path("_report/quant/research/pnl.rows.csv"),
         )
@@ -126,6 +155,8 @@ class QuantBacktestPnlSmokeTest(unittest.TestCase):
             report_output = root / "pnl.md"
             _write_csv(targets, _target_rows())
             _write_csv(forward_returns, _forward_rows())
+            benchmark_returns = root / "benchmark.rows.csv"
+            _write_csv(benchmark_returns, _benchmark_rows())
 
             with patch(
                 "sys.argv",
@@ -135,6 +166,8 @@ class QuantBacktestPnlSmokeTest(unittest.TestCase):
                     str(targets),
                     "--forward-returns-input",
                     str(forward_returns),
+                    "--benchmark-returns-input",
+                    str(benchmark_returns),
                     "--horizons",
                     "1",
                     "--csv-output",
@@ -152,6 +185,8 @@ class QuantBacktestPnlSmokeTest(unittest.TestCase):
 
         self.assertIn("# Backtest PnL Smoke", report)
         self.assertIn("weighted_return_contribution_pct", rows_text)
+        self.assertIn("weighted_excess_return_contribution_pct", rows_text)
+        self.assertIn("- Benchmark-return input: [[", report)
         self.assertIn("paper_backtest_pnl_smoke_only", rows_text)
         self.assertNotIn(b"\r\n", report_bytes)
         self.assertNotIn(b"\r\n", rows_bytes)
