@@ -28,7 +28,7 @@
 | `satellite_equities.primary_queue` | `MSFT` | Microsoft | `hold` | `research decision.md` | collect filings and write thesis/decision notes |
 | `satellite_equities.primary_queue` | `GOOGL` | Alphabet | `hold` | `research decision.md` | collect filings and write thesis/decision notes |
 | `satellite_equities.primary_queue` | `AMZN` | Amazon | `hold` | `research decision.md` | collect filings and write thesis/decision notes |
-| `satellite_equities.primary_queue` | `META` | Meta Platforms | `hold` | `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
+| `satellite_equities.primary_queue` | `META` | Meta Platforms | `hold` | `research decision.md` | collect filings and write thesis/decision notes |
 | `satellite_equities.primary_queue` | `NVDA` | NVIDIA | `hold` | `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
 | `satellite_equities.primary_queue` | `AVGO` | Broadcom | `hold` | `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |
 | `satellite_equities.secondary_queue` | `AAPL` | Apple | `hold` | `research sec-filing-summary.md`, `research sec-filing-documents.md`, `research sec-filing-sections.md`, `research financials.md`, `research thesis.md`, `research decision.md` | collect filings and write thesis/decision notes |

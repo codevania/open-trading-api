@@ -24,3 +24,4 @@
 - Drafted the first MSFT satellite-equity thesis from SEC filing sections and companyfacts financial evidence.
 - Drafted the GOOGL satellite-equity thesis with advertising, Google Cloud, AI capex, and regulatory risk evidence.
 - Drafted the AMZN satellite-equity thesis with AWS, retail advertising, capex, FCF, and regulatory risk evidence.
+- Drafted the META satellite-equity thesis with FoA advertising, AI monetization, Reality Labs losses, capex, and regulatory risk evidence.
