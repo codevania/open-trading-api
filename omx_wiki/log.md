@@ -38,3 +38,7 @@
 - Drafted the META valuation note from local SEC financials, diluted-share proxy data, and the latest located market close, with AI capex, Reality Labs losses, share-count refresh, commitment review, ETF overlap, tax/account route, and sizing caveats left gated before decision.
 - Drafted the NVDA valuation note from local SEC financials, SEC share-count data, and the latest located market close, with customer concentration, export-control, supply-chain, product-transition, ETF overlap, tax/account route, and sizing caveats left gated before decision.
 - Drafted the AVGO valuation note from local SEC financials, SEC share-count data, the latest located market close, and a post-price Apple supply-deal event source, with debt, customer concentration, VMware conversion, custom AI silicon, ETF overlap, tax/account route, and sizing caveats left gated before decision.
+
+## 2026-07-09
+
+- Expanded the gitignored DI satellite decision-input example to cover every primary U.S. satellite equity candidate and added a test that keeps it aligned with the public candidate manifest.

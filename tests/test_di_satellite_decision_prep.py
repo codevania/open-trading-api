@@ -6,9 +6,23 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import yaml
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = REPO_ROOT / "scripts" / "di_satellite_decision_prep.py"
+MANIFEST_FILE = REPO_ROOT / "_report/di/candidates/core-satellite-candidates.yaml"
+INPUT_EXAMPLE = REPO_ROOT / "_report/di/templates/satellite-decision-inputs.example.yaml"
+REQUIRED_MANUAL_INPUT_FIELDS = {
+    "latest_price_checked",
+    "valuation_range_checked",
+    "reverse_dcf_checked",
+    "etf_overlap_checked",
+    "tax_account_route",
+    "max_position_size",
+    "add_trim_rule",
+    "source_freshness_checked",
+}
 
 
 MANIFEST = """\
@@ -83,6 +97,20 @@ def _write_valuation(path: Path) -> None:
 
 
 class DiSatelliteDecisionPrepTest(unittest.TestCase):
+    def test_input_example_covers_current_primary_queue(self) -> None:
+        manifest = yaml.safe_load(MANIFEST_FILE.read_text(encoding="utf-8"))
+        template = yaml.safe_load(INPUT_EXAMPLE.read_text(encoding="utf-8"))
+
+        primary_symbols = [
+            row["symbol"].upper()
+            for row in manifest["satellite_equities"]["primary_queue"]
+        ]
+        template_inputs = template["inputs"]
+
+        self.assertEqual(primary_symbols, list(template_inputs))
+        for symbol in primary_symbols:
+            self.assertEqual(REQUIRED_MANUAL_INPUT_FIELDS, set(template_inputs[symbol]))
+
     def test_reports_pre_decision_inputs_without_creating_order_intent(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

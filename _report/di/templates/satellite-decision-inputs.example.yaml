@@ -4,13 +4,61 @@ purpose: >
   and fill with current, account-specific, and portfolio-specific checks.
   The private path is gitignored.
 
+# Replace every TODO with a dated source check or an explicit portfolio rule.
+# Keep account route, position size, and any real holdings out of this public
+# example file.
 inputs:
   MSFT:
-    latest_price_checked: TODO
-    valuation_range_checked: TODO
-    reverse_dcf_checked: TODO
-    etf_overlap_checked: TODO
-    tax_account_route: TODO
-    max_position_size: TODO
-    add_trim_rule: TODO
-    source_freshness_checked: TODO
+    latest_price_checked: TODO - price, currency, timestamp, and source
+    valuation_range_checked: TODO - base, bear, and bull range tied to price
+    reverse_dcf_checked: TODO - assumptions required to justify current price
+    etf_overlap_checked: TODO - overlap with core ETFs and satellite ETFs
+    tax_account_route: TODO - taxable, ISA, pension, or IRP route
+    max_position_size: TODO - maximum single-name weight before first lot
+    add_trim_rule: TODO - add, trim, and stop rule
+    source_freshness_checked: TODO - filing, price, holdings, and tax check dates
+  GOOGL:
+    latest_price_checked: TODO - price, currency, timestamp, and source
+    valuation_range_checked: TODO - base, bear, and bull range tied to price
+    reverse_dcf_checked: TODO - assumptions required to justify current price
+    etf_overlap_checked: TODO - overlap with core ETFs and satellite ETFs
+    tax_account_route: TODO - taxable, ISA, pension, or IRP route
+    max_position_size: TODO - maximum single-name weight before first lot
+    add_trim_rule: TODO - add, trim, and stop rule
+    source_freshness_checked: TODO - filing, price, holdings, and tax check dates
+  AMZN:
+    latest_price_checked: TODO - price, currency, timestamp, and source
+    valuation_range_checked: TODO - base, bear, and bull range tied to price
+    reverse_dcf_checked: TODO - assumptions required to justify current price
+    etf_overlap_checked: TODO - overlap with core ETFs and satellite ETFs
+    tax_account_route: TODO - taxable, ISA, pension, or IRP route
+    max_position_size: TODO - maximum single-name weight before first lot
+    add_trim_rule: TODO - add, trim, and stop rule
+    source_freshness_checked: TODO - filing, price, holdings, and tax check dates
+  META:
+    latest_price_checked: TODO - price, currency, timestamp, and source
+    valuation_range_checked: TODO - base, bear, and bull range tied to price
+    reverse_dcf_checked: TODO - assumptions required to justify current price
+    etf_overlap_checked: TODO - overlap with core ETFs and satellite ETFs
+    tax_account_route: TODO - taxable, ISA, pension, or IRP route
+    max_position_size: TODO - maximum single-name weight before first lot
+    add_trim_rule: TODO - add, trim, and stop rule
+    source_freshness_checked: TODO - filing, price, holdings, and tax check dates
+  NVDA:
+    latest_price_checked: TODO - price, currency, timestamp, and source
+    valuation_range_checked: TODO - base, bear, and bull range tied to price
+    reverse_dcf_checked: TODO - assumptions required to justify current price
+    etf_overlap_checked: TODO - overlap with core ETFs and satellite ETFs
+    tax_account_route: TODO - taxable, ISA, pension, or IRP route
+    max_position_size: TODO - maximum single-name weight before first lot
+    add_trim_rule: TODO - add, trim, and stop rule
+    source_freshness_checked: TODO - filing, price, holdings, and tax check dates
+  AVGO:
+    latest_price_checked: TODO - price, currency, timestamp, and source
+    valuation_range_checked: TODO - base, bear, and bull range tied to price
+    reverse_dcf_checked: TODO - assumptions required to justify current price
+    etf_overlap_checked: TODO - overlap with core ETFs and satellite ETFs
+    tax_account_route: TODO - taxable, ISA, pension, or IRP route
+    max_position_size: TODO - maximum single-name weight before first lot
+    add_trim_rule: TODO - add, trim, and stop rule
+    source_freshness_checked: TODO - filing, price, holdings, and tax check dates
