@@ -262,6 +262,40 @@ def _backtest_attribution_gate(path: Path | None) -> Gate | None:
     )
 
 
+def _oos_walk_forward_gate(path: Path | None) -> Gate | None:
+    if path is None:
+        return None
+    text = _read_text(path)
+    if not text:
+        return Gate(
+            "oos_walk_forward_preflight",
+            "hold",
+            "no local OOS/Walk-Forward preflight report supplied",
+            "run quant_oos_walk_forward_preflight.py on current attribution smoke rows",
+        )
+    if (
+        "OOS/WF preflight status: `pass_smoke_plumbing_only`" in text
+        and "Order intent generated: `false`" in text
+        and "OOS readiness: `hold`" in text
+        and "Backtest readiness: `hold`" in text
+    ):
+        evidence = "local OOS/Walk-Forward temporal fold plumbing exists but readiness remains hold"
+        if "broker_fee_override_required=true" in text:
+            evidence += "; broker fee override still required"
+        return Gate(
+            "oos_walk_forward_preflight",
+            "pass_smoke_plumbing_only",
+            evidence,
+            "run production OOS only after Point-in-Time coverage, actual costs, and Backtest engine gates pass",
+        )
+    return Gate(
+        "oos_walk_forward_preflight",
+        "hold",
+        "local OOS/Walk-Forward report is not a recognized smoke-only preflight report",
+        "repair OOS/Walk-Forward preflight before using temporal split diagnostics",
+    )
+
+
 def _status_coverage_gate(status_coverage: str, path: Path | None, lifecycle_gap_report: Path | None) -> Gate:
     text = _read_text(path)
     lifecycle_gap_text = _read_text(lifecycle_gap_report)
@@ -318,6 +352,7 @@ def evaluate_readiness(
     backtest_assumptions_report: Path | None = None,
     benchmark_returns_report: Path | None = None,
     backtest_attribution_report: Path | None = None,
+    oos_walk_forward_report: Path | None = None,
     status_coverage_report: Path | None = None,
     status_lifecycle_gap_report: Path | None = None,
     kis_preflight_report: Path | None,
@@ -414,6 +449,10 @@ def evaluate_readiness(
     if attribution_gate is not None:
         gates.append(attribution_gate)
 
+    oos_gate = _oos_walk_forward_gate(oos_walk_forward_report)
+    if oos_gate is not None:
+        gates.append(oos_gate)
+
     gates.append(_status_coverage_gate(status_coverage, status_coverage_report, status_lifecycle_gap_report))
     gates.extend(
         [
@@ -453,6 +492,7 @@ def evaluate_readiness(
         "backtest_assumptions_report_supplied": backtest_assumptions_report is not None,
         "benchmark_returns_report_supplied": benchmark_returns_report is not None,
         "backtest_attribution_report_supplied": backtest_attribution_report is not None,
+        "oos_walk_forward_report_supplied": oos_walk_forward_report is not None,
         "status_coverage_report_supplied": status_coverage_report is not None,
         "status_lifecycle_gap_report_supplied": status_lifecycle_gap_report is not None,
         "backtest_readiness": "hold",
@@ -479,6 +519,7 @@ def _render_report(
     backtest_assumptions_report: Path | None,
     benchmark_returns_report: Path | None,
     backtest_attribution_report: Path | None,
+    oos_walk_forward_report: Path | None,
     status_coverage_report: Path | None,
     status_lifecycle_gap_report: Path | None,
     kis_preflight_report: Path | None,
@@ -496,6 +537,7 @@ def _render_report(
         f"- Backtest assumptions report: {_wikilink(backtest_assumptions_report) if backtest_assumptions_report else '`not_supplied`'}",
         f"- Benchmark returns report: {_wikilink(benchmark_returns_report) if benchmark_returns_report else '`not_supplied`'}",
         f"- Backtest attribution smoke report: {_wikilink(backtest_attribution_report) if backtest_attribution_report else '`not_supplied`'}",
+        f"- OOS/Walk-Forward preflight report: {_wikilink(oos_walk_forward_report) if oos_walk_forward_report else '`not_supplied`'}",
         f"- Status coverage audit report: {_wikilink(status_coverage_report) if status_coverage_report else '`not_supplied`'}",
         f"- Status lifecycle gap report: {_wikilink(status_lifecycle_gap_report) if status_lifecycle_gap_report else '`not_supplied`'}",
         f"- KIS preflight report: {_wikilink(kis_preflight_report) if kis_preflight_report else '`not_supplied`'}",
@@ -571,6 +613,7 @@ def main() -> int:
     parser.add_argument("--backtest-assumptions-report", type=Path)
     parser.add_argument("--benchmark-returns-report", type=Path)
     parser.add_argument("--backtest-attribution-report", type=Path)
+    parser.add_argument("--oos-walk-forward-report", type=Path)
     parser.add_argument("--status-coverage-report", type=Path)
     parser.add_argument("--status-lifecycle-gap-report", type=Path)
     parser.add_argument("--kis-preflight-report", type=Path)
@@ -595,6 +638,7 @@ def main() -> int:
             backtest_assumptions_report=args.backtest_assumptions_report,
             benchmark_returns_report=args.benchmark_returns_report,
             backtest_attribution_report=args.backtest_attribution_report,
+            oos_walk_forward_report=args.oos_walk_forward_report,
             status_coverage_report=args.status_coverage_report,
             status_lifecycle_gap_report=args.status_lifecycle_gap_report,
             kis_preflight_report=args.kis_preflight_report,
@@ -617,6 +661,7 @@ def main() -> int:
         backtest_assumptions_report=args.backtest_assumptions_report,
         benchmark_returns_report=args.benchmark_returns_report,
         backtest_attribution_report=args.backtest_attribution_report,
+        oos_walk_forward_report=args.oos_walk_forward_report,
         status_coverage_report=args.status_coverage_report,
         status_lifecycle_gap_report=args.status_lifecycle_gap_report,
         kis_preflight_report=args.kis_preflight_report,

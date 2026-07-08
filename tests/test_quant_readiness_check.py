@@ -285,6 +285,36 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertEqual(summary["backtest_readiness"], "hold")
         self.assertEqual(summary["live_trading_readiness"], "blocked")
 
+    def test_oos_walk_forward_report_is_preflight_only_gate(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            report = Path(tmp) / "oos.md"
+            report.write_text(
+                "\n".join(
+                    [
+                        "- OOS/WF preflight status: `pass_smoke_plumbing_only`",
+                        "- OOS readiness: `hold`",
+                        "- Backtest readiness: `hold`",
+                        "- Order intent generated: `false`",
+                        "- It inherits assumption-only costs; `broker_fee_override_required=true` still blocks production interpretation.",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            gates, summary = evaluate_readiness(
+                liquidity_rows=_liquidity_rows(),
+                signal_rows=_signal_rows(),
+                oos_walk_forward_report=report,
+                kis_preflight_report=None,
+                status_coverage="current_snapshot_smoke",
+            )
+        by_name = {gate.name: gate for gate in gates}
+
+        self.assertEqual(by_name["oos_walk_forward_preflight"].status, "pass_smoke_plumbing_only")
+        self.assertIn("broker fee override still required", by_name["oos_walk_forward_preflight"].evidence)
+        self.assertTrue(summary["oos_walk_forward_report_supplied"])
+        self.assertEqual(summary["backtest_readiness"], "hold")
+        self.assertEqual(summary["live_trading_readiness"], "blocked")
+
     def test_historical_status_gate_still_does_not_authorize_trading(self) -> None:
         gates, summary = evaluate_readiness(
             liquidity_rows=_liquidity_rows(),
@@ -380,6 +410,7 @@ class QuantReadinessCheckTest(unittest.TestCase):
             assumptions_report = root / "assumptions.md"
             benchmark_report = root / "benchmark.md"
             attribution_report = root / "attribution.md"
+            oos_report = root / "oos.md"
             status_coverage_report = root / "status-coverage.md"
             status_lifecycle_gap_report = root / "status-lifecycle-gaps.md"
             output = root / "readiness.md"
@@ -407,6 +438,10 @@ class QuantReadinessCheckTest(unittest.TestCase):
                 "- Attribution status: `pass_smoke_assumption_only`\n- Order intent generated: `false`\n- Backtest readiness: `hold`\n",
                 encoding="utf-8",
             )
+            oos_report.write_text(
+                "- OOS/WF preflight status: `pass_smoke_plumbing_only`\n- OOS readiness: `hold`\n- Order intent generated: `false`\n- Backtest readiness: `hold`\n",
+                encoding="utf-8",
+            )
             status_coverage_report.write_text("- Coverage status: `hold`\n", encoding="utf-8")
             status_lifecycle_gap_report.write_text("| Missing release/resume groups | 3 |\n", encoding="utf-8")
 
@@ -432,6 +467,8 @@ class QuantReadinessCheckTest(unittest.TestCase):
                     str(benchmark_report),
                     "--backtest-attribution-report",
                     str(attribution_report),
+                    "--oos-walk-forward-report",
+                    str(oos_report),
                     "--status-coverage-report",
                     str(status_coverage_report),
                     "--status-lifecycle-gap-report",
@@ -457,10 +494,12 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertIn("| `backtest_assumptions` | `pass_assumption_only` |", report)
         self.assertIn("| `benchmark_returns_smoke` | `pass_smoke` |", report)
         self.assertIn("| `backtest_attribution_smoke` | `pass_smoke_assumption_only` |", report)
+        self.assertIn("| `oos_walk_forward_preflight` | `pass_smoke_plumbing_only` |", report)
         self.assertIn("| `point_in_time_status_coverage` | `hold` |", report)
         self.assertIn("- Backtest assumptions report: [[", report)
         self.assertIn("- Benchmark returns report: [[", report)
         self.assertIn("- Backtest attribution smoke report: [[", report)
+        self.assertIn("- OOS/Walk-Forward preflight report: [[", report)
         self.assertIn("- Status coverage audit report: [[", report)
         self.assertIn("- Status lifecycle gap report: [[", report)
         self.assertIn("lifecycle missing release/resume groups=3", report)
