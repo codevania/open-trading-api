@@ -10,7 +10,7 @@ Required order:
 2. Write `thesis.md` with a clear invalidation rule.
 3. Write `valuation.md` with latest price, valuation range, reverse DCF or scenario assumptions, ETF overlap, tax/account route, maximum position size, add/trim rule, and source freshness.
 4. Run [[scripts/di_etf_holdings_collect.py|di_etf_holdings_collect.py]] to collect supported official ETF holdings evidence and review [[_report/di/research/ETF-COMPARISON/etf-holdings-source-status|etf-holdings-source-status.md]] for sources that still need manual official confirmation.
-5. Copy [[_report/di/templates/etf-overlap-inputs.example.yaml|etf-overlap-inputs.example.yaml]] to [[_report/private/di/etf-overlap-inputs.yaml|etf-overlap-inputs.yaml]], fill official ETF holding weights plus private ETF portfolio weights, and run [[scripts/di_etf_overlap_check.py|di_etf_overlap_check.py]].
+5. Run [[scripts/di_etf_overlap_input_prepare.py|di_etf_overlap_input_prepare.py]] to prefill supported official ETF holding weights into [[_report/private/di/etf-overlap-inputs.yaml|etf-overlap-inputs.yaml]], then fill any remaining official ETF weights plus private ETF portfolio weights and run [[scripts/di_etf_overlap_check.py|di_etf_overlap_check.py]].
 6. Copy [[_report/di/templates/satellite-decision-inputs.example.yaml|satellite-decision-inputs.example.yaml]] to [[_report/private/di/satellite-decision-inputs.yaml|satellite-decision-inputs.yaml]] and fill account-specific or portfolio-specific checks there.
 7. Run [[scripts/di_satellite_decision_prep.py|di_satellite_decision_prep.py]] and confirm the candidate is no longer `needs_decision_inputs`.
 8. Only then write a checked `decision.md`.

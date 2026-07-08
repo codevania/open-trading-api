@@ -2,7 +2,8 @@ version: 1
 purpose: >
   Example only. Copy to _report/private/di/etf-overlap-inputs.yaml
   and replace TODO values with official ETF holdings and private ETF portfolio
-  weights. The private path is gitignored.
+  weights, or generate a private draft with scripts/di_etf_overlap_input_prepare.py.
+  The private path is gitignored.
 
 # Use percent units. Example: 40 means 40% of the investable portfolio.
 # Use 0 for an ETF that is deliberately not held.

@@ -45,3 +45,4 @@
 - Added a DI ETF overlap input template and calculator so official ETF holding weights plus private ETF portfolio weights can feed the `etf_overlap_checked` blocker without exposing account details.
 - Linked the ETF overlap checker into the ETF and company research routines so future DI sessions can resume the blocker-clearing flow from the repo docs.
 - Added a DI ETF holdings collector and source-status report: QQQ is wired to the official Invesco holdings API, while VOO/VTI/VT remain manual official-source checks until a stable Vanguard holdings endpoint is confirmed.
+- Added a DI ETF overlap input preparer so supported official holdings can prefill the gitignored private overlap YAML while personal ETF weights remain outside Git.
