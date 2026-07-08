@@ -22,6 +22,7 @@ DEFAULT_CANDIDATE_FILE = Path("_report/di/candidates/core-satellite-candidates.y
 DEFAULT_RESEARCH_ROOT = Path("_report/di/research")
 
 UNCHECKED_TOKENS = ("todo", "verify", "check", "must be checked", "needs_", "null")
+FILE_UNCHECKED_TOKENS = ("todo", "verify", "must be checked", "needs_", "null", "pending")
 MIN_RESEARCH_LINES = {
     "sec-filing-summary.md": 6,
     "sec-filing-documents.md": 6,
@@ -98,12 +99,13 @@ def _meaningful_lines(text: str) -> list[str]:
     lines: list[str] = []
     for raw_line in text.splitlines():
         line = raw_line.strip()
+        lowered = line.lower()
         if not line or line.startswith("#"):
             continue
         if any(pattern.match(line) for pattern in PLACEHOLDER_LINE_PATTERNS):
             if not _is_checked_decision_line(line):
                 continue
-        if line.lower() in UNCHECKED_TOKENS:
+        if any(token in lowered for token in FILE_UNCHECKED_TOKENS):
             continue
         lines.append(line)
     return lines

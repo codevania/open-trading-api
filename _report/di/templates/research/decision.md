@@ -1,50 +1,67 @@
 # Decision
 
-## 메타
+## Metadata
 
-- Symbol:
-- Company/ETF:
-- 작성일:
-- 결정:
-- 검토자:
+- Symbol: TODO
+- Company/ETF: TODO
+- Prepared on: TODO
+- Reviewer: TODO
+- Source date: TODO
+- Order intent generated: `false`
 
-## 결정
+## Pre-Decision Checklist
 
-- [ ] 관심
-- [ ] 보류
-- [ ] 소액 매수 후보
-- [ ] 추가 매수 후보
-- [ ] 비중 축소 후보
-- [ ] 제외
+- [ ] `thesis.md` is filled and includes an invalidation rule.
+- [ ] `financials.md` is filled from primary source data.
+- [ ] `valuation.md` is filled with latest price, scenario range, and reverse DCF or expectation check.
+- [ ] ETF overlap is checked against core and satellite holdings.
+- [ ] Tax/account route is checked.
+- [ ] Maximum position size, add rule, and trim rule are written.
+- [ ] Source freshness is recorded.
 
-## 근거
+## Decision
 
-1.
-2.
-3.
+- [ ] Watch only
+- [ ] Hold / wait
+- [ ] Small buy candidate
+- [ ] Add candidate
+- [ ] Trim candidate
+- [ ] Exclude
 
-## 실행 조건
+## Rationale
 
-- 가격 조건:
-- 실적 조건:
-- 수급/차트 조건:
-- 이벤트 조건:
+1. TODO
+2. TODO
+3. TODO
 
-## 무효화 조건
+## Execution Conditions
 
--
+- Price condition: TODO
+- Valuation condition: TODO
+- Fundamental condition: TODO
+- Event condition: TODO
+- Portfolio exposure condition: TODO
 
-## 포지션 관리
+## Risk And Invalidation
 
-- 초기 비중:
-- 최대 비중:
-- 추가 매수 조건:
-- 축소/매도 조건:
+- Thesis invalidation: TODO
+- Valuation invalidation: TODO
+- Portfolio risk limit: TODO
+- Data freshness limit: TODO
 
-## 다음 점검일
+## Position Management
 
--
+- Initial weight: TODO
+- Maximum weight: TODO
+- Add condition: TODO
+- Trim/sell condition: TODO
 
-## 원천
+## Next Review
 
--
+- Review trigger: TODO
+- Review date: TODO
+- Data to refresh: TODO
+
+## Sources
+
+- TODO

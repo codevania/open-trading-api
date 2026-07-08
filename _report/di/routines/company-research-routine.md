@@ -1,5 +1,20 @@
 # DI Company Research Routine
 
+## Current Gate Order
+
+For satellite equities, do not move directly from `thesis.md` to `decision.md`.
+
+Required order:
+
+1. Collect source evidence: SEC/DART filings, source documents, section maps, and financial summaries.
+2. Write `thesis.md` with a clear invalidation rule.
+3. Write `valuation.md` with latest price, valuation range, reverse DCF or scenario assumptions, ETF overlap, tax/account route, maximum position size, add/trim rule, and source freshness.
+4. Run `scripts/di_satellite_decision_prep.py` and confirm the candidate is no longer `needs_decision_inputs`.
+5. Only then write a checked `decision.md`.
+6. Run `scripts/di_candidate_evidence_check.py` before watchlist or active position review.
+
+This process creates research notes only. It does not create buy, sell, hold, or order intent.
+
 ## 목적
 
 재량투자 후보 기업을 같은 절차로 검토하기 위한 루틴이다. KIS MCP는 시세와 수급 확인에 사용하고, 재무제표와 공시는 DART 또는 SEC EDGAR 원문을 우선한다.

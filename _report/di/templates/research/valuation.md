@@ -1,45 +1,83 @@
 # Valuation
 
-## 메타
+## Metadata
 
-- Symbol:
-- Company:
-- 작성일:
-- 기준 주가:
-- 기준 환율:
-- 원천:
+- Symbol: TODO
+- Company: TODO
+- Prepared on: TODO
+- Base currency: TODO
+- Source date: TODO
+- Order intent generated: `false`
 
-## 현재 밸류에이션
+## Market Snapshot
 
-| 지표 | 값 | 비고 |
-|---|---:|---|
-| 시가총액 |  |  |
-| EV |  |  |
-| PER |  |  |
-| Forward PER |  |  |
-| EV/EBITDA |  |  |
-| FCF Yield |  |  |
+| Item | Value | Source |
+| --- | ---: | --- |
+| Latest price | TODO | TODO |
+| Market cap | TODO | TODO |
+| Enterprise value | TODO | TODO |
+| Net cash / debt | TODO | TODO |
+| Shares outstanding | TODO | TODO |
 
-## 시나리오
+## Current Multiples
 
-| 시나리오 | 핵심 가정 | 적정 범위 | 리스크 |
-|---|---|---:|---|
-| Bull |  |  |  |
-| Base |  |  |  |
-| Bear |  |  |  |
+| Metric | Current | 3Y/5Y reference | Note |
+| --- | ---: | ---: | --- |
+| P/E | TODO | TODO | TODO |
+| Forward P/E | TODO | TODO | TODO |
+| EV/EBIT | TODO | TODO | TODO |
+| EV/EBITDA | TODO | TODO | TODO |
+| EV/FCF | TODO | TODO | TODO |
+| FCF yield | TODO | TODO | TODO |
 
-## 비교군
+## Scenario Range
 
-| 기업 | 성장률 | 영업이익률 | PER | EV/EBITDA | 비고 |
-|---|---:|---:|---:|---:|---|
-|  |  |  |  |  |  |
+| Scenario | Key assumptions | Fair value range | Main risk |
+| --- | --- | ---: | --- |
+| Bull | TODO | TODO | TODO |
+| Base | TODO | TODO | TODO |
+| Bear | TODO | TODO | TODO |
 
-## 판단
+## Reverse DCF / Expectation Check
 
-- 현재 가격이 반영한 기대:
-- 안전마진:
-- 추가 확인:
+- Revenue growth implied by current price: TODO
+- Margin implied by current price: TODO
+- Reinvestment / capex assumption: TODO
+- Terminal growth or exit multiple: TODO
+- Safety margin: TODO
 
-## 무효화 조건
+## ETF Overlap
 
--
+- Core ETF overlap: TODO
+- Satellite ETF overlap: TODO
+- Existing single-name exposure: TODO
+- Double-counting note: TODO
+
+## Tax And Account Route
+
+- Account route: TODO
+- FX assumption: TODO
+- Dividend withholding / local tax note: TODO
+- Rebalancing tax note: TODO
+
+## Position Sizing
+
+- First lot size: TODO
+- Maximum single-name weight: TODO
+- Add rule: TODO
+- Trim rule: TODO
+- Stop adding rule: TODO
+
+## Source Freshness
+
+- Latest filing date checked: TODO
+- Financial data date checked: TODO
+- Price date checked: TODO
+- ETF holdings date checked: TODO
+- Tax/account source date checked: TODO
+
+## Decision Handoff
+
+- Valuation conclusion: TODO
+- Required follow-up before `decision.md`: TODO
+- Invalidation link from `thesis.md`: TODO

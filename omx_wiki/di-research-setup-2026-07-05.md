@@ -5,9 +5,12 @@
 - `scripts/di_etf_compare.py`: renders Core ETF, Korea-listed ETF verification queue, and US tech satellite candidates from `_report/di/candidates/core-satellite-candidates.yaml`
 - `scripts/di_candidate_evidence_check.py`: checks whether each candidate has enough issuer, fee, tax/account, thesis, and decision evidence before watchlist promotion
 - `scripts/di_etf_source_collect.py`: preserves official ETF issuer source pages from the candidate manifest under ignored raw storage before any facts are copied into research notes
+- `scripts/di_satellite_decision_prep.py`: checks primary satellite equities before `decision.md` so valuation, latest price, ETF overlap, tax/account route, position sizing, add/trim rules, and source freshness are not skipped
 - Stock thesis and decision evidence must contain filled research content; placeholder templates and unchecked decisions remain blocked.
+- Stock valuation evidence must also be filled; TODO-heavy valuation templates remain blocked.
 - Suggested output: `_report/di/research/ETF-COMPARISON/etf-checklist.md`
 - Evidence gate output: `_report/di/research/ETF-COMPARISON/evidence-gate.md`
+- Satellite decision-prep output: `_report/di/research/ETF-COMPARISON/satellite-decision-prep.md`
 - Domestic ETF source URL checks: `_report/di/research/ETF-COMPARISON/domestic-etf-source-url-check.md`
 - The candidate manifest is a research queue, not a buy list. Move candidates into `_report/di/watchlist.yaml` only after checklist and decision notes exist.
 
