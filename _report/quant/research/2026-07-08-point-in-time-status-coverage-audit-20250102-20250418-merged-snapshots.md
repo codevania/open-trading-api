@@ -4,6 +4,7 @@
 - Status events: [[_report/quant/data/point_in_time_status_events/2026-07-08-kind-current-status-events.merged-20260703-20260708.csv|_report/quant/data/point_in_time_status_events/2026-07-08-kind-current-status-events.merged-20260703-20260708.csv]]
 - Replayed market-data: [[_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250418-merged-snapshots.rows.csv|_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250418-merged-snapshots.rows.csv]]
 - Source coverage manifest: `not_supplied`
+- Source policy: [[_report/quant/data/point_in_time_status_sources.yaml|_report/quant/data/point_in_time_status_sources.yaml]]
 - Output: [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots.rows.csv|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots.rows.csv]]
 - Coverage mode: `current_snapshot_smoke`
 - Coverage status: `hold`
@@ -30,6 +31,8 @@
 | Replay matched market rows | 198137 |
 | Replay missing market rows | 0 |
 | Source coverage manifest rows | 0 |
+| Source coverage manifest row failures | 0 |
+| Source coverage manifest validation | `not_supplied` |
 | Source coverage missing status types | `managed_issue,trading_halt,market_alert,delisting` |
 | Rows with any status-event code | 18320 |
 | Rows with applied status event | 1646 |
@@ -80,5 +83,5 @@
 
 - Event-code ratios are diagnostic; a stock with no status event is not automatically a data gap.
 - Current snapshot events can exclude active issues, but they do not prove historical state transitions.
-- `historical_complete` also requires a source coverage manifest that covers the market-data window for every required status type.
+- `historical_complete` also requires a source coverage manifest that passes source-policy/raw-path validation and covers the market-data window for every required status type.
 - Keep `Backtest readiness` at `hold` until source coverage is reproducible for every rebalance date.
