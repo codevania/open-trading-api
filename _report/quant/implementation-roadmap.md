@@ -75,6 +75,8 @@ Baseline 2026-07-08 72-date smoke artifacts:
 - [[_report/quant/research/2026-07-09-kind-status-events-merged-market-enrich-81d|_report/quant/research/2026-07-09-kind-status-events-merged-market-enrich-81d.md]]
 - [[_report/quant/research/2026-07-09-kind-status-events-merged-market-enriched-81d-validation|_report/quant/research/2026-07-09-kind-status-events-merged-market-enriched-81d-validation.md]]
 - [[_report/quant/research/2026-07-09-kind-status-events-merged-market-enriched-81d-validation.rows.csv|_report/quant/research/2026-07-09-kind-status-events-merged-market-enriched-81d-validation.rows.csv]]
+- [[_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-market-enriched-81d|_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-market-enriched-81d.md]]
+- [[_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-market-enriched-81d.rows.csv]]
 - [[_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots-market-enriched-81d.md]]
 - [[_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv]]
 - [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d.md]]
@@ -899,6 +901,8 @@ Status coverage audit:
 - [[tests/test_quant_point_in_time_status_source_manifest_validate.py|tests/test_quant_point_in_time_status_source_manifest_validate.py]]
 - [[scripts/quant_point_in_time_status_lifecycle_gap_report.py|scripts/quant_point_in_time_status_lifecycle_gap_report.py]]
 - [[tests/test_quant_point_in_time_status_lifecycle_gap_report.py|tests/test_quant_point_in_time_status_lifecycle_gap_report.py]]
+- [[scripts/quant_point_in_time_status_unknown_market_report.py|scripts/quant_point_in_time_status_unknown_market_report.py]]
+- [[tests/test_quant_point_in_time_status_unknown_market_report.py|tests/test_quant_point_in_time_status_unknown_market_report.py]]
 - [[_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221|_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221.md]]
 - [[_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221.rows.csv|_report/quant/research/2026-07-06-point-in-time-status-coverage-audit-20250102-20250221.rows.csv]]
 - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250307.md]]
@@ -914,13 +918,15 @@ Status coverage audit:
 - [[_report/quant/research/2026-07-09-kind-status-events-merged-market-enrich-81d|_report/quant/research/2026-07-09-kind-status-events-merged-market-enrich-81d.md]]
 - [[_report/quant/research/2026-07-09-kind-status-events-merged-market-enriched-81d-validation|_report/quant/research/2026-07-09-kind-status-events-merged-market-enriched-81d-validation.md]]
 - [[_report/quant/research/2026-07-09-kind-status-events-merged-market-enriched-81d-validation.rows.csv|_report/quant/research/2026-07-09-kind-status-events-merged-market-enriched-81d-validation.rows.csv]]
+- [[_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-market-enriched-81d|_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-market-enriched-81d.md]]
+- [[_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-market-enriched-81d.rows.csv]]
 - [[_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots-market-enriched-81d.md]]
 - [[_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv]]
 - [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots.md]]
 - [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots.rows.csv]]
 - [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d.md]]
 - [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv]]
-- Latest market enrichment: 81-date local market-data resolves `1` additional merged status-event market label; merged events now have `47` `UNKNOWN` market rows, down from `48`.
+- Latest market enrichment: 81-date local market-data resolves `1` additional merged status-event market label; merged events now have `47` `UNKNOWN` market rows across `31` codes, down from `48`. Unknown-market target rows are split by status type as `trading_halt=28`, `delisting=9`, `managed_issue=6`, and `market_alert=4`.
 - Coverage status: `hold`
 - Coverage mode: `current_snapshot_smoke`
 - Replayed rows: `198137`; replay missing rows: `0`
