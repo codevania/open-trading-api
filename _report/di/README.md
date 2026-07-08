@@ -17,9 +17,13 @@ _report/di/
   watchlist.yaml                  # 개인 관찰종목, git ignore
   templates/
     daily-report.md
+    etf-overlap-inputs.example.yaml
+    satellite-decision-inputs.example.yaml
   routines/
     daily-report-routine.md
     daily-learning-routine.md
+    etf-research-routine.md
+    company-research-routine.md
     codex-automation-prompt.md
   daily/
     YYYY/
@@ -45,6 +49,7 @@ _report/di/
 4. 원천 응답은 공용 저장소인 `_report/raw/YYYY/YYYY-MM-DD/SYMBOL/`에 저장한다.
 5. 사람이 읽는 리포트는 `_report/di/daily/YYYY/YYYY-MM-DD.md`에 저장한다.
 6. 판단 변경은 [[_report/di/decisions/decision-log|_report/di/decisions/decision-log.md]]에 누적한다.
+7. ETF/개별주 후보 승격은 [[_report/di/routines/etf-research-routine|etf-research-routine.md]]와 [[_report/di/routines/company-research-routine|company-research-routine.md]]의 gate를 통과한 뒤에만 검토한다.
 
 ## 학습 일지
 
