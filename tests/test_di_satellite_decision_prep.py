@@ -61,6 +61,27 @@ def _write_financials(path: Path) -> None:
     )
 
 
+def _write_valuation(path: Path) -> None:
+    path.write_text(
+        """\
+# Valuation
+
+- Symbol: MSFT
+- Source: latest market snapshot and SEC filing financials
+- Order intent generated: `false`
+- Latest price is recorded with timestamp.
+- Market cap is recorded.
+- Base scenario valuation range is recorded.
+- Bear scenario valuation range is recorded.
+- Reverse DCF assumption set is recorded.
+- ETF overlap is recorded.
+- Tax/account route is recorded.
+- Maximum position size is recorded.
+""",
+        encoding="utf-8",
+    )
+
+
 class DiSatelliteDecisionPrepTest(unittest.TestCase):
     def test_reports_pre_decision_inputs_without_creating_order_intent(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -170,6 +191,59 @@ class DiSatelliteDecisionPrepTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("pending: valuation.md+decision.md", result.stdout)
             self.assertIn("`valuation.md`", result.stdout)
+
+    def test_private_input_file_can_clear_manual_inputs(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "candidates.yaml"
+            input_file = root / "inputs.yaml"
+            research_root = root / "research"
+            msft = research_root / "MSFT"
+            msft.mkdir(parents=True)
+            manifest.write_text(MANIFEST, encoding="utf-8")
+            input_file.write_text(
+                """\
+version: 1
+inputs:
+  MSFT:
+    latest_price_checked: "2026-07-08 source recorded"
+    valuation_range_checked: "base bear bull range recorded"
+    reverse_dcf_checked: "scenario assumptions recorded"
+    etf_overlap_checked: "core and satellite overlap recorded"
+    tax_account_route: "taxable account route recorded"
+    max_position_size: "single-name cap recorded"
+    add_trim_rule: "add and trim rule recorded"
+    source_freshness_checked: "source dates recorded"
+""",
+                encoding="utf-8",
+            )
+            _write_thesis(msft / "thesis.md")
+            _write_financials(msft / "financials.md")
+            _write_valuation(msft / "valuation.md")
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--candidate-file",
+                    str(manifest),
+                    "--research-root",
+                    str(research_root),
+                    "--input-file",
+                    str(input_file),
+                    "--run-date",
+                    "2026-07-08",
+                ],
+                cwd=REPO_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("| Ready for checked decision | 1 |", result.stdout)
+            self.assertIn("| `primary_queue` | `MSFT` | Microsoft | `ready_for_checked_decision` |", result.stdout)
+            self.assertIn("write checked decision.md with no order intent", result.stdout)
 
     def test_rejects_non_object_manifest(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

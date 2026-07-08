@@ -31,3 +31,4 @@
 - Tightened the DI candidate evidence gate so satellite equities also require `valuation.md` before watchlist or active position review.
 - Updated valuation and decision templates to match the satellite decision-prep gate, and tightened placeholder filtering so TODO-heavy valuation notes cannot pass promotion.
 - Tightened the DI satellite decision-prep report so copied TODO-heavy valuation templates still remain pending before `decision.md`.
+- Added a gitignored DI satellite decision-input path and example template so account route, sizing, overlap, and freshness checks stay separate from the public candidate manifest.

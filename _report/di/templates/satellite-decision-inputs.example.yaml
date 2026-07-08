@@ -1,0 +1,16 @@
+version: 1
+purpose: >
+  Example only. Copy to _report/private/di/satellite-decision-inputs.yaml
+  and fill with current, account-specific, and portfolio-specific checks.
+  The private path is gitignored.
+
+inputs:
+  MSFT:
+    latest_price_checked: TODO
+    valuation_range_checked: TODO
+    reverse_dcf_checked: TODO
+    etf_overlap_checked: TODO
+    tax_account_route: TODO
+    max_position_size: TODO
+    add_trim_rule: TODO
+    source_freshness_checked: TODO

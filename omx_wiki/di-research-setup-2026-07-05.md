@@ -8,6 +8,7 @@
 - `scripts/di_satellite_decision_prep.py`: checks primary satellite equities before `decision.md` so valuation, latest price, ETF overlap, tax/account route, position sizing, add/trim rules, and source freshness are not skipped
 - Stock thesis and decision evidence must contain filled research content; placeholder templates and unchecked decisions remain blocked.
 - Stock valuation evidence must also be filled; TODO-heavy valuation templates remain blocked.
+- Account-specific and portfolio-specific decision inputs should be kept in `_report/private/di/satellite-decision-inputs.yaml`, using `_report/di/templates/satellite-decision-inputs.example.yaml` as the copy source.
 - Suggested output: `_report/di/research/ETF-COMPARISON/etf-checklist.md`
 - Evidence gate output: `_report/di/research/ETF-COMPARISON/evidence-gate.md`
 - Satellite decision-prep output: `_report/di/research/ETF-COMPARISON/satellite-decision-prep.md`

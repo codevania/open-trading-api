@@ -192,6 +192,7 @@ _report/holdings*.csv
 _report/di/watchlist.yaml
 _report/di/portfolio.yaml
 _report/di/holdings*.csv
+# DI decision-prep inputs may include account route, sizing, holdings overlap, or other personal portfolio checks.
 _report/private/**
 _report/raw/**
 !_report/raw/

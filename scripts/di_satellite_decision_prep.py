@@ -19,6 +19,7 @@ except Exception:
 
 DEFAULT_CANDIDATE_FILE = Path("_report/di/candidates/core-satellite-candidates.yaml")
 DEFAULT_RESEARCH_ROOT = Path("_report/di/research")
+DEFAULT_DECISION_INPUT_FILE = Path("_report/private/di/satellite-decision-inputs.yaml")
 
 REQUIRED_RESEARCH_FILES = ("financials.md", "thesis.md", "valuation.md")
 OPTIONAL_STAGE_FILES = ("decision.md",)
@@ -62,6 +63,12 @@ def _load_yaml(path: Path) -> dict[str, Any]:
     if not isinstance(payload, dict):
         raise ValueError(f"{path}: expected YAML object")
     return payload
+
+
+def _load_optional_yaml(path: Path | None) -> dict[str, Any]:
+    if path is None or not path.exists():
+        return {}
+    return _load_yaml(path)
 
 
 def _as_list(value: Any) -> list[Any]:
@@ -129,7 +136,22 @@ def _research_state(symbol: str, research_root: Path) -> str:
     return f"present: {present_text}; pending: {missing_text}"
 
 
-def _missing_inputs(row: dict[str, Any], symbol: str, research_root: Path) -> list[str]:
+def _manual_input_row(row: dict[str, Any], symbol: str, input_payload: dict[str, Any]) -> dict[str, Any]:
+    merged = dict(row)
+    nested = row.get("decision_inputs")
+    if isinstance(nested, dict):
+        merged.update(nested)
+    inputs = input_payload.get("inputs") or input_payload.get("symbols") or {}
+    if not isinstance(inputs, dict):
+        raise ValueError("decision input file: expected inputs object")
+    external = inputs.get(symbol) or inputs.get(symbol.upper()) or inputs.get(symbol.lower()) or {}
+    if not isinstance(external, dict):
+        raise ValueError(f"decision input file: expected object for {symbol}")
+    merged.update(external)
+    return merged
+
+
+def _missing_inputs(row: dict[str, Any], symbol: str, research_root: Path, input_payload: dict[str, Any]) -> list[str]:
     missing: list[str] = []
     for filename in REQUIRED_RESEARCH_FILES:
         if not _research_file_present(symbol, research_root, filename):
@@ -137,8 +159,9 @@ def _missing_inputs(row: dict[str, Any], symbol: str, research_root: Path) -> li
     thesis_path = research_root / symbol / "thesis.md"
     if not _has_invalidation_rule(thesis_path):
         missing.append("invalidation_rule")
+    manual_row = _manual_input_row(row, symbol, input_payload)
     for field, label in MANUAL_DECISION_INPUTS.items():
-        if not _is_filled(row.get(field)):
+        if not _is_filled(manual_row.get(field)):
             missing.append(label)
     return missing
 
@@ -162,13 +185,15 @@ def evaluate_satellite_decision_prep(
     *,
     research_root: Path,
     queue: str,
+    input_payload: dict[str, Any] | None = None,
 ) -> list[SatelliteDecisionPrep]:
     results: list[SatelliteDecisionPrep] = []
+    input_payload = input_payload or {}
     for queue_name, row in _candidate_rows(payload, queue):
         symbol = _text(row.get("symbol")).upper()
         if not symbol:
             raise ValueError(f"satellite_equities.{queue_name}: missing symbol")
-        required_inputs = tuple(_missing_inputs(row, symbol, research_root))
+        required_inputs = tuple(_missing_inputs(row, symbol, research_root, input_payload))
         status = "ready_for_checked_decision" if not required_inputs else "needs_decision_inputs"
         results.append(
             SatelliteDecisionPrep(
@@ -201,6 +226,7 @@ def render_report(
     *,
     candidate_file: Path,
     research_root: Path,
+    input_file: Path | None,
     run_date: str,
     queue: str,
 ) -> str:
@@ -211,6 +237,7 @@ def render_report(
         f"- Run date: `{run_date}`",
         f"- Candidate manifest: `{candidate_file.as_posix()}`",
         f"- Research root: `{research_root.as_posix()}`",
+        f"- Decision input file: `{input_file.as_posix() if input_file else 'not configured'}`",
         f"- Queue scope: `{queue}`",
         "- Interpretation: pre-decision checklist only; no buy, sell, hold, or order intent is generated",
         "- Order intent generated: `false`",
@@ -273,6 +300,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Prepare DI satellite equities before writing decision notes.")
     parser.add_argument("--candidate-file", type=Path, default=DEFAULT_CANDIDATE_FILE)
     parser.add_argument("--research-root", type=Path, default=DEFAULT_RESEARCH_ROOT)
+    parser.add_argument("--input-file", type=Path, default=DEFAULT_DECISION_INPUT_FILE)
     parser.add_argument("--queue", choices=("primary_queue", "secondary_queue", "all"), default="primary_queue")
     parser.add_argument("--run-date", default=_now_kst().date().isoformat())
     parser.add_argument("--output", type=Path, help="Markdown report output path. Prints to stdout when omitted.")
@@ -280,11 +308,18 @@ def main() -> int:
 
     try:
         payload = _load_yaml(args.candidate_file)
-        rows = evaluate_satellite_decision_prep(payload, research_root=args.research_root, queue=args.queue)
+        input_payload = _load_optional_yaml(args.input_file)
+        rows = evaluate_satellite_decision_prep(
+            payload,
+            research_root=args.research_root,
+            queue=args.queue,
+            input_payload=input_payload,
+        )
         report = render_report(
             rows,
             candidate_file=args.candidate_file,
             research_root=args.research_root,
+            input_file=args.input_file,
             run_date=args.run_date,
             queue=args.queue,
         )
