@@ -25,3 +25,4 @@
 - Drafted the GOOGL satellite-equity thesis with advertising, Google Cloud, AI capex, and regulatory risk evidence.
 - Drafted the AMZN satellite-equity thesis with AWS, retail advertising, capex, FCF, and regulatory risk evidence.
 - Drafted the META satellite-equity thesis with FoA advertising, AI monetization, Reality Labs losses, capex, and regulatory risk evidence.
+- Drafted the NVDA satellite-equity thesis with Data Center AI infrastructure, Blackwell, customer concentration, supply chain, and export-control risk evidence.
