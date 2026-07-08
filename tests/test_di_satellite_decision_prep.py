@@ -142,7 +142,10 @@ class DiSatelliteDecisionPrepTest(unittest.TestCase):
         self.assertIn("| Needs prep | 6 |", result.stdout)
         self.assertIn("| `primary_queue` | `MSFT` | Microsoft | `needs_decision_inputs` |", result.stdout)
         self.assertIn("| `primary_queue` | `AVGO` | Broadcom | `needs_decision_inputs` |", result.stdout)
-        self.assertIn("`valuation.md`", result.stdout)
+        self.assertIn(
+            "| `primary_queue` | `AVGO` | Broadcom | `needs_decision_inputs` | present: financials.md+thesis.md+valuation.md; pending: decision.md |",
+            result.stdout,
+        )
         self.assertIn("`tax_account_route`", result.stdout)
 
     def test_placeholder_valuation_stays_pending(self) -> None:
