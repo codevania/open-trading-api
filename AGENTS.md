@@ -41,3 +41,14 @@
 - `domestic_stock.news_title`: 뉴스/공시 제목 스캔
 
 리포트 질문에 꼭 필요할 때만 다른 API를 추가한다.
+
+## 퀀트 학습 루틴 규칙
+
+- 사용자가 Quant/퀀트 맥락에서 "오늘 퀀트 학습", "퀀트 공부 루틴", "퀀트 매일 학습", "퀀트 학습 내용 만들어줘", "퀀트 공부할 것 만들어줘"처럼 요청하면 [[_report/quant/routines/daily-learning-routine|_report/quant/routines/daily-learning-routine.md]]를 따라 일일 학습 노트를 생성한다.
+- 학습 노트는 `_report/quant/learning/daily/YYYY/YYYY-MM-DD.md`에 작성한다.
+- 날짜는 기본적으로 한국시간(Asia/Seoul)을 사용한다.
+- 이미 같은 날짜 학습 노트가 있으면 중복 파일을 만들지 말고 기존 파일을 읽어 보강한다.
+- 다음 학습 주제는 [[_report/quant/learning/12-week-daily-plan|_report/quant/learning/12-week-daily-plan.md]]에서 마지막 완료 일자를 기준으로 고른다.
+- 학습 내용은 초보자가 이해할 수 있게 쓰되 핵심 용어 `Universe`, `Liquidity Filter`, `Backtest`, `Point-in-Time`, `Signal`, `Benchmark`, `Slippage`, `Out-of-Sample`은 영어로 유지한다.
+- 학습 루틴은 repo-local 문서와 저장된 raw/research artifact를 우선 사용한다. 외부 자료가 필요하면 공식 문서나 1차 자료를 우선한다.
+- 학습 노트는 투자 조언이나 매매 지시가 아니다. 주문 API 호출, 실제 주문, 보유수량/계좌/토큰 기록은 포함하지 않는다.
