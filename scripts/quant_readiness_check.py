@@ -422,6 +422,71 @@ def _status_evidence_collection_queue_gate(path: Path | None) -> Gate | None:
     )
 
 
+def _status_source_manifest_fill_packet_gate(path: Path | None) -> Gate | None:
+    if path is None:
+        return None
+    text = _read_text(path)
+    if not text:
+        return Gate(
+            "point_in_time_status_source_manifest_fill_packet",
+            "hold",
+            "source manifest fill packet path was supplied but could not be read",
+            "rerun quant_point_in_time_status_source_manifest_fill_packet.py",
+        )
+    if (
+        "Point-in-Time Status Source Manifest Fill Packet" in text
+        and "Order intent generated: `false`" in text
+        and "Backtest readiness impact: `hold`" in text
+    ):
+        fill_rows = _markdown_metric(text, "Fill packet rows") or "unknown"
+        evidence = f"local P1 source-manifest fill packet has {fill_rows} rows but does not prove source coverage"
+        if "not source coverage evidence" in text:
+            evidence += "; report explicitly labels it as non-evidence"
+        return Gate(
+            "point_in_time_status_source_manifest_fill_packet",
+            "plan_only",
+            evidence,
+            "capture official raw files, fill source_url/raw_path/confidence, then materialize and validate the manifest",
+        )
+    return Gate(
+        "point_in_time_status_source_manifest_fill_packet",
+        "hold",
+        "local source manifest fill packet is not a recognized plan-only report",
+        "rerun quant_point_in_time_status_source_manifest_fill_packet.py",
+    )
+
+
+def _status_source_manifest_materialize_gate(path: Path | None) -> Gate | None:
+    if path is None:
+        return None
+    text = _read_text(path)
+    if not text:
+        return Gate(
+            "point_in_time_status_source_manifest_materialized",
+            "hold",
+            "source manifest materialization report path was supplied but could not be read",
+            "rerun quant_point_in_time_status_source_manifest_materialize.py after fill-packet capture fields are filled",
+        )
+    if (
+        "Point-in-Time Status Source Manifest Materialize" in text
+        and "Order intent generated: `false`" in text
+        and "Backtest readiness impact: `hold`" in text
+    ):
+        manifest_rows = _markdown_metric(text, "Manifest rows") or "unknown"
+        return Gate(
+            "point_in_time_status_source_manifest_materialized",
+            "materialized_unvalidated",
+            f"local filled packet materialized {manifest_rows} source manifest rows, but validation and coverage audit are still required",
+            "run quant_point_in_time_status_source_manifest_validate.py, then rerun status coverage audit",
+        )
+    return Gate(
+        "point_in_time_status_source_manifest_materialized",
+        "hold",
+        "local source manifest materialization report is not a recognized materialization report",
+        "rerun quant_point_in_time_status_source_manifest_materialize.py after official raw capture",
+    )
+
+
 def _status_coverage_gate(status_coverage: str, path: Path | None, lifecycle_gap_report: Path | None) -> Gate:
     text = _read_text(path)
     lifecycle_gap_text = _read_text(lifecycle_gap_report)
@@ -484,6 +549,8 @@ def evaluate_readiness(
     status_lifecycle_gap_report: Path | None = None,
     status_evidence_collection_plan_report: Path | None = None,
     status_evidence_collection_queue_report: Path | None = None,
+    status_source_manifest_fill_packet_report: Path | None = None,
+    status_source_manifest_materialize_report: Path | None = None,
     kis_preflight_report: Path | None,
     min_market_dates: int = DEFAULT_MIN_MARKET_DATES,
     min_liquidity_lookback: int = DEFAULT_MIN_LIQUIDITY_LOOKBACK,
@@ -594,6 +661,18 @@ def evaluate_readiness(
     if status_evidence_queue_gate is not None:
         gates.append(status_evidence_queue_gate)
 
+    status_source_manifest_fill_packet_gate = _status_source_manifest_fill_packet_gate(
+        status_source_manifest_fill_packet_report
+    )
+    if status_source_manifest_fill_packet_gate is not None:
+        gates.append(status_source_manifest_fill_packet_gate)
+
+    status_source_manifest_materialize_gate = _status_source_manifest_materialize_gate(
+        status_source_manifest_materialize_report
+    )
+    if status_source_manifest_materialize_gate is not None:
+        gates.append(status_source_manifest_materialize_gate)
+
     gates.append(_status_coverage_gate(status_coverage, status_coverage_report, status_lifecycle_gap_report))
     gates.extend(
         [
@@ -639,6 +718,8 @@ def evaluate_readiness(
         "status_lifecycle_gap_report_supplied": status_lifecycle_gap_report is not None,
         "status_evidence_collection_plan_report_supplied": status_evidence_collection_plan_report is not None,
         "status_evidence_collection_queue_report_supplied": status_evidence_collection_queue_report is not None,
+        "status_source_manifest_fill_packet_report_supplied": status_source_manifest_fill_packet_report is not None,
+        "status_source_manifest_materialize_report_supplied": status_source_manifest_materialize_report is not None,
         "backtest_readiness": "hold",
         "live_trading_readiness": "blocked",
     }
@@ -672,6 +753,8 @@ def _render_report(
     status_lifecycle_gap_report: Path | None,
     status_evidence_collection_plan_report: Path | None,
     status_evidence_collection_queue_report: Path | None,
+    status_source_manifest_fill_packet_report: Path | None,
+    status_source_manifest_materialize_report: Path | None,
     kis_preflight_report: Path | None,
     status_coverage: str,
 ) -> str:
@@ -693,6 +776,8 @@ def _render_report(
         f"- Status lifecycle gap report: {_wikilink(status_lifecycle_gap_report) if status_lifecycle_gap_report else '`not_supplied`'}",
         f"- Status evidence collection plan report: {_wikilink(status_evidence_collection_plan_report) if status_evidence_collection_plan_report else '`not_supplied`'}",
         f"- Status evidence collection queue report: {_wikilink(status_evidence_collection_queue_report) if status_evidence_collection_queue_report else '`not_supplied`'}",
+        f"- Status source manifest fill packet report: {_wikilink(status_source_manifest_fill_packet_report) if status_source_manifest_fill_packet_report else '`not_supplied`'}",
+        f"- Status source manifest materialize report: {_wikilink(status_source_manifest_materialize_report) if status_source_manifest_materialize_report else '`not_supplied`'}",
         f"- KIS preflight report: {_wikilink(kis_preflight_report) if kis_preflight_report else '`not_supplied`'}",
         f"- Status coverage mode: `{status_coverage}`",
         "- KIS API call: `false`",
@@ -772,6 +857,8 @@ def main() -> int:
     parser.add_argument("--status-lifecycle-gap-report", type=Path)
     parser.add_argument("--status-evidence-collection-plan-report", type=Path)
     parser.add_argument("--status-evidence-collection-queue-report", type=Path)
+    parser.add_argument("--status-source-manifest-fill-packet-report", type=Path)
+    parser.add_argument("--status-source-manifest-materialize-report", type=Path)
     parser.add_argument("--kis-preflight-report", type=Path)
     parser.add_argument("--status-coverage", default="current_snapshot_smoke")
     parser.add_argument("--min-market-dates", default=DEFAULT_MIN_MARKET_DATES, type=int)
@@ -800,6 +887,8 @@ def main() -> int:
             status_lifecycle_gap_report=args.status_lifecycle_gap_report,
             status_evidence_collection_plan_report=args.status_evidence_collection_plan_report,
             status_evidence_collection_queue_report=args.status_evidence_collection_queue_report,
+            status_source_manifest_fill_packet_report=args.status_source_manifest_fill_packet_report,
+            status_source_manifest_materialize_report=args.status_source_manifest_materialize_report,
             kis_preflight_report=args.kis_preflight_report,
             min_market_dates=args.min_market_dates,
             min_liquidity_lookback=args.min_liquidity_lookback,
@@ -826,6 +915,8 @@ def main() -> int:
         status_lifecycle_gap_report=args.status_lifecycle_gap_report,
         status_evidence_collection_plan_report=args.status_evidence_collection_plan_report,
         status_evidence_collection_queue_report=args.status_evidence_collection_queue_report,
+        status_source_manifest_fill_packet_report=args.status_source_manifest_fill_packet_report,
+        status_source_manifest_materialize_report=args.status_source_manifest_materialize_report,
         kis_preflight_report=args.kis_preflight_report,
         status_coverage=args.status_coverage,
     )
