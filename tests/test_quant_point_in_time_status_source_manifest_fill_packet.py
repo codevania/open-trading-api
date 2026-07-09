@@ -134,6 +134,11 @@ class QuantPointInTimeStatusSourceManifestFillPacketTest(unittest.TestCase):
         self.assertEqual(rows[0]["batch_id"], "P1-001")
         self.assertEqual(rows[0]["manifest_draft_row_number"], "2")
         self.assertEqual(rows[0]["evidence_capture_status"], "pending_official_raw_capture")
+        self.assertEqual(rows[0]["source_url_hint"], "https://kind.krx.co.kr/")
+        self.assertEqual(
+            rows[0]["raw_path_suggestion"],
+            "_report/raw/quant/status-source-manifest/20250102-20250418/p1-001-managed-issue-kind.json",
+        )
         self.assertEqual(rows[0]["source_url_to_fill"], "")
         self.assertEqual(rows[0]["raw_path_to_fill"], "")
         self.assertEqual(rows[0]["confidence_to_fill"], "")
@@ -187,6 +192,7 @@ class QuantPointInTimeStatusSourceManifestFillPacketTest(unittest.TestCase):
         self.assertNotIn(b"\r\n", report_bytes)
         self.assertIn("Point-in-Time Status Source Manifest Fill Packet", report_text)
         self.assertIn("- Backtest readiness impact: `hold`", report_text)
+        self.assertIn("`raw_path_suggestion`", report_text)
 
 
 if __name__ == "__main__":

@@ -38,8 +38,9 @@
 ## Fill Instructions
 
 1. Use each `batch_id` to capture an official raw file from the listed source and candidate table.
-2. Fill `source_url_to_fill`, `raw_path_to_fill`, and `confidence_to_fill` only after the raw file is saved under `_report/raw/**`.
-3. Convert filled packet evidence into a source coverage manifest, then run the manifest validator and coverage audit.
+2. Use `source_url_hint` and `raw_path_suggestion` as capture aids only; adjust the final path extension if the official export is not JSON.
+3. Fill `source_url_to_fill`, `raw_path_to_fill`, and `confidence_to_fill` only after the raw file is saved under `_report/raw/**`.
+4. Convert filled packet evidence into a source coverage manifest, then run the manifest validator and coverage audit.
 
 ## Guardrails
 

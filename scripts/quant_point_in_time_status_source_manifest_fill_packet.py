@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import re
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -61,6 +62,8 @@ OUTPUT_FIELDS = (
     "lifecycle_target_codes",
     "candidate_tables",
     "allowed_url_prefixes",
+    "source_url_hint",
+    "raw_path_suggestion",
     "suggested_source",
     "required_evidence",
     "collection_status",
@@ -105,6 +108,31 @@ def _queue_key(row: dict[str, str]) -> tuple[str, str]:
     return row.get("status_type", ""), row.get("manifest_source", "")
 
 
+def _slug(value: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", value.strip().lower()).strip("-")
+    return slug or "unknown"
+
+
+def _source_url_hint(row: dict[str, str]) -> str:
+    if row.get("source_url", ""):
+        return row["source_url"]
+    prefixes = [part.strip() for part in row.get("allowed_url_prefixes", "").split(";") if part.strip()]
+    return prefixes[0] if prefixes else ""
+
+
+def _raw_path_suggestion(*, queue_row: dict[str, str], manifest_row: dict[str, str]) -> str:
+    start = manifest_row.get("coverage_start", "").replace("-", "") or "unknown-start"
+    end = manifest_row.get("coverage_end", "").replace("-", "") or "unknown-end"
+    file_name = "-".join(
+        [
+            _slug(queue_row.get("batch_id", "")),
+            _slug(manifest_row.get("status_type", "")),
+            _slug(manifest_row.get("source", "")),
+        ]
+    )
+    return f"_report/raw/quant/status-source-manifest/{start}-{end}/{file_name}.json"
+
+
 def _p1_queue_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
     filtered = [
         row
@@ -147,6 +175,8 @@ def _build_packet_row(
         "lifecycle_target_codes": manifest_row["lifecycle_target_codes"],
         "candidate_tables": manifest_row["candidate_tables"],
         "allowed_url_prefixes": manifest_row["allowed_url_prefixes"],
+        "source_url_hint": _source_url_hint(manifest_row),
+        "raw_path_suggestion": _raw_path_suggestion(queue_row=queue_row, manifest_row=manifest_row),
         "suggested_source": queue_row["suggested_source"],
         "required_evidence": queue_row["required_evidence"],
         "collection_status": queue_row["collection_status"],
@@ -278,8 +308,9 @@ def _render_report(summary: dict[str, Any], output_path: Path) -> str:
         "## Fill Instructions",
         "",
         "1. Use each `batch_id` to capture an official raw file from the listed source and candidate table.",
-        "2. Fill `source_url_to_fill`, `raw_path_to_fill`, and `confidence_to_fill` only after the raw file is saved under `_report/raw/**`.",
-        "3. Convert filled packet evidence into a source coverage manifest, then run the manifest validator and coverage audit.",
+        "2. Use `source_url_hint` and `raw_path_suggestion` as capture aids only; adjust the final path extension if the official export is not JSON.",
+        "3. Fill `source_url_to_fill`, `raw_path_to_fill`, and `confidence_to_fill` only after the raw file is saved under `_report/raw/**`.",
+        "4. Convert filled packet evidence into a source coverage manifest, then run the manifest validator and coverage audit.",
         "",
         "## Guardrails",
         "",
