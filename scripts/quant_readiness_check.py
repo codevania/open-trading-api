@@ -382,6 +382,46 @@ def _status_evidence_collection_plan_gate(path: Path | None) -> Gate | None:
     )
 
 
+def _status_evidence_collection_queue_gate(path: Path | None) -> Gate | None:
+    if path is None:
+        return None
+    text = _read_text(path)
+    if not text:
+        return Gate(
+            "point_in_time_status_evidence_collection_queue",
+            "hold",
+            "status evidence collection queue path was supplied but could not be read",
+            "rerun quant_point_in_time_status_evidence_collection_queue.py",
+        )
+    if (
+        "Point-in-Time Status Evidence Collection Queue" in text
+        and "Order intent generated: `false`" in text
+        and "Backtest readiness impact: `hold`" in text
+    ):
+        queue_batches = _markdown_metric(text, "Queue batches") or "unknown"
+        queued_rows = _markdown_metric(text, "Queued source rows") or "unknown"
+        priority_counts = []
+        for priority in ("1", "2", "3"):
+            count = _markdown_code_metric(text, priority)
+            if count:
+                priority_counts.append(f"P{priority}={count}")
+        evidence = f"local collection queue groups plan rows into {queue_batches} batches with {queued_rows} queued source rows"
+        if priority_counts:
+            evidence += f"; priority batches {','.join(priority_counts)}"
+        return Gate(
+            "point_in_time_status_evidence_collection_queue",
+            "plan_only",
+            evidence,
+            "execute P1 source-manifest batches before P2 release/resume and P3 market-label batches",
+        )
+    return Gate(
+        "point_in_time_status_evidence_collection_queue",
+        "hold",
+        "local status evidence collection queue is not a recognized plan-only report",
+        "rerun quant_point_in_time_status_evidence_collection_queue.py",
+    )
+
+
 def _status_coverage_gate(status_coverage: str, path: Path | None, lifecycle_gap_report: Path | None) -> Gate:
     text = _read_text(path)
     lifecycle_gap_text = _read_text(lifecycle_gap_report)
@@ -443,6 +483,7 @@ def evaluate_readiness(
     status_coverage_report: Path | None = None,
     status_lifecycle_gap_report: Path | None = None,
     status_evidence_collection_plan_report: Path | None = None,
+    status_evidence_collection_queue_report: Path | None = None,
     kis_preflight_report: Path | None,
     min_market_dates: int = DEFAULT_MIN_MARKET_DATES,
     min_liquidity_lookback: int = DEFAULT_MIN_LIQUIDITY_LOOKBACK,
@@ -549,6 +590,10 @@ def evaluate_readiness(
     if status_evidence_plan_gate is not None:
         gates.append(status_evidence_plan_gate)
 
+    status_evidence_queue_gate = _status_evidence_collection_queue_gate(status_evidence_collection_queue_report)
+    if status_evidence_queue_gate is not None:
+        gates.append(status_evidence_queue_gate)
+
     gates.append(_status_coverage_gate(status_coverage, status_coverage_report, status_lifecycle_gap_report))
     gates.extend(
         [
@@ -593,6 +638,7 @@ def evaluate_readiness(
         "status_coverage_report_supplied": status_coverage_report is not None,
         "status_lifecycle_gap_report_supplied": status_lifecycle_gap_report is not None,
         "status_evidence_collection_plan_report_supplied": status_evidence_collection_plan_report is not None,
+        "status_evidence_collection_queue_report_supplied": status_evidence_collection_queue_report is not None,
         "backtest_readiness": "hold",
         "live_trading_readiness": "blocked",
     }
@@ -601,6 +647,9 @@ def evaluate_readiness(
 
 def _wikilink(path: Path) -> str:
     rendered = path.as_posix()
+    if path.suffix == ".md":
+        target = rendered[: -len(path.suffix)]
+        return f"[[{target}|{rendered}]]"
     return f"[[{rendered}|{rendered}]]"
 
 
@@ -622,6 +671,7 @@ def _render_report(
     status_coverage_report: Path | None,
     status_lifecycle_gap_report: Path | None,
     status_evidence_collection_plan_report: Path | None,
+    status_evidence_collection_queue_report: Path | None,
     kis_preflight_report: Path | None,
     status_coverage: str,
 ) -> str:
@@ -642,6 +692,7 @@ def _render_report(
         f"- Status coverage audit report: {_wikilink(status_coverage_report) if status_coverage_report else '`not_supplied`'}",
         f"- Status lifecycle gap report: {_wikilink(status_lifecycle_gap_report) if status_lifecycle_gap_report else '`not_supplied`'}",
         f"- Status evidence collection plan report: {_wikilink(status_evidence_collection_plan_report) if status_evidence_collection_plan_report else '`not_supplied`'}",
+        f"- Status evidence collection queue report: {_wikilink(status_evidence_collection_queue_report) if status_evidence_collection_queue_report else '`not_supplied`'}",
         f"- KIS preflight report: {_wikilink(kis_preflight_report) if kis_preflight_report else '`not_supplied`'}",
         f"- Status coverage mode: `{status_coverage}`",
         "- KIS API call: `false`",
@@ -720,6 +771,7 @@ def main() -> int:
     parser.add_argument("--status-coverage-report", type=Path)
     parser.add_argument("--status-lifecycle-gap-report", type=Path)
     parser.add_argument("--status-evidence-collection-plan-report", type=Path)
+    parser.add_argument("--status-evidence-collection-queue-report", type=Path)
     parser.add_argument("--kis-preflight-report", type=Path)
     parser.add_argument("--status-coverage", default="current_snapshot_smoke")
     parser.add_argument("--min-market-dates", default=DEFAULT_MIN_MARKET_DATES, type=int)
@@ -747,6 +799,7 @@ def main() -> int:
             status_coverage_report=args.status_coverage_report,
             status_lifecycle_gap_report=args.status_lifecycle_gap_report,
             status_evidence_collection_plan_report=args.status_evidence_collection_plan_report,
+            status_evidence_collection_queue_report=args.status_evidence_collection_queue_report,
             kis_preflight_report=args.kis_preflight_report,
             min_market_dates=args.min_market_dates,
             min_liquidity_lookback=args.min_liquidity_lookback,
@@ -772,6 +825,7 @@ def main() -> int:
         status_coverage_report=args.status_coverage_report,
         status_lifecycle_gap_report=args.status_lifecycle_gap_report,
         status_evidence_collection_plan_report=args.status_evidence_collection_plan_report,
+        status_evidence_collection_queue_report=args.status_evidence_collection_queue_report,
         kis_preflight_report=args.kis_preflight_report,
         status_coverage=args.status_coverage,
     )
