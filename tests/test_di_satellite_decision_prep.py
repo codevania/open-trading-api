@@ -146,6 +146,7 @@ class DiSatelliteDecisionPrepTest(unittest.TestCase):
             self.assertIn("`valuation.md`", result.stdout)
             self.assertIn("`latest_price`", result.stdout)
             self.assertIn("`etf_overlap`", result.stdout)
+            self.assertIn("fill remaining required inputs before decision.md:", result.stdout)
             self.assertIn("Order intent generated: `false`", result.stdout)
 
     def test_current_repo_primary_queue_stays_pre_decision(self) -> None:

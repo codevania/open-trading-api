@@ -169,6 +169,43 @@ etf_holdings:
             self.assertIn("| Ready for private decision input | 2 |", result.stdout)
             self.assertIn("`3.60pp`", result.stdout)
 
+    def test_reports_research_target_context_without_actual_holdings_claim(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "candidates.yaml"
+            inputs = root / "overlap.yaml"
+            manifest.write_text(MANIFEST, encoding="utf-8")
+            inputs.write_text(
+                INPUTS.replace(
+                    "version: 1\n",
+                    "version: 1\nnotes:\n  - research_target_v1 scenario, not actual holdings\n",
+                ),
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--candidate-file",
+                    str(manifest),
+                    "--input-file",
+                    str(inputs),
+                    "--run-date",
+                    "2026-07-09",
+                ],
+                cwd=REPO_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn(
+                "- Portfolio weight context: `research_target_scenario_not_actual_holdings`",
+                result.stdout,
+            )
+
     def test_example_template_covers_current_primary_queue_and_etfs(self) -> None:
         manifest = yaml.safe_load(MANIFEST_FILE.read_text(encoding="utf-8"))
         template = yaml.safe_load(INPUT_EXAMPLE.read_text(encoding="utf-8"))

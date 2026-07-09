@@ -160,6 +160,14 @@ def _format_pp(value: float) -> str:
     return f"{value:.2f}pp"
 
 
+def _portfolio_weight_context(input_payload: dict[str, Any]) -> str:
+    notes = input_payload.get("notes") or []
+    note_text = " ".join(_text(note).lower() for note in _as_list(notes))
+    if "research_target" in note_text:
+        return "research_target_scenario_not_actual_holdings"
+    return "private_input_values"
+
+
 def evaluate_overlap(
     candidate_payload: dict[str, Any],
     *,
@@ -235,6 +243,7 @@ def render_report(
     input_file: Path | None,
     run_date: str,
     queue: str,
+    portfolio_weight_context: str = "private_input_values",
 ) -> str:
     ready = sum(1 for row in rows if row.status == "ready_for_private_decision_input")
     lines = [
@@ -244,6 +253,7 @@ def render_report(
         f"- Candidate manifest: `{candidate_file.as_posix()}`",
         f"- ETF overlap input file: `{input_file.as_posix() if input_file else 'not configured'}`",
         f"- Queue scope: `{queue}`",
+        f"- Portfolio weight context: `{portfolio_weight_context}`",
         "- Interpretation: overlap-prep only; no buy, sell, hold, or order intent is generated",
         "- Order intent generated: `false`",
         "- Formula: `portfolio ETF weight * ETF holding weight / 100 = portfolio overlap percentage points`",
@@ -312,6 +322,7 @@ def main() -> int:
             input_file=args.input_file,
             run_date=args.run_date,
             queue=args.queue,
+            portfolio_weight_context=_portfolio_weight_context(input_payload),
         )
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc

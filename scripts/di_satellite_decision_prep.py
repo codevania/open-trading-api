@@ -195,6 +195,7 @@ def evaluate_satellite_decision_prep(
             raise ValueError(f"satellite_equities.{queue_name}: missing symbol")
         required_inputs = tuple(_missing_inputs(row, symbol, research_root, input_payload))
         status = "ready_for_checked_decision" if not required_inputs else "needs_decision_inputs"
+        blocked_action = "fill remaining required inputs before decision.md: " + ", ".join(required_inputs)
         results.append(
             SatelliteDecisionPrep(
                 queue=queue_name,
@@ -206,7 +207,7 @@ def evaluate_satellite_decision_prep(
                 safe_next_action=(
                     "write checked decision.md with no order intent"
                     if status == "ready_for_checked_decision"
-                    else "fill valuation, overlap, tax/account, sizing, and freshness inputs before decision.md"
+                    else blocked_action
                 ),
             )
         )
