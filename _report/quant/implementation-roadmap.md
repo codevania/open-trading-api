@@ -221,7 +221,7 @@ Previous 52-date baseline artifacts:
 - [[_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250307.rows.csv|_report/quant/research/2026-07-08-backtest-pnl-smoke-20d-20250102-20250307.rows.csv]]
 - [[_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250307|_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250307.md]]
 - [[_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250307-merged-status|_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250307-merged-status.md]]
-- Implementation hygiene: remaining Quant report-output generators now route Markdown reports through [[scripts/quant_io.py|scripts/quant_io.py]] `write_text_lf`; CSV writers keep explicit `lineterminator="\n"`.
+- Implementation hygiene: remaining Quant report-output generators now route Markdown reports through [[scripts/quant_io.py|scripts/quant_io.py]] `write_text_lf`; CSV writers keep explicit `lineterminator="\n"`, and [[tests/test_quant_io.py|tests/test_quant_io.py]] guards the convention.
 
 Previous 2026-07-06 smoke artifacts:
 
