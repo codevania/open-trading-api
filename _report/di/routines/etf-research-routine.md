@@ -11,6 +11,7 @@ python scripts/di_etf_source_collect.py --candidate-file _report/di/candidates/c
 python scripts/di_etf_holdings_collect.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --run-date YYYY-MM-DD --dry-run --output _report/di/research/ETF-COMPARISON/etf-holdings-source-status.md
 python scripts/di_etf_overlap_input_prepare.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --run-date YYYY-MM-DD --dry-run
 python scripts/di_etf_overlap_check.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --input-file _report/private/di/etf-overlap-inputs.yaml --run-date YYYY-MM-DD
+python scripts/di_private_input_status.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --etf-input-file _report/private/di/etf-overlap-inputs.yaml --decision-input-file _report/private/di/satellite-decision-inputs.yaml --run-date YYYY-MM-DD --output _report/di/research/ETF-COMPARISON/private-input-status.md
 ```
 
 관련 파일:
@@ -23,10 +24,12 @@ python scripts/di_etf_overlap_check.py --candidate-file _report/di/candidates/co
 - [[scripts/di_etf_holdings_collect.py|di_etf_holdings_collect.py]]
 - [[scripts/di_etf_overlap_input_prepare.py|di_etf_overlap_input_prepare.py]]
 - [[scripts/di_etf_overlap_check.py|di_etf_overlap_check.py]]
+- [[scripts/di_private_input_status.py|di_private_input_status.py]]
 - [[_report/di/templates/etf-overlap-inputs.example.yaml|etf-overlap-inputs.example.yaml]]
 - [[_report/di/research/ETF-COMPARISON/etf-checklist|etf-checklist.md]]
 - [[_report/di/research/ETF-COMPARISON/evidence-gate|evidence-gate.md]]
 - [[_report/di/research/ETF-COMPARISON/etf-holdings-source-status|etf-holdings-source-status.md]]
+- [[_report/di/research/ETF-COMPARISON/private-input-status|private-input-status.md]]
 
 ## 규칙
 
