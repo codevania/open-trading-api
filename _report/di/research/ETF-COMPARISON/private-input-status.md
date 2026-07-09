@@ -1,9 +1,9 @@
 # DI Private Input Status
 
 - Run date: `2026-07-10`
-- Candidate manifest: `_report/di/candidates/core-satellite-candidates.yaml`
-- ETF overlap input file: `_report/private/di/etf-overlap-inputs.yaml`
-- Satellite decision input file: `_report/private/di/satellite-decision-inputs.yaml`
+- Candidate manifest: [[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]
+- ETF overlap input file: [[_report/private/di/etf-overlap-inputs.yaml|etf-overlap-inputs.yaml]]
+- Satellite decision input file: [[_report/private/di/satellite-decision-inputs.yaml|satellite-decision-inputs.yaml]]
 - Queue scope: `primary_queue`
 - Row filter: `all`
 - Interpretation: private input completeness only; values are masked.

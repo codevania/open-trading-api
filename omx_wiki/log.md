@@ -54,3 +54,4 @@
 - Added missing-only and fail-on-missing modes to the DI private-input checker so decision promotion can stop automatically while private blockers remain.
 - Added blocked-only and fail-on-blocked modes to the DI satellite decision-prep checker so checked `decision.md` promotion stops when research or private inputs remain incomplete.
 - Added hold-only and fail-on-hold modes to the DI candidate evidence gate so watchlist promotion stops automatically while candidate evidence remains incomplete.
+- Normalized DI private-input and satellite decision-prep report links to Obsidian wikilinks so generated blocker reports remain mobile/wiki readable.

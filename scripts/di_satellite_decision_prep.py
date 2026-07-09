@@ -221,6 +221,19 @@ def _cell(value: str) -> str:
     return value.replace("|", "\\|")
 
 
+def _repo_doc_ref(path: Path | None, *, missing_label: str = "not configured") -> str:
+    if path is None:
+        return f"`{missing_label}`"
+    if not path.is_absolute():
+        normalized = path.as_posix()
+        return f"[[{normalized}|{path.name}]]"
+    try:
+        relative_path = path.resolve().relative_to(Path.cwd().resolve())
+    except ValueError:
+        return f"`{path.as_posix()}`"
+    return f"[[{relative_path.as_posix()}|{path.name}]]"
+
+
 def render_report(
     rows: list[SatelliteDecisionPrep],
     *,
@@ -236,9 +249,9 @@ def render_report(
         "# DI Satellite Equity Decision Prep",
         "",
         f"- Run date: `{run_date}`",
-        f"- Candidate manifest: `{candidate_file.as_posix()}`",
+        f"- Candidate manifest: {_repo_doc_ref(candidate_file)}",
         f"- Research root: `{research_root.as_posix()}`",
-        f"- Decision input file: `{input_file.as_posix() if input_file else 'not configured'}`",
+        f"- Decision input file: {_repo_doc_ref(input_file)}",
         f"- Queue scope: `{queue}`",
         f"- Row filter: `{row_filter}`",
         "- Interpretation: pre-decision checklist only; no buy, sell, hold, or order intent is generated",

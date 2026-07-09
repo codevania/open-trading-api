@@ -280,6 +280,27 @@ inputs:
             self.assertIn("`inputs.MSFT.tax_account_route` | `missing`", result.stdout)
             self.assertNotIn("Traceback", result.stderr)
 
+    def test_current_repo_paths_render_as_obsidian_links(self) -> None:
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(SCRIPT),
+                "--candidate-file",
+                "_report/di/candidates/core-satellite-candidates.yaml",
+                "--run-date",
+                "2026-07-10",
+            ],
+            cwd=REPO_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("[[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]", result.stdout)
+        self.assertIn("[[_report/private/di/etf-overlap-inputs.yaml|etf-overlap-inputs.yaml]]", result.stdout)
+        self.assertIn("[[_report/private/di/satellite-decision-inputs.yaml|satellite-decision-inputs.yaml]]", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

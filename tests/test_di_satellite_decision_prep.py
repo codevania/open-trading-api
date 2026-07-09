@@ -175,6 +175,8 @@ class DiSatelliteDecisionPrepTest(unittest.TestCase):
             result.stdout,
         )
         self.assertIn("`tax_account_route`", result.stdout)
+        self.assertIn("[[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]", result.stdout)
+        self.assertIn("[[_report/private/di/satellite-decision-inputs.yaml|satellite-decision-inputs.yaml]]", result.stdout)
 
     def test_placeholder_valuation_stays_pending(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

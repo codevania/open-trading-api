@@ -227,6 +227,19 @@ def _cell(value: str) -> str:
     return value.replace("|", "\\|")
 
 
+def _repo_doc_ref(path: Path | None, *, missing_label: str = "not configured") -> str:
+    if path is None:
+        return f"`{missing_label}`"
+    if not path.is_absolute():
+        normalized = path.as_posix()
+        return f"[[{normalized}|{path.name}]]"
+    try:
+        relative_path = path.resolve().relative_to(Path.cwd().resolve())
+    except ValueError:
+        return f"`{path.as_posix()}`"
+    return f"[[{relative_path.as_posix()}|{path.name}]]"
+
+
 def _render_summary(rows: list[PrivateInputStatus]) -> list[str]:
     by_area: Counter[str] = Counter(row.area for row in rows)
     filled_by_area: Counter[str] = Counter(row.area for row in rows if row.status == "filled")
@@ -256,9 +269,9 @@ def render_report(
         "# DI Private Input Status",
         "",
         f"- Run date: `{run_date}`",
-        f"- Candidate manifest: `{candidate_file.as_posix()}`",
-        f"- ETF overlap input file: `{etf_input_file.as_posix() if etf_input_file else 'not configured'}`",
-        f"- Satellite decision input file: `{decision_input_file.as_posix() if decision_input_file else 'not configured'}`",
+        f"- Candidate manifest: {_repo_doc_ref(candidate_file)}",
+        f"- ETF overlap input file: {_repo_doc_ref(etf_input_file)}",
+        f"- Satellite decision input file: {_repo_doc_ref(decision_input_file)}",
         f"- Queue scope: `{queue}`",
         f"- Row filter: `{row_filter}`",
         "- Interpretation: private input completeness only; values are masked.",
