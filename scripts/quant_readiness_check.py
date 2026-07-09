@@ -86,13 +86,19 @@ def _markdown_metric(text: str, metric: str) -> str:
     return match.group(1).strip().strip("`")
 
 
+def _markdown_code_metric(text: str, metric: str) -> str:
+    match = re.search(rf"\| `{re.escape(metric)}` \| ([^|]+) \|", text)
+    if not match:
+        return ""
+    return match.group(1).strip().strip("`")
+
+
 def _lifecycle_missing_by_status(text: str) -> str:
     counts: list[str] = []
     for status_type in ("managed_issue", "market_alert", "trading_halt"):
-        match = re.search(rf"\| `{re.escape(status_type)}` \| ([^|]+) \|", text)
-        if not match:
+        value = _markdown_code_metric(text, status_type)
+        if not value:
             continue
-        value = match.group(1).strip()
         if value and value != "0":
             counts.append(f"{status_type}={value}")
     return ",".join(counts)
@@ -337,6 +343,45 @@ def _bias_control_gate(path: Path | None) -> Gate | None:
     )
 
 
+def _status_evidence_collection_plan_gate(path: Path | None) -> Gate | None:
+    if path is None:
+        return None
+    text = _read_text(path)
+    if not text:
+        return Gate(
+            "point_in_time_status_evidence_collection_plan",
+            "hold",
+            "status evidence collection plan path was supplied but could not be read",
+            "rerun quant_point_in_time_status_evidence_collection_plan.py",
+        )
+    if (
+        "Point-in-Time Status Evidence Collection Plan" in text
+        and "Order intent generated: `false`" in text
+        and "Backtest readiness impact: `hold`" in text
+    ):
+        plan_rows = _markdown_metric(text, "Collection plan rows") or "unknown"
+        blocker_counts = []
+        for blocker in ("source_manifest_evidence", "release_resume_evidence", "market_label_resolution"):
+            count = _markdown_code_metric(text, blocker)
+            if count:
+                blocker_counts.append(f"{blocker}={count}")
+        evidence = f"local collection plan identifies {plan_rows} pending evidence rows and does not prove source coverage"
+        if blocker_counts:
+            evidence += f"; blockers {','.join(blocker_counts)}"
+        return Gate(
+            "point_in_time_status_evidence_collection_plan",
+            "plan_only",
+            evidence,
+            "collect official raw evidence, fill source manifest, and rerun coverage audit",
+        )
+    return Gate(
+        "point_in_time_status_evidence_collection_plan",
+        "hold",
+        "local status evidence collection plan is not a recognized plan-only report",
+        "rerun quant_point_in_time_status_evidence_collection_plan.py",
+    )
+
+
 def _status_coverage_gate(status_coverage: str, path: Path | None, lifecycle_gap_report: Path | None) -> Gate:
     text = _read_text(path)
     lifecycle_gap_text = _read_text(lifecycle_gap_report)
@@ -397,6 +442,7 @@ def evaluate_readiness(
     bias_control_report: Path | None = None,
     status_coverage_report: Path | None = None,
     status_lifecycle_gap_report: Path | None = None,
+    status_evidence_collection_plan_report: Path | None = None,
     kis_preflight_report: Path | None,
     min_market_dates: int = DEFAULT_MIN_MARKET_DATES,
     min_liquidity_lookback: int = DEFAULT_MIN_LIQUIDITY_LOOKBACK,
@@ -499,6 +545,10 @@ def evaluate_readiness(
     if bias_gate is not None:
         gates.append(bias_gate)
 
+    status_evidence_plan_gate = _status_evidence_collection_plan_gate(status_evidence_collection_plan_report)
+    if status_evidence_plan_gate is not None:
+        gates.append(status_evidence_plan_gate)
+
     gates.append(_status_coverage_gate(status_coverage, status_coverage_report, status_lifecycle_gap_report))
     gates.extend(
         [
@@ -542,6 +592,7 @@ def evaluate_readiness(
         "bias_control_report_supplied": bias_control_report is not None,
         "status_coverage_report_supplied": status_coverage_report is not None,
         "status_lifecycle_gap_report_supplied": status_lifecycle_gap_report is not None,
+        "status_evidence_collection_plan_report_supplied": status_evidence_collection_plan_report is not None,
         "backtest_readiness": "hold",
         "live_trading_readiness": "blocked",
     }
@@ -570,6 +621,7 @@ def _render_report(
     bias_control_report: Path | None,
     status_coverage_report: Path | None,
     status_lifecycle_gap_report: Path | None,
+    status_evidence_collection_plan_report: Path | None,
     kis_preflight_report: Path | None,
     status_coverage: str,
 ) -> str:
@@ -589,6 +641,7 @@ def _render_report(
         f"- Bias Control preflight report: {_wikilink(bias_control_report) if bias_control_report else '`not_supplied`'}",
         f"- Status coverage audit report: {_wikilink(status_coverage_report) if status_coverage_report else '`not_supplied`'}",
         f"- Status lifecycle gap report: {_wikilink(status_lifecycle_gap_report) if status_lifecycle_gap_report else '`not_supplied`'}",
+        f"- Status evidence collection plan report: {_wikilink(status_evidence_collection_plan_report) if status_evidence_collection_plan_report else '`not_supplied`'}",
         f"- KIS preflight report: {_wikilink(kis_preflight_report) if kis_preflight_report else '`not_supplied`'}",
         f"- Status coverage mode: `{status_coverage}`",
         "- KIS API call: `false`",
@@ -666,6 +719,7 @@ def main() -> int:
     parser.add_argument("--bias-control-report", type=Path)
     parser.add_argument("--status-coverage-report", type=Path)
     parser.add_argument("--status-lifecycle-gap-report", type=Path)
+    parser.add_argument("--status-evidence-collection-plan-report", type=Path)
     parser.add_argument("--kis-preflight-report", type=Path)
     parser.add_argument("--status-coverage", default="current_snapshot_smoke")
     parser.add_argument("--min-market-dates", default=DEFAULT_MIN_MARKET_DATES, type=int)
@@ -692,6 +746,7 @@ def main() -> int:
             bias_control_report=args.bias_control_report,
             status_coverage_report=args.status_coverage_report,
             status_lifecycle_gap_report=args.status_lifecycle_gap_report,
+            status_evidence_collection_plan_report=args.status_evidence_collection_plan_report,
             kis_preflight_report=args.kis_preflight_report,
             min_market_dates=args.min_market_dates,
             min_liquidity_lookback=args.min_liquidity_lookback,
@@ -716,6 +771,7 @@ def main() -> int:
         bias_control_report=args.bias_control_report,
         status_coverage_report=args.status_coverage_report,
         status_lifecycle_gap_report=args.status_lifecycle_gap_report,
+        status_evidence_collection_plan_report=args.status_evidence_collection_plan_report,
         kis_preflight_report=args.kis_preflight_report,
         status_coverage=args.status_coverage,
     )

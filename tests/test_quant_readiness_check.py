@@ -343,6 +343,44 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertEqual(summary["backtest_readiness"], "hold")
         self.assertEqual(summary["live_trading_readiness"], "blocked")
 
+    def test_status_evidence_collection_plan_is_plan_only_gate(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            report = Path(tmp) / "status-evidence-plan.md"
+            report.write_text(
+                "\n".join(
+                    [
+                        "# Point-in-Time Status Evidence Collection Plan",
+                        "- Order intent generated: `false`",
+                        "- Backtest readiness impact: `hold`",
+                        "| Metric | Value |",
+                        "| --- | ---: |",
+                        "| Collection plan rows | 361 |",
+                        "| Blocker | Count |",
+                        "| --- | ---: |",
+                        "| `source_manifest_evidence` | 10 |",
+                        "| `release_resume_evidence` | 304 |",
+                        "| `market_label_resolution` | 47 |",
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            gates, summary = evaluate_readiness(
+                liquidity_rows=_liquidity_rows(),
+                signal_rows=_signal_rows(),
+                status_evidence_collection_plan_report=report,
+                kis_preflight_report=None,
+                status_coverage="current_snapshot_smoke",
+            )
+        by_name = {gate.name: gate for gate in gates}
+
+        self.assertEqual(by_name["point_in_time_status_evidence_collection_plan"].status, "plan_only")
+        self.assertIn("361 pending evidence rows", by_name["point_in_time_status_evidence_collection_plan"].evidence)
+        self.assertIn("release_resume_evidence=304", by_name["point_in_time_status_evidence_collection_plan"].evidence)
+        self.assertTrue(summary["status_evidence_collection_plan_report_supplied"])
+        self.assertEqual(summary["backtest_readiness"], "hold")
+        self.assertEqual(summary["live_trading_readiness"], "blocked")
+
     def test_historical_status_gate_still_does_not_authorize_trading(self) -> None:
         gates, summary = evaluate_readiness(
             liquidity_rows=_liquidity_rows(),
@@ -442,6 +480,7 @@ class QuantReadinessCheckTest(unittest.TestCase):
             bias_report = root / "bias.md"
             status_coverage_report = root / "status-coverage.md"
             status_lifecycle_gap_report = root / "status-lifecycle-gaps.md"
+            status_evidence_collection_plan_report = root / "status-evidence-plan.md"
             output = root / "readiness.md"
             _write_csv(liquidity, _liquidity_rows())
             _write_csv(signals, _signal_rows())
@@ -477,6 +516,13 @@ class QuantReadinessCheckTest(unittest.TestCase):
             )
             status_coverage_report.write_text("- Coverage status: `hold`\n", encoding="utf-8")
             status_lifecycle_gap_report.write_text("| Missing release/resume groups | 3 |\n", encoding="utf-8")
+            status_evidence_collection_plan_report.write_text(
+                "# Point-in-Time Status Evidence Collection Plan\n"
+                "- Order intent generated: `false`\n"
+                "- Backtest readiness impact: `hold`\n"
+                "| Collection plan rows | 361 |\n",
+                encoding="utf-8",
+            )
 
             with patch(
                 "sys.argv",
@@ -508,6 +554,8 @@ class QuantReadinessCheckTest(unittest.TestCase):
                     str(status_coverage_report),
                     "--status-lifecycle-gap-report",
                     str(status_lifecycle_gap_report),
+                    "--status-evidence-collection-plan-report",
+                    str(status_evidence_collection_plan_report),
                     "--report-output",
                     str(output),
                 ],
@@ -531,6 +579,7 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertIn("| `backtest_attribution_smoke` | `pass_smoke_assumption_only` |", report)
         self.assertIn("| `oos_walk_forward_preflight` | `pass_smoke_plumbing_only` |", report)
         self.assertIn("| `bias_control_preflight` | `hold` |", report)
+        self.assertIn("| `point_in_time_status_evidence_collection_plan` | `plan_only` |", report)
         self.assertIn("| `point_in_time_status_coverage` | `hold` |", report)
         self.assertIn("- Backtest assumptions report: [[", report)
         self.assertIn("- Benchmark returns report: [[", report)
@@ -539,6 +588,7 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertIn("- Bias Control preflight report: [[", report)
         self.assertIn("- Status coverage audit report: [[", report)
         self.assertIn("- Status lifecycle gap report: [[", report)
+        self.assertIn("- Status evidence collection plan report: [[", report)
         self.assertIn("lifecycle missing release/resume groups=3", report)
         self.assertIn("| Forward-return complete rows | 1 |", report)
         self.assertIn("| Portfolio target rows | 2 |", report)
