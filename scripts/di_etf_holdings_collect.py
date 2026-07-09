@@ -33,6 +33,7 @@ INVESCO_QQQ_HOLDINGS_URL = (
     "?idType=ticker&interval=monthly&productType=ETF"
 )
 INVESCO_QQQ_SOURCE_URL = "https://www.invesco.com/qqq-etf/en/about.html"
+VANGUARD_HOLDINGS_URL_TEMPLATE = "https://investor.vanguard.com/vmf/api/{symbol}/portfolio-holding/stock.json"
 
 
 @dataclass(frozen=True)
@@ -100,9 +101,9 @@ def _provider_for(symbol: str, source_url: str) -> tuple[str, str, str, str]:
     if "investor.vanguard.com" in url_lower:
         return (
             "vanguard",
-            "",
-            "manual_official_source_required",
-            "official profile page exists, but a stable holdings API was not confirmed",
+            VANGUARD_HOLDINGS_URL_TEMPLATE.format(symbol=normalized.lower()),
+            "confirmed_api",
+            "official Vanguard profile app exposes portfolio-holding stock JSON",
         )
     if not source_url:
         return ("unknown", "", "missing_source_url", "candidate manifest has no source_url")
@@ -181,6 +182,14 @@ def _invesco_headers(user_agent: str) -> dict[str, str]:
     }
 
 
+def _vanguard_headers(user_agent: str, source_url: str) -> dict[str, str]:
+    return {
+        "Accept": "application/json",
+        "User-Agent": user_agent,
+        "Referer": source_url or "https://investor.vanguard.com/",
+    }
+
+
 def _parse_float(value: Any) -> float | None:
     if value is None:
         return None
@@ -240,6 +249,139 @@ def normalize_invesco_holdings(payload: dict[str, Any], candidate_symbols: tuple
     }
 
 
+def normalize_vanguard_holdings(payload: dict[str, Any], candidate_symbols: tuple[str, ...]) -> dict[str, Any]:
+    pages = payload.get("pages")
+    if not isinstance(pages, list) or not pages:
+        raise ValueError("Vanguard holdings payload: expected non-empty pages list")
+
+    rows: list[dict[str, Any]] = []
+    weights: dict[str, float] = {}
+    as_of_values: list[str] = []
+    reported_size = None
+    for page_index, page in enumerate(pages):
+        if not isinstance(page, dict):
+            raise ValueError(f"Vanguard holdings payload: pages[{page_index}] expected object")
+        if reported_size is None:
+            reported_size = page.get("size")
+        as_of = _text(page.get("asOfDate"))
+        if as_of and as_of not in as_of_values:
+            as_of_values.append(as_of)
+        entities = (page.get("fund") or {}).get("entity") or []
+        if not isinstance(entities, list):
+            raise ValueError(f"Vanguard holdings payload: pages[{page_index}].fund.entity expected list")
+        for index, holding in enumerate(entities):
+            if not isinstance(holding, dict):
+                raise ValueError(f"Vanguard holdings payload: pages[{page_index}].entity[{index}] expected object")
+            ticker = _text(holding.get("ticker")).upper()
+            weight = _parse_float(holding.get("percentWeight"))
+            if ticker and weight is not None:
+                weights[ticker] = weight
+            rows.append(
+                {
+                    "ticker": ticker or None,
+                    "issuer_name": _text(holding.get("longName")) or _text(holding.get("shortName")) or None,
+                    "weight_pct": weight,
+                    "security_type": _text(holding.get("type")) or None,
+                    "shares_held": _text(holding.get("sharesHeld")) or None,
+                    "market_value": _parse_float(holding.get("marketValue")),
+                    "notional_value": _parse_float(holding.get("notionalValue")),
+                    "isin": _text(holding.get("isin")) or None,
+                    "cusip": _text(holding.get("cusip")) or None,
+                    "sedol": _text(holding.get("sedol")) or None,
+                }
+            )
+
+    candidate_weights = {symbol: weights.get(symbol) for symbol in candidate_symbols}
+    share_class_notes: dict[str, str] = {}
+    if "GOOGL" in candidate_symbols and weights.get("GOOG") is not None:
+        share_class_notes["GOOGL"] = (
+            f"GOOG is reported separately at {weights['GOOG']:.6f}%; "
+            "decide whether to combine Alphabet classes in the private overlap input."
+        )
+
+    as_of = as_of_values[0] if as_of_values else ""
+    if "T" in as_of:
+        as_of = as_of.split("T", 1)[0]
+    coverage = "full" if isinstance(reported_size, int) and len(rows) >= reported_size else "reported_holdings"
+    return {
+        "provider": "vanguard",
+        "as_of": as_of,
+        "raw_as_of_values": as_of_values,
+        "total_number_of_holdings": reported_size,
+        "coverage": coverage,
+        "candidate_holdings": candidate_weights,
+        "share_class_notes": share_class_notes,
+        "holdings": rows,
+    }
+
+
+def collect_vanguard_holdings(
+    session: requests.Session,
+    source: EtfHoldingSource,
+    *,
+    candidate_symbols: tuple[str, ...],
+    timeout: float,
+    user_agent: str,
+    page_size: int,
+    max_pages: int,
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    pages: list[dict[str, Any]] = []
+    page_meta: list[dict[str, Any]] = []
+    start = 1
+    total_size: int | None = None
+    headers = _vanguard_headers(user_agent, source.source_url)
+
+    for page_number in range(1, max_pages + 1):
+        params = {"start": start, "count": page_size}
+        response = session.get(source.holdings_url, headers=headers, params=params, timeout=timeout, allow_redirects=True)
+        response.raise_for_status()
+        payload = response.json()
+        if not isinstance(payload, dict):
+            raise ValueError(f"{source.symbol}: Vanguard holdings response expected JSON object")
+        entities = (payload.get("fund") or {}).get("entity") or []
+        if not isinstance(entities, list):
+            raise ValueError(f"{source.symbol}: Vanguard holdings response expected fund.entity list")
+
+        pages.append(payload)
+        page_meta.append(
+            {
+                "page_number": page_number,
+                "requested_url": response.url,
+                "status_code": response.status_code,
+                "content_type": response.headers.get("content-type", ""),
+                "bytes": len(response.content),
+                "row_count": len(entities),
+            }
+        )
+        if isinstance(payload.get("size"), int):
+            total_size = payload["size"]
+        start += len(entities)
+        if not entities or payload.get("next") is None or (total_size is not None and start > total_size):
+            break
+    else:
+        raise ValueError(f"{source.symbol}: Vanguard holdings pagination exceeded max_pages={max_pages}")
+
+    raw_payload = {
+        "provider": "vanguard",
+        "symbol": source.symbol,
+        "holdings_url": source.holdings_url,
+        "page_size": page_size,
+        "page_count": len(pages),
+        "pages": pages,
+    }
+    normalized = normalize_vanguard_holdings(raw_payload, candidate_symbols)
+    meta = {
+        "requested_url": source.holdings_url,
+        "final_url": page_meta[-1]["requested_url"] if page_meta else source.holdings_url,
+        "status_code": page_meta[-1]["status_code"] if page_meta else None,
+        "content_type": page_meta[-1]["content_type"] if page_meta else "",
+        "bytes": sum(item["bytes"] for item in page_meta),
+        "page_count": len(page_meta),
+        "page_meta": page_meta,
+    }
+    return raw_payload, normalized, meta
+
+
 def build_summary(
     sources: list[EtfHoldingSource],
     *,
@@ -281,6 +423,8 @@ def collect_holdings(
     run_date: str,
     timeout: float,
     user_agent: str,
+    page_size: int,
+    max_pages: int,
 ) -> dict[str, Any]:
     session = requests.Session()
     results: list[dict[str, Any]] = []
@@ -305,32 +449,50 @@ def collect_holdings(
         meta_path = output_dir / "holdings.raw.json.meta.json"
         normalized_path = output_dir / "holdings.normalized.json"
         try:
-            headers = _invesco_headers(user_agent) if source.provider == "invesco" else {"User-Agent": user_agent}
-            response = session.get(source.holdings_url, headers=headers, timeout=timeout, allow_redirects=True)
-            raw_path.write_bytes(response.content)
-            response.raise_for_status()
-            payload = response.json()
-            if not isinstance(payload, dict):
-                raise ValueError(f"{source.symbol}: holdings response expected JSON object")
-            normalized = (
-                normalize_invesco_holdings(payload, candidate_symbols)
-                if source.provider == "invesco"
-                else {"provider": source.provider, "candidate_holdings": {}}
-            )
+            if source.provider == "invesco":
+                response = session.get(
+                    source.holdings_url,
+                    headers=_invesco_headers(user_agent),
+                    timeout=timeout,
+                    allow_redirects=True,
+                )
+                raw_path.write_bytes(response.content)
+                response.raise_for_status()
+                payload = response.json()
+                if not isinstance(payload, dict):
+                    raise ValueError(f"{source.symbol}: holdings response expected JSON object")
+                normalized = normalize_invesco_holdings(payload, candidate_symbols)
+                response_meta = {
+                    "requested_url": source.holdings_url,
+                    "final_url": response.url,
+                    "status_code": response.status_code,
+                    "content_type": response.headers.get("content-type", ""),
+                    "bytes": len(response.content),
+                }
+            elif source.provider == "vanguard":
+                raw_payload, normalized, response_meta = collect_vanguard_holdings(
+                    session,
+                    source,
+                    candidate_symbols=candidate_symbols,
+                    timeout=timeout,
+                    user_agent=user_agent,
+                    page_size=page_size,
+                    max_pages=max_pages,
+                )
+                _write_json(raw_path, raw_payload)
+            else:
+                raise ValueError(f"{source.symbol}: unsupported provider {source.provider!r}")
             _write_json(normalized_path, normalized)
             result = {
                 **asdict(source),
                 "status": "collected",
                 "fetched_at_kst": fetched_at,
-                "requested_url": source.holdings_url,
-                "final_url": response.url,
-                "status_code": response.status_code,
-                "content_type": response.headers.get("content-type", ""),
-                "bytes": len(response.content),
+                **response_meta,
                 "raw_path": raw_path.as_posix(),
                 "normalized_path": normalized_path.as_posix(),
                 "as_of": normalized.get("as_of"),
                 "coverage": normalized.get("coverage"),
+                "total_number_of_holdings": normalized.get("total_number_of_holdings"),
                 "candidate_holdings": normalized.get("candidate_holdings", {}),
                 "share_class_notes": normalized.get("share_class_notes", {}),
             }
@@ -463,6 +625,8 @@ def main() -> int:
     parser.add_argument("--symbol", action="append", dest="symbols", default=[])
     parser.add_argument("--equity-queue", choices=("primary_queue", "secondary_queue", "all"), default=DEFAULT_EQUITY_QUEUE)
     parser.add_argument("--timeout", type=float, default=20.0)
+    parser.add_argument("--page-size", type=int, default=500)
+    parser.add_argument("--max-pages", type=int, default=50)
     parser.add_argument("--user-agent", default=os.environ.get("ETF_USER_AGENT") or os.environ.get("SEC_USER_AGENT") or DEFAULT_USER_AGENT)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--output", type=Path, help="Markdown status report output path.")
@@ -492,6 +656,8 @@ def main() -> int:
                 run_date=args.run_date,
                 timeout=args.timeout,
                 user_agent=args.user_agent,
+                page_size=args.page_size,
+                max_pages=args.max_pages,
             )
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc

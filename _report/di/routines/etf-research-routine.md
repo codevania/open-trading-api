@@ -35,7 +35,7 @@ python scripts/di_etf_overlap_check.py --candidate-file _report/di/candidates/co
 - 국내상장 ETF 후보는 운용사 자료와 증권사/세금 근거가 기록될 때까지 `needs_issuer_and_tax_verification` 상태로 둔다.
 - 후보를 active monitoring으로 승격하기 전에는 [[_report/di/research/ETF-COMPARISON/evidence-gate|evidence-gate.md]]를 blocker list로 확인한다.
 - [[scripts/di_etf_source_collect.py|di_etf_source_collect.py]]는 먼저 `--dry-run`으로 실행한다. 공식 운용사 원천 페이지를 `_report/raw/YYYY/YYYY-MM-DD/di/etf-sources/` 아래에 보존해야 할 때만 live 수집을 실행한다.
-- [[scripts/di_etf_holdings_collect.py|di_etf_holdings_collect.py]]는 공식 보유종목 API가 확인된 ETF만 live 수집한다. 현재 `QQQ`는 Invesco 공식 holdings API가 확인됐고, `VOO`/`VTI`/`VT`는 Vanguard 공식 profile page만 확인됐으므로 보유종목은 수동 공식 원천 확인 상태로 둔다.
+- [[scripts/di_etf_holdings_collect.py|di_etf_holdings_collect.py]]는 공식 보유종목 API가 확인된 ETF만 live 수집한다. 현재 `QQQ`는 Invesco 공식 holdings API, `VOO`/`VTI`/`VT`는 Vanguard 공식 `portfolio-holding` JSON endpoint를 사용한다.
 - [[scripts/di_etf_overlap_input_prepare.py|di_etf_overlap_input_prepare.py]]는 수집된 공식 holdings raw에서 확인 가능한 ETF 보유비중을 [[_report/private/di/etf-overlap-inputs.yaml|etf-overlap-inputs.yaml]] 초안으로 옮긴다. 기존 개인 ETF 비중은 보존하고, 새로 쓸 때도 private 경로만 사용한다.
 - [[scripts/di_etf_overlap_check.py|di_etf_overlap_check.py]]는 [[_report/private/di/etf-overlap-inputs.yaml|etf-overlap-inputs.yaml]]에 공식 ETF 보유비중과 개인 ETF 비중을 채운 뒤 실행한다. 개인 비중이 들어가므로 private 파일만 사용한다.
 - 국내 ETF 운용사 URL을 추가하거나 제외할 때는 [[_report/di/research/ETF-COMPARISON/domestic-etf-source-url-check|domestic-etf-source-url-check.md]]에 검증 결과를 기록한다.
