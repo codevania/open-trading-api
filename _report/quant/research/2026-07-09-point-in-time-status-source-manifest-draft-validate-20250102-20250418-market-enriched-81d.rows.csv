@@ -1,0 +1,11 @@
+﻿row_number,status_type,coverage_start,coverage_end,source,source_url,raw_path,status,message
+2,managed_issue,2025-01-02,2025-04-18,krx_data_marketplace,,,fail,"source_url is empty; raw_path is empty; confidence must be high, medium, or low"
+3,managed_issue,2025-01-02,2025-04-18,kind,,,fail,"source_url is empty; raw_path is empty; confidence must be high, medium, or low"
+4,managed_issue,2025-01-02,2025-04-18,manual_snapshot,,,fail,"source_url is empty; raw_path is empty; confidence must be high, medium, or low"
+5,trading_halt,2025-01-02,2025-04-18,kind,,,fail,"source_url is empty; raw_path is empty; confidence must be high, medium, or low"
+6,trading_halt,2025-01-02,2025-04-18,manual_snapshot,,,fail,"source_url is empty; raw_path is empty; confidence must be high, medium, or low"
+7,market_alert,2025-01-02,2025-04-18,krx_data_marketplace,,,fail,"source_url is empty; raw_path is empty; confidence must be high, medium, or low"
+8,market_alert,2025-01-02,2025-04-18,manual_snapshot,,,fail,"source_url is empty; raw_path is empty; confidence must be high, medium, or low"
+9,delisting,2025-01-02,2025-04-18,krx_data_marketplace,,,fail,"source_url is empty; raw_path is empty; confidence must be high, medium, or low"
+10,delisting,2025-01-02,2025-04-18,kind,,,fail,"source_url is empty; raw_path is empty; confidence must be high, medium, or low"
+11,delisting,2025-01-02,2025-04-18,manual_snapshot,,,fail,"source_url is empty; raw_path is empty; confidence must be high, medium, or low"

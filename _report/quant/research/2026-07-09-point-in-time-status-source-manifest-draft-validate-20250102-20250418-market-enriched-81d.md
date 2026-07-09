@@ -18,6 +18,10 @@
 | Row failures | 10 |
 | Missing coverage status types | `none` |
 
+## Row Output
+
+- [[_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-validate-20250102-20250418-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-validate-20250102-20250418-market-enriched-81d.rows.csv]]
+
 ## Row Checks
 
 | Row | Status type | Coverage | Source | Raw path | Status | Message |

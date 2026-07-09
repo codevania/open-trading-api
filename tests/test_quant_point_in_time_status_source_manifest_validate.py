@@ -207,6 +207,7 @@ class QuantPointInTimeStatusSourceManifestValidateTest(unittest.TestCase):
             policy = root / "policy.yaml"
             manifest = root / "manifest.csv"
             report = root / "manifest-validate.md"
+            rows_output = root / "manifest-validate.rows.csv"
             raw = (
                 root
                 / "_report"
@@ -238,6 +239,8 @@ class QuantPointInTimeStatusSourceManifestValidateTest(unittest.TestCase):
                     "managed_issue",
                     "--repo-root",
                     str(root),
+                    "--rows-output",
+                    str(rows_output),
                     "--report-output",
                     str(report),
                 ],
@@ -246,10 +249,17 @@ class QuantPointInTimeStatusSourceManifestValidateTest(unittest.TestCase):
 
             report_text = report.read_text(encoding="utf-8")
             report_bytes = report.read_bytes()
+            rows_bytes = rows_output.read_bytes()
+            with rows_output.open("r", encoding="utf-8-sig", newline="") as handle:
+                rows = list(csv.DictReader(handle))
 
         self.assertIn("- Overall status: `pass`", report_text)
         self.assertIn("| Manifest rows | 1 |", report_text)
+        self.assertIn("- " + f"[[{rows_output.as_posix()}|{rows_output.as_posix()}]]", report_text)
+        self.assertEqual(rows[0]["status"], "pass")
+        self.assertEqual(rows[0]["source_url"], "https://kind.krx.co.kr/example")
         self.assertNotIn(b"\r\n", report_bytes)
+        self.assertNotIn(b"\r\n", rows_bytes)
 
 
 if __name__ == "__main__":

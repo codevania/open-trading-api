@@ -31,6 +31,17 @@ REQUIRED_FIELDS = {
     "notes",
 }
 VALID_CONFIDENCE = {"high", "medium", "low"}
+CHECK_FIELDS = (
+    "row_number",
+    "status_type",
+    "coverage_start",
+    "coverage_end",
+    "source",
+    "source_url",
+    "raw_path",
+    "status",
+    "message",
+)
 
 
 @dataclass
@@ -40,6 +51,7 @@ class ManifestRowCheck:
     coverage_start: str
     coverage_end: str
     source: str
+    source_url: str
     raw_path: str
     status: str
     message: str
@@ -135,6 +147,7 @@ def _check_row(
     coverage_start = row.get("coverage_start", "")
     coverage_end = row.get("coverage_end", "")
     source = row.get("source", "")
+    source_url = row.get("source_url", "")
     raw_path = row.get("raw_path", "").replace("\\", "/")
     messages: list[str] = []
     scope_note = ""
@@ -157,7 +170,6 @@ def _check_row(
     else:
         allowed_prefixes = [str(prefix) for prefix in source_policy.get("allowed_url_prefixes", []) or []]
 
-    source_url = row.get("source_url", "")
     if not source_url:
         messages.append("source_url is empty")
     elif allowed_prefixes and not _source_url_allowed(source_url, allowed_prefixes):
@@ -181,6 +193,7 @@ def _check_row(
         coverage_start=coverage_start,
         coverage_end=coverage_end,
         source=source,
+        source_url=source_url,
         raw_path=raw_path,
         status=status,
         message="; ".join(messages) if messages else scope_note or "ok",
@@ -258,7 +271,28 @@ def _wikilink(path: Path | None) -> str:
     return f"[[{rendered}|{rendered}]]"
 
 
-def _render_report(checks: list[ManifestRowCheck], summary: dict[str, Any]) -> str:
+def _write_check_rows(path: Path, checks: list[ManifestRowCheck]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=CHECK_FIELDS, lineterminator="\n")
+        writer.writeheader()
+        for check in checks:
+            writer.writerow(
+                {
+                    "row_number": check.row_number,
+                    "status_type": check.status_type,
+                    "coverage_start": check.coverage_start,
+                    "coverage_end": check.coverage_end,
+                    "source": check.source,
+                    "source_url": check.source_url,
+                    "raw_path": check.raw_path,
+                    "status": check.status,
+                    "message": check.message,
+                }
+            )
+
+
+def _render_report(checks: list[ManifestRowCheck], summary: dict[str, Any], rows_output: Path | None) -> str:
     lines = [
         "# Point-in-Time Status Source Coverage Manifest Validate",
         "",
@@ -280,11 +314,18 @@ def _render_report(checks: list[ManifestRowCheck], summary: dict[str, Any]) -> s
         f"| Row failures | {summary['row_failures']} |",
         f"| Missing coverage status types | `{','.join(summary['missing_coverage_status_types']) or 'none'}` |",
         "",
-        "## Row Checks",
-        "",
-        "| Row | Status type | Coverage | Source | Raw path | Status | Message |",
-        "| ---: | --- | --- | --- | --- | --- | --- |",
     ]
+    if rows_output is not None:
+        lines.extend(["## Row Output", "", f"- {_wikilink(rows_output)}", ""])
+
+    lines.extend(
+        [
+            "## Row Checks",
+            "",
+            "| Row | Status type | Coverage | Source | Raw path | Status | Message |",
+            "| ---: | --- | --- | --- | --- | --- | --- |",
+        ]
+    )
     for check in checks:
         lines.append(
             f"| {check.row_number} | `{check.status_type}` | "
@@ -313,6 +354,7 @@ def main() -> int:
     parser.add_argument("--market-end")
     parser.add_argument("--required-status-types", default=",".join(DEFAULT_REQUIRED_STATUS_TYPES))
     parser.add_argument("--repo-root", type=Path)
+    parser.add_argument("--rows-output", type=Path)
     parser.add_argument("--report-output", type=Path)
     args = parser.parse_args()
 
@@ -329,7 +371,9 @@ def main() -> int:
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc
 
-    report = _render_report(checks, summary)
+    if args.rows_output:
+        _write_check_rows(args.rows_output, checks)
+    report = _render_report(checks, summary, args.rows_output)
     if args.report_output:
         write_text_lf(args.report_output, report)
     else:
