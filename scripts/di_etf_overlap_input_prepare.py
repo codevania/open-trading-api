@@ -27,6 +27,7 @@ TODO_AS_OF = "TODO - official holdings date"
 TODO_SOURCE_URL = "TODO - official issuer holdings or factsheet URL"
 TODO_COVERAGE = "TODO - full, candidate_only, or top_n"
 TODO_HOLDING_WEIGHT = "TODO - ETF holding percent"
+STALE_MANUAL_NOTE = "manual official holdings still required"
 UNCHECKED_TOKENS = ("todo", "verify", "check", "needs_", "null", "pending", "none")
 
 
@@ -182,6 +183,8 @@ def _notes(existing_row: dict[str, Any], normalized: dict[str, Any] | None) -> l
     existing_notes = existing_row.get("notes")
     for value in _as_list(existing_notes):
         text = _text(value)
+        if normalized and text == STALE_MANUAL_NOTE:
+            continue
         if text and text not in notes:
             notes.append(text)
     if normalized:
@@ -195,7 +198,7 @@ def _notes(existing_row: dict[str, Any], normalized: dict[str, Any] | None) -> l
         if normalized:
             notes.append("official holdings prefilled from normalized raw evidence")
         else:
-            notes.append("manual official holdings still required")
+            notes.append(STALE_MANUAL_NOTE)
     return notes
 
 

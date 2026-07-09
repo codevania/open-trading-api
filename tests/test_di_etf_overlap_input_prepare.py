@@ -120,6 +120,9 @@ etf_holdings:
     as_of: "2026-06-30"
     source_url: "https://manual.example/qqq"
     coverage: candidate_only
+    notes:
+      - manual official holdings still required
+      - keep this analyst note
     holdings:
       MSFT: 9.9
 """,
@@ -173,6 +176,9 @@ etf_holdings:
     as_of: "2026-06-30"
     source_url: "https://manual.example/qqq"
     coverage: candidate_only
+    notes:
+      - manual official holdings still required
+      - keep this analyst note
     holdings:
       MSFT: 9.9
 """,
@@ -208,6 +214,11 @@ etf_holdings:
             self.assertEqual(payload["etf_holdings"]["QQQ"]["as_of"], "2026-07-07")
             self.assertEqual(payload["etf_holdings"]["QQQ"]["source_url"], "https://www.invesco.com/qqq-etf/en/about.html")
             self.assertEqual(payload["etf_holdings"]["QQQ"]["holdings"]["MSFT"], 4.631281)
+            self.assertNotIn("manual official holdings still required", payload["etf_holdings"]["QQQ"]["notes"])
+            self.assertIn("keep this analyst note", payload["etf_holdings"]["QQQ"]["notes"])
+            self.assertTrue(
+                any("GOOG is reported separately" in note for note in payload["etf_holdings"]["QQQ"]["notes"])
+            )
 
     def test_dry_run_does_not_write_private_file(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
