@@ -53,3 +53,4 @@
 - Added a masked DI private-input status checker and public status report so ETF portfolio weights and satellite decision inputs can be tracked as `filled`/`missing` without exposing private values.
 - Added missing-only and fail-on-missing modes to the DI private-input checker so decision promotion can stop automatically while private blockers remain.
 - Added blocked-only and fail-on-blocked modes to the DI satellite decision-prep checker so checked `decision.md` promotion stops when research or private inputs remain incomplete.
+- Added hold-only and fail-on-hold modes to the DI candidate evidence gate so watchlist promotion stops automatically while candidate evidence remains incomplete.

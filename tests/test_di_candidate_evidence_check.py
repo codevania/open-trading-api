@@ -195,6 +195,132 @@ class DiCandidateEvidenceCheckTest(unittest.TestCase):
             self.assertIn("| `satellite_equities.primary_queue` | `MSFT` | Microsoft | `ready_for_watchlist_review` | - |", result.stdout)
             self.assertIn("Order intent generated: `false`", result.stdout)
 
+    def test_only_hold_filters_ready_rows_and_can_fail_gate(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "candidates.yaml"
+            research_root = root / "research"
+            msft = research_root / "MSFT"
+            msft.mkdir(parents=True)
+            (msft / "sec-filing-summary.md").write_text(
+                """\
+# MSFT SEC Filing Summary
+
+- Source: SEC EDGAR raw JSON collected for DI research
+- Order intent generated: `false`
+- Latest 10-K: available
+- Latest 10-Q: available
+- Latest 8-K: available
+- XBRL facts: available
+""",
+                encoding="utf-8",
+            )
+            _write_sec_documents(msft / "sec-filing-documents.md")
+            _write_sec_sections(msft / "sec-filing-sections.md")
+            _write_financials(msft / "financials.md")
+            _write_valuation(msft / "valuation.md")
+            (msft / "thesis.md").write_text(
+                """\
+# Thesis
+
+- Symbol: MSFT
+- Company: Microsoft
+- Source: SEC 10-K and SEC 10-Q
+1. Azure growth is the first operating driver to verify.
+2. Office and Windows cash flow fund AI infrastructure.
+3. Capex and margin pressure are the main counterweight.
+- Invalidation rule: cloud growth or margin quality breaks the written thesis.
+""",
+                encoding="utf-8",
+            )
+            (msft / "decision.md").write_text(
+                """\
+# Decision
+
+- Symbol: MSFT
+- Company/ETF: Microsoft
+- [x] Watch only
+1. Filing evidence exists in the research folder.
+2. Position size is not approved yet.
+- Invalidation condition: thesis evidence becomes stale.
+""",
+                encoding="utf-8",
+            )
+            manifest.write_text(MANIFEST, encoding="utf-8")
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--candidate-file",
+                    str(manifest),
+                    "--research-root",
+                    str(research_root),
+                    "--run-date",
+                    "2026-07-10",
+                    "--only-hold",
+                    "--fail-on-hold",
+                ],
+                cwd=REPO_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 2, result.stderr)
+            self.assertIn("Row filter: `hold_only`", result.stdout)
+            self.assertIn("| Candidates checked | 1 |", result.stdout)
+            self.assertIn("| Ready for next review | 0 |", result.stdout)
+            self.assertIn("| Hold | 1 |", result.stdout)
+            self.assertIn("| `korea_listed_etfs_to_verify` | `360750` | TIGER US S&P500 | `hold` |", result.stdout)
+            self.assertNotIn("| `core_etfs` | `VOO` |", result.stdout)
+            self.assertNotIn("| `satellite_equities.primary_queue` | `MSFT` |", result.stdout)
+            self.assertIn("Order intent generated: `false`", result.stdout)
+
+    def test_fail_on_hold_succeeds_when_all_candidates_are_ready(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "candidates.yaml"
+            manifest.write_text(
+                """\
+core_etfs:
+  - symbol: VOO
+    name: Vanguard S&P 500 ETF
+    benchmark: S&P 500 Index
+    source_url: https://example.com/voo
+    currency_hedge: unhedged
+    distribution_policy: quarterly
+    tax_account_fit: taxable account note recorded
+    expense_ratio: "0.03%"
+korea_listed_etfs_to_verify: []
+satellite_etfs_to_verify: []
+satellite_equities:
+  primary_queue: []
+  secondary_queue: []
+""",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--candidate-file",
+                    str(manifest),
+                    "--run-date",
+                    "2026-07-10",
+                    "--fail-on-hold",
+                ],
+                cwd=REPO_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("| Ready for next review | 1 |", result.stdout)
+            self.assertIn("| Hold | 0 |", result.stdout)
+
     def test_current_repo_candidates_are_not_ready_for_promotion(self) -> None:
         result = subprocess.run(
             [
@@ -215,6 +341,8 @@ class DiCandidateEvidenceCheckTest(unittest.TestCase):
         self.assertIn("| Candidates checked | 17 |", result.stdout)
         self.assertIn("| Ready for next review | 0 |", result.stdout)
         self.assertIn("| Hold | 17 |", result.stdout)
+        self.assertIn("[[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]", result.stdout)
+        self.assertIn("[[_report/di/watchlist.yaml|_report/di/watchlist.yaml]]", result.stdout)
 
     def test_placeholder_stock_notes_do_not_pass_promotion(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

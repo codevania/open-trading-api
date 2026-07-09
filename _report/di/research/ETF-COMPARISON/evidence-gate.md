@@ -1,8 +1,9 @@
 # DI Candidate Evidence Gate
 
-- Run date: `2026-07-09`
+- Run date: `2026-07-10`
 - Candidate manifest: [[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]
 - Research root: `_report/di/research`
+- Row filter: `all`
 - Interpretation: readiness gate only; no buy or order intent is generated
 - Order intent generated: `false`
 

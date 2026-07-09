@@ -191,20 +191,33 @@ def _render_missing(missing: tuple[str, ...]) -> str:
     return ", ".join(f"`{item}`" for item in missing) if missing else "-"
 
 
+def _repo_doc_ref(path: Path, *, label: str | None = None) -> str:
+    if not path.is_absolute():
+        normalized = path.as_posix()
+        return f"[[{normalized}|{label or path.name}]]"
+    try:
+        relative_path = path.resolve().relative_to(Path.cwd().resolve())
+    except ValueError:
+        return f"`{path.as_posix()}`"
+    return f"[[{relative_path.as_posix()}|{label or path.name}]]"
+
+
 def render_report(
     gates: list[CandidateGate],
     *,
     candidate_file: Path,
     research_root: Path,
     run_date: str,
+    row_filter: str = "all",
 ) -> str:
     ready = sum(1 for gate in gates if gate.status != "hold")
     lines = [
         "# DI Candidate Evidence Gate",
         "",
         f"- Run date: `{run_date}`",
-        f"- Candidate manifest: `{candidate_file.as_posix()}`",
+        f"- Candidate manifest: {_repo_doc_ref(candidate_file)}",
         f"- Research root: `{research_root.as_posix()}`",
+        f"- Row filter: `{row_filter}`",
         "- Interpretation: readiness gate only; no buy or order intent is generated",
         "- Order intent generated: `false`",
         "",
@@ -241,7 +254,7 @@ def render_report(
             "",
             "## Promotion Rules",
             "",
-            "- ETF candidates stay out of `_report/di/watchlist.yaml` until issuer, cost, NAV/liquidity, distribution, tax, and account evidence are filled.",
+            "- ETF candidates stay out of [[_report/di/watchlist.yaml|_report/di/watchlist.yaml]] until issuer, cost, NAV/liquidity, distribution, tax, and account evidence are filled.",
             "- Stock candidates stay out of active position review until SEC/DART source evidence, primary filing document and section maps, `financials.md`, `thesis.md`, `valuation.md`, and `decision.md` exist.",
             "- A `ready_*` status means research process readiness only, not a recommendation to buy.",
             "",
@@ -255,6 +268,12 @@ def main() -> int:
     parser.add_argument("--candidate-file", type=Path, default=DEFAULT_CANDIDATE_FILE)
     parser.add_argument("--research-root", type=Path, default=DEFAULT_RESEARCH_ROOT)
     parser.add_argument("--run-date", default=_now_kst().date().isoformat())
+    parser.add_argument("--only-hold", action="store_true", help="Show only candidates that remain on hold.")
+    parser.add_argument(
+        "--fail-on-hold",
+        action="store_true",
+        help="Return exit code 2 when any checked candidate remains on hold.",
+    )
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
 
@@ -264,12 +283,21 @@ def main() -> int:
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc
 
-    report = render_report(gates, candidate_file=args.candidate_file, research_root=args.research_root, run_date=args.run_date)
+    visible_gates = [gate for gate in gates if gate.status == "hold"] if args.only_hold else gates
+    report = render_report(
+        visible_gates,
+        candidate_file=args.candidate_file,
+        research_root=args.research_root,
+        run_date=args.run_date,
+        row_filter="hold_only" if args.only_hold else "all",
+    )
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(report, encoding="utf-8")
     else:
         print(report)
+    if args.fail_on_hold and any(gate.status == "hold" for gate in gates):
+        return 2
     return 0
 
 

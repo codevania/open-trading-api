@@ -7,6 +7,7 @@ ETF를 [[_report/di/watchlist.yaml|_report/di/watchlist.yaml]]에 추가하기 �
 ```bash
 python scripts/di_etf_compare.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --output _report/di/research/ETF-COMPARISON/etf-checklist.md
 python scripts/di_candidate_evidence_check.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --output _report/di/research/ETF-COMPARISON/evidence-gate.md
+python scripts/di_candidate_evidence_check.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --only-hold --fail-on-hold
 python scripts/di_etf_source_collect.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --run-date YYYY-MM-DD --dry-run
 python scripts/di_etf_holdings_collect.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --run-date YYYY-MM-DD --dry-run --output _report/di/research/ETF-COMPARISON/etf-holdings-source-status.md
 python scripts/di_etf_overlap_input_prepare.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --run-date YYYY-MM-DD --dry-run
