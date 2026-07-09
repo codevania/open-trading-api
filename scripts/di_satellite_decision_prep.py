@@ -229,6 +229,7 @@ def render_report(
     input_file: Path | None,
     run_date: str,
     queue: str,
+    row_filter: str = "all",
 ) -> str:
     ready = sum(1 for row in rows if row.status == "ready_for_checked_decision")
     lines = [
@@ -239,6 +240,7 @@ def render_report(
         f"- Research root: `{research_root.as_posix()}`",
         f"- Decision input file: `{input_file.as_posix() if input_file else 'not configured'}`",
         f"- Queue scope: `{queue}`",
+        f"- Row filter: `{row_filter}`",
         "- Interpretation: pre-decision checklist only; no buy, sell, hold, or order intent is generated",
         "- Order intent generated: `false`",
         "",
@@ -303,6 +305,12 @@ def main() -> int:
     parser.add_argument("--input-file", type=Path, default=DEFAULT_DECISION_INPUT_FILE)
     parser.add_argument("--queue", choices=("primary_queue", "secondary_queue", "all"), default="primary_queue")
     parser.add_argument("--run-date", default=_now_kst().date().isoformat())
+    parser.add_argument("--only-blocked", action="store_true", help="Show only candidates that still need inputs.")
+    parser.add_argument(
+        "--fail-on-blocked",
+        action="store_true",
+        help="Return exit code 2 when any checked candidate is not ready for a checked decision.",
+    )
     parser.add_argument("--output", type=Path, help="Markdown report output path. Prints to stdout when omitted.")
     args = parser.parse_args()
 
@@ -315,13 +323,19 @@ def main() -> int:
             queue=args.queue,
             input_payload=input_payload,
         )
+        visible_rows = (
+            [row for row in rows if row.status != "ready_for_checked_decision"]
+            if args.only_blocked
+            else rows
+        )
         report = render_report(
-            rows,
+            visible_rows,
             candidate_file=args.candidate_file,
             research_root=args.research_root,
             input_file=args.input_file,
             run_date=args.run_date,
             queue=args.queue,
+            row_filter="blocked_only" if args.only_blocked else "all",
         )
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc
@@ -331,6 +345,8 @@ def main() -> int:
         args.output.write_text(report, encoding="utf-8")
     else:
         print(report)
+    if args.fail_on_blocked and any(row.status != "ready_for_checked_decision" for row in rows):
+        return 2
     return 0
 
 

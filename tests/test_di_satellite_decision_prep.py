@@ -264,6 +264,7 @@ inputs:
                     str(input_file),
                     "--run-date",
                     "2026-07-08",
+                    "--fail-on-blocked",
                 ],
                 cwd=REPO_ROOT,
                 text=True,
@@ -275,6 +276,83 @@ inputs:
             self.assertIn("| Ready for checked decision | 1 |", result.stdout)
             self.assertIn("| `primary_queue` | `MSFT` | Microsoft | `ready_for_checked_decision` |", result.stdout)
             self.assertIn("write checked decision.md with no order intent", result.stdout)
+
+    def test_fail_on_blocked_returns_2_and_only_blocked_filters_ready_rows(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "candidates.yaml"
+            input_file = root / "inputs.yaml"
+            research_root = root / "research"
+            msft = research_root / "MSFT"
+            nvda = research_root / "NVDA"
+            msft.mkdir(parents=True)
+            nvda.mkdir(parents=True)
+            manifest.write_text(
+                """\
+satellite_equities:
+  primary_queue:
+    - symbol: MSFT
+      name: Microsoft
+      market: NASDAQ
+      status: candidate
+    - symbol: NVDA
+      name: NVIDIA
+      market: NASDAQ
+      status: candidate
+  secondary_queue: []
+""",
+                encoding="utf-8",
+            )
+            input_file.write_text(
+                """\
+version: 1
+inputs:
+  MSFT:
+    latest_price_checked: "recorded"
+    valuation_range_checked: "recorded"
+    reverse_dcf_checked: "recorded"
+    etf_overlap_checked: "recorded"
+    tax_account_route: "recorded"
+    max_position_size: "recorded"
+    add_trim_rule: "recorded"
+    source_freshness_checked: "recorded"
+""",
+                encoding="utf-8",
+            )
+            _write_thesis(msft / "thesis.md")
+            _write_financials(msft / "financials.md")
+            _write_valuation(msft / "valuation.md")
+            _write_thesis(nvda / "thesis.md")
+            _write_financials(nvda / "financials.md")
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--candidate-file",
+                    str(manifest),
+                    "--research-root",
+                    str(research_root),
+                    "--input-file",
+                    str(input_file),
+                    "--run-date",
+                    "2026-07-08",
+                    "--only-blocked",
+                    "--fail-on-blocked",
+                ],
+                cwd=REPO_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 2, result.stderr)
+            self.assertIn("Row filter: `blocked_only`", result.stdout)
+            self.assertIn("| Candidates checked | 1 |", result.stdout)
+            self.assertIn("| Ready for checked decision | 0 |", result.stdout)
+            self.assertNotIn("| `primary_queue` | `MSFT` | Microsoft |", result.stdout)
+            self.assertIn("| `primary_queue` | `NVDA` | NVIDIA | `needs_decision_inputs` |", result.stdout)
+            self.assertIn("Order intent generated: `false`", result.stdout)
 
     def test_rejects_non_object_manifest(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

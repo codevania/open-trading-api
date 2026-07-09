@@ -13,7 +13,7 @@ Required order:
 5. Run [[scripts/di_etf_overlap_input_prepare.py|di_etf_overlap_input_prepare.py]] to prefill supported official ETF holding weights into [[_report/private/di/etf-overlap-inputs.yaml|etf-overlap-inputs.yaml]], then fill any remaining official ETF weights plus private ETF portfolio weights and run [[scripts/di_etf_overlap_check.py|di_etf_overlap_check.py]].
 6. Copy [[_report/di/templates/satellite-decision-inputs.example.yaml|satellite-decision-inputs.example.yaml]] to [[_report/private/di/satellite-decision-inputs.yaml|satellite-decision-inputs.yaml]] and fill account-specific or portfolio-specific checks there.
 7. Run [[scripts/di_private_input_status.py|di_private_input_status.py]] to confirm which private fields are still `missing` without printing the private values. Use `--only-missing --fail-on-missing` as the blocking gate before promotion.
-8. Run [[scripts/di_satellite_decision_prep.py|di_satellite_decision_prep.py]] and confirm the candidate is no longer `needs_decision_inputs`.
+8. Run [[scripts/di_satellite_decision_prep.py|di_satellite_decision_prep.py]] with `--fail-on-blocked` and confirm the candidate is no longer `needs_decision_inputs`.
 9. Only then write a checked `decision.md`.
 10. Run [[scripts/di_candidate_evidence_check.py|di_candidate_evidence_check.py]] before watchlist or active position review.
 
