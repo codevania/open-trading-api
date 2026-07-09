@@ -456,6 +456,52 @@ def _status_source_manifest_fill_packet_gate(path: Path | None) -> Gate | None:
     )
 
 
+def _status_source_manifest_fill_progress_gate(path: Path | None) -> Gate | None:
+    if path is None:
+        return None
+    text = _read_text(path)
+    if not text:
+        return Gate(
+            "point_in_time_status_source_manifest_fill_progress",
+            "hold",
+            "source manifest fill-progress report path was supplied but could not be read",
+            "rerun quant_point_in_time_status_source_manifest_fill_progress.py",
+        )
+    if (
+        "Point-in-Time Status Source Manifest Fill Progress" in text
+        and "Order intent generated: `false`" in text
+        and "Backtest readiness impact: `hold`" in text
+    ):
+        fill_rows = _markdown_metric(text, "Fill packet rows") or "unknown"
+        materializable_rows = _markdown_metric(text, "Materializable rows") or "unknown"
+        blocked_rows = _markdown_metric(text, "Blocked rows") or "unknown"
+        raw_path_exists_rows = _markdown_metric(text, "Raw path exists rows") or "unknown"
+        evidence = (
+            f"local P1 source-manifest fill progress has {materializable_rows}/{fill_rows} "
+            f"materializable rows; blocked rows={blocked_rows}; raw paths present={raw_path_exists_rows}"
+        )
+        if "not source coverage evidence" in text:
+            evidence += "; report explicitly labels it as non-evidence"
+        status = "ready_for_materialization" if fill_rows != "unknown" and materializable_rows == fill_rows else "blocked"
+        next_action = (
+            "materialize and validate the source manifest, then rerun coverage audit"
+            if status == "ready_for_materialization"
+            else "capture official raw files and fill source_url/raw_path/confidence/capture status until all P1 rows are materializable"
+        )
+        return Gate(
+            "point_in_time_status_source_manifest_fill_progress",
+            status,
+            evidence,
+            next_action,
+        )
+    return Gate(
+        "point_in_time_status_source_manifest_fill_progress",
+        "hold",
+        "local source manifest fill-progress report is not recognized",
+        "rerun quant_point_in_time_status_source_manifest_fill_progress.py",
+    )
+
+
 def _status_source_manifest_materialize_gate(path: Path | None) -> Gate | None:
     if path is None:
         return None
@@ -550,6 +596,7 @@ def evaluate_readiness(
     status_evidence_collection_plan_report: Path | None = None,
     status_evidence_collection_queue_report: Path | None = None,
     status_source_manifest_fill_packet_report: Path | None = None,
+    status_source_manifest_fill_progress_report: Path | None = None,
     status_source_manifest_materialize_report: Path | None = None,
     kis_preflight_report: Path | None,
     min_market_dates: int = DEFAULT_MIN_MARKET_DATES,
@@ -667,6 +714,12 @@ def evaluate_readiness(
     if status_source_manifest_fill_packet_gate is not None:
         gates.append(status_source_manifest_fill_packet_gate)
 
+    status_source_manifest_fill_progress_gate = _status_source_manifest_fill_progress_gate(
+        status_source_manifest_fill_progress_report
+    )
+    if status_source_manifest_fill_progress_gate is not None:
+        gates.append(status_source_manifest_fill_progress_gate)
+
     status_source_manifest_materialize_gate = _status_source_manifest_materialize_gate(
         status_source_manifest_materialize_report
     )
@@ -719,6 +772,7 @@ def evaluate_readiness(
         "status_evidence_collection_plan_report_supplied": status_evidence_collection_plan_report is not None,
         "status_evidence_collection_queue_report_supplied": status_evidence_collection_queue_report is not None,
         "status_source_manifest_fill_packet_report_supplied": status_source_manifest_fill_packet_report is not None,
+        "status_source_manifest_fill_progress_report_supplied": status_source_manifest_fill_progress_report is not None,
         "status_source_manifest_materialize_report_supplied": status_source_manifest_materialize_report is not None,
         "backtest_readiness": "hold",
         "live_trading_readiness": "blocked",
@@ -754,6 +808,7 @@ def _render_report(
     status_evidence_collection_plan_report: Path | None,
     status_evidence_collection_queue_report: Path | None,
     status_source_manifest_fill_packet_report: Path | None,
+    status_source_manifest_fill_progress_report: Path | None,
     status_source_manifest_materialize_report: Path | None,
     kis_preflight_report: Path | None,
     status_coverage: str,
@@ -777,6 +832,7 @@ def _render_report(
         f"- Status evidence collection plan report: {_wikilink(status_evidence_collection_plan_report) if status_evidence_collection_plan_report else '`not_supplied`'}",
         f"- Status evidence collection queue report: {_wikilink(status_evidence_collection_queue_report) if status_evidence_collection_queue_report else '`not_supplied`'}",
         f"- Status source manifest fill packet report: {_wikilink(status_source_manifest_fill_packet_report) if status_source_manifest_fill_packet_report else '`not_supplied`'}",
+        f"- Status source manifest fill-progress report: {_wikilink(status_source_manifest_fill_progress_report) if status_source_manifest_fill_progress_report else '`not_supplied`'}",
         f"- Status source manifest materialize report: {_wikilink(status_source_manifest_materialize_report) if status_source_manifest_materialize_report else '`not_supplied`'}",
         f"- KIS preflight report: {_wikilink(kis_preflight_report) if kis_preflight_report else '`not_supplied`'}",
         f"- Status coverage mode: `{status_coverage}`",
@@ -858,6 +914,7 @@ def main() -> int:
     parser.add_argument("--status-evidence-collection-plan-report", type=Path)
     parser.add_argument("--status-evidence-collection-queue-report", type=Path)
     parser.add_argument("--status-source-manifest-fill-packet-report", type=Path)
+    parser.add_argument("--status-source-manifest-fill-progress-report", type=Path)
     parser.add_argument("--status-source-manifest-materialize-report", type=Path)
     parser.add_argument("--kis-preflight-report", type=Path)
     parser.add_argument("--status-coverage", default="current_snapshot_smoke")
@@ -888,6 +945,7 @@ def main() -> int:
             status_evidence_collection_plan_report=args.status_evidence_collection_plan_report,
             status_evidence_collection_queue_report=args.status_evidence_collection_queue_report,
             status_source_manifest_fill_packet_report=args.status_source_manifest_fill_packet_report,
+            status_source_manifest_fill_progress_report=args.status_source_manifest_fill_progress_report,
             status_source_manifest_materialize_report=args.status_source_manifest_materialize_report,
             kis_preflight_report=args.kis_preflight_report,
             min_market_dates=args.min_market_dates,
@@ -916,6 +974,7 @@ def main() -> int:
         status_evidence_collection_plan_report=args.status_evidence_collection_plan_report,
         status_evidence_collection_queue_report=args.status_evidence_collection_queue_report,
         status_source_manifest_fill_packet_report=args.status_source_manifest_fill_packet_report,
+        status_source_manifest_fill_progress_report=args.status_source_manifest_fill_progress_report,
         status_source_manifest_materialize_report=args.status_source_manifest_materialize_report,
         kis_preflight_report=args.kis_preflight_report,
         status_coverage=args.status_coverage,

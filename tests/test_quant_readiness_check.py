@@ -455,6 +455,47 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertEqual(summary["backtest_readiness"], "hold")
         self.assertEqual(summary["live_trading_readiness"], "blocked")
 
+    def test_status_source_manifest_fill_progress_is_blocked_gate(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            report = Path(tmp) / "status-source-manifest-fill-progress.md"
+            report.write_text(
+                "\n".join(
+                    [
+                        "# Point-in-Time Status Source Manifest Fill Progress",
+                        "- Order intent generated: `false`",
+                        "- Backtest readiness impact: `hold`",
+                        "- Interpretation: fill progress only, not source coverage evidence",
+                        "| Metric | Value |",
+                        "| --- | ---: |",
+                        "| Fill packet rows | 10 |",
+                        "| Materializable rows | 0 |",
+                        "| Blocked rows | 10 |",
+                        "| Raw path exists rows | 0 |",
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            gates, summary = evaluate_readiness(
+                liquidity_rows=_liquidity_rows(),
+                signal_rows=_signal_rows(),
+                status_source_manifest_fill_progress_report=report,
+                kis_preflight_report=None,
+                status_coverage="current_snapshot_smoke",
+            )
+        by_name = {gate.name: gate for gate in gates}
+
+        self.assertEqual(by_name["point_in_time_status_source_manifest_fill_progress"].status, "blocked")
+        self.assertIn(
+            "0/10 materializable rows",
+            by_name["point_in_time_status_source_manifest_fill_progress"].evidence,
+        )
+        self.assertIn("non-evidence", by_name["point_in_time_status_source_manifest_fill_progress"].evidence)
+        self.assertIn("capture official raw files", by_name["point_in_time_status_source_manifest_fill_progress"].next_action)
+        self.assertTrue(summary["status_source_manifest_fill_progress_report_supplied"])
+        self.assertEqual(summary["backtest_readiness"], "hold")
+        self.assertEqual(summary["live_trading_readiness"], "blocked")
+
     def test_status_source_manifest_materialize_is_unvalidated_gate(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             report = Path(tmp) / "status-source-manifest-materialize.md"
@@ -593,6 +634,7 @@ class QuantReadinessCheckTest(unittest.TestCase):
             status_evidence_collection_plan_report = root / "status-evidence-plan.md"
             status_evidence_collection_queue_report = root / "status-evidence-queue.md"
             status_source_manifest_fill_packet_report = root / "status-source-manifest-fill-packet.md"
+            status_source_manifest_fill_progress_report = root / "status-source-manifest-fill-progress.md"
             status_source_manifest_materialize_report = root / "status-source-manifest-materialize.md"
             output = root / "readiness.md"
             _write_csv(liquidity, _liquidity_rows())
@@ -652,6 +694,17 @@ class QuantReadinessCheckTest(unittest.TestCase):
                 "| Fill packet rows | 10 |\n",
                 encoding="utf-8",
             )
+            status_source_manifest_fill_progress_report.write_text(
+                "# Point-in-Time Status Source Manifest Fill Progress\n"
+                "- Order intent generated: `false`\n"
+                "- Backtest readiness impact: `hold`\n"
+                "- Interpretation: fill progress only, not source coverage evidence\n"
+                "| Fill packet rows | 10 |\n"
+                "| Materializable rows | 0 |\n"
+                "| Blocked rows | 10 |\n"
+                "| Raw path exists rows | 0 |\n",
+                encoding="utf-8",
+            )
             status_source_manifest_materialize_report.write_text(
                 "# Point-in-Time Status Source Manifest Materialize\n"
                 "- Order intent generated: `false`\n"
@@ -696,6 +749,8 @@ class QuantReadinessCheckTest(unittest.TestCase):
                     str(status_evidence_collection_queue_report),
                     "--status-source-manifest-fill-packet-report",
                     str(status_source_manifest_fill_packet_report),
+                    "--status-source-manifest-fill-progress-report",
+                    str(status_source_manifest_fill_progress_report),
                     "--status-source-manifest-materialize-report",
                     str(status_source_manifest_materialize_report),
                     "--report-output",
@@ -724,6 +779,7 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertIn("| `point_in_time_status_evidence_collection_plan` | `plan_only` |", report)
         self.assertIn("| `point_in_time_status_evidence_collection_queue` | `plan_only` |", report)
         self.assertIn("| `point_in_time_status_source_manifest_fill_packet` | `plan_only` |", report)
+        self.assertIn("| `point_in_time_status_source_manifest_fill_progress` | `blocked` |", report)
         self.assertIn("| `point_in_time_status_source_manifest_materialized` | `materialized_unvalidated` |", report)
         self.assertIn("| `point_in_time_status_coverage` | `hold` |", report)
         self.assertIn("- Backtest assumptions report: [[", report)
@@ -736,6 +792,7 @@ class QuantReadinessCheckTest(unittest.TestCase):
         self.assertIn("- Status evidence collection plan report: [[", report)
         self.assertIn("- Status evidence collection queue report: [[", report)
         self.assertIn("- Status source manifest fill packet report: [[", report)
+        self.assertIn("- Status source manifest fill-progress report: [[", report)
         self.assertIn("- Status source manifest materialize report: [[", report)
         self.assertIn("lifecycle missing release/resume groups=3", report)
         self.assertIn("| Forward-return complete rows | 1 |", report)
