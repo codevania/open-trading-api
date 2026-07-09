@@ -25,7 +25,7 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 1. Quant learning baseline | in-progress | 35% | [[_report/quant/learning-roadmap|_report/quant/learning-roadmap.md]], week 01 study log | Continue weekly study logs tied to outputs |
 | 2. Strategy specification | in-progress | 50% | `001` Momentum and `002` Reversal specs exist | Keep Strategy rules stable before Backtest |
 | 3. Current Snapshot Universe v0 | in-progress | 85-90% | KRX listed issues + managed issues parsed into current Universe; 360 Universe OHLCV raw files applied to Liquidity Filter smoke | Expand OHLCV coverage beyond first 360 captured rows |
-| 4. Point-in-Time Universe | in-progress | 79-82% | KRX OpenAPI market-data path works; two KIND current snapshots are merged into `497` logical status-event rows, 81-date local market enrichment reduces merged `UNKNOWN` market labels from `48` to `47`, a 72-date `Point-in-Time Universe` smoke produced `184549` include / `13588` exclude rows, and status coverage audit keeps this at `hold` because the source is still `current_snapshot_smoke` with `0` release/resume-like events and no filled source coverage manifest; lifecycle gap report identifies `304` code/status groups that need release/resume evidence, and the evidence collection plan now prioritizes `361` pending rows (`10` manifest raw evidence, `304` release/resume evidence, `47` market-label evidence) | Execute the evidence collection plan with official raw sources, fill/validate the source manifest, then keep Universe eligibility smoke aligned |
+| 4. Point-in-Time Universe | in-progress | 80-83% | KRX OpenAPI market-data path works; three KIND current snapshots are merged into `634` logical status-event rows across `3` raw capture dates, 81-date local market enrichment leaves `61` `UNKNOWN` market rows across `31` codes, a 72-date `Point-in-Time Universe` smoke still produced `184549` include / `13588` exclude rows, and status coverage audit keeps this at `hold` because the source is still `current_snapshot_smoke` with `0` release/resume-like events and no filled source coverage manifest; lifecycle gap report identifies `314` code/status groups that need release/resume evidence, and the evidence collection plan now prioritizes `385` pending rows (`10` manifest raw evidence, `314` release/resume evidence, `61` market-label evidence) | Execute the evidence collection plan with official raw sources, fill/validate the source manifest, then keep Universe eligibility smoke aligned |
 | 5. Market data pipeline | in-progress | 95-97% | KIS raw save, smoke validators, Universe OHLCV queue, first 360 KIS captures, KRX OpenAPI core raw collector/normalizer, 72-date historical status-replay market-data merge, 81-date forward-price merge through `2025-05-02`, continuity audit, date-scoped market-data join, status replay smoke, and resumable existing-raw verification exist | Extend status coverage, not only prices, before Backtest promotion |
 | 6. Liquidity Filter | in-progress | 72-76% | [[scripts/quant_liquidity_filter.py|scripts/quant_liquidity_filter.py]] evaluates 361 current Universe saved-raw rows; [[scripts/quant_point_in_time_liquidity_filter.py|scripts/quant_point_in_time_liquidity_filter.py]] produced a 72-date, 20-day Point-in-Time smoke with `54138` include rows and `135316` full-lookback rows | Keep 20-day rule aligned while status coverage expands |
 | 7. Backtest engine connection | preflight | 52-56% | [[scripts/quant_backtest_input_contract_validate.py|scripts/quant_backtest_input_contract_validate.py]] validates the 72-date, 20-day smoke artifacts as internally joinable, [[scripts/quant_backtest_pnl_smoke.py|scripts/quant_backtest_pnl_smoke.py]] computes diagnostic weighted-return and benchmark-excess smoke rows with complete 1-day target coverage after extending prices through `2025-05-02`, [[scripts/quant_backtest_assumptions_validate.py|scripts/quant_backtest_assumptions_validate.py]] validates local cost/benchmark assumptions as `pass_assumption_only`, [[scripts/quant_benchmark_return_smoke.py|scripts/quant_benchmark_return_smoke.py]] computes complete benchmark return smoke rows, and [[scripts/quant_backtest_attribution_smoke.py|scripts/quant_backtest_attribution_smoke.py]] adds cost/benchmark-active attribution smoke, while Backtest remains `hold` | Wire engine only after Point-in-Time status coverage, actual fee override, production benchmark attribution, OOS, and Bias Control are acceptable |
@@ -35,6 +35,34 @@ This roadmap is not a trading recommendation. It is an implementation control do
 | 11. Execution / live trading | blocked | 5% | Demo-only order intent preflight exists; no KIS order executor exists | Only after Backtest/OOS/Bias Control pass |
 
 ## Completed Artifacts
+
+Latest 2026-07-09 3-snapshot status-refresh artifacts:
+
+- [[_report/quant/research/2026-07-09-kind-status-source-probe|_report/quant/research/2026-07-09-kind-status-source-probe.md]]
+- [[_report/quant/research/2026-07-09-kind-status-events-extract|_report/quant/research/2026-07-09-kind-status-events-extract.md]]
+- [[_report/quant/research/2026-07-09-kind-status-events-market-enriched-81d-validation|_report/quant/research/2026-07-09-kind-status-events-market-enriched-81d-validation.md]]
+- [[_report/quant/research/2026-07-09-kind-status-events-market-enriched-81d-validation.rows.csv|_report/quant/research/2026-07-09-kind-status-events-market-enriched-81d-validation.rows.csv]]
+- [[_report/quant/data/point_in_time_status_events/2026-07-09-kind-current-status-events.merged-20260703-20260708-20260709.market-enriched-81d.csv|_report/quant/data/point_in_time_status_events/2026-07-09-kind-current-status-events.merged-20260703-20260708-20260709.market-enriched-81d.csv]]
+- [[_report/quant/research/2026-07-09-kind-status-events-merge-20260703-20260708-20260709|_report/quant/research/2026-07-09-kind-status-events-merge-20260703-20260708-20260709.md]]
+- [[_report/quant/research/2026-07-09-kind-status-events-merged-20260703-20260708-20260709-market-enriched-81d-validation|_report/quant/research/2026-07-09-kind-status-events-merged-20260703-20260708-20260709-market-enriched-81d-validation.md]]
+- [[_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-merged-3snapshots-market-enriched-81d|_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-merged-3snapshots-market-enriched-81d.md]]
+- [[_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-merged-3snapshots-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-merged-3snapshots-market-enriched-81d.rows.csv]]
+- [[_report/quant/research/2026-07-09-kind-status-replay-on-openapi-20250102-20250418-merged-3snapshots|_report/quant/research/2026-07-09-kind-status-replay-on-openapi-20250102-20250418-merged-3snapshots.md]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-3snapshots-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-3snapshots-market-enriched-81d.md]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-3snapshots-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-3snapshots-market-enriched-81d.rows.csv]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-3snapshots-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-3snapshots-market-enriched-81d.md]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-3snapshots-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-3snapshots-market-enriched-81d.rows.csv]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-evidence-collection-plan-20250102-20250418-merged-3snapshots-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-evidence-collection-plan-20250102-20250418-merged-3snapshots-market-enriched-81d.md]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-evidence-collection-plan-20250102-20250418-merged-3snapshots-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-evidence-collection-plan-20250102-20250418-merged-3snapshots-market-enriched-81d.rows.csv]]
+- [[_report/quant/research/2026-07-09-kind-status-point-in-time-universe-smoke-merged-3snapshots-20250102-20250418|_report/quant/research/2026-07-09-kind-status-point-in-time-universe-smoke-merged-3snapshots-20250102-20250418.md]]
+- [[_report/quant/research/2026-07-09-kind-status-point-in-time-liquidity-smoke-merged-3snapshots-20d-20250102-20250418|_report/quant/research/2026-07-09-kind-status-point-in-time-liquidity-smoke-merged-3snapshots-20d-20250102-20250418.md]]
+- [[_report/quant/research/2026-07-09-kind-status-point-in-time-momentum-signal-candidates-smoke-merged-3snapshots-20d-20250102-20250418|_report/quant/research/2026-07-09-kind-status-point-in-time-momentum-signal-candidates-smoke-merged-3snapshots-20d-20250102-20250418.md]]
+- [[_report/quant/research/2026-07-09-backtest-input-contract-validate-merged-3snapshots-20250102-20250418|_report/quant/research/2026-07-09-backtest-input-contract-validate-merged-3snapshots-20250102-20250418.md]]
+- [[_report/quant/research/2026-07-09-backtest-pnl-smoke-merged-3snapshots-20d-20250102-20250418-price-through-20250502|_report/quant/research/2026-07-09-backtest-pnl-smoke-merged-3snapshots-20d-20250102-20250418-price-through-20250502.md]]
+- [[_report/quant/research/2026-07-09-backtest-attribution-smoke-merged-3snapshots-20d-20250102-20250418-price-through-20250502|_report/quant/research/2026-07-09-backtest-attribution-smoke-merged-3snapshots-20d-20250102-20250418-price-through-20250502.md]]
+- [[_report/quant/research/2026-07-09-oos-walk-forward-preflight-merged-3snapshots-20d-20250102-20250418-price-through-20250502|_report/quant/research/2026-07-09-oos-walk-forward-preflight-merged-3snapshots-20d-20250102-20250418-price-through-20250502.md]]
+- [[_report/quant/research/2026-07-09-bias-control-preflight-merged-3snapshots-20d-20250102-20250418-price-through-20250502|_report/quant/research/2026-07-09-bias-control-preflight-merged-3snapshots-20d-20250102-20250418-price-through-20250502.md]]
+- [[_report/quant/research/2026-07-09-quant-readiness-check-merged-3snapshots-20d-20250102-20250418-price-through-20250502-final|_report/quant/research/2026-07-09-quant-readiness-check-merged-3snapshots-20d-20250102-20250418-price-through-20250502-final.md]]
 
 Latest 2026-07-08 forward-price coverage artifacts for the existing 72-date signal window:
 
@@ -56,7 +84,7 @@ Latest 2026-07-08 forward-price coverage artifacts for the existing 72-date sign
 - [[_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250418-price-through-20250502|_report/quant/research/2026-07-08-quant-readiness-check-20d-20250102-20250418-price-through-20250502.md]]
 - [[_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-lifecycle-gaps|_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-lifecycle-gaps.md]]
 - [[_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-market-enriched-81d-status|_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-market-enriched-81d-status.md]]
-- [[_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-evidence-plan|_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-evidence-plan.md]]
+- [[_report/quant/research/2026-07-09-quant-readiness-check-merged-3snapshots-20d-20250102-20250418-price-through-20250502-final|_report/quant/research/2026-07-09-quant-readiness-check-merged-3snapshots-20d-20250102-20250418-price-through-20250502-final.md]]
 
 Baseline 2026-07-08 72-date smoke artifacts:
 
@@ -589,8 +617,8 @@ Known limitation:
 
 Hard blockers before Backtest interpretation:
 
-- `Point-in-Time Universe` full historical path is not built; the latest evidence is a 72-date KIND current-snapshot replay smoke over two merged capture dates.
-- Historical managed issue / trading suspension / market alert / delisting status is not reproducible across the full target Rebalance date range; two KIND current snapshots have been normalized and replayed, but release/resume-like lifecycle rows are still absent.
+- `Point-in-Time Universe` full historical path is not built; the latest evidence is a 72-date KIND current-snapshot replay smoke over three merged capture dates.
+- Historical managed issue / trading suspension / market alert / delisting status is not reproducible across the full target Rebalance date range; three KIND current snapshots have been normalized and replayed, but release/resume-like lifecycle rows are still absent.
 - Full-Universe `Liquidity Filter` coverage is incomplete because only the first 360 generated Universe OHLCV rows have been captured.
 
 ## KRX OpenAPI Core Raw Smoke
@@ -770,11 +798,11 @@ Official-source check:
 
 KIND fallback result:
 
-- KIND public status downloads were usable for `6/7` probed sources without login on both `2026-07-03` and `2026-07-08`.
+- KIND public status downloads were usable for `6/7` probed sources without login on `2026-07-03`, `2026-07-08`, and `2026-07-09`.
 - The `2026-07-08` KIND current snapshot normalized into `327` valid status-event rows with `0` invalid rows.
 - Market enrichment from the 42-date market-data join resolved `297/327` second-snapshot event rows and left `30` as `UNKNOWN`.
-- A local evidence merge combined the `2026-07-03` and `2026-07-08` KIND current snapshots into `497` logical status-event rows, preserving `2` raw capture dates and `14` raw source paths; the original merged set had `48` `UNKNOWN` market rows, and the 81-date market enrichment reduces this to `47`.
-- Merged status-event validation stayed `497/497` valid with `0` duplicate event keys.
+- A local evidence merge combined the `2026-07-03`, `2026-07-08`, and `2026-07-09` KIND current snapshots into `634` logical status-event rows, preserving `3` raw capture dates and `18` raw source paths; 81-date market enrichment leaves `61` `UNKNOWN` market rows across `31` codes.
+- Merged status-event validation stayed `634/634` valid with `0` duplicate event keys.
 - The merged KIND events replayed against the latest 72-date KRX OpenAPI market-data merge and marked `1646/198137` rows as `exclude_by_status_event`.
 - The merged replayed market-data rows were converted into a 72-date `Point-in-Time Universe` smoke with `184549` include rows and `13588` exclude rows.
 - Status coverage is still not historical-complete because release/resume-like rows remain `0` for managed issue, market alert, and trading halt lifecycles.
@@ -856,7 +884,7 @@ Validator checks:
 Current validated sample:
 
 - [[_report/quant/data/point_in_time_status_events/2026-07-03-kind-current-status-events.csv|_report/quant/data/point_in_time_status_events/2026-07-03-kind-current-status-events.csv]] has `344` valid rows and `0` duplicate event keys.
-- [[_report/quant/data/point_in_time_status_events/2026-07-08-kind-current-status-events.merged-20260703-20260708.csv|_report/quant/data/point_in_time_status_events/2026-07-08-kind-current-status-events.merged-20260703-20260708.csv]] merges two KIND current snapshots into `497` logical status-event rows and validates with `0` duplicate event keys.
+- [[_report/quant/data/point_in_time_status_events/2026-07-09-kind-current-status-events.merged-20260703-20260708-20260709.csv|_report/quant/data/point_in_time_status_events/2026-07-09-kind-current-status-events.merged-20260703-20260708-20260709.csv]] merges three KIND current snapshots into `634` logical status-event rows and validates with `0` duplicate event keys.
 
 Next gate:
 
@@ -892,12 +920,14 @@ Artifact:
 - [[_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250404-merged-snapshots.rows.csv|_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250404-merged-snapshots.rows.csv]]
 - [[_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250418-merged-snapshots|_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250418-merged-snapshots.md]]
 - [[_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250418-merged-snapshots.rows.csv|_report/quant/research/2026-07-08-kind-status-replay-on-openapi-20250102-20250418-merged-snapshots.rows.csv]]
+- [[_report/quant/research/2026-07-09-kind-status-replay-on-openapi-20250102-20250418-merged-3snapshots|_report/quant/research/2026-07-09-kind-status-replay-on-openapi-20250102-20250418-merged-3snapshots.md]]
+- [[_report/quant/data/point_in_time_status_events/2026-07-09-kind-status-replay-on-openapi-20250102-20250418-merged-3snapshots.rows.csv|_report/quant/data/point_in_time_status_events/2026-07-09-kind-status-replay-on-openapi-20250102-20250418-merged-3snapshots.rows.csv]]
 
 Latest smoke result:
 
 - Market data input rows: `198137`
-- Status event rows: `497`
-- Codes with events: `286`
+- Status event rows: `634`
+- Codes with events: `296`
 - Include rows by event state: `196491`
 - Exclude rows by event state: `1646`
 
@@ -924,36 +954,34 @@ Status coverage audit:
 - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250404-merged-snapshots.rows.csv|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250404-merged-snapshots.rows.csv]]
 - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots.md]]
 - [[_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots.rows.csv|_report/quant/research/2026-07-08-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots.rows.csv]]
-- [[_report/quant/research/2026-07-09-kind-status-events-merged-market-enrich-81d|_report/quant/research/2026-07-09-kind-status-events-merged-market-enrich-81d.md]]
-- [[_report/quant/research/2026-07-09-kind-status-events-merged-market-enriched-81d-validation|_report/quant/research/2026-07-09-kind-status-events-merged-market-enriched-81d-validation.md]]
-- [[_report/quant/research/2026-07-09-kind-status-events-merged-market-enriched-81d-validation.rows.csv|_report/quant/research/2026-07-09-kind-status-events-merged-market-enriched-81d-validation.rows.csv]]
-- [[_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-market-enriched-81d|_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-market-enriched-81d.md]]
-- [[_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-market-enriched-81d.rows.csv]]
-- [[_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots-market-enriched-81d.md]]
-- [[_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv]]
-- [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots.md]]
-- [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots.rows.csv]]
-- [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d.md]]
-- [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-snapshots-market-enriched-81d.rows.csv]]
+- [[_report/quant/research/2026-07-09-kind-status-events-merged-20260703-20260708-20260709-market-enrich-81d|_report/quant/research/2026-07-09-kind-status-events-merged-20260703-20260708-20260709-market-enrich-81d.md]]
+- [[_report/quant/research/2026-07-09-kind-status-events-merged-20260703-20260708-20260709-market-enriched-81d-validation|_report/quant/research/2026-07-09-kind-status-events-merged-20260703-20260708-20260709-market-enriched-81d-validation.md]]
+- [[_report/quant/research/2026-07-09-kind-status-events-merged-20260703-20260708-20260709-market-enriched-81d-validation.rows.csv|_report/quant/research/2026-07-09-kind-status-events-merged-20260703-20260708-20260709-market-enriched-81d-validation.rows.csv]]
+- [[_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-merged-3snapshots-market-enriched-81d|_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-merged-3snapshots-market-enriched-81d.md]]
+- [[_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-merged-3snapshots-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-kind-status-events-unknown-market-targets-merged-3snapshots-market-enriched-81d.rows.csv]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-3snapshots-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-3snapshots-market-enriched-81d.md]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-3snapshots-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-coverage-audit-20250102-20250418-merged-3snapshots-market-enriched-81d.rows.csv]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-3snapshots-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-3snapshots-market-enriched-81d.md]]
+- [[_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-3snapshots-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-lifecycle-gaps-20250102-20250418-merged-3snapshots-market-enriched-81d.rows.csv]]
 - [[scripts/quant_point_in_time_status_source_manifest_draft.py|scripts/quant_point_in_time_status_source_manifest_draft.py]]
 - [[tests/test_quant_point_in_time_status_source_manifest_draft.py|tests/test_quant_point_in_time_status_source_manifest_draft.py]]
 - [[_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d.md]]
 - [[_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d.rows.csv]]
-- Latest market enrichment: 81-date local market-data resolves `1` additional merged status-event market label; merged events now have `47` `UNKNOWN` market rows across `31` codes, down from `48`. Unknown-market target rows are split by status type as `trading_halt=28`, `delisting=9`, `managed_issue=6`, and `market_alert=4`.
+- Latest market enrichment: the 3-snapshot merge has `634` logical status-event rows across `3` raw capture dates; 81-date local market-data leaves `61` `UNKNOWN` market rows across `31` codes. Unknown-market target rows are split by status type as `trading_halt=42`, `delisting=9`, `managed_issue=6`, and `market_alert=4`.
 - Coverage status: `hold`
 - Coverage mode: `current_snapshot_smoke`
 - Replayed rows: `198137`; replay missing rows: `0`
-- Rows with any status-event code: `18320`; rows with applied status event: `1646`; rows excluded by status event: `1646`
-- Raw status capture dates: `2` (`2026-07-03..2026-07-08`)
+- Rows with any status-event code: `19040`; rows with applied status event: `1646`; rows excluded by status event: `1646`
+- Raw status capture dates: `3` (`2026-07-03..2026-07-09`)
 - Release/resume-like event rows: `0`, so active-state lifetimes remain one-sided and not historical-complete.
 - Source coverage manifest rows: `0`; missing manifest coverage for `managed_issue`, `trading_halt`, `market_alert`, and `delisting`.
 - Source coverage manifest validation: `not_supplied`; row failures: `0`.
 - [[scripts/quant_point_in_time_status_coverage_audit.py|scripts/quant_point_in_time_status_coverage_audit.py]] now applies [[scripts/quant_point_in_time_status_source_manifest_validate.py|scripts/quant_point_in_time_status_source_manifest_validate.py]] when a source coverage manifest is supplied; source policy, raw evidence paths, required status types, and market-window coverage must validate before `historical_complete` can pass.
-- Lifecycle diagnostics: `managed_issue` `105/0`, `market_alert` `75/0`, and `trading_halt` `253/0` active-like/release-resume rows.
-- Lifecycle gap report: the latest market-enriched report still has `304` code/status lifecycle groups with `missing_release_resume_evidence` (`managed_issue=104`, `market_alert=70`, `trading_halt=130`). These rows are collection targets for official transition evidence, not historical truth and not a Backtest promotion.
+- Lifecycle diagnostics: `managed_issue` `107/0`, `market_alert` `85/0`, and `trading_halt` `378/0` active-like/release-resume rows.
+- Lifecycle gap report: the latest market-enriched 3-snapshot report has `314` code/status lifecycle groups with `missing_release_resume_evidence` (`managed_issue=106`, `market_alert=78`, `trading_halt=130`). These rows are collection targets for official transition evidence, not historical truth and not a Backtest promotion.
 - Source manifest draft: [[_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-20250102-20250418-market-enriched-81d.md]] produces `10` `pending_raw_evidence` draft rows across `managed_issue`, `trading_halt`, `market_alert`, and `delisting`; `source_url`, `raw_path`, and `confidence` are intentionally blank until official raw files are captured.
 - Source manifest draft validation: [[_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-validate-20250102-20250418-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-validate-20250102-20250418-market-enriched-81d.md]] and [[_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-validate-20250102-20250418-market-enriched-81d.rows.csv|_report/quant/research/2026-07-09-point-in-time-status-source-manifest-draft-validate-20250102-20250418-market-enriched-81d.rows.csv]] record `10/10` row failures because every draft row still lacks `source_url`, `raw_path`, and `confidence`.
-- Evidence collection plan: [[scripts/quant_point_in_time_status_evidence_collection_plan.py|scripts/quant_point_in_time_status_evidence_collection_plan.py]] consolidates the lifecycle gap, source manifest draft, and unknown-market target rows into [[_report/quant/research/2026-07-09-point-in-time-status-evidence-collection-plan-20250102-20250418-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-evidence-collection-plan-20250102-20250418-market-enriched-81d.md]], with `361` pending collection rows: priority `1` source manifest raw evidence `10`, priority `2` release/resume evidence `304`, and priority `3` market-label evidence `47`.
+- Evidence collection plan: [[scripts/quant_point_in_time_status_evidence_collection_plan.py|scripts/quant_point_in_time_status_evidence_collection_plan.py]] consolidates the lifecycle gap, source manifest draft, and unknown-market target rows into [[_report/quant/research/2026-07-09-point-in-time-status-evidence-collection-plan-20250102-20250418-merged-3snapshots-market-enriched-81d|_report/quant/research/2026-07-09-point-in-time-status-evidence-collection-plan-20250102-20250418-merged-3snapshots-market-enriched-81d.md]], with `385` pending collection rows: priority `1` source manifest raw evidence `10`, priority `2` release/resume evidence `314`, and priority `3` market-label evidence `61`.
 - The audit pass gate now also requires every lifecycle status type with active-like rows to have release/resume-like rows, at least one dated raw capture path, and a source coverage manifest that passes source-policy/raw-path validation and covers the market-data window for every required status type.
 
 Universe eligibility smoke:
@@ -1049,8 +1077,8 @@ Backtest attribution smoke:
 
 - [[scripts/quant_backtest_attribution_smoke.py|scripts/quant_backtest_attribution_smoke.py]]
 - [[tests/test_quant_backtest_attribution_smoke.py|tests/test_quant_backtest_attribution_smoke.py]]
-- [[_report/quant/research/2026-07-09-backtest-attribution-smoke-20d-20250102-20250418-price-through-20250502|_report/quant/research/2026-07-09-backtest-attribution-smoke-20d-20250102-20250418-price-through-20250502.md]]
-- [[_report/quant/research/2026-07-09-backtest-attribution-smoke-20d-20250102-20250418-price-through-20250502.rows.csv|_report/quant/research/2026-07-09-backtest-attribution-smoke-20d-20250102-20250418-price-through-20250502.rows.csv]]
+- [[_report/quant/research/2026-07-09-backtest-attribution-smoke-merged-3snapshots-20d-20250102-20250418-price-through-20250502|_report/quant/research/2026-07-09-backtest-attribution-smoke-merged-3snapshots-20d-20250102-20250418-price-through-20250502.md]]
+- [[_report/quant/research/2026-07-09-backtest-attribution-smoke-merged-3snapshots-20d-20250102-20250418-price-through-20250502.rows.csv|_report/quant/research/2026-07-09-backtest-attribution-smoke-merged-3snapshots-20d-20250102-20250418-price-through-20250502.rows.csv]]
 - Result: `53` date-horizon attribution rows, `1060` PnL input rows, attribution status `pass_smoke_assumption_only`, average gross return `0.3758%`, average baseline net return `0.0458%`, average stress net return `-0.3242%`, and average baseline active return `0.0280%`.
 - Limitation: this wires local assumption costs and benchmark-active diagnostics only. `broker_fee_override_required=true`, so actual KIS account/channel fees are still missing and this is not a production Backtest.
 
@@ -1087,8 +1115,8 @@ Quant readiness check:
 - Latest attribution readiness: [[_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-attribution-smoke|_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-attribution-smoke.md]]
 - Latest OOS/WF preflight readiness: [[_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-oos-preflight|_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-oos-preflight.md]]
 - Latest Bias Control preflight readiness: [[_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-bias-preflight|_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-bias-preflight.md]]
-- Latest evidence-plan readiness: [[_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-evidence-plan|_report/quant/research/2026-07-09-quant-readiness-check-20d-20250102-20250418-price-through-20250502-evidence-plan.md]]
-- Result: market-data window `pass`, Liquidity Filter `pass_smoke`, Signal Candidate `pass_smoke`, forward-return smoke `pass_smoke` with complete `1,5` horizon coverage, portfolio target smoke `pass_smoke`, Backtest input contract `pass_smoke`, Backtest PnL smoke `pass_smoke`, Backtest assumptions `pass_assumption_only`, benchmark returns smoke `pass_smoke`, Backtest attribution smoke `pass_smoke_assumption_only`, OOS/Walk-Forward preflight `pass_smoke_plumbing_only`, Bias Control preflight `hold`, Point-in-Time status evidence collection plan `plan_only` with `361` pending evidence rows, Point-in-Time status coverage `hold` with merged coverage audit evidence including source manifest validation `not_supplied` and lifecycle missing release/resume groups `304`, Backtest engine `hold`, live trading controls `blocked`, KIS demo account `blocked`.
+- Latest 3-snapshot final readiness: [[_report/quant/research/2026-07-09-quant-readiness-check-merged-3snapshots-20d-20250102-20250418-price-through-20250502-final|_report/quant/research/2026-07-09-quant-readiness-check-merged-3snapshots-20d-20250102-20250418-price-through-20250502-final.md]]
+- Result: market-data window `pass`, Liquidity Filter `pass_smoke`, Signal Candidate `pass_smoke`, forward-return smoke `pass_smoke` with complete `1,5` horizon coverage, portfolio target smoke `pass_smoke`, Backtest input contract `pass_smoke`, Backtest PnL smoke `pass_smoke`, Backtest assumptions `pass_assumption_only`, benchmark returns smoke `pass_smoke`, Backtest attribution smoke `pass_smoke_assumption_only`, OOS/Walk-Forward preflight `pass_smoke_plumbing_only`, Bias Control preflight `hold`, Point-in-Time status evidence collection plan `plan_only` with `385` pending evidence rows, Point-in-Time status coverage `hold` with merged 3-snapshot coverage audit evidence including source manifest validation `not_supplied` and lifecycle missing release/resume groups `314`, Backtest engine `hold`, live trading controls `blocked`, KIS demo account `blocked`.
 - Guardrail: the readiness checker makes no KIS API calls and generates no order intents.
 
 Next gate:
@@ -1264,7 +1292,7 @@ Current state:
 - KRX OpenAPI core raw collection and normalization: usable for parser development and historical market-data collection.
 - KRX OpenAPI date-scoped market-data join/merge: usable as a 72-date smoke input for status replay development and an 81-date local forward-price coverage input through `2025-05-02`.
 - KRX Data Marketplace status-source probe: official status screen `bld` identifiers found, but unattended JSON access is `auth_required`.
-- KIND public status fallback: two current snapshots (`2026-07-03`, `2026-07-08`) were merged into `497` logical status-event rows and replayed against the 72-date KRX OpenAPI market-data merge, marking `1646/198137` rows as `exclude_by_status_event`; the merged coverage audit now sees `2` raw capture dates but still has `0` release/resume-like rows and no source coverage manifest.
+- KIND public status fallback: three current snapshots (`2026-07-03`, `2026-07-08`, `2026-07-09`) were merged into `634` logical status-event rows and replayed against the 72-date KRX OpenAPI market-data merge, marking `1646/198137` rows as `exclude_by_status_event`; the merged coverage audit now sees `3` raw capture dates but still has `0` release/resume-like rows and no source coverage manifest.
 - Point-in-Time status-event schema: KIND current snapshot samples are normalized, market-enriched, merged, and validated.
 - Point-in-Time status replay and Universe smoke: merged KIND current snapshot events replayed on a 72-date market-data smoke, then converted to `184549` include / `13588` exclude Universe rows; historical coverage still incomplete.
 - Point-in-Time Liquidity Filter smoke: a 72-date, 20-day smoke produced `54138` include rows and `143999` exclude rows, with `135316` rows evaluated on the full 20-day lookback.
@@ -1278,8 +1306,8 @@ Current state:
 - Backtest attribution smoke: latest local report is `pass_smoke_assumption_only` with cost and benchmark-active diagnostics, but actual KIS fee override is still required.
 - OOS/Walk-Forward preflight: latest local report is `pass_smoke_plumbing_only` across `3` temporal folds, but OOS readiness stays `hold`.
 - Bias Control preflight: latest local report keeps Bias Control status at `hold` with `10` machine-readable checks.
-- Point-in-Time evidence collection plan: latest local report organizes `361` pending evidence rows (`10` manifest raw evidence, `304` release/resume evidence, `47` market-label evidence), but it is a collection plan only and does not count as source coverage.
-- Quant readiness check: latest 20-day price-through smoke gate report using the market-enriched merged status coverage audit, lifecycle gap report, evidence collection plan, Backtest attribution smoke, OOS/WF preflight, and Bias Control preflight marks market-data window `pass`, Liquidity Filter, Signal Candidate, forward-return, portfolio targets, Backtest input contract, Backtest PnL smoke, and benchmark returns as `pass_smoke`, Backtest assumptions as `pass_assumption_only`, Backtest attribution smoke as `pass_smoke_assumption_only`, OOS/Walk-Forward preflight as `pass_smoke_plumbing_only`, Bias Control preflight as `hold`, Point-in-Time status evidence collection plan as `plan_only`, Point-in-Time status coverage `hold` with lifecycle missing release/resume groups `304`, Backtest engine `hold`, live trading controls `blocked`, and KIS demo account `blocked`.
+- Point-in-Time evidence collection plan: latest 3-snapshot local report organizes `385` pending evidence rows (`10` manifest raw evidence, `314` release/resume evidence, `61` market-label evidence), but it is a collection plan only and does not count as source coverage.
+- Quant readiness check: latest 20-day price-through smoke gate report using the market-enriched 3-snapshot status coverage audit, lifecycle gap report, evidence collection plan, Backtest attribution smoke, OOS/WF preflight, and Bias Control preflight marks market-data window `pass`, Liquidity Filter, Signal Candidate, forward-return, portfolio targets, Backtest input contract, Backtest PnL smoke, and benchmark returns as `pass_smoke`, Backtest assumptions as `pass_assumption_only`, Backtest attribution smoke as `pass_smoke_assumption_only`, OOS/Walk-Forward preflight as `pass_smoke_plumbing_only`, Bias Control preflight as `hold`, Point-in-Time status evidence collection plan as `plan_only`, Point-in-Time status coverage `hold` with lifecycle missing release/resume groups `314`, Backtest engine `hold`, live trading controls `blocked`, and KIS demo account `blocked`.
 - KIS demo trading: dry-run order intent and local account preflight exist, but the local MCP `.env.kis` is missing `KIS_PAPER_STOCK`; buying-power checks, order status/cancel flow, kill switch, and explicit confirmation gate are not implemented.
 - Backtest readiness: `hold`.
 - Live trading readiness: `blocked`.
