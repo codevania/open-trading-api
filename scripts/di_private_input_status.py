@@ -249,6 +249,7 @@ def render_report(
     decision_input_file: Path | None,
     run_date: str,
     queue: str,
+    row_filter: str = "all",
 ) -> str:
     filled = sum(1 for row in rows if row.status == "filled")
     lines = [
@@ -259,6 +260,7 @@ def render_report(
         f"- ETF overlap input file: `{etf_input_file.as_posix() if etf_input_file else 'not configured'}`",
         f"- Satellite decision input file: `{decision_input_file.as_posix() if decision_input_file else 'not configured'}`",
         f"- Queue scope: `{queue}`",
+        f"- Row filter: `{row_filter}`",
         "- Interpretation: private input completeness only; values are masked.",
         "- Sensitive values printed: `false`",
         "- Order intent generated: `false`",
@@ -315,6 +317,12 @@ def main() -> int:
     parser.add_argument("--decision-input-file", type=Path, default=DEFAULT_DECISION_INPUT_FILE)
     parser.add_argument("--queue", choices=("primary_queue", "secondary_queue", "all"), default="primary_queue")
     parser.add_argument("--run-date", default=_now_kst().date().isoformat())
+    parser.add_argument("--only-missing", action="store_true", help="Show only missing private-input fields.")
+    parser.add_argument(
+        "--fail-on-missing",
+        action="store_true",
+        help="Return exit code 2 when any checked private-input field is missing.",
+    )
     parser.add_argument("--output", type=Path, help="Markdown report output path. Prints to stdout when omitted.")
     args = parser.parse_args()
 
@@ -328,13 +336,15 @@ def main() -> int:
             decision_input_payload=decision_input_payload,
             queue=args.queue,
         )
+        visible_rows = [row for row in rows if row.status == "missing"] if args.only_missing else rows
         report = render_report(
-            rows,
+            visible_rows,
             candidate_file=args.candidate_file,
             etf_input_file=args.etf_input_file,
             decision_input_file=args.decision_input_file,
             run_date=args.run_date,
             queue=args.queue,
+            row_filter="missing_only" if args.only_missing else "all",
         )
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc
@@ -344,6 +354,8 @@ def main() -> int:
         args.output.write_text(report, encoding="utf-8")
     else:
         print(report)
+    if args.fail_on_missing and any(row.status == "missing" for row in rows):
+        return 2
     return 0
 
 

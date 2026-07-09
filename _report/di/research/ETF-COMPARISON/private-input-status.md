@@ -5,6 +5,7 @@
 - ETF overlap input file: `_report/private/di/etf-overlap-inputs.yaml`
 - Satellite decision input file: `_report/private/di/satellite-decision-inputs.yaml`
 - Queue scope: `primary_queue`
+- Row filter: `all`
 - Interpretation: private input completeness only; values are masked.
 - Sensitive values printed: `false`
 - Order intent generated: `false`

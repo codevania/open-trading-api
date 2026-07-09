@@ -12,6 +12,7 @@ python scripts/di_etf_holdings_collect.py --candidate-file _report/di/candidates
 python scripts/di_etf_overlap_input_prepare.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --run-date YYYY-MM-DD --dry-run
 python scripts/di_etf_overlap_check.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --input-file _report/private/di/etf-overlap-inputs.yaml --run-date YYYY-MM-DD
 python scripts/di_private_input_status.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --etf-input-file _report/private/di/etf-overlap-inputs.yaml --decision-input-file _report/private/di/satellite-decision-inputs.yaml --run-date YYYY-MM-DD --output _report/di/research/ETF-COMPARISON/private-input-status.md
+python scripts/di_private_input_status.py --candidate-file _report/di/candidates/core-satellite-candidates.yaml --etf-input-file _report/private/di/etf-overlap-inputs.yaml --decision-input-file _report/private/di/satellite-decision-inputs.yaml --run-date YYYY-MM-DD --only-missing --fail-on-missing
 ```
 
 관련 파일:
