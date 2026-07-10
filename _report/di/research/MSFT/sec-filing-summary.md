@@ -1,8 +1,8 @@
 # MSFT SEC Filing Summary
 
-- Run date: `2026-07-08`
-- Generated at: `2026-07-08T03:31:35+09:00`
-- Raw dir: `_report/raw/2026/2026-07-08/sec/MSFT`
+- Run date: `2026-07-11`
+- Generated at: `2026-07-11T00:16:15+09:00`
+- Raw dir: `_report/raw/2026/2026-07-11/sec/MSFT`
 - Source: SEC EDGAR raw JSON collected for DI research
 - Interpretation: source-readiness summary only; no buy or order intent is generated
 - Order intent generated: `false`

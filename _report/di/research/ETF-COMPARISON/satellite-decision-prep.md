@@ -1,6 +1,6 @@
 # DI Satellite Equity Decision Prep
 
-- Run date: `2026-07-10`
+- Run date: `2026-07-11`
 - Candidate manifest: [[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]
 - Research root: `_report/di/research`
 - Decision input file: [[_report/private/di/satellite-decision-inputs.yaml|satellite-decision-inputs.yaml]]
@@ -21,7 +21,7 @@
 
 | Queue | Symbol | Name | Status | Research state | Required before decision.md | Safe next action |
 | --- | --- | --- | --- | --- | --- | --- |
-| `primary_queue` | `MSFT` | Microsoft | `needs_decision_inputs` | present: financials.md+thesis.md+valuation.md; pending: decision.md | `latest_price`, `valuation_range`, `reverse_dcf_or_scenario`, `tax_account_route`, `source_freshness` | fill remaining required inputs before decision.md: latest_price, valuation_range, reverse_dcf_or_scenario, tax_account_route, source_freshness |
+| `primary_queue` | `MSFT` | Microsoft | `needs_decision_inputs` | present: financials.md+thesis.md+valuation.md; pending: decision.md | `tax_account_route`, `source_freshness` | fill remaining required inputs before decision.md: tax_account_route, source_freshness |
 | `primary_queue` | `GOOGL` | Alphabet | `needs_decision_inputs` | present: financials.md+thesis.md+valuation.md; pending: decision.md | `latest_price`, `valuation_range`, `reverse_dcf_or_scenario`, `tax_account_route`, `source_freshness` | fill remaining required inputs before decision.md: latest_price, valuation_range, reverse_dcf_or_scenario, tax_account_route, source_freshness |
 | `primary_queue` | `AMZN` | Amazon | `needs_decision_inputs` | present: financials.md+thesis.md+valuation.md; pending: decision.md | `latest_price`, `valuation_range`, `reverse_dcf_or_scenario`, `tax_account_route`, `source_freshness` | fill remaining required inputs before decision.md: latest_price, valuation_range, reverse_dcf_or_scenario, tax_account_route, source_freshness |
 | `primary_queue` | `META` | Meta Platforms | `needs_decision_inputs` | present: financials.md+thesis.md+valuation.md; pending: decision.md | `latest_price`, `valuation_range`, `reverse_dcf_or_scenario`, `tax_account_route`, `source_freshness` | fill remaining required inputs before decision.md: latest_price, valuation_range, reverse_dcf_or_scenario, tax_account_route, source_freshness |

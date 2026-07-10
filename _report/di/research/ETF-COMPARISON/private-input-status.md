@@ -1,6 +1,6 @@
 # DI Private Input Status
 
-- Run date: `2026-07-10`
+- Run date: `2026-07-11`
 - Candidate manifest: [[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]
 - ETF overlap input file: [[_report/private/di/etf-overlap-inputs.yaml|etf-overlap-inputs.yaml]]
 - Satellite decision input file: [[_report/private/di/satellite-decision-inputs.yaml|satellite-decision-inputs.yaml]]
@@ -15,8 +15,8 @@
 | Metric | Value |
 | --- | ---: |
 | Fields checked | 80 |
-| Filled fields | 50 |
-| Missing fields | 30 |
+| Filled fields | 53 |
+| Missing fields | 27 |
 
 ## Summary By Area
 
@@ -25,7 +25,7 @@
 | ETF holding weight | 24 | 0 | 24 |
 | ETF portfolio weight | 4 | 0 | 4 |
 | ETF source meta | 4 | 0 | 4 |
-| Satellite decision input | 18 | 30 | 48 |
+| Satellite decision input | 21 | 27 | 48 |
 
 ## Field Status
 
@@ -63,9 +63,9 @@
 | ETF holding weight | `QQQ:META` | `etf_holdings.QQQ.holdings.META` | `filled` | no action; value is present but masked |
 | ETF holding weight | `QQQ:NVDA` | `etf_holdings.QQQ.holdings.NVDA` | `filled` | no action; value is present but masked |
 | ETF holding weight | `QQQ:AVGO` | `etf_holdings.QQQ.holdings.AVGO` | `filled` | no action; value is present but masked |
-| Satellite decision input | `MSFT` | `inputs.MSFT.latest_price_checked` | `missing` | record latest price, currency, timestamp, and source |
-| Satellite decision input | `MSFT` | `inputs.MSFT.valuation_range_checked` | `missing` | record base, bear, and bull valuation range |
-| Satellite decision input | `MSFT` | `inputs.MSFT.reverse_dcf_checked` | `missing` | record scenario or reverse-DCF assumptions |
+| Satellite decision input | `MSFT` | `inputs.MSFT.latest_price_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `MSFT` | `inputs.MSFT.valuation_range_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `MSFT` | `inputs.MSFT.reverse_dcf_checked` | `filled` | no action; value is present but masked |
 | Satellite decision input | `MSFT` | `inputs.MSFT.etf_overlap_checked` | `filled` | no action; value is present but masked |
 | Satellite decision input | `MSFT` | `inputs.MSFT.tax_account_route` | `missing` | record taxable, ISA, pension, or IRP route |
 | Satellite decision input | `MSFT` | `inputs.MSFT.max_position_size` | `filled` | no action; value is present but masked |

@@ -4,9 +4,9 @@
 
 - Symbol: `MSFT`
 - Company: MICROSOFT CORP
-- 작성일: `2026-07-08`
-- 기준 원천일: `2026-07-08`
-- 원천: `_report/raw/2026/2026-07-08/sec/MSFT/companyfacts.raw.json`
+- 작성일: `2026-07-11`
+- 기준 원천일: `2026-07-11`
+- 원천: `_report/raw/2026/2026-07-11/sec/MSFT/companyfacts.raw.json`
 - 해석: SEC XBRL companyfacts 기반 재무 요약이며, 투자 추천 또는 주문 의도가 아니다.
 - Order intent generated: `false`
 
