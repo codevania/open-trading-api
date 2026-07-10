@@ -15,8 +15,8 @@
 | Metric | Value |
 | --- | ---: |
 | Fields checked | 80 |
-| Filled fields | 55 |
-| Missing fields | 25 |
+| Filled fields | 80 |
+| Missing fields | 0 |
 
 ## Summary By Area
 
@@ -25,7 +25,7 @@
 | ETF holding weight | 24 | 0 | 24 |
 | ETF portfolio weight | 4 | 0 | 4 |
 | ETF source meta | 4 | 0 | 4 |
-| Satellite decision input | 23 | 25 | 48 |
+| Satellite decision input | 48 | 0 | 48 |
 
 ## Field Status
 
@@ -71,46 +71,46 @@
 | Satellite decision input | `MSFT` | `inputs.MSFT.max_position_size` | `filled` | no action; value is present but masked |
 | Satellite decision input | `MSFT` | `inputs.MSFT.add_trim_rule` | `filled` | no action; value is present but masked |
 | Satellite decision input | `MSFT` | `inputs.MSFT.source_freshness_checked` | `filled` | no action; value is present but masked |
-| Satellite decision input | `GOOGL` | `inputs.GOOGL.latest_price_checked` | `missing` | record latest price, currency, timestamp, and source |
-| Satellite decision input | `GOOGL` | `inputs.GOOGL.valuation_range_checked` | `missing` | record base, bear, and bull valuation range |
-| Satellite decision input | `GOOGL` | `inputs.GOOGL.reverse_dcf_checked` | `missing` | record scenario or reverse-DCF assumptions |
+| Satellite decision input | `GOOGL` | `inputs.GOOGL.latest_price_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `GOOGL` | `inputs.GOOGL.valuation_range_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `GOOGL` | `inputs.GOOGL.reverse_dcf_checked` | `filled` | no action; value is present but masked |
 | Satellite decision input | `GOOGL` | `inputs.GOOGL.etf_overlap_checked` | `filled` | no action; value is present but masked |
-| Satellite decision input | `GOOGL` | `inputs.GOOGL.tax_account_route` | `missing` | record taxable, ISA, pension, or IRP route |
+| Satellite decision input | `GOOGL` | `inputs.GOOGL.tax_account_route` | `filled` | no action; value is present but masked |
 | Satellite decision input | `GOOGL` | `inputs.GOOGL.max_position_size` | `filled` | no action; value is present but masked |
 | Satellite decision input | `GOOGL` | `inputs.GOOGL.add_trim_rule` | `filled` | no action; value is present but masked |
-| Satellite decision input | `GOOGL` | `inputs.GOOGL.source_freshness_checked` | `missing` | record filing, price, holdings, and tax check dates |
-| Satellite decision input | `AMZN` | `inputs.AMZN.latest_price_checked` | `missing` | record latest price, currency, timestamp, and source |
-| Satellite decision input | `AMZN` | `inputs.AMZN.valuation_range_checked` | `missing` | record base, bear, and bull valuation range |
-| Satellite decision input | `AMZN` | `inputs.AMZN.reverse_dcf_checked` | `missing` | record scenario or reverse-DCF assumptions |
+| Satellite decision input | `GOOGL` | `inputs.GOOGL.source_freshness_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `AMZN` | `inputs.AMZN.latest_price_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `AMZN` | `inputs.AMZN.valuation_range_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `AMZN` | `inputs.AMZN.reverse_dcf_checked` | `filled` | no action; value is present but masked |
 | Satellite decision input | `AMZN` | `inputs.AMZN.etf_overlap_checked` | `filled` | no action; value is present but masked |
-| Satellite decision input | `AMZN` | `inputs.AMZN.tax_account_route` | `missing` | record taxable, ISA, pension, or IRP route |
+| Satellite decision input | `AMZN` | `inputs.AMZN.tax_account_route` | `filled` | no action; value is present but masked |
 | Satellite decision input | `AMZN` | `inputs.AMZN.max_position_size` | `filled` | no action; value is present but masked |
 | Satellite decision input | `AMZN` | `inputs.AMZN.add_trim_rule` | `filled` | no action; value is present but masked |
-| Satellite decision input | `AMZN` | `inputs.AMZN.source_freshness_checked` | `missing` | record filing, price, holdings, and tax check dates |
-| Satellite decision input | `META` | `inputs.META.latest_price_checked` | `missing` | record latest price, currency, timestamp, and source |
-| Satellite decision input | `META` | `inputs.META.valuation_range_checked` | `missing` | record base, bear, and bull valuation range |
-| Satellite decision input | `META` | `inputs.META.reverse_dcf_checked` | `missing` | record scenario or reverse-DCF assumptions |
+| Satellite decision input | `AMZN` | `inputs.AMZN.source_freshness_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `META` | `inputs.META.latest_price_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `META` | `inputs.META.valuation_range_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `META` | `inputs.META.reverse_dcf_checked` | `filled` | no action; value is present but masked |
 | Satellite decision input | `META` | `inputs.META.etf_overlap_checked` | `filled` | no action; value is present but masked |
-| Satellite decision input | `META` | `inputs.META.tax_account_route` | `missing` | record taxable, ISA, pension, or IRP route |
+| Satellite decision input | `META` | `inputs.META.tax_account_route` | `filled` | no action; value is present but masked |
 | Satellite decision input | `META` | `inputs.META.max_position_size` | `filled` | no action; value is present but masked |
 | Satellite decision input | `META` | `inputs.META.add_trim_rule` | `filled` | no action; value is present but masked |
-| Satellite decision input | `META` | `inputs.META.source_freshness_checked` | `missing` | record filing, price, holdings, and tax check dates |
-| Satellite decision input | `NVDA` | `inputs.NVDA.latest_price_checked` | `missing` | record latest price, currency, timestamp, and source |
-| Satellite decision input | `NVDA` | `inputs.NVDA.valuation_range_checked` | `missing` | record base, bear, and bull valuation range |
-| Satellite decision input | `NVDA` | `inputs.NVDA.reverse_dcf_checked` | `missing` | record scenario or reverse-DCF assumptions |
+| Satellite decision input | `META` | `inputs.META.source_freshness_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `NVDA` | `inputs.NVDA.latest_price_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `NVDA` | `inputs.NVDA.valuation_range_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `NVDA` | `inputs.NVDA.reverse_dcf_checked` | `filled` | no action; value is present but masked |
 | Satellite decision input | `NVDA` | `inputs.NVDA.etf_overlap_checked` | `filled` | no action; value is present but masked |
-| Satellite decision input | `NVDA` | `inputs.NVDA.tax_account_route` | `missing` | record taxable, ISA, pension, or IRP route |
+| Satellite decision input | `NVDA` | `inputs.NVDA.tax_account_route` | `filled` | no action; value is present but masked |
 | Satellite decision input | `NVDA` | `inputs.NVDA.max_position_size` | `filled` | no action; value is present but masked |
 | Satellite decision input | `NVDA` | `inputs.NVDA.add_trim_rule` | `filled` | no action; value is present but masked |
-| Satellite decision input | `NVDA` | `inputs.NVDA.source_freshness_checked` | `missing` | record filing, price, holdings, and tax check dates |
-| Satellite decision input | `AVGO` | `inputs.AVGO.latest_price_checked` | `missing` | record latest price, currency, timestamp, and source |
-| Satellite decision input | `AVGO` | `inputs.AVGO.valuation_range_checked` | `missing` | record base, bear, and bull valuation range |
-| Satellite decision input | `AVGO` | `inputs.AVGO.reverse_dcf_checked` | `missing` | record scenario or reverse-DCF assumptions |
+| Satellite decision input | `NVDA` | `inputs.NVDA.source_freshness_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `AVGO` | `inputs.AVGO.latest_price_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `AVGO` | `inputs.AVGO.valuation_range_checked` | `filled` | no action; value is present but masked |
+| Satellite decision input | `AVGO` | `inputs.AVGO.reverse_dcf_checked` | `filled` | no action; value is present but masked |
 | Satellite decision input | `AVGO` | `inputs.AVGO.etf_overlap_checked` | `filled` | no action; value is present but masked |
-| Satellite decision input | `AVGO` | `inputs.AVGO.tax_account_route` | `missing` | record taxable, ISA, pension, or IRP route |
+| Satellite decision input | `AVGO` | `inputs.AVGO.tax_account_route` | `filled` | no action; value is present but masked |
 | Satellite decision input | `AVGO` | `inputs.AVGO.max_position_size` | `filled` | no action; value is present but masked |
 | Satellite decision input | `AVGO` | `inputs.AVGO.add_trim_rule` | `filled` | no action; value is present but masked |
-| Satellite decision input | `AVGO` | `inputs.AVGO.source_freshness_checked` | `missing` | record filing, price, holdings, and tax check dates |
+| Satellite decision input | `AVGO` | `inputs.AVGO.source_freshness_checked` | `filled` | no action; value is present but masked |
 
 ## Privacy Boundary
 

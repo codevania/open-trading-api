@@ -8,7 +8,8 @@ If a new Codex session starts, read these files first:
 2. [[omx_wiki/quant-krx-current-universe-v0|omx_wiki/quant-krx-current-universe-v0.md]]
 3. [[_report/quant/implementation-roadmap|_report/quant/implementation-roadmap.md]]
 4. [[_report/quant/research/2026-06-14-krx-current-universe-v0|_report/quant/research/2026-06-14-krx-current-universe-v0.md]]
-5. [[_report/quant/universe|_report/quant/universe.md]]
+5. [[_report/quant/research/2026-07-11-point-in-time-status-p1-official-capture-operator-guide|_report/quant/research/2026-07-11-point-in-time-status-p1-official-capture-operator-guide.md]]
+6. [[_report/quant/universe|_report/quant/universe.md]]
 
 ## First Commands
 

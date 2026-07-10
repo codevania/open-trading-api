@@ -14,19 +14,19 @@
 | Metric | Value |
 | --- | ---: |
 | Candidates checked | 6 |
-| Ready for checked decision | 1 |
-| Needs prep | 5 |
+| Ready for checked decision | 6 |
+| Needs prep | 0 |
 
 ## Candidate Prep State
 
 | Queue | Symbol | Name | Status | Research state | Required before decision.md | Safe next action |
 | --- | --- | --- | --- | --- | --- | --- |
 | `primary_queue` | `MSFT` | Microsoft | `ready_for_checked_decision` | present: financials.md+thesis.md+valuation.md+decision.md; pending: none | - | review checked decision.md and watchlist promotion separately; no order intent |
-| `primary_queue` | `GOOGL` | Alphabet | `needs_decision_inputs` | present: financials.md+thesis.md+valuation.md; pending: decision.md | `latest_price`, `valuation_range`, `reverse_dcf_or_scenario`, `tax_account_route`, `source_freshness` | fill remaining required inputs before decision.md: latest_price, valuation_range, reverse_dcf_or_scenario, tax_account_route, source_freshness |
-| `primary_queue` | `AMZN` | Amazon | `needs_decision_inputs` | present: financials.md+thesis.md+valuation.md; pending: decision.md | `latest_price`, `valuation_range`, `reverse_dcf_or_scenario`, `tax_account_route`, `source_freshness` | fill remaining required inputs before decision.md: latest_price, valuation_range, reverse_dcf_or_scenario, tax_account_route, source_freshness |
-| `primary_queue` | `META` | Meta Platforms | `needs_decision_inputs` | present: financials.md+thesis.md+valuation.md; pending: decision.md | `latest_price`, `valuation_range`, `reverse_dcf_or_scenario`, `tax_account_route`, `source_freshness` | fill remaining required inputs before decision.md: latest_price, valuation_range, reverse_dcf_or_scenario, tax_account_route, source_freshness |
-| `primary_queue` | `NVDA` | NVIDIA | `needs_decision_inputs` | present: financials.md+thesis.md+valuation.md; pending: decision.md | `latest_price`, `valuation_range`, `reverse_dcf_or_scenario`, `tax_account_route`, `source_freshness` | fill remaining required inputs before decision.md: latest_price, valuation_range, reverse_dcf_or_scenario, tax_account_route, source_freshness |
-| `primary_queue` | `AVGO` | Broadcom | `needs_decision_inputs` | present: financials.md+thesis.md+valuation.md; pending: decision.md | `latest_price`, `valuation_range`, `reverse_dcf_or_scenario`, `tax_account_route`, `source_freshness` | fill remaining required inputs before decision.md: latest_price, valuation_range, reverse_dcf_or_scenario, tax_account_route, source_freshness |
+| `primary_queue` | `GOOGL` | Alphabet | `ready_for_checked_decision` | present: financials.md+thesis.md+valuation.md; pending: decision.md | - | write checked decision.md with no order intent |
+| `primary_queue` | `AMZN` | Amazon | `ready_for_checked_decision` | present: financials.md+thesis.md+valuation.md; pending: decision.md | - | write checked decision.md with no order intent |
+| `primary_queue` | `META` | Meta Platforms | `ready_for_checked_decision` | present: financials.md+thesis.md+valuation.md; pending: decision.md | - | write checked decision.md with no order intent |
+| `primary_queue` | `NVDA` | NVIDIA | `ready_for_checked_decision` | present: financials.md+thesis.md+valuation.md; pending: decision.md | - | write checked decision.md with no order intent |
+| `primary_queue` | `AVGO` | Broadcom | `ready_for_checked_decision` | present: financials.md+thesis.md+valuation.md; pending: decision.md | - | write checked decision.md with no order intent |
 
 ## Manual Inputs Required Before decision.md
 
