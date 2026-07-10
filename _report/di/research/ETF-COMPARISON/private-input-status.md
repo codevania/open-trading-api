@@ -15,8 +15,8 @@
 | Metric | Value |
 | --- | ---: |
 | Fields checked | 80 |
-| Filled fields | 53 |
-| Missing fields | 27 |
+| Filled fields | 55 |
+| Missing fields | 25 |
 
 ## Summary By Area
 
@@ -25,7 +25,7 @@
 | ETF holding weight | 24 | 0 | 24 |
 | ETF portfolio weight | 4 | 0 | 4 |
 | ETF source meta | 4 | 0 | 4 |
-| Satellite decision input | 21 | 27 | 48 |
+| Satellite decision input | 23 | 25 | 48 |
 
 ## Field Status
 
@@ -67,10 +67,10 @@
 | Satellite decision input | `MSFT` | `inputs.MSFT.valuation_range_checked` | `filled` | no action; value is present but masked |
 | Satellite decision input | `MSFT` | `inputs.MSFT.reverse_dcf_checked` | `filled` | no action; value is present but masked |
 | Satellite decision input | `MSFT` | `inputs.MSFT.etf_overlap_checked` | `filled` | no action; value is present but masked |
-| Satellite decision input | `MSFT` | `inputs.MSFT.tax_account_route` | `missing` | record taxable, ISA, pension, or IRP route |
+| Satellite decision input | `MSFT` | `inputs.MSFT.tax_account_route` | `filled` | no action; value is present but masked |
 | Satellite decision input | `MSFT` | `inputs.MSFT.max_position_size` | `filled` | no action; value is present but masked |
 | Satellite decision input | `MSFT` | `inputs.MSFT.add_trim_rule` | `filled` | no action; value is present but masked |
-| Satellite decision input | `MSFT` | `inputs.MSFT.source_freshness_checked` | `missing` | record filing, price, holdings, and tax check dates |
+| Satellite decision input | `MSFT` | `inputs.MSFT.source_freshness_checked` | `filled` | no action; value is present but masked |
 | Satellite decision input | `GOOGL` | `inputs.GOOGL.latest_price_checked` | `missing` | record latest price, currency, timestamp, and source |
 | Satellite decision input | `GOOGL` | `inputs.GOOGL.valuation_range_checked` | `missing` | record base, bear, and bull valuation range |
 | Satellite decision input | `GOOGL` | `inputs.GOOGL.reverse_dcf_checked` | `missing` | record scenario or reverse-DCF assumptions |

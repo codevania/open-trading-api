@@ -339,8 +339,9 @@ satellite_equities:
 
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("| Candidates checked | 17 |", result.stdout)
-        self.assertIn("| Ready for next review | 0 |", result.stdout)
-        self.assertIn("| Hold | 17 |", result.stdout)
+        self.assertIn("| Ready for next review | 1 |", result.stdout)
+        self.assertIn("| Hold | 16 |", result.stdout)
+        self.assertIn("| `satellite_equities.primary_queue` | `MSFT` | Microsoft | `ready_for_watchlist_review` | - |", result.stdout)
         self.assertIn("[[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]", result.stdout)
         self.assertIn("[[_report/di/watchlist.yaml|_report/di/watchlist.yaml]]", result.stdout)
 

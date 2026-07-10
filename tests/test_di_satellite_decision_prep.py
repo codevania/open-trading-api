@@ -156,6 +156,8 @@ class DiSatelliteDecisionPrepTest(unittest.TestCase):
                 str(SCRIPT),
                 "--candidate-file",
                 "_report/di/candidates/core-satellite-candidates.yaml",
+                "--input-file",
+                "_report/di/templates/satellite-decision-inputs.example.yaml",
                 "--run-date",
                 "2026-07-08",
             ],
@@ -177,7 +179,7 @@ class DiSatelliteDecisionPrepTest(unittest.TestCase):
         )
         self.assertIn("`tax_account_route`", result.stdout)
         self.assertIn("[[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]", result.stdout)
-        self.assertIn("[[_report/private/di/satellite-decision-inputs.yaml|satellite-decision-inputs.yaml]]", result.stdout)
+        self.assertIn("[[_report/di/templates/satellite-decision-inputs.example.yaml|satellite-decision-inputs.example.yaml]]", result.stdout)
 
     def test_placeholder_valuation_stays_pending(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -279,6 +281,73 @@ inputs:
             self.assertIn("| Ready for checked decision | 1 |", result.stdout)
             self.assertIn("| `primary_queue` | `MSFT` | Microsoft | `ready_for_checked_decision` |", result.stdout)
             self.assertIn("write checked decision.md with no order intent", result.stdout)
+
+    def test_ready_candidate_with_decision_note_points_to_review(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "candidates.yaml"
+            input_file = root / "inputs.yaml"
+            research_root = root / "research"
+            msft = research_root / "MSFT"
+            msft.mkdir(parents=True)
+            manifest.write_text(MANIFEST, encoding="utf-8")
+            input_file.write_text(
+                """\
+version: 1
+inputs:
+  MSFT:
+    latest_price_checked: "2026-07-08 source recorded"
+    valuation_range_checked: "base bear bull range recorded"
+    reverse_dcf_checked: "scenario assumptions recorded"
+    etf_overlap_checked: "core and satellite overlap recorded"
+    tax_account_route: "taxable account route recorded"
+    max_position_size: "single-name cap recorded"
+    add_trim_rule: "add and trim rule recorded"
+    source_freshness_checked: "source dates recorded"
+""",
+                encoding="utf-8",
+            )
+            _write_thesis(msft / "thesis.md")
+            _write_financials(msft / "financials.md")
+            _write_valuation(msft / "valuation.md")
+            (msft / "decision.md").write_text(
+                """\
+# Decision
+
+- Symbol: MSFT
+- Company/ETF: Microsoft
+- [x] Watch only
+1. Evidence is complete enough for review.
+2. No order intent is generated.
+""",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--candidate-file",
+                    str(manifest),
+                    "--research-root",
+                    str(research_root),
+                    "--input-file",
+                    str(input_file),
+                    "--run-date",
+                    "2026-07-11",
+                ],
+                cwd=REPO_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("present: financials.md+thesis.md+valuation.md+decision.md; pending: none", result.stdout)
+            self.assertIn(
+                "review checked decision.md and watchlist promotion separately; no order intent",
+                result.stdout,
+            )
 
     def test_fail_on_blocked_returns_2_and_only_blocked_filters_ready_rows(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

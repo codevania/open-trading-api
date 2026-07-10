@@ -1,6 +1,6 @@
 # DI Candidate Evidence Gate
 
-- Run date: `2026-07-10`
+- Run date: `2026-07-11`
 - Candidate manifest: [[_report/di/candidates/core-satellite-candidates.yaml|core-satellite-candidates.yaml]]
 - Research root: `_report/di/research`
 - Row filter: `all`
@@ -12,8 +12,8 @@
 | Metric | Value |
 | --- | ---: |
 | Candidates checked | 17 |
-| Ready for next review | 0 |
-| Hold | 17 |
+| Ready for next review | 1 |
+| Hold | 16 |
 
 ## Gate Results
 
@@ -26,7 +26,7 @@
 | `korea_listed_etfs_to_verify` | `360200` | ACE US S&P500 | `hold` | `currency_hedge`, `distribution_policy`, `tax_account_fit`, `expense_ratio` | fill issuer, fee, NAV, distribution, tax, and account evidence |
 | `korea_listed_etfs_to_verify` | `379800` | KODEX US S&P500TR | `hold` | `source_url`, `currency_hedge`, `distribution_policy`, `tax_account_fit`, `expense_ratio` | fill issuer, fee, NAV, distribution, tax, and account evidence |
 | `satellite_etfs_to_verify` | `QQQ` | Invesco QQQ Trust | `hold` | `tax_account_fit`, `expense_ratio` | fill issuer, fee, NAV, distribution, tax, and account evidence |
-| `satellite_equities.primary_queue` | `MSFT` | Microsoft | `hold` | `research decision.md` | collect filings and write thesis/valuation/decision notes |
+| `satellite_equities.primary_queue` | `MSFT` | Microsoft | `ready_for_watchlist_review` | - | review position size and watchlist promotion |
 | `satellite_equities.primary_queue` | `GOOGL` | Alphabet | `hold` | `research decision.md` | collect filings and write thesis/valuation/decision notes |
 | `satellite_equities.primary_queue` | `AMZN` | Amazon | `hold` | `research decision.md` | collect filings and write thesis/valuation/decision notes |
 | `satellite_equities.primary_queue` | `META` | Meta Platforms | `hold` | `research decision.md` | collect filings and write thesis/valuation/decision notes |

@@ -136,6 +136,12 @@ def _research_state(symbol: str, research_root: Path) -> str:
     return f"present: {present_text}; pending: {missing_text}"
 
 
+def _ready_action(symbol: str, research_root: Path) -> str:
+    if _research_file_present(symbol, research_root, "decision.md"):
+        return "review checked decision.md and watchlist promotion separately; no order intent"
+    return "write checked decision.md with no order intent"
+
+
 def _manual_input_row(row: dict[str, Any], symbol: str, input_payload: dict[str, Any]) -> dict[str, Any]:
     merged = dict(row)
     nested = row.get("decision_inputs")
@@ -205,7 +211,7 @@ def evaluate_satellite_decision_prep(
                 research_state=_research_state(symbol, research_root),
                 required_inputs=required_inputs,
                 safe_next_action=(
-                    "write checked decision.md with no order intent"
+                    _ready_action(symbol, research_root)
                     if status == "ready_for_checked_decision"
                     else blocked_action
                 ),
